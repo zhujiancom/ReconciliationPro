@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           					http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+							http://www.springframework.org/schema/context
+							http://www.springframework.org/schema/context/spring-context-4.0.xsd
+							http://www.springframework.org/schema/tx 
+							http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+							http://www.springframework.org/schema/aop
+							http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+							http://www.springframework.org/schema/util
+							http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+	<bean id="beanMapper" class="org.dozer.spring.DozerBeanMapperFactoryBean"
+		scope="singleton">
+		<property name="mappingFiles" value="classpath*:/dozer/*Mapping.xml" />
+	</bean>
+	
+	<util:list id="filters" list-class="java.util.LinkedList" value-type="com.rci.service.filter.CalculateFilter">
+		<bean class="com.rci.service.filter.CashFilter"></bean>
+		<bean class="com.rci.service.filter.DPTGFilter"></bean>
+		<bean class="com.rci.service.filter.DPSHFilter"></bean>
+		<bean class="com.rci.service.filter.MTFilter"></bean>
+		<bean class="com.rci.service.filter.ELEFilter"></bean>
+		<bean class="com.rci.service.filter.TDDFilter"></bean>
+		<bean class="com.rci.service.filter.LSFilter"></bean>
+		<bean class="com.rci.service.filter.MTWMFilter"></bean>
+		<bean class="com.rci.service.filter.FreeFilter"></bean>
+	</util:list>
+	
+	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>
+</beans>
