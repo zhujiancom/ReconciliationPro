@@ -17,6 +17,7 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
 
 /**
@@ -45,8 +46,8 @@ public class DPTGFilter extends AbstractFilter {
 		BigDecimal nodiscountAmount = BigDecimal.ZERO;
 		/* 正常菜品，条件满足使用代金券的总金额 */
 		BigDecimal bediscountAmount = BigDecimal.ZERO;
-		/* 该订单包含的所有饮料 */
-		List<String> beverages = new ArrayList<String>();
+		/* 该订单包含的所有饮料总金额 */
+		BigDecimal beverageAmount = BigDecimal.ZERO;
 		
 		List<OrderItem> items = order.getItems();
 		
@@ -69,14 +70,16 @@ public class DPTGFilter extends AbstractFilter {
 				}
 				suitMap.put(type, count);
 			}
-			if(isBeverage(item.getDishNo())){
-				beverages.add(item.getDishNo());
-			}
-			BigDecimal originPrice = item.getPrice();
+			BigDecimal singlePrice = item.getPrice();
 			BigDecimal count = item.getCount();
 			BigDecimal countBack = item.getCountback();
-			BigDecimal originTotalAmount = DigitUtil.mutiplyDown(originPrice, count.subtract(countBack));
-			if (!suitFlag && isNodiscount(dishNo)) {
+			BigDecimal singleRate = item.getDiscountRate();
+			BigDecimal rate = DigitUtil.precentDown(singleRate, new BigDecimal(100));
+			BigDecimal originTotalAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countBack)),rate);
+			if(isBeverage(dishNo)){
+				beverageAmount = beverageAmount.add(originTotalAmount);
+			}
+			if (isNodiscount(dishNo)) {
 				// 3. 饮料酒水除外
 				nodiscountAmount = nodiscountAmount.add(originTotalAmount);
 				continue;
@@ -84,11 +87,17 @@ public class DPTGFilter extends AbstractFilter {
 			bediscountAmount = bediscountAmount.add(originTotalAmount);
 			
 			/* 判断是否有单品折扣  */
-			BigDecimal rate = item.getDiscountRate();
-			if(isSingleDiscount(rate) && (order.getSingleDiscount() == null || !order.getSingleDiscount())){
-				order.setSingleDiscount(true);
+			if(isSingleDiscount(rate) && (order.getSingleDiscount() == null || YOrN.N.equals(order.getSingleDiscount()))){
+				order.setSingleDiscount(YOrN.Y);
 			}
 		}
+		//酱套餐中的饮料从不可打折金额中除去
+		Integer suitACount = suitMap.get(SchemeType.SUIT_32);
+		Integer suitBCount = suitMap.get(SchemeType.SUIT_68);
+		if(suitACount != null && suitACount != 0){
+			
+		}
+		
 		order.setNodiscountAmount(nodiscountAmount);
 		// 分析客户使用了哪些代金券
 		Map<PairKey<SchemeType,String>,SchemeWrapper> schemes = order.getSchemes();
