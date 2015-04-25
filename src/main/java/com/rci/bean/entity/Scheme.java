@@ -46,7 +46,7 @@ public class Scheme extends BaseEntity {
 	/* 方案单位， 代金券： 张， 套餐： 份 */
 	private String unitCode;
 
-	/* 方案类型 ， 由字典项中获取. Scheme -> MTCHIT_50,MTCHIT_100,MTSUIT_32,MTSUIT_68,MTSUIT_98,MTWM,MTWM_FREE,DPTGCHIT50....ELE,ELE_FREE */
+	/* 方案类型 ， 由字典项中获取. Scheme -> CHIT_50,CHIT_100,SUIT_32,SUIT_68,SUIT_98,FREE,CASH*/
 	private String type;
 
 	@Id

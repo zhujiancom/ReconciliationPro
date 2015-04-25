@@ -1,6 +1,7 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +13,11 @@ import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.PairKey;
 import com.rci.bean.SchemeWrapper;
-import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.contants.BusinessConstant;
-import com.rci.metadata.dto.OrderItemDTO;
+import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.tools.DigitUtil;
 
 /**
  * 大众点评
@@ -44,20 +45,22 @@ public class DPTGFilter extends AbstractFilter {
 		BigDecimal nodiscountAmount = BigDecimal.ZERO;
 		/* 正常菜品，条件满足使用代金券的总金额 */
 		BigDecimal bediscountAmount = BigDecimal.ZERO;
+		/* 该订单包含的所有饮料 */
+		List<String> beverages = new ArrayList<String>();
 		
 		List<OrderItem> items = order.getItems();
 		
 		for (OrderItem item : items) {
 			String dishNo = item.getDishNo();
 			if ("Y".equals(item.getSuitFlag())) {
-				// 2.如果是套餐，则过滤
+				// 2.如果是套餐内菜品，则过滤
 				continue;
 			}
 			if ("P".equals(item.getSuitFlag())) {
 				if (!suitFlag) {
 					suitFlag = true;
 				}
-				SchemeType type = SchemeType.getType(dishNo);
+				SchemeType type = getSuitSchemeType(dishNo);
 				Integer count = suitMap.get(type);
 				if (count != null) {
 					count++;
@@ -65,6 +68,9 @@ public class DPTGFilter extends AbstractFilter {
 					count = 1;
 				}
 				suitMap.put(type, count);
+			}
+			if(isBeverage(item.getDishNo())){
+				beverages.add(item.getDishNo());
 			}
 			BigDecimal originPrice = item.getPrice();
 			BigDecimal count = item.getCount();

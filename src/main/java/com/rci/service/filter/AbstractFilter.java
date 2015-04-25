@@ -3,7 +3,6 @@ package com.rci.service.filter;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -12,14 +11,14 @@ import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.rci.bean.OrderItemDTO;
+import com.rci.bean.PairKey;
+import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
-import com.rci.bean.scheme.PairKey;
-import com.rci.bean.scheme.SchemeWrapper;
-import com.rci.constants.enums.SchemeType;
+import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.service.IDishService;
 import com.rci.service.ISchemeService;
 
@@ -27,7 +26,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 	public static final Log logger = LogFactory.getLog(AbstractFilter.class);
 	
 	@Resource(name="DishService")
-	private IDishService dishService;
+	protected IDishService dishService;
 	
 	@Resource(name="SchemeService")
 	protected ISchemeService schemeService;
@@ -49,10 +48,33 @@ public abstract class AbstractFilter implements CalculateFilter {
 	protected Boolean isNodiscount(String dishNo){
 		Dish dish = dishService.findDishByNo(dishNo);
 		DishType type = dish.getDishType();
-		if(type != null && "N".equalsIgnoreCase(type.getBeDiscount())){
+		if(type != null && !YOrN.isY(type.getBeDiscount())){
 			return true;
 		}
 		return false;
+	}
+	
+	protected Boolean isBeverage(String dishNo){
+		Dish dish = dishService.findDishByNo(dishNo);
+		String typeName = dish.getDishType().getDtName();
+		if("饮料".equals(typeName)){
+			return true;
+		}
+		return false;
+	}
+	
+	protected SchemeType getSuitSchemeType(String dishNo){
+		Dish dish = dishService.findDishByNo(dishNo);
+		if(dish.getDishName().indexOf("套餐A") != -1){
+			return SchemeType.SUIT_32;
+		}
+		if(dish.getDishName().indexOf("套餐B") != -1){
+			return SchemeType.SUIT_68;
+		}
+		if(dish.getDishName().indexOf("套餐C") != -1){
+			return SchemeType.SUIT_98;
+		}
+		return null;
 	}
 	
 	protected Boolean isSingleDiscount(BigDecimal rate){
