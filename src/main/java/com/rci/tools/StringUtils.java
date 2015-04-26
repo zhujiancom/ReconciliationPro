@@ -5,13 +5,13 @@ import java.util.Locale;
 public class StringUtils {
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔSpring¡¿
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªSpringã€‘
 	 * 
-	 * ·½·¨Ãû³Æ£ºhasText
+	 * æ–¹æ³•åç§°ï¼šhasText
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç1:41:45
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ1:41:45
 	 *  
 	 * @param str
 	 * @return
@@ -21,7 +21,7 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔSpring¡¿  ¼ì²é¸ø¶¨µÄCharSequence ÊÇ·ñ´æÔÚÊµ¼ÊµÄ×Ö·ûÎÄ±¾
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªSpringã€‘  æ£€æŸ¥ç»™å®šçš„CharSequence æ˜¯å¦å­˜åœ¨å®é™…çš„å­—ç¬¦æ–‡æœ¬
 	 * <pre>
 	 * StringUtils.hasText(null) = false
 	 * StringUtils.hasText("") = false
@@ -29,11 +29,11 @@ public class StringUtils {
 	 * StringUtils.hasText("12345") = true
 	 * StringUtils.hasText(" 12345 ") = true
 	 * <pre>
-	 * ·½·¨Ãû³Æ£ºhasText
+	 * æ–¹æ³•åç§°ï¼šhasText
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç1:42:09
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ1:42:09
 	 *  
 	 * @param str
 	 * @return
@@ -52,13 +52,13 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔSpring¡¿
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªSpringã€‘
 	 *
-	 * ·½·¨Ãû³Æ£ºhasLength
+	 * æ–¹æ³•åç§°ï¼šhasLength
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç1:46:41
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ1:46:41
 	 *  
 	 * @param str
 	 * @return
@@ -68,13 +68,13 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔSpring¡¿ ¼ì²é¸ø¶¨µÄCharSequence ¼È²»ÊÇNull,³¤¶ÈÒ²²»ÊÇ0 
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªSpringã€‘ æ£€æŸ¥ç»™å®šçš„CharSequence æ—¢ä¸æ˜¯Null,é•¿åº¦ä¹Ÿä¸æ˜¯0 
 	 *
-	 * ·½·¨Ãû³Æ£ºhasLength
+	 * æ–¹æ³•åç§°ï¼šhasLength
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç1:44:17
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ1:44:17
 	 *  
 	 * @param str
 	 * @return
@@ -84,7 +84,7 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔCommons.lang3¡¿ ²ğ·Ö×Ö·û´®
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªCommons.lang3ã€‘ æ‹†åˆ†å­—ç¬¦ä¸²
 	 * 
 	 * <pre>
      * StringUtils.split(null)       = null
@@ -94,11 +94,11 @@ public class StringUtils {
      * StringUtils.split(" abc ")    = ["abc"]
      * </pre>
 	 *
-	 * ·½·¨Ãû³Æ£ºsplit
+	 * æ–¹æ³•åç§°ï¼šsplit
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç2:16:22
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ2:16:22
 	 *  
 	 * @param str
 	 * @return
@@ -108,7 +108,7 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔCommons.lang3¡¿ °´Ö¸¶¨{×Ö·û}²ğ·Ö×Ö·û´®
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªCommons.lang3ã€‘ æŒ‰æŒ‡å®š{å­—ç¬¦}æ‹†åˆ†å­—ç¬¦ä¸²
 	 *
 	 * <pre>
      * StringUtils.split(null, *)         = null
@@ -119,11 +119,11 @@ public class StringUtils {
      * StringUtils.split("a b c", ' ')    = ["a", "b", "c"]
      * </pre>
 	 *
-	 * ·½·¨Ãû³Æ£ºsplit
+	 * æ–¹æ³•åç§°ï¼šsplit
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç2:18:37
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ2:18:37
 	 *  
 	 * @param str
 	 * @param separatorChar
@@ -134,7 +134,7 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔCommons.lang3¡¿ °´Ö¸¶¨{×Ö·û´®}²ğ·Ö×Ö·û´®
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªCommons.lang3ã€‘ æŒ‰æŒ‡å®š{å­—ç¬¦ä¸²}æ‹†åˆ†å­—ç¬¦ä¸²
 	 *
 	 * <pre>
      * StringUtils.split(null, *)         = null
@@ -145,11 +145,11 @@ public class StringUtils {
      * StringUtils.split("ab:cd:ef", ":") = ["ab", "cd", "ef"]
      * </pre>
 	 *
-	 * ·½·¨Ãû³Æ£ºsplit
+	 * æ–¹æ³•åç§°ï¼šsplit
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç2:21:48
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ2:21:48
 	 *  
 	 * @param str
 	 * @param separatorChars
@@ -160,7 +160,7 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔCommons.lang3¡¿ °´Ö¸¶¨{×Ö·û´®}²ğ·Ö×Ö·û´®£¬Ö¸¶¨Êı×é×î´ó³¤¶È
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªCommons.lang3ã€‘ æŒ‰æŒ‡å®š{å­—ç¬¦ä¸²}æ‹†åˆ†å­—ç¬¦ä¸²ï¼ŒæŒ‡å®šæ•°ç»„æœ€å¤§é•¿åº¦
 	 * <pre>
      * StringUtils.split(null, *, *)            = null
      * StringUtils.split("", *, *)              = []
@@ -169,15 +169,15 @@ public class StringUtils {
      * StringUtils.split("ab:cd:ef", ":", 0)    = ["ab", "cd", "ef"]
      * StringUtils.split("ab:cd:ef", ":", 2)    = ["ab", "cd:ef"]
      * </pre>
-	 * ·½·¨Ãû³Æ£ºsplit
+	 * æ–¹æ³•åç§°ï¼šsplit
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç2:23:39
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ2:23:39
 	 *  
 	 * @param str
 	 * @param separatorChars
-	 * @param max  Ö¸¶¨²ğ·ÖºóÊı×éµÄ×î´ó³¤¶È£¬0´ú±íÃ»ÓĞÏŞÖÆ
+	 * @param max  æŒ‡å®šæ‹†åˆ†åæ•°ç»„çš„æœ€å¤§é•¿åº¦ï¼Œ0ä»£è¡¨æ²¡æœ‰é™åˆ¶
 	 * @return
 	 */
 	public static String[] split(final String str, final String separatorChars, final int max){
@@ -185,13 +185,13 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£ºÈ¥³ı×Ö·û´®Í·ºÍÎ²µÄ¿Õ°××Ö·û
+	 * Describle(æè¿°)ï¼šå»é™¤å­—ç¬¦ä¸²å¤´å’Œå°¾çš„ç©ºç™½å­—ç¬¦
 	 *
-	 * ·½·¨Ãû³Æ£ºtrim
+	 * æ–¹æ³•åç§°ï¼štrim
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç2:37:15
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ2:37:15
 	 *  
 	 * @param str
 	 * @return
@@ -201,13 +201,13 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔCommons.lang3¡¿ È¥³ı×Ö·û´®Í·ºÍÎªµÄ¿Õ°××Ö·û£¬Èç¹ûÊÇ¿Õ×Ö·û´®£¬Ôò·µ»Ønull
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªCommons.lang3ã€‘ å»é™¤å­—ç¬¦ä¸²å¤´å’Œä¸ºçš„ç©ºç™½å­—ç¬¦ï¼Œå¦‚æœæ˜¯ç©ºå­—ç¬¦ä¸²ï¼Œåˆ™è¿”å›null
 	 *
-	 * ·½·¨Ãû³Æ£ºtrimToNull
+	 * æ–¹æ³•åç§°ï¼štrimToNull
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç2:47:31
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ2:47:31
 	 *  
 	 * @param str
 	 * @return
@@ -217,13 +217,13 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔCommons.lang3¡¿ È¥³ı×Ö·û´®Í·ºÍÎªµÄ¿Õ°××Ö·û£¬Èç¹ûÊÇ¿Õ×Ö·û´®£¬Ôò·µ»Ø""
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªCommons.lang3ã€‘ å»é™¤å­—ç¬¦ä¸²å¤´å’Œä¸ºçš„ç©ºç™½å­—ç¬¦ï¼Œå¦‚æœæ˜¯ç©ºå­—ç¬¦ä¸²ï¼Œåˆ™è¿”å›""
 	 *
-	 * ·½·¨Ãû³Æ£ºtrimToEmpty
+	 * æ–¹æ³•åç§°ï¼štrimToEmpty
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç2:49:23
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ2:49:23
 	 *  
 	 * @param str
 	 * @return
@@ -233,7 +233,7 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔSpring¡¿  È¥³ıËùÓĞ×Ö·û´®ÖĞµÄ¿Õ°××Ö·û
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªSpringã€‘  å»é™¤æ‰€æœ‰å­—ç¬¦ä¸²ä¸­çš„ç©ºç™½å­—ç¬¦
 	 *
 	 * <pre>
 	 * StringUtils.trimAllWhitespace(null)          = null
@@ -243,11 +243,11 @@ public class StringUtils {
      * StringUtils.trimAllWhitespace("    abc    ") = "abc"
 	 * </pre>
 	 *
-	 * ·½·¨Ãû³Æ£ºtrimAllWhitespace
+	 * æ–¹æ³•åç§°ï¼štrimAllWhitespace
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç2:50:25
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ2:50:25
 	 *  
 	 * @param str
 	 * @return
@@ -257,17 +257,17 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔSpring¡¿  È¥³ı×Ö·û´®¿ªÍ·Ö¸¶¨µÄ×Ö·û
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªSpringã€‘  å»é™¤å­—ç¬¦ä¸²å¼€å¤´æŒ‡å®šçš„å­—ç¬¦
 	 *
 	 * <pre>
 	 * StringUtils.trimLeadingCharacter("_a_bc_", '_') = a_bc_
 	 * StringUtils.trimLeadingCharacter("a_bc_", '_') = a_bc_
 	 * </pre>
-	 * ·½·¨Ãû³Æ£ºtrimLeadingCharacter
+	 * æ–¹æ³•åç§°ï¼štrimLeadingCharacter
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç2:55:22
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ2:55:22
 	 *  
 	 * @param str
 	 * @param leadingCharacter
@@ -278,17 +278,17 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔSpring¡¿  È¥³ı×Ö·û´®Ä©Î²Ö¸¶¨µÄ×Ö·û
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªSpringã€‘  å»é™¤å­—ç¬¦ä¸²æœ«å°¾æŒ‡å®šçš„å­—ç¬¦
 	 *
 	 * <pre>
 	 * StringUtils.trimTrailingCharacter("a_bc_", '_') = "a_bc"
 	 * StringUtils.trimTrailingCharacter("_a_bc__", '_') = "_a_bc"
 	 * </pre>
-	 * ·½·¨Ãû³Æ£ºtrimTrailingCharacter
+	 * æ–¹æ³•åç§°ï¼štrimTrailingCharacter
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç2:57:45
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ2:57:45
 	 *  
 	 * @param str
 	 * @param trailingCharacter
@@ -299,13 +299,13 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔSpring¡¿  locale×Ö·û´®×ª»»³ÉLocale¶ÔÏó
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªSpringã€‘  localeå­—ç¬¦ä¸²è½¬æ¢æˆLocaleå¯¹è±¡
 	 *
-	 * ·½·¨Ãû³Æ£ºparseLocaleString
+	 * æ–¹æ³•åç§°ï¼šparseLocaleString
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç3:04:09
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ3:04:09
 	 *  
 	 * @param localeString
 	 * @return
@@ -315,13 +315,13 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º¡¾À´×ÔSpring¡¿ »ñÈ¡ÎÄ¼şÃûºó×º
+	 * Describle(æè¿°)ï¼šã€æ¥è‡ªSpringã€‘ è·å–æ–‡ä»¶ååç¼€
 	 *
-	 * ·½·¨Ãû³Æ£ºgetFilenameExtension
+	 * æ–¹æ³•åç§°ï¼šgetFilenameExtension
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç3:11:41
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ3:11:41
 	 *  
 	 * @param path
 	 * @return
@@ -331,13 +331,13 @@ public class StringUtils {
 	}
 	/**
 	 * 
-	 * Describle(ÃèÊö)£º ¡¾À´×ÔSpring¡¿ »ñÈ¡ÎÄ¼şÃû³Æ
+	 * Describle(æè¿°)ï¼š ã€æ¥è‡ªSpringã€‘ è·å–æ–‡ä»¶åç§°
 	 *
-	 * ·½·¨Ãû³Æ£ºgetFilename
+	 * æ–¹æ³•åç§°ï¼šgetFilename
 	 *
-	 * ËùÔÚÀàÃû£ºStringUtils
+	 * æ‰€åœ¨ç±»åï¼šStringUtils
 	 *
-	 * Create Time:2015Äê4ÔÂ22ÈÕ ÏÂÎç3:12:33
+	 * Create Time:2015å¹´4æœˆ22æ—¥ ä¸‹åˆ3:12:33
 	 *  
 	 * @param path
 	 * @return

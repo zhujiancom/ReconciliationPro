@@ -1,17 +1,17 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.rci.bean.PairKey;
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
@@ -19,6 +19,7 @@ import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
+import com.rci.tools.StringUtils;
 
 /**
  * 大众点评
@@ -47,7 +48,7 @@ public class DPTGFilter extends AbstractFilter {
 		/* 正常菜品，条件满足使用代金券的总金额 */
 		BigDecimal bediscountAmount = BigDecimal.ZERO;
 		/* 该订单包含的所有饮料总金额 */
-		BigDecimal beverageAmount = BigDecimal.ZERO;
+//		BigDecimal beverageAmount = BigDecimal.ZERO;
 		
 		List<OrderItem> items = order.getItems();
 		
@@ -76,9 +77,6 @@ public class DPTGFilter extends AbstractFilter {
 			BigDecimal singleRate = item.getDiscountRate();
 			BigDecimal rate = DigitUtil.precentDown(singleRate, new BigDecimal(100));
 			BigDecimal originTotalAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countBack)),rate);
-			if(isBeverage(dishNo)){
-				beverageAmount = beverageAmount.add(originTotalAmount);
-			}
 			if (isNodiscount(dishNo)) {
 				// 3. 饮料酒水除外
 				nodiscountAmount = nodiscountAmount.add(originTotalAmount);
@@ -87,34 +85,51 @@ public class DPTGFilter extends AbstractFilter {
 			bediscountAmount = bediscountAmount.add(originTotalAmount);
 			
 			/* 判断是否有单品折扣  */
-			if(isSingleDiscount(rate) && (order.getSingleDiscount() == null || YOrN.N.equals(order.getSingleDiscount()))){
+			if((order.getSingleDiscount() == null || YOrN.N.equals(order.getSingleDiscount())) && isSingleDiscount(rate)){
 				order.setSingleDiscount(YOrN.Y);
 			}
 		}
-		//酱套餐中的饮料从不可打折金额中除去
+		//将套餐中的饮料从不可打折金额中除去
 		Integer suitACount = suitMap.get(SchemeType.SUIT_32);
 		Integer suitBCount = suitMap.get(SchemeType.SUIT_68);
 		if(suitACount != null && suitACount != 0){
-			
+			Integer beverageAmount = suitACount*5;
+			nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
+			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
+		}
+		if(suitBCount != null && suitBCount != 0){
+			Integer beverageAmount = suitBCount*14;
+			nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
+			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
 		}
 		
 		order.setNodiscountAmount(nodiscountAmount);
 		// 分析客户使用了哪些代金券
-		Map<PairKey<SchemeType,String>,SchemeWrapper> schemes = order.getSchemes();
-		if (CollectionUtils.isEmpty(schemes)) {
-			schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
-			order.setSchemes(schemes);
-		}
-		BigDecimal chitAmount = order.getPaymodeMapping().get(BusinessConstant.DPTG_NO);
-		if(order.getFreeAmount()!=null){
-			bediscountAmount = bediscountAmount.subtract(order.getFreeAmount());
+		BigDecimal chitAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_DPTG);
+		BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
+		if(freeAmount!=null){
+			bediscountAmount = bediscountAmount.subtract(freeAmount);
 		}
 		if(bediscountAmount.compareTo(chitAmount) < 0){
 			//如果可打折金额小于代金券实际使用金额，则这单属于异常单
-			order.setUnusual(UNUSUAL);
+			order.setUnusual(YOrN.Y);
 			logger.warn("----【"+order.getOrderNo()+"】支付金额异常----， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+". 可打折金额不应该小于代金券支付金额");
 		}
-		schemes.putAll(createSchemes(chitAmount, BusinessConstant.DPTG_NO,suitFlag));
+//		schemes.putAll(createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag));
+		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag);
+		if(!CollectionUtils.isEmpty(schemes)){
+			String schemeName = StringUtils.trimToEmpty(order.getSchemeName());
+			BigDecimal postAmount = BigDecimal.ZERO;
+			for(Iterator<Entry<SchemeType,SchemeWrapper>> it=schemes.entrySet().iterator();it.hasNext();){
+				Entry<SchemeType,SchemeWrapper> entry = it.next();
+				SchemeWrapper wrapper = entry.getValue();
+				schemeName = schemeName+","+wrapper.getName();
+				postAmount = postAmount.add(calculateTG(wrapper.getScheme(), wrapper.getCount()));
+			}
+			order.setSchemeName(schemeName);
+			//保存账户关联信息
+			preserveOAR(postAmount,BusinessConstant.DPTG_ACC,order);
+		}
 		//计算余额
 		BigDecimal balance = chain.getBalance();
 		logger.debug("DPTGFilter - balance = "+balance);
@@ -123,13 +138,12 @@ public class DPTGFilter extends AbstractFilter {
 		}
 		balance = balance.subtract(chitAmount);
 		chain.setBalance(balance);
-//		chain.doFilter(order, items, chain);
 	}
 
-	@Override
-	public String getChit() {
-		return "大众点评团购";
-	}
+//	@Override
+//	public String getChit() {
+//		return "大众点评团购";
+//	}
 
 	@Override
 	protected Map<SchemeType, Integer> getSuitMap() {

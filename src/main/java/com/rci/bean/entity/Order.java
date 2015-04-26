@@ -26,6 +26,7 @@ import javax.persistence.Version;
 import com.rci.bean.PairKey;
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.base.BaseEntity;
+import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums;
 import com.rci.tools.StringUtils;
 @Entity
@@ -40,49 +41,49 @@ public class Order extends BaseEntity {
 	
 	private Long oid;
 	
-	/* �������   */
+	/* 订单编号   */
 	private String orderNo;
 	
-	/* ���ѱ�� */
+	/* 付费编号 */
 	private String payNo;
 	
-	/* ����ʱ��  */
+	/* 开桌时间  */
 	private Date openDeskTime;
 	
-	/* ����ʱ��  */
+	/* 结账时间  */
 	private Date checkoutTime;
 	
-	/*���� */
+	/*日期 */
 	private String day;
 	
-	/* ����ԭ��   */
+	/* 订单原价   */
 	private BigDecimal originPrice;
 	
-	/* ����֧����ʽ��Ӧ��� */
+	/* 订单支付方式对应金额 */
 	private Map<String,BigDecimal> paymodeMapping=new HashMap<String,BigDecimal>();
 	
-	/* �������е�֧����ʽ ����(,)���ŷָ�*/
+	/* 订单所有的支付方式 ，用(,)逗号分割*/
 	private String paymodes;
 
-	/* �ۿ۷��� ��� */
+	/* 折扣方案 名称 */
 	private String schemeName;
 	
-	/* �Ƿ���е�Ʒ�ۿ�  */
+	/* 是否具有单品折扣  */
 	private CommonEnums.YOrN singleDiscount;
 	
-	/* ʵ�ս��   */
+	/* 实收金额   */
 	private BigDecimal realAmount;
 	
-	/* �����Ʒ��ϸ  */
+	/* 具体菜品明细  */
 	private List<OrderItem> items;
 	
-	/* ��¼�ö���ʹ�õķ��� */
-	private Map<PairKey<String,String>,SchemeWrapper> schemes; 
+	/* 记录该订单使用的方案 */
+	private Map<PairKey<SchemeType,String>,SchemeWrapper> schemes; 
 	
-	/* �õ����쳣 */
+	/* 该单有异常 */
 	private CommonEnums.YOrN unusual;
 	
-	/* ���ɴ��۽��   */
+	/* 不可打折金额   */
 	private BigDecimal nodiscountAmount;
 	
 	/**
@@ -270,18 +271,19 @@ public class Order extends BaseEntity {
 		this.items = items;
 	}
 
+
 	/**
 	 * @return the schemes
 	 */
 	@Transient
-	public Map<PairKey<String, String>, SchemeWrapper> getSchemes() {
+	public Map<PairKey<SchemeType, String>, SchemeWrapper> getSchemes() {
 		return schemes;
 	}
 
 	/**
 	 * @param schemes the schemes to set
 	 */
-	public void setSchemes(Map<PairKey<String, String>, SchemeWrapper> schemes) {
+	public void setSchemes(Map<PairKey<SchemeType, String>, SchemeWrapper> schemes) {
 		this.schemes = schemes;
 	}
 
@@ -361,13 +363,13 @@ public class Order extends BaseEntity {
 	/**
 	 * 
 	 *
-	 * Describle(����)�����order��ʹ�õ�֧����ʽ�Ͷ�Ӧ��֧�����
+	 * Describle(描述)：添加order所使用的支付方式和对应的支付金额
 	 *
-	 * ������ƣ�addPayMode
+	 * 方法名称：addPayMode
 	 *
-	 * ��������Order
+	 * 所在类名：Order
 	 *
-	 * Create Time:2015��4��23�� ����10:49:03
+	 * Create Time:2015年4月23日 下午10:49:03
 	 *  
 	 * @param paymodeNo
 	 * @param amount

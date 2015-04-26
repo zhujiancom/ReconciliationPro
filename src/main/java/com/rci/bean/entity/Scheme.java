@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +15,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
+import com.rci.enums.BusinessEnums.SchemeType;
 
 @Entity
 @Table(name = "bus_tb_scheme")
@@ -47,7 +50,7 @@ public class Scheme extends BaseEntity {
 	private String unitCode;
 
 	/* 方案类型 ， 由字典项中获取. Scheme -> CHIT_50,CHIT_100,SUIT_32,SUIT_68,SUIT_98,FREE,CASH*/
-	private String type;
+	private SchemeType type;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -123,18 +126,20 @@ public class Scheme extends BaseEntity {
 		this.unitCode = unitCode;
 	}
 
+
 	/**
 	 * @return the type
 	 */
-	public String getType() {
+	@Enumerated(EnumType.STRING)
+	@Column(name="s_type")
+	public SchemeType getType() {
 		return type;
 	}
 
 	/**
-	 * @param type
-	 *            the type to set
+	 * @param type the type to set
 	 */
-	public void setType(String type) {
+	public void setType(SchemeType type) {
 		this.type = type;
 	}
 

@@ -1,16 +1,20 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import com.rci.bean.entity.Order;
+import com.rci.enums.BusinessEnums.FreeType;
 
 public class FilterChain implements CalculateFilter {
 	LinkedList<CalculateFilter> filters = new LinkedList<CalculateFilter>();
 	int pos = 0;
 	BigDecimal balance = BigDecimal.ZERO;
+	private Map<FreeType,BigDecimal> freeMap = new HashMap<FreeType,BigDecimal>();
+	
 	
 	public void addFilter(CalculateFilter filter){
 		this.filters.add(filter);
@@ -36,10 +40,10 @@ public class FilterChain implements CalculateFilter {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public String getChit() {
-		throw new UnsupportedOperationException();
-	}
+//	@Override
+//	public String getChit() {
+//		throw new UnsupportedOperationException();
+//	}
 	
 	public void reset(){
 		this.pos = 0;
@@ -52,6 +56,20 @@ public class FilterChain implements CalculateFilter {
 
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
+	}
+
+	/**
+	 * @return the freeMap
+	 */
+	public Map<FreeType, BigDecimal> getFreeMap() {
+		return freeMap;
+	}
+
+	/**
+	 * @param freeMap the freeMap to set
+	 */
+	public void setFreeMap(Map<FreeType, BigDecimal> freeMap) {
+		this.freeMap = freeMap;
 	}
 
 }

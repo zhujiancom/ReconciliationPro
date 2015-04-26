@@ -1,7 +1,8 @@
 package com.rci.service;
 
 import com.rci.bean.entity.Scheme;
+import com.rci.enums.BusinessEnums.SchemeType;
 
 public interface ISchemeService {
-	public Scheme getScheme(String type,String paymodeno);
+	public Scheme getScheme(SchemeType type,String paymodeno);
 }

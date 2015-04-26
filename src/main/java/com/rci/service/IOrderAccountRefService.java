@@ -6,4 +6,6 @@ import com.rci.bean.entity.OrderAccountRef;
 
 public interface IOrderAccountRefService {
 	List<OrderAccountRef> getOARef(String billno);
+	
+	void rwInsertOar(OrderAccountRef oar);
 }

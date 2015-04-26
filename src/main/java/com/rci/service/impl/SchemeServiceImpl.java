@@ -7,6 +7,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
 import com.rci.bean.entity.Scheme;
+import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.service.ISchemeService;
 import com.rci.service.base.BaseService;
 
@@ -28,7 +29,7 @@ public class SchemeServiceImpl extends BaseService<Scheme, Long> implements
 		ISchemeService {
 
 	@Override
-	public Scheme getScheme(String type, String paymodeno) {
+	public Scheme getScheme(SchemeType type, String paymodeno) {
 		DetachedCriteria sdc = DetachedCriteria.forClass(Scheme.class);
 		sdc.add(Restrictions.eq("type", type)).add(Restrictions.eq("paymodeno", paymodeno));
 		Scheme scheme = baseDAO.queryUniqueByCriteria(sdc);

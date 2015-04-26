@@ -13,5 +13,5 @@ public interface CalculateFilter {
 	
 	void doFilter(Order order,FilterChain chain);
 	
-	String getChit();
+//	String getChit();
 }

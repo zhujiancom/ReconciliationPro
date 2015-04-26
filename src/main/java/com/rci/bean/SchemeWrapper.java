@@ -9,16 +9,22 @@ import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
 
 public class SchemeWrapper {
-private Scheme scheme;
-	
+	private Scheme scheme;
+
 	private Integer count;
-	
+
 	private BigDecimal postAmount;
-	
-	public SchemeWrapper(){}
-	
-	public SchemeWrapper(Scheme s){
+
+	public SchemeWrapper() {
+	}
+
+	public SchemeWrapper(Scheme s) {
 		this.scheme = s;
+	}
+	
+	public SchemeWrapper(Scheme s,Integer count){
+		this(s);
+		this.count = count;
 	}
 
 	public Scheme getScheme() {
@@ -39,13 +45,16 @@ private Scheme scheme;
 
 	public String getName() {
 		StringBuffer name = new StringBuffer();
-		if(StringUtils.hasText(scheme.getUnitCode())){
-			//Èç¹ûÓĞÊıÁ¿µ¥Î»£¬»ñÈ¡ÊıÁ¿µ¥Î»Ãû³Æ
-			IDictItemService dictService = (IDictItemService) SpringUtils.getBean("DictionaryService");
-			DictItem item = dictService.getDictItem("UNIT", scheme.getUnitCode());
+		if (StringUtils.hasText(scheme.getUnitCode())) {
+			// å¦‚æœæœ‰æ•°é‡å•ä½ï¼Œè·å–æ•°é‡å•ä½åç§°
+			IDictItemService dictService = (IDictItemService) SpringUtils
+					.getBean("DictionaryService");
+			DictItem item = dictService.getDictItem("UNIT",
+					scheme.getUnitCode());
 			String unitName = item.getItemCname();
-			name.append(scheme.getName()).append("¡¾").append(+this.count).append("¡¿").append(unitName);
-		}else{
+			name.append(scheme.getName()).append("ã€").append(+this.count)
+					.append("ã€‘").append(unitName);
+		} else {
 			name.append(scheme.getName()).append("-").append(postAmount);
 		}
 		return name.toString();
@@ -59,7 +68,7 @@ private Scheme scheme;
 		this.postAmount = postAmount;
 	}
 
-	public void increasement(){
+	public void increasement() {
 		this.count++;
 	}
 }

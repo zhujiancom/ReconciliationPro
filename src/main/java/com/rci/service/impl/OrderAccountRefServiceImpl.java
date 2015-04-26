@@ -21,4 +21,12 @@ public class OrderAccountRefServiceImpl extends
 		return baseDAO.queryListByCriteria(dc);
 	}
 
+	/* 
+	 * @see com.rci.service.IOrderAccountRefService#rwInsertOra(com.rci.bean.entity.OrderAccountRef)
+	 */
+	@Override
+	public void rwInsertOar(OrderAccountRef oar) {
+		rwCreate(oar);
+	}
+
 }
