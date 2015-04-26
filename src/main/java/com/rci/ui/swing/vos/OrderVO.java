@@ -6,6 +6,8 @@ package com.rci.ui.swing.vos;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.rci.enums.CommonEnums;
+
 /**
  * @author zj
  * 
@@ -72,7 +74,7 @@ public class OrderVO {
 
 	private BigDecimal nodiscountAmount;
 
-	private Boolean singleDiscount;
+	private CommonEnums.YOrN singleDiscount;
 
 	/**
 	 * @return the orderId
@@ -341,18 +343,11 @@ public class OrderVO {
 		this.nodiscountAmount = nodiscountAmount;
 	}
 
-	/**
-	 * @return the singleDiscount
-	 */
-	public Boolean getSingleDiscount() {
+	public CommonEnums.YOrN getSingleDiscount() {
 		return singleDiscount;
 	}
 
-	/**
-	 * @param singleDiscount
-	 *            the singleDiscount to set
-	 */
-	public void setSingleDiscount(Boolean singleDiscount) {
+	public void setSingleDiscount(CommonEnums.YOrN singleDiscount) {
 		this.singleDiscount = singleDiscount;
 	}
 

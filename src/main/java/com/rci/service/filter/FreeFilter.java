@@ -1,24 +1,17 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
-import com.rci.bean.PairKey;
-import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Order;
-import com.rci.bean.entity.Scheme;
 import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.FreeType;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
-import com.rci.metadata.dto.OrderItemDTO;
 
 /**
  * 免单

@@ -255,7 +255,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 */
 	protected BigDecimal calculateTG(Scheme scheme,Integer count){
 		BigDecimal postAmount = BigDecimal.ZERO;
-		BigDecimal rate = BigDecimal.ONE.subtract(DigitUtil.precentDown(scheme.getCommission(), new BigDecimal(100)));
+		BigDecimal rate = BigDecimal.ONE.subtract(DigitUtil.precentDown(scheme.getCommission()));
 		BigDecimal singlePrice = DigitUtil.mutiplyDown(scheme.getPostPrice(), rate);
 		if(scheme.getSpread() != null){
 			singlePrice = singlePrice.add(scheme.getSpread());

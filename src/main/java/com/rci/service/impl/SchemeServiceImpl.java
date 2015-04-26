@@ -5,6 +5,7 @@ package com.rci.service.impl;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.SchemeType;
@@ -25,6 +26,7 @@ import com.rci.service.base.BaseService;
  * remark (备注):
  *
  */
+@Service("SchemeService")
 public class SchemeServiceImpl extends BaseService<Scheme, Long> implements
 		ISchemeService {
 

@@ -43,7 +43,7 @@ public class ELEFilter extends AbstractFilter {
 				BigDecimal count = item.getCount();
 				BigDecimal countback = item.getCountback();
 				BigDecimal ratepercent = item.getDiscountRate();
-				BigDecimal rate = DigitUtil.precentDown(ratepercent, new BigDecimal(100));
+				BigDecimal rate = DigitUtil.precentDown(ratepercent);
 				BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate).setScale(0, BigDecimal.ROUND_CEILING);
 				actualAmount = actualAmount.add(price);
 			}

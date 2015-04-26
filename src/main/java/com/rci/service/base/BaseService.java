@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.rci.bean.entity.base.BaseEntity;
-import com.rci.dao.DAOFacade;
+import com.rci.dao.impl.DefaultHibernateDAOFacadeImpl;
 
 /**
  * @Description
@@ -21,7 +21,7 @@ import com.rci.dao.DAOFacade;
 public abstract class BaseService<T extends BaseEntity, PK extends Serializable>{
 	private transient Log logger = LogFactory.getLog(BaseService.class);
 	@Autowired
-	protected DAOFacade<T, PK> baseDAO;
+	protected DefaultHibernateDAOFacadeImpl<T, PK> baseDAO;
 
 	protected Log logger(){
 		if(logger == null){

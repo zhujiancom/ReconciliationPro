@@ -23,7 +23,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
-import com.rci.bean.PairKey;
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.BusinessEnums.SchemeType;
@@ -78,7 +77,7 @@ public class Order extends BaseEntity {
 	private List<OrderItem> items;
 	
 	/* 记录该订单使用的方案 */
-	private Map<PairKey<SchemeType,String>,SchemeWrapper> schemes; 
+	private Map<SchemeType,SchemeWrapper> schemes; 
 	
 	/* 该单有异常 */
 	private CommonEnums.YOrN unusual;
@@ -271,19 +270,12 @@ public class Order extends BaseEntity {
 		this.items = items;
 	}
 
-
-	/**
-	 * @return the schemes
-	 */
 	@Transient
-	public Map<PairKey<SchemeType, String>, SchemeWrapper> getSchemes() {
+	public Map<SchemeType, SchemeWrapper> getSchemes() {
 		return schemes;
 	}
 
-	/**
-	 * @param schemes the schemes to set
-	 */
-	public void setSchemes(Map<PairKey<SchemeType, String>, SchemeWrapper> schemes) {
+	public void setSchemes(Map<SchemeType, SchemeWrapper> schemes) {
 		this.schemes = schemes;
 	}
 
