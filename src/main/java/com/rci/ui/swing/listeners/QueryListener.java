@@ -49,6 +49,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private JLabel mtwmValue;
 	private JLabel mtwmFreeValue;
 	private JLabel freeValue;
+	private JLabel totalValue;
 	
 	public QueryListener(JTable mainTable,JTable subTable){
 		this.mainTable = mainTable;
@@ -71,6 +72,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 			mtwmValue.setText(getTotalAmount(BusinessConstant.MTWM_ACC).toString());
 			mtwmFreeValue.setText(getTotalAmount(BusinessConstant.FREE_MTWM_ACC).toString());
 			freeValue.setText(getTotalAmount(BusinessConstant.FREE_ACC).toString());
+			totalValue.setText(getTotalDayAmount().toString());
 			mainTable.getSelectionModel().addListSelectionListener(this);
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
@@ -142,7 +144,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		}
 		
 		loaderService.load(queryDate);
-		List<OrderVO> ordervos = orderService.queryOrderVOsByDay(time);
+		List<OrderVO> ordervos = orderService.accquireOrderVOsByDay(time);
 		this.orders = ordervos;
 		OrderTableModel otm = new OrderTableModel(orders);
 		mainTable.setModel(otm);
@@ -165,6 +167,17 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 
 	public void setTimeInput(JTextField timeInput) {
 		this.timeInput = timeInput;
+	}
+	
+	public BigDecimal getTotalDayAmount(){
+		BigDecimal totalAmount = new BigDecimal(BigInteger.ZERO,2);
+		if(CollectionUtils.isEmpty(orders)){
+			return totalAmount;
+		}
+		for(OrderVO order:orders){
+			totalAmount = totalAmount.add(order.getTotalAmount());
+		}
+		return totalAmount;
 	}
 	
 	public BigDecimal getTotalAmount(String accountNo){
@@ -228,6 +241,13 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 				}
 			}
 		}
+		if(BusinessConstant.FREE_ACC.equals(accountNo)){
+			for(OrderVO order:orders){
+				if(order.getFreeAmount() != null){
+					totalAmount = totalAmount.add(order.getFreeAmount());
+				}
+			}
+		}
 		return totalAmount;
 	}
 
@@ -265,5 +285,9 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 
 	public void setFreeValue(JLabel freeValue) {
 		this.freeValue = freeValue;
+	}
+
+	public void setTotalValue(JLabel totalValue) {
+		this.totalValue = totalValue;
 	}
 }

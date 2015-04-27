@@ -42,6 +42,8 @@ public class PropertyConstants{
 	public static final String ACCOUNT_FREE_MTWM="account.free.mtwm";
 	public static final String ACCOUNT_FREE_ELE="account.free.ele";
 	public static final String ACCOUNT_CASHMACHINE="account.cashmachine";
+	public static final String ACCOUNT_CASH="account.cash";
+	public static final String ACCOUNT_DEPOSIT="account.deposit";
 	
 	/*
 	 * 支付方式

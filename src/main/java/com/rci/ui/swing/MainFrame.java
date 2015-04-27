@@ -56,6 +56,7 @@ public class MainFrame extends JFrame {
 	private JLabel mtwmValue;
 	private JLabel mtwmFreeValue;
 	private JLabel freeValue;
+	private JLabel totalValue;
 	
 	public MainFrame(){
 		initComponent();
@@ -70,6 +71,7 @@ public class MainFrame extends JFrame {
 		listener.setMtwmValue(mtwmValue);
 		listener.setMtwmFreeValue(mtwmFreeValue);
 		listener.setFreeValue(freeValue);
+		listener.setTotalValue(totalValue);
 		queryBtn.registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		queryBtn.addActionListener(listener);
 		
@@ -84,6 +86,7 @@ public class MainFrame extends JFrame {
 		clistener.setMtwmValue(mtwmValue);
 		clistener.setMtwmFreeValue(mtwmFreeValue);
 		clistener.setFreeValue(freeValue);
+		clistener.setTotalValue(totalValue);
 		cleanBtn.addActionListener(clistener);
 		
 		try {
@@ -155,7 +158,7 @@ public class MainFrame extends JFrame {
 		
 		JPanel conclusionPanel = new JPanel();
 		containerPanel.add(conclusionPanel, BorderLayout.SOUTH);
-		conclusionPanel.setLayout(new GridLayout(9, 1));
+		conclusionPanel.setLayout(new GridLayout(11, 1));
 		
 		JLabel pos = new JLabel("收银机入账总额：");
 		posValue = new JLabel();
@@ -217,8 +220,15 @@ public class MainFrame extends JFrame {
 		freeValue = new JLabel();
 		freeValue.setForeground(Color.RED);
 		JPanel freePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		mtwmFreePanel.add(freeLabel);
-		mtwmFreePanel.add(freeValue);
+		freePanel.add(freeLabel);
+		freePanel.add(freeValue);
+		
+		JLabel totalLabel = new JLabel("当日营业收入总额：");
+		totalValue = new JLabel();
+		totalValue.setForeground(Color.RED);
+		JPanel totalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		totalPanel.add(totalLabel);
+		totalPanel.add(totalValue);
 		
 		conclusionPanel.add(posPanel);
 		conclusionPanel.add(tgPanel);
@@ -229,5 +239,6 @@ public class MainFrame extends JFrame {
 		conclusionPanel.add(mtwmFreePanel);
 		conclusionPanel.add(tddPanel);
 		conclusionPanel.add(freePanel);
+		conclusionPanel.add(totalPanel);
 	}
 }

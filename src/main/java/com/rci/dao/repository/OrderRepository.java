@@ -3,6 +3,8 @@
  */
 package com.rci.dao.repository;
 
+import org.springframework.stereotype.Repository;
+
 import com.rci.bean.entity.Order;
 import com.rci.dao.impl.DefaultHibernateDAOFacadeImpl;
 
@@ -20,6 +22,7 @@ import com.rci.dao.impl.DefaultHibernateDAOFacadeImpl;
  * remark (备注):
  *
  */
+@Repository
 public class OrderRepository extends DefaultHibernateDAOFacadeImpl<Order, Long> {
 
 }

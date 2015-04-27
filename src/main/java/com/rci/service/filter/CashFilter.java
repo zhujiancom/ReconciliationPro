@@ -14,6 +14,7 @@ import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
+import com.rci.tools.StringUtils;
 
 /**
  * pos机现金
@@ -55,20 +56,28 @@ public class CashFilter extends AbstractFilter {
 				if(cashAmount.compareTo(actualAmount) != 0){
 					//如果收银机显示现金收入和计算收入不相符时，报异常
 					order.setUnusual(YOrN.Y);
-					logger.debug("----【"+order.getOrderNo()+"】:#8折优惠# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
+					logger.debug("--- 【"+order.getPayNo()+"】[收银机支付异常] ---，#8折优惠# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
 				}
-				schemeName = schemeName+",店内现金优惠-"+actualAmount;
-				preserveOAR(actualAmount, BusinessConstant.CASHMACHINE_ACC, order);
+				if(StringUtils.hasText(schemeName)){
+					schemeName = schemeName+",店内现金优惠-"+actualAmount;
+				}else{
+					schemeName = "店内现金优惠-"+actualAmount;
+				}
 				order.setSchemeName(schemeName);
+				preserveOAR(actualAmount, BusinessConstant.CASHMACHINE_ACC, order);
 			}
 			else if(actualAmount.compareTo(originAmount)==0){
 				//无折扣
-				schemeName = schemeName+",现金支付-"+cashAmount;
-				preserveOAR(cashAmount, BusinessConstant.CASHMACHINE_ACC, order);
+				if(StringUtils.hasText(schemeName)){
+					schemeName = schemeName+",现金支付-"+cashAmount;
+				}else{
+					schemeName = "现金支付-"+cashAmount;
+				}
 				order.setSchemeName(schemeName);
+				preserveOAR(cashAmount, BusinessConstant.CASHMACHINE_ACC, order);
 			}
 			else{
-				logger.error("----【"+order.getOrderNo()+"】实际金额不应该大于原价");
+				logger.error("----【"+order.getPayNo()+"】[收银机支付异常] ---, 实际金额不应该大于原价");
 			}
 	}
 

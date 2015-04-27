@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.ui.swing.vos.OrderVO;
 
 public class OrderTable extends JTable {
@@ -82,14 +83,14 @@ public class OrderTable extends JTable {
 				int column) {
 			OrderTableModel tm = (OrderTableModel) table.getModel();
 			OrderVO order = tm.getOrderAt(row);
-			if(order.getUnusual() == 1){
+			if(YOrN.Y.equals(order.getUnusual())){
 				setBackground(Color.RED);
 				setForeground(Color.WHITE);
 			}else{
 				setBackground(Color.WHITE);
 				setForeground(Color.BLACK);
 			}
-			if(order.getUnusual() == 1 && isSelected){
+			if(YOrN.Y.equals(order.getUnusual()) && isSelected){
 				table.setSelectionBackground(Color.RED);
 				table.setSelectionForeground(Color.WHITE);
 			}else{

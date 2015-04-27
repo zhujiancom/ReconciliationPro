@@ -17,6 +17,7 @@ import com.rci.enums.BusinessEnums.FreeType;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
+import com.rci.tools.StringUtils;
 
 /**
  * 美团外卖
@@ -40,7 +41,11 @@ public class MTWMFilter extends AbstractFilter {
 		BigDecimal actualAmount = BigDecimal.ZERO;
 		
 		String schemeName = order.getSchemeName();
-		schemeName = schemeName+","+"美团外卖在线支付"+onlineAmount+"元";
+		if(StringUtils.hasText(schemeName)){
+			schemeName = schemeName+",美团外卖在线支付"+onlineAmount+"元";
+		}else{
+			schemeName = "美团外卖在线支付"+onlineAmount+"元";
+		}
 		
 		List<OrderItem> items = order.getItems();
 		for(OrderItem item:items){
@@ -59,16 +64,16 @@ public class MTWMFilter extends AbstractFilter {
 			if(freeMap.get(FreeType.MTWM) == null){
 				freeMap.put(FreeType.MTWM, freeAmount);
 			}
+			//保存饿了么补贴金额
+			preserveOAR(freeAmount,BusinessConstant.FREE_MTWM_ACC,order);
 		}
 		if(actualAmount.compareTo(onlineAmount) != 0){
 			order.setUnusual(YOrN.Y);
-			logger.warn("[--- ELEFilter ---]: 在线支付金额："+onlineAmount+" , 实际支付金额： "+actualAmount);
+			logger.warn("--- 【"+order.getPayNo()+"】[美团外卖支付异常] ---， 在线支付金额："+onlineAmount+" , 实际支付金额： "+actualAmount);
 		}
 		order.setSchemeName(schemeName);
 		//保存饿了么在线支付金额
 		preserveOAR(actualAmount,BusinessConstant.MTWM_ACC,order);
-		//保存饿了么补贴金额
-		preserveOAR(actualAmount,BusinessConstant.FREE_MTWM_ACC,order);
 	}
 
 	@Override

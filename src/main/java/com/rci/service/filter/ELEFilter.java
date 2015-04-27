@@ -17,6 +17,7 @@ import com.rci.enums.BusinessEnums.FreeType;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
+import com.rci.tools.StringUtils;
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -35,7 +36,12 @@ public class ELEFilter extends AbstractFilter {
 			BigDecimal actualAmount = BigDecimal.ZERO;
 			
 			String schemeName = order.getSchemeName();
-			schemeName = schemeName+","+"饿了么在线支付"+onlineAmount+"元";
+			if(StringUtils.hasText(schemeName)){
+				schemeName = schemeName+","+"饿了么在线支付"+onlineAmount+"元";
+			}else{
+				schemeName = "饿了么在线支付"+onlineAmount+"元";
+			}
+			
 			
 			List<OrderItem> items = order.getItems();
 			for(OrderItem item:items){
@@ -54,16 +60,16 @@ public class ELEFilter extends AbstractFilter {
 				if(freeMap.get(FreeType.ELE) == null){
 					freeMap.put(FreeType.ELE, freeAmount);
 				}
+				//保存饿了么补贴金额
+				preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
 			}
 			if(actualAmount.compareTo(onlineAmount) != 0){
 				order.setUnusual(YOrN.Y);
-				logger.warn("[--- ELEFilter ---]: 在线支付金额："+onlineAmount+" , 实际支付金额： "+actualAmount);
+				logger.warn("--- 【"+order.getPayNo()+"】[饿了么在线支付异常] ---， 在线支付金额："+onlineAmount+" , 实际支付金额： "+actualAmount);
 			}
 			order.setSchemeName(schemeName);
 			//保存饿了么在线支付金额
 			preserveOAR(actualAmount,BusinessConstant.ELE_ACC,order);
-			//保存饿了么补贴金额
-			preserveOAR(actualAmount,BusinessConstant.FREE_ELE_ACC,order);
 	}
 
 

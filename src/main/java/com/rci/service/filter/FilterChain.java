@@ -40,11 +40,6 @@ public class FilterChain implements CalculateFilter {
 		throw new UnsupportedOperationException();
 	}
 
-//	@Override
-//	public String getChit() {
-//		throw new UnsupportedOperationException();
-//	}
-	
 	public void reset(){
 		this.pos = 0;
 		this.balance = BigDecimal.ZERO;

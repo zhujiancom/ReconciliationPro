@@ -1,6 +1,7 @@
 package com.rci.service.impl;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,7 @@ import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.base.BaseService;
+import com.rci.tools.DateUtil;
 import com.rci.ui.swing.vos.OrderItemVO;
 import com.rci.ui.swing.vos.OrderVO;
 
@@ -48,6 +50,11 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	public void rwInsertOrder(Order order) {
 		rwCreate(order);
 	}
+	
+	@Override
+	public void rwUpdateOrder(Order order){
+		rwUpdate(order);
+	}
 
 	@Override
 	public List<Order> queryAllDayOrders() {
@@ -64,7 +71,7 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	}
 
 	@Override
-	public List<OrderVO> queryOrderVOsByDay(String day) {
+	public List<OrderVO> accquireOrderVOsByDay(String day) {
 		List<OrderVO> vos = new LinkedList<OrderVO>();
 		List<Order> orders = queryOrdersByDay(day);
 		if (!CollectionUtils.isEmpty(orders)) {
@@ -99,6 +106,7 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 					if (BusinessConstant.FREE_MTWM_ACC.equals(accountNo)) {
 						vo.setMtwmFreeAmount(amount);
 					}
+					totalAmount = totalAmount.add(amount);
 					if (BusinessConstant.FREE_ACC.equals(accountNo)) {
 						vo.setFreeAmount(amount);
 					}
@@ -138,6 +146,11 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	public void rwDeleteOrders(String day) {
 		List<Order> orders = queryOrdersByDay(day);
 		baseDAO.delete(orders.toArray(new Order[0]));
+		try {
+			oaService.rwDeleteOar(DateUtil.parseDate(day, "yyyyMMdd"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

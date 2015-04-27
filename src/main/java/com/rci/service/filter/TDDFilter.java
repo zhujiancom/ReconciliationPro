@@ -1,8 +1,10 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -14,6 +16,7 @@ import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
+import com.rci.tools.StringUtils;
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -27,9 +30,16 @@ public class TDDFilter extends AbstractFilter {
 	@Override
 	public void generateScheme(Order order,FilterChain chain) {
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_TDD);
-		BigDecimal actualAmount = BigDecimal.ZERO;
+		BigDecimal totalAmount = BigDecimal.ZERO; //订单总金额
+		BigDecimal tddAmount = BigDecimal.ZERO; //淘点点支付金额
+		
 		String schemeName = order.getSchemeName();
-		schemeName = schemeName+","+"淘点点在线支付"+onlineAmount+"元";
+		if(StringUtils.hasText(schemeName)){
+			schemeName = schemeName+",支付宝（淘点点）支付"+onlineAmount+"元";	
+		}else{
+			schemeName = "淘点点在线支付"+onlineAmount+"元";
+		}
+		
 		List<OrderItem> items = order.getItems();
 		for(OrderItem item:items){
 			BigDecimal singlePrice = item.getPrice();
@@ -38,15 +48,25 @@ public class TDDFilter extends AbstractFilter {
 			BigDecimal ratepercent = item.getDiscountRate();
 			BigDecimal rate = DigitUtil.precentDown(ratepercent);
 			BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate).setScale(0, BigDecimal.ROUND_CEILING);
-			actualAmount = actualAmount.add(price);
+			totalAmount = totalAmount.add(price);
 		}
-		if(actualAmount.compareTo(onlineAmount) != 0){
+		BigDecimal otherAmount = BigDecimal.ZERO;
+		for(Iterator<Entry<String,BigDecimal>> it = order.getPaymodeMapping().entrySet().iterator();it.hasNext();){
+			Entry<String,BigDecimal> entry = it.next();
+			String paymode = entry.getKey();
+			BigDecimal amount = entry.getValue();
+			if(!BusinessConstant.PAYMODE_TDD.equals(paymode)){
+				otherAmount = otherAmount.add(amount);
+			}
+		}
+		tddAmount = totalAmount.subtract(otherAmount);
+		if(tddAmount.compareTo(onlineAmount) != 0){
 			order.setUnusual(YOrN.Y);
-			logger.warn("[--- ELEFilter ---]: 在线支付金额："+onlineAmount+" , 实际支付金额： "+actualAmount);
+			logger.warn("--- 【"+order.getPayNo()+"】[淘点点支付异常] ---， 在线支付金额："+onlineAmount+" , 实际支付金额： "+tddAmount);
 		}
 		order.setSchemeName(schemeName);
 		//保存淘点点在线支付金额
-		preserveOAR(actualAmount,BusinessConstant.TDD_ACC,order);
+		preserveOAR(tddAmount,BusinessConstant.TDD_ACC,order);
 	}
 
 	@Override

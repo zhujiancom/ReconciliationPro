@@ -18,12 +18,12 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.account.Account;
-import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.service.IAccountService;
 import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
+import com.rci.service.IOrderService;
 import com.rci.service.ISchemeService;
 import com.rci.tools.DigitUtil;
 
@@ -41,6 +41,10 @@ public abstract class AbstractFilter implements CalculateFilter {
 	
 	@Resource(name="SchemeService")
 	protected ISchemeService schemeService;
+	
+	@Resource(name="OrderService")
+	protected IOrderService orderService;
+	
 	@Override
 	public void doFilter(Order order,FilterChain chain) {
 		if (support(order.getPaymodeMapping())) {
@@ -52,14 +56,14 @@ public abstract class AbstractFilter implements CalculateFilter {
 	protected abstract void generateScheme(Order order,FilterChain chain);
 
 	/**
-	 * 菜品是否可以打折
+	 * 菜品是否不可以打折
 	 * @param dishNo
 	 * @return
 	 */
 	protected Boolean isNodiscount(String dishNo){
 		Dish dish = dishService.findDishByNo(dishNo);
 		DishType type = dish.getDishType();
-		if(type != null && !YOrN.isY(type.getBeDiscount())){
+		if(type != null && YOrN.isY(type.getNotDiscount())){
 			return true;
 		}
 		return false;
@@ -255,8 +259,13 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 */
 	protected BigDecimal calculateTG(Scheme scheme,Integer count){
 		BigDecimal postAmount = BigDecimal.ZERO;
-		BigDecimal rate = BigDecimal.ONE.subtract(DigitUtil.precentDown(scheme.getCommission()));
-		BigDecimal singlePrice = DigitUtil.mutiplyDown(scheme.getPostPrice(), rate);
+		BigDecimal singlePrice = BigDecimal.ZERO;
+		if(scheme.getCommission() != null && scheme.getCommission().compareTo(BigDecimal.ZERO) != 0){
+			BigDecimal rate = BigDecimal.ONE.subtract(DigitUtil.precentDown(scheme.getCommission()));
+			singlePrice = DigitUtil.mutiplyDown(scheme.getPostPrice(), rate);
+		}else{
+			singlePrice = scheme.getPostPrice();
+		}
 		if(scheme.getSpread() != null){
 			singlePrice = singlePrice.add(scheme.getSpread());
 		}
@@ -281,14 +290,15 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 */
 	protected void preserveOAR(BigDecimal postAmount,String accNo,Order order){
 		OrderAccountRef oar = new OrderAccountRef();
-		Account account = accService.getAccByNo(BusinessConstant.MT_ACC);
+		Account account = accService.getAccByNo(accNo);
 		oar.setAccId(account.getAccId());
-		oar.setAccNo(BusinessConstant.MT_ACC);
+		oar.setAccNo(accNo);
 		oar.setOrderNo(order.getOrderNo());
 		oar.setPostTime(order.getCheckoutTime());
 		oar.setRealAmount(postAmount);
 		//保存关联数据
 		oarService.rwInsertOar(oar);
+		orderService.rwUpdateOrder(order);
 	}
 	
 }

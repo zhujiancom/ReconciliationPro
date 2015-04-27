@@ -35,6 +35,7 @@ public class CleanListener implements ActionListener {
 	private JLabel mtwmValue;
 	private JLabel mtwmFreeValue;
 	private JLabel freeValue;
+	private JLabel totalValue;
 	
 	public CleanListener(JTable mainTable,JTable subTable){
 		this.mainTable = mainTable;
@@ -68,6 +69,7 @@ public class CleanListener implements ActionListener {
 			mtwmValue.setText(BigDecimal.ZERO.toString());
 			mtwmFreeValue.setText(BigDecimal.ZERO.toString());
 			freeValue.setText(BigDecimal.ZERO.toString());
+			totalValue.setText(BigDecimal.ZERO.toString());
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
 		}
@@ -115,6 +117,10 @@ public class CleanListener implements ActionListener {
 
 	public void setFreeValue(JLabel freeValue) {
 		this.freeValue = freeValue;
+	}
+
+	public void setTotalValue(JLabel totalValue) {
+		this.totalValue = totalValue;
 	}
 
 }

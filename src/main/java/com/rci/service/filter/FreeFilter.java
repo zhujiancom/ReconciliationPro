@@ -12,6 +12,7 @@ import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.FreeType;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
+import com.rci.tools.StringUtils;
 
 /**
  * 免单
@@ -34,20 +35,25 @@ public class FreeFilter extends AbstractFilter {
 		Map<FreeType,BigDecimal> freeMap = chain.getFreeMap();
 		BigDecimal freeELEAmount = freeMap.get(FreeType.ELE);
 		BigDecimal freeMTWMAmount = freeMap.get(FreeType.MTWM);
-		if(freeELEAmount != null){
-			normalAmount = normalAmount.subtract(freeELEAmount);
+		if(freeELEAmount != null || order.getPaymodeMapping().containsKey(BusinessConstant.PAYMODE_ELE)){
+			return;
 		}
-		if(freeMTWMAmount != null){
-			normalAmount = normalAmount.subtract(freeMTWMAmount);
+		if(freeMTWMAmount != null || order.getPaymodeMapping().containsKey(BusinessConstant.PAYMODE_MTWM)){
+			return;
 		}
 		String schemeName = order.getSchemeName();
 		if(normalAmount.compareTo(BigDecimal.ZERO) > 0){
-			schemeName = schemeName+",免单"+normalAmount+"元";
+			if(StringUtils.hasText(schemeName)){
+				schemeName = schemeName+",免单"+normalAmount+"元";
+			}else{
+				schemeName = "免单"+normalAmount+"元";
+			}
 		}
 		if(normalAmount.compareTo(BigDecimal.ZERO) < 0){
-			logger.error("----【"+order.getOrderNo()+"】:免单金额超出了原价");
+			logger.error("----【"+order.getPayNo()+"】[免单金额异常] --- , 免单金额超出了原价");
 			order.setUnusual(YOrN.Y);
 		}
+		preserveOAR(normalAmount, BusinessConstant.FREE_ACC, order);
 	}
 
 	@Override

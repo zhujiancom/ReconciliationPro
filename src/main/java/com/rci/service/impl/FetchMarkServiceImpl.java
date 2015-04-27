@@ -35,7 +35,6 @@ public class FetchMarkServiceImpl extends BaseService<DataFetchMark, Long>
 	}
 
 	@Override
-//	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void rwSystemInit() {
 		DataFetchMark mark = new DataFetchMark(MarkType.SYSTEM_INIT);
 		mark.setMarkFlag(CommonEnums.YOrN.Y);
@@ -43,7 +42,6 @@ public class FetchMarkServiceImpl extends BaseService<DataFetchMark, Long>
 	}
 
 	@Override
-//	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void rwOrderMark(String day) {
 		DataFetchMark mark = new DataFetchMark(MarkType.ORDER_FETCH);
 		mark.setRciDate(day);
@@ -53,7 +51,6 @@ public class FetchMarkServiceImpl extends BaseService<DataFetchMark, Long>
 	}
 	
 	@Override
-//	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void rwUpdateMark(DataFetchMark mark){
 		mark.setSavepoint(DateUtil.getCurrentDate());
 		baseDAO.update(mark);

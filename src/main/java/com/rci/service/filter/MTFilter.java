@@ -105,17 +105,22 @@ public class MTFilter extends AbstractFilter {
 			if(bediscountAmount.compareTo(chitAmount) < 0){
 				//如果可打折金额小于代金券实际使用金额，则这单属于异常单
 				order.setUnusual(YOrN.Y);
-				logger.warn("----【"+order.getOrderNo()+"】支付金额异常----， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+". 可打折金额不应该小于代金券支付金额");
+				logger.warn("---【"+order.getPayNo()+"】[美团支付异常]---， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+". 可打折金额不应该小于代金券支付金额");
 			}
 //			schemes.putAll(createSchemes(chitAmount, BusinessConstant.PAYMODE_MT,suitFlag));
 			Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, BusinessConstant.PAYMODE_MT,suitFlag);
 			if(!CollectionUtils.isEmpty(schemes)){
-				String schemeName = StringUtils.trimToEmpty(order.getSchemeName());
+				String schemeName = order.getSchemeName();
 				BigDecimal postAmount = BigDecimal.ZERO;
 				for(Iterator<Entry<SchemeType,SchemeWrapper>> it=schemes.entrySet().iterator();it.hasNext();){
 					Entry<SchemeType,SchemeWrapper> entry = it.next();
 					SchemeWrapper wrapper = entry.getValue();
-					schemeName = schemeName+","+wrapper.getName();
+					if(StringUtils.hasText(schemeName)){
+						schemeName = schemeName+","+wrapper.getName();
+					}else{
+						
+					}schemeName = wrapper.getName();
+					
 					postAmount = postAmount.add(calculateTG(wrapper.getScheme(), wrapper.getCount()));
 				}
 				order.setSchemeName(schemeName);
@@ -123,13 +128,13 @@ public class MTFilter extends AbstractFilter {
 				preserveOAR(postAmount,BusinessConstant.MT_ACC,order);
 			}
 			//计算订余额
-			BigDecimal balance = chain.getBalance();
-			logger.debug("MTFilter - balance = "+balance);
-			if(balance.compareTo(chitAmount) < 0){
-				logger.error("----【"+order.getOrderNo()+"】数据异常----,余额:"+balance+" , 需支付金额:"+chitAmount+". 余额不能小于需支付金额");
-			}
-			balance = balance.subtract(chitAmount);
-			chain.setBalance(balance);
+//			BigDecimal balance = chain.getBalance();
+//			logger.debug("MTFilter - balance = "+balance);
+//			if(balance.compareTo(chitAmount) < 0){
+//				logger.error("----【"+order.getPayNo()+"】[美团]数据异常----,余额:"+balance+" , 需支付金额:"+chitAmount+". 余额不能小于需支付金额");
+//			}
+//			balance = balance.subtract(chitAmount);
+//			chain.setBalance(balance);
 	}
 
 	@Override

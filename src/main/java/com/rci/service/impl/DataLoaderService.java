@@ -19,7 +19,7 @@ import com.rci.service.filter.FilterChain;
 import com.rci.tools.DateUtil;
 
 @Service("DataLoaderService")
-public class DataLoaderServiceImpl implements IDataLoaderService {
+public class DataLoaderService implements IDataLoaderService {
 	@Autowired
 	private List<CalculateFilter> filters;
 	

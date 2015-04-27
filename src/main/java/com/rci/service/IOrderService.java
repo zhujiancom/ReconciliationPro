@@ -17,11 +17,13 @@ public interface IOrderService {
 	
 	void rwDeleteOrders(String day);
 	
+	void rwUpdateOrder(Order order);
+	
 	List<Order> queryAllDayOrders();
 	
 	List<Order> queryOrdersByDay(String day);
 	
-	List<OrderVO> queryOrderVOsByDay(String day);
+	List<OrderVO> accquireOrderVOsByDay(String day);
 	
 	List<OrderItemVO> queryOrderItemVOsByPayno(String payno);
 }

@@ -49,7 +49,7 @@ public class SchemeWrapper {
 			// 如果有数量单位，获取数量单位名称
 			IDictItemService dictService = (IDictItemService) SpringUtils
 					.getBean("DictionaryService");
-			DictItem item = dictService.getDictItem("UNIT",
+			DictItem item = dictService.getDictItem("NUM_UNIT",
 					scheme.getUnitCode());
 			String unitName = item.getItemCname();
 			name.append(scheme.getName()).append("【").append(+this.count)

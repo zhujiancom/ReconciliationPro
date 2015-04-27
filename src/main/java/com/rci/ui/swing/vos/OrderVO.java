@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.rci.enums.CommonEnums;
+import com.rci.enums.CommonEnums.YOrN;
 
 /**
  * @author zj
@@ -70,7 +71,7 @@ public class OrderVO {
 	/* 正常免单金额 */
 	private BigDecimal freeAmount;
 	
-	private Integer unusual;
+	private YOrN unusual;
 
 	private BigDecimal nodiscountAmount;
 
@@ -313,18 +314,11 @@ public class OrderVO {
 		this.eleFreeAmount = eleFreeAmount;
 	}
 
-	/**
-	 * @return the unusual
-	 */
-	public Integer getUnusual() {
+	public YOrN getUnusual() {
 		return unusual;
 	}
 
-	/**
-	 * @param unusual
-	 *            the unusual to set
-	 */
-	public void setUnusual(Integer unusual) {
+	public void setUnusual(YOrN unusual) {
 		this.unusual = unusual;
 	}
 
