@@ -6,6 +6,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +18,9 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
+import com.rci.enums.BusinessEnums.DataGenerateType;
+import com.rci.enums.BusinessEnums.FlowType;
+import com.rci.enums.CommonEnums.YOrN;
 
 @Entity
 @Table(name="bus_tb_account_flow")
@@ -30,22 +35,36 @@ public class AccFlow extends BaseEntity {
 	
 	private Long accId;
 	
-	/* ���ʱ�� */
+	/* 流水生成时间 */
 	private Date time;
 	
-	/* ���� */
+	/* 流水类型， 收入，支出，转账 */
+	private FlowType flowType;
+	
+	/* 分类名称 */
 	private String classify;
 	
 	private BigDecimal amount;
 	
-	/* �̼�*/
+	/* 商家*/
 	private String merchant;
 	
-	/* ��Ŀ */
+	/* 项目 */
 	private String project;
 	
-	/* ��ע*/
+	/* 备注*/
 	private String remark;
+	
+	/* 是否手动更新 */
+	private YOrN manualUpdate;
+	
+	private DataGenerateType generateType = DataGenerateType.MANUAL;
+	
+	public AccFlow(){}
+	
+	public AccFlow(Long accId){
+		this.accId = accId;
+	}
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -120,6 +139,36 @@ public class AccFlow extends BaseEntity {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="manual_update")
+	public YOrN getManualUpdate() {
+		return manualUpdate;
+	}
+
+	public void setManualUpdate(YOrN manualUpdate) {
+		this.manualUpdate = manualUpdate;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="data_generate_type")
+	public DataGenerateType getGenerateType() {
+		return generateType;
+	}
+
+	public void setGenerateType(DataGenerateType generateType) {
+		this.generateType = generateType;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="flow_type")
+	public FlowType getFlowType() {
+		return flowType;
+	}
+
+	public void setFlowType(FlowType flowType) {
+		this.flowType = flowType;
 	}
 
 	@Override

@@ -39,4 +39,14 @@ public class AccountServiceImpl extends BaseService<Account, Long> implements IA
 		return account;
 	}
 
+	@Override
+	public Account getAccount(Long id) {
+		return baseDAO.get(id);
+	}
+
+	@Override
+	public void rwUpdateAccount(Account account) {
+		super.rwUpdate(account);
+	}
+
 }

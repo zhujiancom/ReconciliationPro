@@ -263,10 +263,10 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 	 * @author zj
 	 * @Date 2014年10月20日
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked" })
 	@Override
-	public List<T> queryListByCriteria(DetachedCriteria dc){
-		List<T> results = Collections.emptyList();
+	public <E> List<E> queryListByCriteria(DetachedCriteria dc){
+		List<E> results = Collections.emptyList();
 		try{
 			CriteriaImpl criteria = (CriteriaImpl) dc.getExecutableCriteria(getCurrentSession());
 			results = criteria.list();

@@ -21,4 +21,8 @@ import com.rci.bean.entity.account.Account;
  */
 public interface IAccountService {
 	Account getAccByNo(String accNo);
+	
+	Account getAccount(Long id);
+	
+	void rwUpdateAccount(Account account);
 }

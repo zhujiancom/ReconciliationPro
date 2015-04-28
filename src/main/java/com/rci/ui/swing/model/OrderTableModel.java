@@ -82,7 +82,9 @@ public class OrderTableModel extends AbstractTableModel {
 	public void setRowCount(int rowCount){
 		int old = getRowCount();
 		orders = Collections.emptyList();
-		super.fireTableRowsDeleted(rowCount,old-1);
+		if(old > 0){
+			super.fireTableRowsDeleted(rowCount,old-1);
+		}
 	}
 
 }

@@ -9,9 +9,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
+import com.rci.service.IAccFlowService;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderService;
 import com.rci.tools.DateUtil;
@@ -25,6 +27,7 @@ public class CleanListener implements ActionListener {
 	private JTable subTable;
 	private IOrderService orderService;
 	private IFetchMarkService markService;
+	private IAccFlowService accFlowService;
 	private JTextField timeInput;
 	private JLabel posValue;
 	private JLabel mtValue;
@@ -42,14 +45,19 @@ public class CleanListener implements ActionListener {
 		this.subTable = subTable;
 		orderService = (IOrderService) SpringUtils.getBean("OrderService");
 		markService = (IFetchMarkService) SpringUtils.getBean("FetchMarkService");
+		accFlowService = (IAccFlowService) SpringUtils.getBean("AccFlowService");
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		OrderTableModel orderModel = (OrderTableModel) mainTable.getModel();
-		orderModel.setRowCount(0);
-		OrderItemTableModel itemModel = (OrderItemTableModel) subTable.getModel();
-		itemModel.setRowCount(0);
+		if(mainTable.getModel() instanceof OrderTableModel){
+			OrderTableModel orderModel = (OrderTableModel) mainTable.getModel();
+			orderModel.setRowCount(0);
+		}
+		if(subTable.getModel() instanceof OrderItemTableModel){
+			OrderItemTableModel itemModel = (OrderItemTableModel) subTable.getModel();
+			itemModel.setRowCount(0);
+		}
 		String time = timeInput.getText();
 		try{
 			if(!StringUtils.hasText(time)){
@@ -60,6 +68,8 @@ public class CleanListener implements ActionListener {
 			}
 			orderService.rwDeleteOrders(time);
 			markService.rwDeleteMark(time);
+			accFlowService.rwDeleteFlowInfo(time,DataGenerateType.AUTO);
+			
 			posValue.setText(BigDecimal.ZERO.toString());
 			mtValue.setText(BigDecimal.ZERO.toString());
 			tgValue.setText(BigDecimal.ZERO.toString());
