@@ -32,6 +32,14 @@ public class DictGroup extends BaseEntity {
 	/* �ֵ���Ӣ����� */
 	private String groupEname;
 	
+	public DictGroup(){}
+	
+	public DictGroup(String groupCode,String groupCname,String groupEname){
+		this.groupCode = groupCode;
+		this.groupCname = groupCname;
+		this.groupEname = groupEname;
+	}
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
 	@Column(name="dgid", nullable=false,updatable=false)
