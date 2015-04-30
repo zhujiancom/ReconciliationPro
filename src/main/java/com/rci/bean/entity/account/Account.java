@@ -77,6 +77,15 @@ public class Account extends BaseEntity {
 	/* 是否父账户 */
 	private CommonEnums.YOrN isParent;
 	
+	public Account(){}
+	
+	public Account(String name,String accNo,String accType){
+		this.accNo = accNo;
+		this.accType = accType;
+		this.accName = name;
+		this.currency = "RMB";
+	}
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
 	@Column(name="accId", nullable=false,updatable=false)

@@ -39,6 +39,13 @@ public class DictItem extends BaseEntity{
 	/* ����*/
 	private String description;
 	
+	public DictItem(){}
+	
+	public DictItem(String groupCode,String itemCode){
+		this.groupCode = groupCode;
+		this.itemCode = itemCode;
+	}
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
 	@Column(name="dtid", nullable=false,updatable=false)
