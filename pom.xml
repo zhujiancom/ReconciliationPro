@@ -3,7 +3,7 @@
   <groupId>com.rci</groupId>
   <artifactId>ReconciliationPro</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Reconciliation</name>
+  <name>ReconciliationPro</name>
   <description>对账系统</description>
   
   <properties>

@@ -90,6 +90,7 @@ public class SystemInitService implements InitializingBean{
 		Account account9 = new Account("美团外卖活动补贴","FREE_MTWM","VIRTUAL");
 		Account account10 = new Account("支付宝账户","TDD","VIRTUAL");
 		Account account11 = new Account("免单账户","FREE","CASH");
+		Account account12 = new Account("美团超级代金券在线支付","MT_SUPER","VIRTUAL");
 		accounts.add(account1);
 		accounts.add(account2);
 		accounts.add(account3);
@@ -101,6 +102,7 @@ public class SystemInitService implements InitializingBean{
 		accounts.add(account9);
 		accounts.add(account10);
 		accounts.add(account11);
+		accounts.add(account12);
 		accService.rwCreateAccount(accounts.toArray(new Account[0]));
 	}
 	
