@@ -106,6 +106,12 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 					if (BusinessConstant.FREE_MTWM_ACC.equals(accountNo)) {
 						vo.setMtwmFreeAmount(amount);
 					}
+					if (BusinessConstant.MT_SUPER_ACC.equals(accountNo)){
+						vo.setMtSuperAmount(amount);
+					}
+					if (BusinessConstant.FREE_MT_SUPER_ACC.equals(accountNo)){
+						vo.setMtSuperFreeAmount(amount);
+					}
 					totalAmount = totalAmount.add(amount);
 					if (BusinessConstant.FREE_ACC.equals(accountNo)) {
 						vo.setFreeAmount(amount);

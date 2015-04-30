@@ -10,6 +10,7 @@ public class BusinessConstant {
 	public static final String MT_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_MT);
 	public static final String MTWM_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_MTWM);
 	public static final String MT_SUPER_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_MTSUPER);
+	public static final String FREE_MT_SUPER_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_FREE_MTSUPER);
 	public static final String DPTG_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_DPTG);
 	public static final String ELE_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_ELE);
 	public static final String TDD_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_TDD);

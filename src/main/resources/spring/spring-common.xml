@@ -28,6 +28,7 @@
 		<bean class="com.rci.service.filter.TDDFilter"></bean>
 		<bean class="com.rci.service.filter.MTWMFilter"></bean>
 		<bean class="com.rci.service.filter.FreeFilter"></bean>
+		<bean class="com.rci.service.filter.MTSuperFilter"></bean>
 	</util:list>
 	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>

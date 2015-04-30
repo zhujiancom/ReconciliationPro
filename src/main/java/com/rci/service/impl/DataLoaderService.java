@@ -63,7 +63,8 @@ public class DataLoaderService implements IDataLoaderService {
 			//2. 如果加载过数据，则判断当前时间是否在保存点之后，如果在并且在当天24点之前，则做增量查询
 			Date savepoint = mark.getSavepoint();
 			if(savepoint != null && savepoint.before(queryEndofDate)){
-				orders = transformService.transformOrderInfo(date);
+				orders = transformService.transformOrderInfo(savepoint);
+				mark.setSavepoint(DateUtil.getCurrentDate());
 				markService.rwUpdateMark(mark);
 			}
 		}
