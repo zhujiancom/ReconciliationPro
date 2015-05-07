@@ -81,6 +81,7 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 				BigDecimal totalAmount = BigDecimal.ZERO;
 				for (OrderAccountRef accountRef : oaRefs) {
 					BigDecimal amount = accountRef.getRealAmount();
+					totalAmount = totalAmount.add(amount);
 					String accountNo = accountRef.getAccNo();
 					if (BusinessConstant.CASHMACHINE_ACC.equals(accountNo)) {
 						vo.setCashmachineAmount(amount);
@@ -112,9 +113,9 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 					if (BusinessConstant.FREE_MT_SUPER_ACC.equals(accountNo)){
 						vo.setMtSuperFreeAmount(amount);
 					}
-					totalAmount = totalAmount.add(amount);
 					if (BusinessConstant.FREE_ACC.equals(accountNo)) {
 						vo.setFreeAmount(amount);
+						totalAmount = totalAmount.subtract(amount);
 					}
 				}
 				vo.setSchemeName(order.getSchemeName());

@@ -59,6 +59,9 @@ public class MTWMFilter extends AbstractFilter {
 		}
 		if(freeAmount != null){
 			actualAmount = actualAmount.subtract(freeAmount);
+			if(freeAmount.compareTo(new BigDecimal(8)) >= 0){
+				freeAmount = freeAmount.subtract(new BigDecimal("2"));
+			}
 			schemeName = schemeName+","+"美团外卖活动补贴"+freeAmount+"元";
 			Map<FreeType,BigDecimal> freeMap = chain.getFreeMap();
 			if(freeMap.get(FreeType.MTWM) == null){

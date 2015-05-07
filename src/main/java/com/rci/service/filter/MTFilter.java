@@ -118,9 +118,8 @@ public class MTFilter extends AbstractFilter {
 					if(StringUtils.hasText(schemeName)){
 						schemeName = schemeName+","+wrapper.getName();
 					}else{
-						
-					}schemeName = wrapper.getName();
-					
+						schemeName = wrapper.getName();
+					}
 					postAmount = postAmount.add(calculateTG(wrapper.getScheme(), wrapper.getCount()));
 				}
 				order.setSchemeName(schemeName);
