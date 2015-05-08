@@ -66,9 +66,13 @@ public class MTSuperFilter extends AbstractFilter {
 		order.setSchemeName(schemeName);
 		//保存美团超级代金券在线支付金额
 		preserveOAR(BigDecimal.TEN,BusinessConstant.FREE_MT_SUPER_ACC,order);
-		BigDecimal count = totalAmount.divide(new BigDecimal(50),BigDecimal.ROUND_DOWN);
-		BigDecimal freeAmount = count.multiply(new BigDecimal(6)).add(BigDecimal.TEN);
-		preserveOAR(totalAmount.subtract(freeAmount),BusinessConstant.MT_SUPER_ACC,order);
+		BigDecimal chitAmount = new BigDecimal("50");
+		BigDecimal count = totalAmount.divide(chitAmount,BigDecimal.ROUND_DOWN);
+		BigDecimal singleActualAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(chitAmount, new BigDecimal("0.88")),new BigDecimal("0.99"));
+		BigDecimal totalChitAmount = DigitUtil.mutiplyDown(singleActualAmount, count);
+		BigDecimal balance = totalAmount.subtract(chitAmount.multiply(count)).subtract(BigDecimal.TEN);
+		totalAmount = totalChitAmount.add(balance);
+		preserveOAR(totalAmount,BusinessConstant.MT_SUPER_ACC,order);
 	}
 
 	@Override

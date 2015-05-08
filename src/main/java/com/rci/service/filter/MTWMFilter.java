@@ -18,6 +18,7 @@ import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
+import com.rci.tools.properties.PropertyUtils;
 
 /**
  * 美团外卖
@@ -28,7 +29,9 @@ import com.rci.tools.StringUtils;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class MTWMFilter extends AbstractFilter {
 	private static final Log logger = LogFactory.getLog(MTWMFilter.class);
-
+	private static final BigDecimal BASE_FREE_AMOUNT=PropertyUtils.getBigDecimalValue("mtwm.base.free.amount");
+	private static final BigDecimal FREE_AMOUNT=PropertyUtils.getBigDecimalValue("mtwm.free.amount");
+	
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
 		return paymodeMapping.containsKey(BusinessConstant.PAYMODE_MTWM);
@@ -59,8 +62,9 @@ public class MTWMFilter extends AbstractFilter {
 		}
 		if(freeAmount != null){
 			actualAmount = actualAmount.subtract(freeAmount);
-			if(freeAmount.compareTo(new BigDecimal(8)) >= 0){
-				freeAmount = freeAmount.subtract(new BigDecimal("2"));
+			BigDecimal cutAmount = freeAmount.remainder(new BigDecimal("15"));
+			if(cutAmount.compareTo(BASE_FREE_AMOUNT) >= 0){
+				freeAmount = freeAmount.subtract(FREE_AMOUNT);
 			}
 			schemeName = schemeName+","+"美团外卖活动补贴"+freeAmount+"元";
 			Map<FreeType,BigDecimal> freeMap = chain.getFreeMap();
