@@ -47,8 +47,8 @@ public class OrderVO {
 	/* 大众点评团购在线支付金额  */
 	private BigDecimal dptgAmount;
 
-	@Deprecated
-	private BigDecimal dpshAmount;
+//	@Deprecated
+//	private BigDecimal dpshAmount;
 
 	/* 淘点点在线支付金额  */
 	private BigDecimal tddAmount;
@@ -225,23 +225,23 @@ public class OrderVO {
 	public void setDptgAmount(BigDecimal dptgAmount) {
 		this.dptgAmount = dptgAmount;
 	}
-
-	/**
-	 * @return the dpshAmount
-	 */
-	@Deprecated
-	public BigDecimal getDpshAmount() {
-		return dpshAmount;
-	}
-
-	/**
-	 * @param dpshAmount
-	 *            the dpshAmount to set
-	 */
-	@Deprecated
-	public void setDpshAmount(BigDecimal dpshAmount) {
-		this.dpshAmount = dpshAmount;
-	}
+//
+//	/**
+//	 * @return the dpshAmount
+//	 */
+//	@Deprecated
+//	public BigDecimal getDpshAmount() {
+//		return dpshAmount;
+//	}
+//
+//	/**
+//	 * @param dpshAmount
+//	 *            the dpshAmount to set
+//	 */
+//	@Deprecated
+//	public void setDpshAmount(BigDecimal dpshAmount) {
+//		this.dpshAmount = dpshAmount;
+//	}
 
 	/**
 	 * @return the tddAmount
