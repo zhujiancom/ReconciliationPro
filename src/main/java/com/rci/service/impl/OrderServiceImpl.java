@@ -21,7 +21,6 @@ import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.OrderItem;
 import com.rci.contants.BusinessConstant;
 import com.rci.service.IDishService;
-import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.base.BaseService;
@@ -34,8 +33,6 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 		IOrderService {
 	@Autowired
 	private Mapper beanMapper;
-	@Resource(name = "FetchMarkService")
-	private IFetchMarkService markService;
 	@Resource(name="OrderAccountRefService")
 	private IOrderAccountRefService oaService;
 	@Resource(name="DishService")
