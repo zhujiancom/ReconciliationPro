@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.contants.BusinessConstant;
-import com.rci.enums.BusinessEnums.FreeType;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.StringUtils;
@@ -32,13 +31,12 @@ public class FreeFilter extends AbstractFilter {
 	protected void generateScheme(Order order,FilterChain chain) {
 		BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
 		BigDecimal normalAmount = freeAmount;
-		Map<FreeType,BigDecimal> freeMap = chain.getFreeMap();
-		BigDecimal freeELEAmount = freeMap.get(FreeType.ELE);
-		BigDecimal freeMTWMAmount = freeMap.get(FreeType.MTWM);
-		if(freeELEAmount != null || order.getPaymodeMapping().containsKey(BusinessConstant.PAYMODE_ELE)){
+		Map<String,BigDecimal> freeMap = chain.getFreeMap();
+		BigDecimal otherAmount = freeMap.get(order.getPayNo());
+		if(otherAmount != null || order.getPaymodeMapping().containsKey(BusinessConstant.PAYMODE_ELE)){
 			return;
 		}
-		if(freeMTWMAmount != null || order.getPaymodeMapping().containsKey(BusinessConstant.PAYMODE_MTWM)){
+		if(otherAmount != null || order.getPaymodeMapping().containsKey(BusinessConstant.PAYMODE_MTWM)){
 			return;
 		}
 		String schemeName = order.getSchemeName();
@@ -53,6 +51,7 @@ public class FreeFilter extends AbstractFilter {
 			logger.error("----【"+order.getPayNo()+"】[免单金额异常] --- , 免单金额超出了原价");
 			order.setUnusual(YOrN.Y);
 		}
+		order.setSchemeName(schemeName);
 		preserveOAR(normalAmount, BusinessConstant.FREE_ACC, order);
 	}
 

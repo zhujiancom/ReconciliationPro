@@ -20,6 +20,7 @@ import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
+import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IAccountService;
 import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
@@ -45,6 +46,9 @@ public abstract class AbstractFilter implements CalculateFilter {
 	@Resource(name="OrderService")
 	protected IOrderService orderService;
 	
+	@Resource(name="DataTransformService")
+	private IDataTransformService transformService;
+	
 	@Override
 	public void doFilter(Order order,FilterChain chain) {
 		if (support(order.getPaymodeMapping())) {
@@ -62,6 +66,9 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 */
 	protected Boolean isNodiscount(String dishNo){
 		Dish dish = dishService.findDishByNo(dishNo);
+		if(dish ==null){
+			dish = transformService.transformDishInfo(dishNo);
+		}
 		DishType type = dish.getDishType();
 		if(type != null && YOrN.isY(type.getNotDiscount())){
 			return true;

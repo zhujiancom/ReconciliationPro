@@ -41,7 +41,7 @@ public class DataFetchServiceImpl implements IDataFetchService {
 		List<DishDTO> dishes = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_DISH_By_TYPENO,new Object[]{typeno}, new BeanRowMappers<DishDTO>(DishDTO.class));
 		return dishes;
 	}
-
+	
 	@Override
 	public List<DishTypeDTO> fetchAllDishTypes() {
 		List<DishTypeDTO> types = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_DISH_TYPE, new BeanRowMappers<DishTypeDTO>(DishTypeDTO.class));
@@ -64,6 +64,16 @@ public class DataFetchServiceImpl implements IDataFetchService {
 	public List<OrderItemDTO> fetchOrderItems(String orderNo) {
 		List<OrderItemDTO> items = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_ORDERITEM,new Object[]{orderNo},new BeanRowMappers<OrderItemDTO>(OrderItemDTO.class));
 		return items;
+	}
+
+	@Override
+	public DishDTO fetchDishByNo(String dishno) {
+		return sqlServerJdbcTemplate.queryForObject(NativeSQLBuilder.QUERY_DISH_BY_NO,new Object[]{dishno},new BeanRowMappers<DishDTO>(DishDTO.class));
+	}
+
+	@Override
+	public DishTypeDTO fetchDishTypeByNo(String typeno) {
+		return sqlServerJdbcTemplate.queryForObject(NativeSQLBuilder.QUERY_DISH_TYPE_BY_NO,new Object[]{typeno},new BeanRowMappers<DishTypeDTO>(DishTypeDTO.class));
 	}
 
 }

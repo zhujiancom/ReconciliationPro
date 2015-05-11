@@ -3,6 +3,7 @@ package com.rci.metadata.service;
 import java.util.Date;
 import java.util.List;
 
+import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 
 public interface IDataTransformService {
@@ -45,4 +46,6 @@ public interface IDataTransformService {
 	 *
 	 */
 	void transformPaymodeInfo();
+	
+	public Dish transformDishInfo(String dishno);
 }

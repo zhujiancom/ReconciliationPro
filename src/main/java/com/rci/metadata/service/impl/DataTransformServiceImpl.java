@@ -94,6 +94,19 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			}
 		}
 	}
+	
+	public Dish transformDishInfo(String dishno){
+		DishDTO dishDTO = fetchService.fetchDishByNo(dishno);
+		DishType dType= dishService.findDishTypeByTypeNo(dishDTO.getDishType());
+		if(dType == null){
+			DishTypeDTO dTypeDTO = fetchService.fetchDishTypeByNo(dishDTO.getDishType());
+			dType = beanMapper.map(dTypeDTO, DishType.class);
+		}
+		Dish dish = beanMapper.map(dishDTO, Dish.class);
+		dish.setDishType(dType);
+		dishService.rwSaveDish(dish);
+		return dish;
+	}
 
 	@Override
 	public void transformPaymodeInfo() {

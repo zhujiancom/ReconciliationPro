@@ -12,6 +12,21 @@ import com.rci.metadata.dto.PaymodeDTO;
 public interface IDataFetchService {
 	/**
 	 * 
+	 * Describle(描述)： 根据菜品编号查找菜品信息
+	 *
+	 * 方法名称：fetchDishByNo
+	 *
+	 * 所在类名：IDataFetchService
+	 *
+	 * Create Time:2015年5月11日 上午9:35:26
+	 *  
+	 * @param dishno
+	 * @return
+	 */
+	DishDTO fetchDishByNo(String dishno);
+	
+	/**
+	 * 
 	 *
 	 * Describle(描述)：获取指定类型的菜品
 	 *
@@ -24,6 +39,21 @@ public interface IDataFetchService {
 	 * @return
 	 */
 	List<DishDTO> fetchAllDishesByType(String typeno);
+	
+	/**
+	 * 
+	 * Describle(描述)： 根据菜品类型编号查找菜品类型信息
+	 *
+	 * 方法名称：fetchDishTypeByNo
+	 *
+	 * 所在类名：IDataFetchService
+	 *
+	 * Create Time:2015年5月11日 上午9:36:18
+	 *  
+	 * @param typeno
+	 * @return
+	 */
+	DishTypeDTO fetchDishTypeByNo(String typeno);
 	
 	/**
 	 * 
@@ -84,4 +114,5 @@ public interface IDataFetchService {
 	 * @return
 	 */
 	List<OrderItemDTO> fetchOrderItems(String orderNo);
+	
 }

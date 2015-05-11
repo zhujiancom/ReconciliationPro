@@ -7,13 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.rci.bean.entity.Order;
-import com.rci.enums.BusinessEnums.FreeType;
 
 public class FilterChain implements CalculateFilter {
 	LinkedList<CalculateFilter> filters = new LinkedList<CalculateFilter>();
 	int pos = 0;
 	BigDecimal balance = BigDecimal.ZERO;
-	private Map<FreeType,BigDecimal> freeMap = new HashMap<FreeType,BigDecimal>();
+	private Map<String,BigDecimal> freeMap = new HashMap<String,BigDecimal>();
 	
 	
 	public void addFilter(CalculateFilter filter){
@@ -56,14 +55,14 @@ public class FilterChain implements CalculateFilter {
 	/**
 	 * @return the freeMap
 	 */
-	public Map<FreeType, BigDecimal> getFreeMap() {
+	public Map<String, BigDecimal> getFreeMap() {
 		return freeMap;
 	}
 
 	/**
 	 * @param freeMap the freeMap to set
 	 */
-	public void setFreeMap(Map<FreeType, BigDecimal> freeMap) {
+	public void setFreeMap(Map<String, BigDecimal> freeMap) {
 		this.freeMap = freeMap;
 	}
 

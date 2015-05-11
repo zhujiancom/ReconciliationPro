@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.contants.BusinessConstant;
-import com.rci.enums.BusinessEnums.FreeType;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
@@ -56,9 +55,9 @@ public class ELEFilter extends AbstractFilter {
 			if(freeAmount != null){
 				actualAmount = actualAmount.subtract(freeAmount);
 				schemeName = schemeName+","+"饿了么活动补贴"+freeAmount+"元";
-				Map<FreeType,BigDecimal> freeMap = chain.getFreeMap();
-				if(freeMap.get(FreeType.ELE) == null){
-					freeMap.put(FreeType.ELE, freeAmount);
+				Map<String,BigDecimal> freeMap = chain.getFreeMap();
+				if(freeMap.get(order.getPayNo()) == null){
+					freeMap.put(order.getPayNo(), freeAmount);
 				}
 				//保存饿了么补贴金额
 				preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);

@@ -42,25 +42,6 @@ public final class BusinessEnums {
 	}
 	
 	/**
-	 * remark (备注): 活动补贴类型， {饿了么活动补贴， 美团外卖活动补贴}
-	 * 
-	 * @author zj
-	 *	
-	 * 项目名称：ReconciliationPro
-	 *
-	 * 类名称：FreeType
-	 *
-	 * 包名称：com.rci.enums
-	 *
-	 * Create Time: 2015年4月28日 下午1:56:18
-	 *
-	 *
-	 */
-	public static enum FreeType{
-		ELE,MTWM
-	}
-	
-	/**
 	 * remark (备注): 流水生成方式，{ 自动，手动 }
 	 * 
 	 * @author zj
