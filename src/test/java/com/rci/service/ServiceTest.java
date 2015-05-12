@@ -1,6 +1,8 @@
 package com.rci.service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -37,14 +39,24 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 
 	@Test
 	public void testBigDecimalRemainder(){
-		BigDecimal a = new BigDecimal("23");
+		BigDecimal a = new BigDecimal("15");
 		BigDecimal b = new BigDecimal("15");
 		System.out.println(a.remainder(b));
+		System.out.println(a.remainder(b).equals(BigDecimal.ZERO));
 	}
 	
 	@Test
 	public void testPropertiesUtils(){
 //		System.out.println(PropertyUtils.getIntegerValue("mtwm.base.free.amount"));
 		System.out.println(PropertyUtils.getBigDecimalValue("mtwm.base.free.amount"));
+	}
+	
+	@Test
+	public void testDate() throws ParseException{
+		Date orderDate = DateUtil.parseDate("20150328","yyyyMMdd");
+		Date sdate = DateUtil.parseDate("2015-03-02");
+		Date edate = DateUtil.parseDate("2015-04-10");
+		System.out.println(orderDate.before(edate));
+		System.out.println(orderDate.after(sdate));
 	}
 }

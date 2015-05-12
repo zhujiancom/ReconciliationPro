@@ -1,6 +1,8 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,9 +14,11 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
+import com.rci.bean.entity.Scheme;
 import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
+import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
 
@@ -54,13 +58,37 @@ public class ELEFilter extends AbstractFilter {
 			}
 			if(freeAmount != null){
 				actualAmount = actualAmount.subtract(freeAmount);
-				schemeName = schemeName+","+"饿了么活动补贴"+freeAmount+"元";
-				Map<String,BigDecimal> freeMap = chain.getFreeMap();
-				if(freeMap.get(order.getPayNo()) == null){
-					freeMap.put(order.getPayNo(), freeAmount);
+//				schemeName = schemeName+","+"饿了么活动补贴"+freeAmount+"元";
+//				Map<String,BigDecimal> freeMap = chain.getFreeMap();
+//				if(freeMap.get(order.getPayNo()) == null){
+//					freeMap.put(order.getPayNo(), freeAmount);
+//				}
+//				//保存饿了么补贴金额
+//				preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
+				List<Scheme> schemes = schemeService.getSchemes(BusinessConstant.PAYMODE_ELE);
+				for(Scheme scheme:schemes){
+					BigDecimal price = scheme.getPrice();
+					System.out.println(freeAmount.remainder(price).compareTo(BigDecimal.ZERO) == 0);
+					if(freeAmount.remainder(scheme.getPrice()).compareTo(BigDecimal.ZERO) == 0){
+						String day = order.getDay();
+						try {
+							Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
+							if(orderDate.after(scheme.getStartDate()) && orderDate.before(scheme.getEndDate())){
+								freeAmount = scheme.getPostPrice();
+								schemeName = schemeName+","+scheme.getName();
+								Map<String,BigDecimal> freeMap = chain.getFreeMap();
+								if(freeMap.get(order.getPayNo()) == null){
+									freeMap.put(order.getPayNo(), freeAmount);
+								}
+								//保存饿了么补贴金额
+								preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
+								break;
+							}
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+					}
 				}
-				//保存饿了么补贴金额
-				preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
 			}
 			if(actualAmount.compareTo(onlineAmount) != 0){
 				order.setUnusual(YOrN.Y);

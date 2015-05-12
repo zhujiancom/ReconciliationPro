@@ -3,6 +3,8 @@
  */
 package com.rci.service.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,16 @@ public class SchemeServiceImpl extends BaseService<Scheme, Long> implements
 	@Override
 	public void rwCreateScheme(Scheme[] schemes) {
 		super.rwCreate(schemes);
+	}
+
+	/* 
+	 * @see com.rci.service.ISchemeService#getSchemes(java.lang.String)
+	 */
+	@Override
+	public List<Scheme> getSchemes(String paymodeno) {
+		DetachedCriteria sdc = DetachedCriteria.forClass(Scheme.class);
+		sdc.add(Restrictions.eq("paymodeno", paymodeno));
+		return baseDAO.queryListByCriteria(sdc);
 	}
 
 }
