@@ -77,4 +77,8 @@ public final class BusinessEnums {
 	public static enum FlowType{
 		IN,OUT,CHANGE
 	}
+	
+	public static enum ActivityStatus{
+		RUNNING,FINISHED
+	}
 }

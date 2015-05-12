@@ -2,6 +2,7 @@ package com.rci.bean.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,10 +12,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
+import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
 
 @Entity
@@ -51,6 +55,14 @@ public class Scheme extends BaseEntity {
 
 	/* 方案类型 ， 由字典项中获取. Scheme -> CHIT_50,CHIT_100,SUIT_32,SUIT_68,SUIT_98,FREE,CASH*/
 	private SchemeType type;
+	
+	/* 活动开始时间  */
+	private Date startDate;
+	
+	/* 活动结束时间  */
+	private Date endDate;
+	
+	private ActivityStatus activityStatus;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -141,6 +153,36 @@ public class Scheme extends BaseEntity {
 	 */
 	public void setType(SchemeType type) {
 		this.type = type;
+	}
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="start_date")
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="end_date")
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="activity_status")
+	public ActivityStatus getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(ActivityStatus activityStatus) {
+		this.activityStatus = activityStatus;
 	}
 
 	@Override
