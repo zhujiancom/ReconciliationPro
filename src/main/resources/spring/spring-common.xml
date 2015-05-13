@@ -18,6 +18,11 @@
 	<bean id="beanMapper" class="org.dozer.spring.DozerBeanMapperFactoryBean"
 		scope="singleton">
 		<property name="mappingFiles" value="classpath*:/dozer/*Mapping.xml" />
+		<property name="customConvertersWithId">
+			<map>
+				<entry key="paymodeConvert" value-ref="PaymodeConverter"/>
+			</map>
+		</property>
 	</bean>
 	
 	<util:list id="filters" list-class="java.util.LinkedList" value-type="com.rci.service.filter.CalculateFilter">

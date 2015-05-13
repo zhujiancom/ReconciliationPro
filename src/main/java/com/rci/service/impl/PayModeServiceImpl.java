@@ -2,6 +2,8 @@ package com.rci.service.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.Paymode;
@@ -24,6 +26,13 @@ public class PayModeServiceImpl extends BaseService<Paymode, Long> implements
 	@Override
 	public void rwCreatePayMode(Paymode[] modes) {
 		rwCreate(modes);
+	}
+
+	@Override
+	public Paymode getPayModeByNo(String pmno) {
+		DetachedCriteria dc = DetachedCriteria.forClass(Paymode.class);
+		dc.add(Restrictions.eq("pmNo", pmno));
+		return baseDAO.queryUniqueByCriteria(dc);
 	}
 
 }

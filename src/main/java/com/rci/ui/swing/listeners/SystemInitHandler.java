@@ -1,8 +1,25 @@
 package com.rci.ui.swing.listeners;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import com.rci.service.ISchemeService;
+import com.rci.tools.SpringUtils;
+import com.rci.ui.swing.model.DZDPSchemeModel;
+import com.rci.ui.swing.model.DZDPSchemeTable;
+import com.rci.ui.swing.vos.SchemeVO;
 
 /**
  * 
@@ -25,11 +42,11 @@ public class SystemInitHandler extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = -4393899033664657099L;
-//	private SystemInitService service;
-//	
-//	public SystemInitHandler(){
-//		service = (InitSystemService) SpringUtils.getBean("InitSystemService");
-//	}
+	private ISchemeService schemeSverice;
+	
+	public SystemInitHandler(){
+		schemeSverice = (ISchemeService) SpringUtils.getBean("SchemeService");
+	}
 //
 //	
 	public ActionListener dataInit(){
@@ -45,75 +62,70 @@ public class SystemInitHandler extends JFrame {
 	}
 //	
 	public ActionListener settings(){
-//		return new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				JFrame frame = new JFrame("参数设置");
-//				Container contentPane  = frame.getContentPane();
-//				GridBagLayout gridbag = new GridBagLayout();
-//				contentPane.setLayout(gridbag);
-//				GridBagConstraints c = new GridBagConstraints();
-//				c.fill = GridBagConstraints.WEST;
-//				c.anchor = GridBagConstraints.NORTHWEST;
-//				JLabel l1 = new JLabel("大众点评方案");
-//				add(gridbag,l1,c,0,0,1,1);
-//				contentPane.add(l1);
-//				JButton b1 = new JButton("添加");
-//				add(gridbag,b1,c,1,0,5,1);
-//				contentPane.add(b1);
-//				
-//				JPanel p1 = createDZDPPanel();
-//				c.ipadx = 10;
-//				add(gridbag,p1,c,0,1,1,99);
-//				contentPane.add(p1);
-//				
-//				frame.setSize(600, 480);
-//				frame.addWindowListener(new WindowAdapter() {
-//					@Override
-//					public void windowClosed(WindowEvent e) {
-//						super.windowClosed(e);
-//					}
-//				});
-//				frame.setLocationRelativeTo(null); // 相对居中, 在frame设置size之后
-//				frame.setVisible(true);
-//			}
-//
-//			private JPanel createDZDPPanel() {
-//				JPanel p = new JPanel();
-//				p.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-////				p.setPreferredSize(new Dimension(300, 200));
-//				GridLayout layout = new GridLayout(0, 6);
-//				p.setLayout(layout);
-//				
-//				JLabel l1 = new JLabel("方案名称");
-//				JLabel l2 = new JLabel("抵用价格");
-//				JLabel l3 = new JLabel("实际价格");
-//				JLabel l4 = new JLabel("对冲金额");
-//				JLabel l5 = new JLabel("返点率");
-//				JLabel l6 = new JLabel("类型");
-//				p.add(l1);
-//				p.add(l2);
-//				p.add(l3);
-//				p.add(l4);
-//				p.add(l5);
-//				p.add(l6);
-//				return p;
-//			}
-//			
-//			private void add(GridBagLayout layout,Component comp,GridBagConstraints constraints,int x,int y,double wx,double wy){
-//				add(layout,comp,constraints,x,y,wx,wy,30,20);
-//			}
-//			
-//			private void add(GridBagLayout layout,Component comp,GridBagConstraints constraints,int x,int y,double wx,double wy,int width,int height){
-////				constraints.gridwidth = width;
-////				constraints.gridheight = height;
-//				constraints.gridx = x;
-//				constraints.gridy = y;
-//				constraints.weightx = wx;
-//				constraints.weighty = wy;
-//				layout.setConstraints(comp, constraints);
-//			}
-//		};
-		return null;
+		return new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame frame = new JFrame("方案设置");
+				Container contentPane  = frame.getContentPane();
+				//布局管理器
+				GridBagLayout layout = new GridBagLayout();
+				contentPane.setLayout(layout);
+
+				JPanel dzdpPanel = createDZDPPanel();
+				JPanel elePanel = createELEPanel();
+				
+				GridBagConstraints s=new GridBagConstraints();
+				s.gridwidth = 0;//设置组件水平所占用的格子数，如果为0，就说明该组件是该行的最后一个
+				s.weightx = 0.8; // 设置组件水平的拉伸幅度，如果为0就说明不拉伸，不为0就随着窗口增大进行拉伸，0到1之间
+				s.weighty = 0; //设置组件垂直的拉伸幅度，如果为0就说明不拉伸，不为0就随着窗口增大进行拉伸，0到1之间
+				s.fill = GridBagConstraints.BOTH; //用来控制添加进的组件的显示位置
+				layout.setConstraints(dzdpPanel, s);
+				layout.setConstraints(elePanel, s);
+				
+				contentPane.add(dzdpPanel);
+				contentPane.add(elePanel);
+				
+				frame.setSize(1200, 800);
+				frame.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosed(WindowEvent e) {
+						super.windowClosed(e);
+					}
+				});
+				frame.setLocationRelativeTo(null); // 相对居中, 在frame设置size之后
+				frame.setVisible(true);
+			}
+
+			private JPanel createDZDPPanel() {
+				JPanel p = new JPanel();
+				DZDPSchemeTable view = new DZDPSchemeTable();
+				List<SchemeVO> schemes = schemeSverice.getSchemeVOs("DZDP");
+				DZDPSchemeModel dataModel = new DZDPSchemeModel(schemes);
+				view.setModel(dataModel);
+				view.setHeaderLabel();
+				JScrollPane jsp = new JScrollPane(view);
+				jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				jsp.setViewportView(view);
+				p.add(jsp);
+				
+				return p;
+			}
+			
+			private JPanel createELEPanel(){
+				JPanel p = new JPanel();
+				
+				DZDPSchemeTable view = new DZDPSchemeTable();
+				List<SchemeVO> schemes = schemeSverice.getSchemeVOs("ELE");
+				DZDPSchemeModel dataModel = new DZDPSchemeModel(schemes);
+				view.setModel(dataModel);
+				view.setHeaderLabel();
+				JScrollPane jsp = new JScrollPane(view);
+				jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				jsp.setViewportView(view);
+				p.add(jsp);
+				
+				return p;
+			}
+		};
 	}
 }

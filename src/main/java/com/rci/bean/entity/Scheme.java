@@ -63,6 +63,8 @@ public class Scheme extends BaseEntity {
 	private Date endDate;
 	
 	private ActivityStatus activityStatus;
+	
+	private String vendor;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -183,6 +185,15 @@ public class Scheme extends BaseEntity {
 
 	public void setActivityStatus(ActivityStatus activityStatus) {
 		this.activityStatus = activityStatus;
+	}
+
+	@Column(name="vendor")
+	public String getVendor() {
+		return vendor;
+	}
+
+	public void setVendor(String vendor) {
+		this.vendor = vendor;
 	}
 
 	@Override

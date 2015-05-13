@@ -49,4 +49,13 @@ http://dozer.sourceforge.net/schema/beanmapping.xsd">
 			<b>actualAmount</b>
 		</field>
 	</mapping>
+	
+	<mapping map-null="false" map-empty-string="false">
+		<class-a>com.rci.bean.entity.Scheme</class-a>
+		<class-b>com.rci.ui.swing.vos.SchemeVO</class-b>
+		<field custom-converter-id="paymodeConvert">
+			<a>paymodeno</a>
+			<b>paymode</b>
+		</field>
+	</mapping>
 </mappings>

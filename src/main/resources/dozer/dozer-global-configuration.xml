@@ -9,5 +9,11 @@ http://dozer.sourceforge.net/schema/beanmapping.xsd">
 <!-- 			<variable name="type_name">org.dozer.sample.MyType -->
 <!-- 			</variable> -->
 <!-- 		</variables> -->
+<!-- 		<custom-converters> -->
+<!-- 			<converter type="com.rci.mapping.converter.SchemeConverter"> -->
+<!-- 				<class-a>com.rci.bean.entity.Scheme</class-a> -->
+<!-- 				<class-b>com.rci.ui.swing.vos.SchemeVO</class-b> -->
+<!-- 			</converter> -->
+<!-- 		</custom-converters> -->
 	</configuration>
 </mappings>

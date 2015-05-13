@@ -114,7 +114,7 @@ public class MainFrame extends JFrame {
 		menubar.add(sysMenu);
 		menubar.add(helpMenu);
 		JMenuItem dataInit = new JMenuItem("数据初始化");
-		JMenuItem settings = new JMenuItem("参数设置");
+		JMenuItem settings = new JMenuItem("方案设置");
 		JMenuItem helpInfo = new JMenuItem("帮助信息");
 		sysMenu.add(dataInit);
 		sysMenu.add(settings);

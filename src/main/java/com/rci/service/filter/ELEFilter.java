@@ -67,8 +67,6 @@ public class ELEFilter extends AbstractFilter {
 //				preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
 				List<Scheme> schemes = schemeService.getSchemes(BusinessConstant.PAYMODE_ELE);
 				for(Scheme scheme:schemes){
-					BigDecimal price = scheme.getPrice();
-					System.out.println(freeAmount.remainder(price).compareTo(BigDecimal.ZERO) == 0);
 					if(freeAmount.remainder(scheme.getPrice()).compareTo(BigDecimal.ZERO) == 0){
 						String day = order.getDay();
 						try {

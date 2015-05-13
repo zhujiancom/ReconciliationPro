@@ -7,14 +7,18 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.dozer.Mapper;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.properties.PropertyUtils;
+import com.rci.ui.swing.vos.SchemeVO;
 
 @ContextConfiguration({"classpath:spring/spring-db.xml","classpath:spring/spring-common.xml"})
 public class ServiceTest extends AbstractJUnit4SpringContextTests{
@@ -23,6 +27,9 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	@Resource(name="AccFlowService")
 	private IAccFlowService flowService;
+	
+	@Autowired
+	private Mapper beanMapper;
 	
 	@Test
 	public void testQuerySumAmount() {
@@ -58,5 +65,12 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 		Date edate = DateUtil.parseDate("2015-04-10");
 		System.out.println(orderDate.before(edate));
 		System.out.println(orderDate.after(sdate));
+	}
+	
+	@Test
+	public void testDozer(){
+		Scheme s = new Scheme();
+		s.setUnitCode("PC");
+		SchemeVO vo = beanMapper.map(s, SchemeVO.class);
 	}
 }
