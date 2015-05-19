@@ -47,6 +47,7 @@ public class PropertyConstants{
 	public static final String ACCOUNT_DEPOSIT="account.deposit";
 	public static final String ACCOUNT_MTSUPER="account.mt.super";
 	public static final String ACCOUNT_FREE_MTSUPER="account.free.mt.super";
+	public static final String ACCOUNT_POS="account.pos";
 	/*
 	 * 支付方式
 	 */
@@ -59,4 +60,5 @@ public class PropertyConstants{
 	public static final String PAYMODE_MT="paymode.mt";
 	public static final String PAYMODE_FREE="paymode.free";
 	public static final String PAYMODE_MT_SUPER="paymode.mtsuper";
+	public static final String PAYMODE_POS="paymode.pos";
 }

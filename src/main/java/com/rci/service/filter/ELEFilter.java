@@ -49,6 +49,8 @@ public class ELEFilter extends AbstractFilter {
 			
 			List<OrderItem> items = order.getItems();
 			for(OrderItem item:items){
+				String dishNo=item.getDishNo();
+				isNodiscount(dishNo);
 				BigDecimal singlePrice = item.getPrice();
 				BigDecimal count = item.getCount();
 				BigDecimal countback = item.getCountback();

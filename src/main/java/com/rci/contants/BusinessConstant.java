@@ -21,6 +21,7 @@ public class BusinessConstant {
 	public static final String FREE_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_FREE);
 	public static final String CASH_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_CASH);
 	public static final String DEPOSIT_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_DEPOSIT);
+	public static final String POS_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_POS);
 	
 	/*
 	 * 支付方式常量
@@ -34,4 +35,5 @@ public class BusinessConstant {
 	public static final String PAYMODE_MT=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_MT);
 	public static final String PAYMODE_FREE=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_FREE);
 	public static final String PAYMODE_MTSUPER=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_MT_SUPER);
+	public static final String PAYMODE_POS=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_POS);
 }

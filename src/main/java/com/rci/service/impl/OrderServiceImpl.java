@@ -20,6 +20,7 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.OrderItem;
 import com.rci.contants.BusinessConstant;
+import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
@@ -37,6 +38,8 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	private IOrderAccountRefService oaService;
 	@Resource(name="DishService")
 	private IDishService dishService;
+	@Resource(name="DataTransformService")
+	private IDataTransformService transformService;
 
 	@Override
 	public Order getOrder(Long pk) {
@@ -137,6 +140,9 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 			for (OrderItem item : items) {
 				OrderItemVO vo = beanMapper.map(item, OrderItemVO.class);
 				Dish dish = dishService.findDishByNo(item.getDishNo());
+				if(dish == null){
+					dish = transformService.transformDishInfo(item.getDishNo());
+				}
 				vo.setDishName(dish.getDishName());
 				vos.add(vo);
 			}
