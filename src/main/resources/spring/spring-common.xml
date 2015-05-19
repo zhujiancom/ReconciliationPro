@@ -34,6 +34,7 @@
 		<bean class="com.rci.service.filter.MTWMFilter"></bean>
 		<bean class="com.rci.service.filter.FreeFilter"></bean>
 		<bean class="com.rci.service.filter.MTSuperFilter"></bean>
+		<bean class="com.rci.service.filter.DPSHFilter"></bean>
 	</util:list>
 	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>

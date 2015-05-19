@@ -46,9 +46,8 @@ public class OrderVO {
 
 	/* 大众点评团购在线支付金额  */
 	private BigDecimal dptgAmount;
-
-//	@Deprecated
-//	private BigDecimal dpshAmount;
+	
+	private BigDecimal dpshAmount;
 
 	/* 淘点点在线支付金额  */
 	private BigDecimal tddAmount;
@@ -242,6 +241,14 @@ public class OrderVO {
 //	public void setDpshAmount(BigDecimal dpshAmount) {
 //		this.dpshAmount = dpshAmount;
 //	}
+
+	public BigDecimal getDpshAmount() {
+		return dpshAmount;
+	}
+
+	public void setDpshAmount(BigDecimal dpshAmount) {
+		this.dpshAmount = dpshAmount;
+	}
 
 	/**
 	 * @return the tddAmount

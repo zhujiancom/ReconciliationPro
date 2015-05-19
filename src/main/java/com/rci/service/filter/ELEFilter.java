@@ -16,6 +16,7 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.Scheme;
 import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DateUtil;
@@ -67,7 +68,7 @@ public class ELEFilter extends AbstractFilter {
 //				preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
 				List<Scheme> schemes = schemeService.getSchemes(BusinessConstant.PAYMODE_ELE);
 				for(Scheme scheme:schemes){
-					if(scheme.isFinished()){
+					if(scheme.getActivityStatus().equals(ActivityStatus.FINISHED)){
 						continue;
 					}
 					if(freeAmount.remainder(scheme.getPrice()).compareTo(BigDecimal.ZERO) == 0){

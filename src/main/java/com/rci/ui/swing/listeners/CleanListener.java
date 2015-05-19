@@ -32,6 +32,7 @@ public class CleanListener implements ActionListener {
 	private JLabel posValue;
 	private JLabel mtValue;
 	private JLabel tgValue;
+	private JLabel shValue;
 	private JLabel eleFreeValue;
 	private JLabel eleValue;
 	private JLabel tddValue;
@@ -75,6 +76,7 @@ public class CleanListener implements ActionListener {
 			posValue.setText(BigDecimal.ZERO.toString());
 			mtValue.setText(BigDecimal.ZERO.toString());
 			tgValue.setText(BigDecimal.ZERO.toString());
+			shValue.setText(BigDecimal.ZERO.toString());
 			eleFreeValue.setText(BigDecimal.ZERO.toString());
 			eleValue.setText(BigDecimal.ZERO.toString());
 			tddValue.setText(BigDecimal.ZERO.toString());
@@ -149,6 +151,10 @@ public class CleanListener implements ActionListener {
 	 */
 	public void setMtSuperFreeValue(JLabel mtSuperFreeValue) {
 		this.mtSuperFreeValue = mtSuperFreeValue;
+	}
+
+	public void setShValue(JLabel shValue) {
+		this.shValue = shValue;
 	}
 
 }

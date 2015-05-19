@@ -46,10 +46,11 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 
 	@Test
 	public void testBigDecimalRemainder(){
-		BigDecimal a = new BigDecimal("15");
-		BigDecimal b = new BigDecimal("15");
-		System.out.println(a.remainder(b));
-		System.out.println(a.remainder(b).equals(BigDecimal.ZERO));
+		BigDecimal a = new BigDecimal("153");
+		BigDecimal b = new BigDecimal("100");
+//		System.out.println(a.remainder(b));
+//		System.out.println(a.remainder(b).equals(BigDecimal.ZERO));
+		System.out.println(a.divideToIntegralValue(b));
 	}
 	
 	@Test

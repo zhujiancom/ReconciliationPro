@@ -12,6 +12,7 @@ public class BusinessConstant {
 	public static final String MT_SUPER_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_MTSUPER);
 	public static final String FREE_MT_SUPER_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_FREE_MTSUPER);
 	public static final String DPTG_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_DPTG);
+	public static final String DPSH_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_DPSH);
 	public static final String ELE_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_ELE);
 	public static final String TDD_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_TDD);
 	public static final String FREE_ELE_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_FREE_ELE);
@@ -29,6 +30,7 @@ public class BusinessConstant {
 	public static final String PAYMODE_MTWM=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_MTWM);
 	public static final String PAYMODE_TDD=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_TDD);
 	public static final String PAYMODE_DPTG=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_DPTG);
+	public static final String PAYMODE_DPSH=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_DPSH);
 	public static final String PAYMODE_MT=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_MT);
 	public static final String PAYMODE_FREE=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_FREE);
 	public static final String PAYMODE_MTSUPER=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_MT_SUPER);

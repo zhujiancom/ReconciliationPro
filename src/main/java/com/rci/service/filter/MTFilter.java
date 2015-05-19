@@ -43,6 +43,8 @@ public class MTFilter extends AbstractFilter {
 			List<OrderItem> items = order.getItems();
 			for (OrderItem item : items) {
 				String dishNo = item.getDishNo();
+				BigDecimal count = item.getCount();
+				BigDecimal countBack = item.getCountback();
 				if ("Y".equals(item.getSuitFlag())) {
 					// 2.如果是套餐，则过滤
 					continue;
@@ -52,18 +54,19 @@ public class MTFilter extends AbstractFilter {
 						suitFlag = true;
 					}
 					SchemeType type = getSuitSchemeType(dishNo);
-					Integer count = suitMap.get(type);
-					if (count != null) {
-						count++;
+					Integer suitCount = suitMap.get(type);
+					Integer itemCount = count.subtract(countBack).intValue();
+					if (suitCount != null) {
+						suitCount += itemCount;
 					} else {
-						count = 1;
+						suitCount = itemCount;
 					}
-					suitMap.put(type, count);
+					suitMap.put(type, suitCount);
 				}
 				
 				BigDecimal singlePrice = item.getPrice();
-				BigDecimal count = item.getCount();
-				BigDecimal countBack = item.getCountback();
+//				BigDecimal count = item.getCount();
+//				BigDecimal countBack = item.getCountback();
 				BigDecimal singleRate = item.getDiscountRate();
 				BigDecimal rate = DigitUtil.precentDown(singleRate);
 				BigDecimal originTotalAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countBack)),rate);

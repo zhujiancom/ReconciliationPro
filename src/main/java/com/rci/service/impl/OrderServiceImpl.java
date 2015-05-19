@@ -89,6 +89,9 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 					if (BusinessConstant.DPTG_ACC.equals(accountNo)) {
 						vo.setDptgAmount(amount);
 					}
+					if (BusinessConstant.DPSH_ACC.equals(accountNo)) {
+						vo.setDpshAmount(amount);
+					}
 					if (BusinessConstant.ELE_ACC.equals(accountNo)) {
 						vo.setEleAmount(amount);
 					}

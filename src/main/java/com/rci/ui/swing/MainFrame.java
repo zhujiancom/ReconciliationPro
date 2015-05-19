@@ -50,6 +50,7 @@ public class MainFrame extends JFrame {
 	private JLabel posValue;
 	private JLabel mtValue;
 	private JLabel tgValue;
+	private JLabel shValue;
 	private JLabel eleFreeValue;
 	private JLabel eleValue;
 	private JLabel tddValue;
@@ -69,6 +70,7 @@ public class MainFrame extends JFrame {
 		listener.setPosValue(posValue);
 		listener.setEleFreeValue(eleFreeValue);
 		listener.setTddValue(tddValue);
+		listener.setShValue(shValue);
 		listener.setTgValue(tgValue);
 		listener.setMtwmValue(mtwmValue);
 		listener.setMtwmFreeValue(mtwmFreeValue);
@@ -86,6 +88,7 @@ public class MainFrame extends JFrame {
 		clistener.setPosValue(posValue);
 		clistener.setEleFreeValue(eleFreeValue);
 		clistener.setTddValue(tddValue);
+		clistener.setShValue(shValue);
 		clistener.setTgValue(tgValue);
 		clistener.setMtwmValue(mtwmValue);
 		clistener.setMtwmFreeValue(mtwmFreeValue);
@@ -164,7 +167,7 @@ public class MainFrame extends JFrame {
 		
 		JPanel conclusionPanel = new JPanel();
 		containerPanel.add(conclusionPanel, BorderLayout.SOUTH);
-		conclusionPanel.setLayout(new GridLayout(13, 1));
+		conclusionPanel.setLayout(new GridLayout(14, 1));
 		
 		JLabel pos = new JLabel("收银机入账总额：");
 		posValue = new JLabel();
@@ -186,6 +189,13 @@ public class MainFrame extends JFrame {
 		JPanel tgPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		tgPanel.add(tg);
 		tgPanel.add(tgValue);
+		
+		JLabel sh = new JLabel("大众点评闪惠入账总额：");
+		shValue = new JLabel();
+		shValue.setForeground(Color.RED);
+		JPanel shPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		shPanel.add(sh);
+		shPanel.add(shValue);
 		
 		JLabel eleFreeLabel = new JLabel("饿了么补贴总额：");
 		eleFreeValue = new JLabel();
@@ -252,6 +262,7 @@ public class MainFrame extends JFrame {
 		
 		conclusionPanel.add(posPanel);
 		conclusionPanel.add(tgPanel);
+		conclusionPanel.add(shPanel);
 		conclusionPanel.add(mtPanel);
 		conclusionPanel.add(elePanel);
 		conclusionPanel.add(eleFreePanel);

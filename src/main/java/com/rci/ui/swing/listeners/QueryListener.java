@@ -43,6 +43,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private JLabel posValue;
 	private JLabel mtValue;
 	private JLabel tgValue;
+	private JLabel shValue;
 	private JLabel eleFreeValue;
 	private JLabel eleValue;
 	private JLabel tddValue;
@@ -68,6 +69,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 			posValue.setText(getTotalAmount(BusinessConstant.CASHMACHINE_ACC).toString());
 			mtValue.setText(getTotalAmount(BusinessConstant.MT_ACC).toString());
 			tgValue.setText(getTotalAmount(BusinessConstant.DPTG_ACC).toString());
+			shValue.setText(getTotalAmount(BusinessConstant.DPSH_ACC).toString());
 			eleFreeValue.setText(getTotalAmount(BusinessConstant.FREE_ELE_ACC).toString());
 			eleValue.setText(getTotalAmount(BusinessConstant.ELE_ACC).toString());
 			tddValue.setText(getTotalAmount(BusinessConstant.TDD_ACC).toString());
@@ -210,6 +212,13 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 				}
 			}
 		}
+		if(BusinessConstant.DPSH_ACC.equals(accountNo)){
+			for(OrderVO order:orders){
+				if(order.getDpshAmount() != null){
+					totalAmount = totalAmount.add(order.getDpshAmount());
+				}
+			}
+		}
 		if(BusinessConstant.ELE_ACC.equals(accountNo)){
 			for(OrderVO order:orders){
 				if(order.getEleAmount() != null){
@@ -322,5 +331,9 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	 */
 	public void setMtSuperFreeValue(JLabel mtSuperFreeValue) {
 		this.mtSuperFreeValue = mtSuperFreeValue;
+	}
+
+	public void setShValue(JLabel shValue) {
+		this.shValue = shValue;
 	}
 }

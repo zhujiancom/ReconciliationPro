@@ -212,12 +212,4 @@ public class Scheme extends BaseEntity {
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
-	
-	@Transient
-	public boolean isFinished(){
-		if(activityStatus.equals(ActivityStatus.FINISHED)){
-			return true;
-		}
-		return false;
-	}
 }

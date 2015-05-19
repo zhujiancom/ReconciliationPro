@@ -36,6 +36,7 @@ public class PropertyConstants{
 	public static final String ACCOUNT_MT="account.mt";
 	public static final String ACCOUNT_MTWM="account.mtwm";
 	public static final String ACCOUNT_DPTG="account.dptg";
+	public static final String ACCOUNT_DPSH="account.dpsh";
 	public static final String ACCOUNT_ELE="account.ele";
 	public static final String ACCOUNT_TDD="account.tdd";
 	public static final String ACCOUNT_FREE="account.free";
@@ -54,6 +55,7 @@ public class PropertyConstants{
 	public static final String PAYMODE_MTWM="paymode.mtwm";
 	public static final String PAYMODE_TDD="paymode.tdd";
 	public static final String PAYMODE_DPTG="paymode.dptg";
+	public static final String PAYMODE_DPSH="paymode.dpsh";
 	public static final String PAYMODE_MT="paymode.mt";
 	public static final String PAYMODE_FREE="paymode.free";
 	public static final String PAYMODE_MT_SUPER="paymode.mtsuper";
