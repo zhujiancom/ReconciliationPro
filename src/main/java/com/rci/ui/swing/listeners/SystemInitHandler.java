@@ -1,10 +1,9 @@
 package com.rci.ui.swing.listeners;
 
-import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -15,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.ISchemeService;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.model.DZDPSchemeModel;
@@ -67,17 +67,21 @@ public class SystemInitHandler extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JFrame frame = new JFrame("方案设置");
 				Container contentPane  = frame.getContentPane();
+				System.out.println(contentPane.getPreferredSize().width);
+				System.out.println(contentPane.getPreferredSize().height);
+				System.out.println(contentPane.getWidth());
+				System.out.println(contentPane.getHeight());
 				//布局管理器
 				GridBagLayout layout = new GridBagLayout();
 				contentPane.setLayout(layout);
-
+				
 				JPanel dzdpPanel = createDZDPPanel();
 				JPanel elePanel = createELEPanel();
 				
 				GridBagConstraints s=new GridBagConstraints();
-				s.gridwidth = 0;//设置组件水平所占用的格子数，如果为0，就说明该组件是该行的最后一个
-				s.weightx = 0.8; // 设置组件水平的拉伸幅度，如果为0就说明不拉伸，不为0就随着窗口增大进行拉伸，0到1之间
-				s.weighty = 0; //设置组件垂直的拉伸幅度，如果为0就说明不拉伸，不为0就随着窗口增大进行拉伸，0到1之间
+				s.gridwidth = 1;//设置组件水平所占用的格子数，如果为0，就说明该组件是该行的最后一个
+				s.weightx = 1; // 设置组件水平的拉伸幅度，如果为0就说明不拉伸，不为0就随着窗口增大进行拉伸，0到1之间
+				s.weighty = 0.5; //设置组件垂直的拉伸幅度，如果为0就说明不拉伸，不为0就随着窗口增大进行拉伸，0到1之间
 				s.fill = GridBagConstraints.BOTH; //用来控制添加进的组件的显示位置
 				layout.setConstraints(dzdpPanel, s);
 				layout.setConstraints(elePanel, s);
@@ -99,7 +103,7 @@ public class SystemInitHandler extends JFrame {
 			private JPanel createDZDPPanel() {
 				JPanel p = new JPanel();
 				DZDPSchemeTable view = new DZDPSchemeTable();
-				List<SchemeVO> schemes = schemeSverice.getSchemeVOs("DZDP");
+				List<SchemeVO> schemes = schemeSverice.getSchemeVOs(Vendor.DZDP);
 				DZDPSchemeModel dataModel = new DZDPSchemeModel(schemes);
 				view.setModel(dataModel);
 				view.setHeaderLabel();
@@ -113,9 +117,10 @@ public class SystemInitHandler extends JFrame {
 			
 			private JPanel createELEPanel(){
 				JPanel p = new JPanel();
+				p.setPreferredSize(new Dimension(1000,800));
 				
 				DZDPSchemeTable view = new DZDPSchemeTable();
-				List<SchemeVO> schemes = schemeSverice.getSchemeVOs("ELE");
+				List<SchemeVO> schemes = schemeSverice.getSchemeVOs(Vendor.ELE);
 				DZDPSchemeModel dataModel = new DZDPSchemeModel(schemes);
 				view.setModel(dataModel);
 				view.setHeaderLabel();

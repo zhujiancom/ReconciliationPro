@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.ui.swing.vos.SchemeVO;
 
 public interface ISchemeService {
@@ -15,5 +16,5 @@ public interface ISchemeService {
 	
 	void rwCreateScheme(Scheme[] schemes);
 	
-	public List<SchemeVO> getSchemeVOs(String vendor);
+	public List<SchemeVO> getSchemeVOs(Vendor vendor);
 }

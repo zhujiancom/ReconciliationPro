@@ -8,6 +8,7 @@ import com.rci.ui.swing.MainFrame;
 
 public class MainEntry {
 
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		new ClassPathXmlApplicationContext("spring/spring-common.xml","spring/spring-db.xml");
 		JFrame frame = new MainFrame();

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.ISchemeService;
 import com.rci.service.base.BaseService;
 import com.rci.ui.swing.vos.SchemeVO;
@@ -67,7 +68,7 @@ public class SchemeServiceImpl extends BaseService<Scheme, Long> implements
 	}
 
 	@Override
-	public List<SchemeVO> getSchemeVOs(String vendor) {
+	public List<SchemeVO> getSchemeVOs(Vendor vendor) {
 		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
 		dc.add(Restrictions.eq("vendor", vendor));
 		List<Scheme> schemes = baseDAO.queryListByCriteria(dc);
