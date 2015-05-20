@@ -17,6 +17,7 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
@@ -123,6 +124,7 @@ public class DPTGFilter extends AbstractFilter {
 //		schemes.putAll(createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag));
 		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag);
 		if(!CollectionUtils.isEmpty(schemes)){
+			createTicketStatistic(order.getDay(), Vendor.DZDP, schemes);
 			String schemeName = order.getSchemeName();
 			BigDecimal postAmount = BigDecimal.ZERO;
 			for(Iterator<Entry<SchemeType,SchemeWrapper>> it=schemes.entrySet().iterator();it.hasNext();){
@@ -158,4 +160,5 @@ public class DPTGFilter extends AbstractFilter {
 	protected Map<SchemeType, Integer> getSuitMap() {
 		return suitMap;
 	}
+	
 }

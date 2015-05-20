@@ -1,6 +1,8 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,8 +19,10 @@ import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.Scheme;
+import com.rci.bean.entity.TicketStatistic;
 import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IAccountService;
@@ -26,6 +30,8 @@ import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.ISchemeService;
+import com.rci.service.ITicketStatisticService;
+import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
 
 public abstract class AbstractFilter implements CalculateFilter {
@@ -48,6 +54,10 @@ public abstract class AbstractFilter implements CalculateFilter {
 	
 	@Resource(name="DataTransformService")
 	private IDataTransformService transformService;
+	
+	@Resource(name="TicketStatisticService")
+	private ITicketStatisticService statisticService;
+	
 	
 	@Override
 	public void doFilter(Order order,FilterChain chain) {
@@ -245,6 +255,49 @@ public abstract class AbstractFilter implements CalculateFilter {
 		//保存关联数据
 		oarService.rwInsertOar(oar);
 		orderService.rwUpdateOrder(order);
+	}
+	
+	protected void createTicketStatistic(String day,Vendor vendor,Map<SchemeType,SchemeWrapper> schemes){
+	try{
+		Date queryDate = DateUtil.parseDate(day,"yyyyMMdd");
+		TicketStatistic ts = statisticService.queryTicketStatisticByDate(queryDate, vendor);
+		//统计代金券信息
+		if(ts == null){
+			ts = new TicketStatistic();
+			ts.setChit50(schemes.get(SchemeType.CHIT_50)==null?0:schemes.get(SchemeType.CHIT_50).getCount());
+			ts.setChit100(schemes.get(SchemeType.CHIT_100)==null?0:schemes.get(SchemeType.CHIT_100).getCount());
+			ts.setSuit32(schemes.get(SchemeType.SUIT_32)==null?0:schemes.get(SchemeType.SUIT_32).getCount());
+			ts.setSuit68(schemes.get(SchemeType.SUIT_68)==null?0:schemes.get(SchemeType.SUIT_68).getCount());
+			ts.setSuit98(schemes.get(SchemeType.SUIT_98)==null?0:schemes.get(SchemeType.SUIT_98).getCount());
+			ts.setVendor(vendor);
+			ts.setDate(queryDate);
+			statisticService.rwCreateTicketStatistic(ts);
+		}else{
+			Integer chit50 = schemes.get(SchemeType.CHIT_50)==null?0:schemes.get(SchemeType.CHIT_50).getCount();
+			if(chit50 > 0){
+				ts.setChit50(ts.getChit50()+chit50);
+			}
+			Integer chit100 = schemes.get(SchemeType.CHIT_100)==null?0:schemes.get(SchemeType.CHIT_100).getCount();
+			if(chit100 > 0){
+				ts.setChit100(ts.getChit100()+chit100);
+			}
+			Integer suit32 = schemes.get(SchemeType.SUIT_32)==null?0:schemes.get(SchemeType.SUIT_32).getCount();
+			if(suit32 > 0){
+				ts.setSuit32(ts.getSuit32()+suit32);
+			}
+			Integer suit68 = schemes.get(SchemeType.SUIT_68)==null?0:schemes.get(SchemeType.SUIT_68).getCount();
+			if(suit68 > 0){
+				ts.setSuit68(ts.getSuit68()+suit68);
+			}
+			Integer suit98 = schemes.get(SchemeType.SUIT_98)==null?0:schemes.get(SchemeType.SUIT_98).getCount();
+			if(suit98 > 0){
+				ts.setSuit98(ts.getSuit98()+suit98);
+			}
+			statisticService.rwUpdateTicketStatistic(ts);
+		}
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}
 	}
 	
 }

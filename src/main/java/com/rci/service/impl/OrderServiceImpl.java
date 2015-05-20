@@ -86,6 +86,9 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 					if (BusinessConstant.CASHMACHINE_ACC.equals(accountNo)) {
 						vo.setCashmachineAmount(amount);
 					}
+					if (BusinessConstant.POS_ACC.equals(accountNo)) {
+						vo.setPosAmount(amount);
+					}
 					if (BusinessConstant.MT_ACC.equals(accountNo)) {
 						vo.setMtAmount(amount);
 					}

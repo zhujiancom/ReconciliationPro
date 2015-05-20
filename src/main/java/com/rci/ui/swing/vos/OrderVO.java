@@ -75,6 +75,8 @@ public class OrderVO {
 	
 	private BigDecimal mtSuperFreeAmount;
 	
+	private BigDecimal posAmount;
+	
 	private YOrN unusual;
 
 	private BigDecimal nodiscountAmount;
@@ -391,6 +393,14 @@ public class OrderVO {
 	 */
 	public void setMtSuperFreeAmount(BigDecimal mtSuperFreeAmount) {
 		this.mtSuperFreeAmount = mtSuperFreeAmount;
+	}
+
+	public BigDecimal getPosAmount() {
+		return posAmount;
+	}
+
+	public void setPosAmount(BigDecimal posAmount) {
+		this.posAmount = posAmount;
 	}
 
 }

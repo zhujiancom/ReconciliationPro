@@ -26,7 +26,7 @@ public class OrderTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 19;
+		return 20;
 	}
 	
 	public OrderVO getOrderAt(int rowIndex){
@@ -72,8 +72,10 @@ public class OrderTableModel extends AbstractTableModel {
 		case 16:
 			return order.getMtSuperAmount();
 		case 17:
-			return order.getFreeAmount();
+			return order.getPosAmount();
 		case 18:
+			return order.getFreeAmount();
+		case 19:
 			return order.getTotalAmount();
 		default:
 			break;

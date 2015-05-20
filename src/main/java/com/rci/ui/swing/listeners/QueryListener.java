@@ -19,12 +19,15 @@ import javax.swing.table.TableColumnModel;
 
 import org.springframework.util.CollectionUtils;
 
+import com.rci.bean.entity.TicketStatistic;
 import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
 import com.rci.service.IDataLoaderService;
 import com.rci.service.IOrderService;
+import com.rci.service.ITicketStatisticService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.model.OrderItemTableModel;
@@ -38,9 +41,11 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private JTable subTable;
 	private IOrderService orderService;
 	private IDataLoaderService loaderService;
+	private ITicketStatisticService tsService;
 	private JTextField timeInput;
 	private List<OrderVO> orders;
 	private JLabel posValue;
+	private JLabel cashValue;
 	private JLabel mtValue;
 	private JLabel tgValue;
 	private JLabel shValue;
@@ -53,12 +58,15 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private JLabel mtSuperValue;
 	private JLabel mtSuperFreeValue;
 	private JLabel totalValue;
+	private JLabel tgRemark;
+	private JLabel mtRemark;
 	
 	public QueryListener(JTable mainTable,JTable subTable){
 		this.mainTable = mainTable;
 		this.subTable = subTable;
 		orderService = (IOrderService) SpringUtils.getBean("OrderService");
 		loaderService = (IDataLoaderService) SpringUtils.getBean("DataLoaderService");
+		tsService = (ITicketStatisticService) SpringUtils.getBean("TicketStatisticService");
 	}
 	
 	@Override
@@ -66,7 +74,8 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		String time = timeInput.getText();
 		try{
 			loadOrderData(time);
-			posValue.setText(getTotalAmount(BusinessConstant.CASHMACHINE_ACC).toString());
+			cashValue.setText(getTotalAmount(BusinessConstant.CASHMACHINE_ACC).toString());
+			posValue.setText(getTotalAmount(BusinessConstant.POS_ACC).toString());
 			mtValue.setText(getTotalAmount(BusinessConstant.MT_ACC).toString());
 			tgValue.setText(getTotalAmount(BusinessConstant.DPTG_ACC).toString());
 			shValue.setText(getTotalAmount(BusinessConstant.DPSH_ACC).toString());
@@ -79,10 +88,26 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 			mtSuperFreeValue.setText(getTotalAmount(BusinessConstant.FREE_MT_SUPER_ACC).toString());
 			freeValue.setText(getTotalAmount(BusinessConstant.FREE_ACC).toString());
 			totalValue.setText(getTotalDayAmount().toString());
+			tgRemark.setText(getTicketStatistic(Vendor.DZDP));
+			mtRemark.setText(getTicketStatistic(Vendor.MT));
 			mainTable.getSelectionModel().addListSelectionListener(this);
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
 		}
+	}
+
+	private String getTicketStatistic(Vendor vendor) {
+		try{
+			String time = timeInput.getText();
+			TicketStatistic ts = tsService.queryTicketStatisticByDate(DateUtil.parseDate(time, "yyyyMMdd"), vendor);
+			if(ts != null){
+				return ts.getName();
+			}
+			return "";
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	@Override
@@ -187,9 +212,16 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	}
 	
 	public BigDecimal getTotalAmount(String accountNo){
-		BigDecimal totalAmount = new BigDecimal(BigInteger.ZERO,2);
+		BigDecimal totalAmount = BigDecimal.ZERO;
 		if(CollectionUtils.isEmpty(orders)){
 			return totalAmount;
+		}
+		if(BusinessConstant.POS_ACC.equals(accountNo)){
+			for(OrderVO order:orders){
+				if(order.getPosAmount() != null){
+					totalAmount = totalAmount.add(order.getPosAmount());
+				}
+			}
 		}
 		if(BusinessConstant.MT_ACC.equals(accountNo)){
 			for(OrderVO order:orders){
@@ -335,5 +367,17 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 
 	public void setShValue(JLabel shValue) {
 		this.shValue = shValue;
+	}
+
+	public void setCashValue(JLabel cashValue) {
+		this.cashValue = cashValue;
+	}
+
+	public void setTgRemark(JLabel tgRemark) {
+		this.tgRemark = tgRemark;
+	}
+
+	public void setMtRemark(JLabel mtRemark) {
+		this.mtRemark = mtRemark;
 	}
 }

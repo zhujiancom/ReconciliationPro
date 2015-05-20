@@ -81,4 +81,8 @@ public final class BusinessEnums {
 	public static enum ActivityStatus{
 		RUNNING,FINISHED
 	}
+	
+	public static enum Vendor{
+		ELE,DZDP,MTWM,MT
+	}
 }

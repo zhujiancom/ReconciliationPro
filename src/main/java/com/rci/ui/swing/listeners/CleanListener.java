@@ -16,6 +16,7 @@ import com.rci.exceptions.ServiceException;
 import com.rci.service.IAccFlowService;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderService;
+import com.rci.service.ITicketStatisticService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
@@ -28,8 +29,10 @@ public class CleanListener implements ActionListener {
 	private IOrderService orderService;
 	private IFetchMarkService markService;
 	private IAccFlowService accFlowService;
+	private ITicketStatisticService tsService;
 	private JTextField timeInput;
 	private JLabel posValue;
+	private JLabel cashValue;
 	private JLabel mtValue;
 	private JLabel tgValue;
 	private JLabel shValue;
@@ -42,6 +45,8 @@ public class CleanListener implements ActionListener {
 	private JLabel mtSuperFreeValue;
 	private JLabel freeValue;
 	private JLabel totalValue;
+	private JLabel tgRemark;
+	private JLabel mtRemark;
 	
 	public CleanListener(JTable mainTable,JTable subTable){
 		this.mainTable = mainTable;
@@ -49,6 +54,7 @@ public class CleanListener implements ActionListener {
 		orderService = (IOrderService) SpringUtils.getBean("OrderService");
 		markService = (IFetchMarkService) SpringUtils.getBean("FetchMarkService");
 		accFlowService = (IAccFlowService) SpringUtils.getBean("AccFlowService");
+		tsService = (ITicketStatisticService) SpringUtils.getBean("TicketStatisticService");
 	}
 	
 	@Override
@@ -72,20 +78,23 @@ public class CleanListener implements ActionListener {
 			orderService.rwDeleteOrders(time);
 			markService.rwDeleteMark(time);
 			accFlowService.rwDeleteFlowInfo(time,DataGenerateType.AUTO);
-			
-			posValue.setText(BigDecimal.ZERO.toString());
-			mtValue.setText(BigDecimal.ZERO.toString());
-			tgValue.setText(BigDecimal.ZERO.toString());
-			shValue.setText(BigDecimal.ZERO.toString());
-			eleFreeValue.setText(BigDecimal.ZERO.toString());
-			eleValue.setText(BigDecimal.ZERO.toString());
-			tddValue.setText(BigDecimal.ZERO.toString());
-			mtwmValue.setText(BigDecimal.ZERO.toString());
-			mtwmFreeValue.setText(BigDecimal.ZERO.toString());
-			mtSuperValue.setText(BigDecimal.ZERO.toString());
-			mtSuperFreeValue.setText(BigDecimal.ZERO.toString());
-			freeValue.setText(BigDecimal.ZERO.toString());
-			totalValue.setText(BigDecimal.ZERO.toString());
+			tsService.rwDeleteTicketStatistic(time);
+			cashValue.setText(null);
+			posValue.setText(null);
+			mtValue.setText(null);
+			tgValue.setText(null);
+			shValue.setText(null);
+			eleFreeValue.setText(null);
+			eleValue.setText(null);
+			tddValue.setText(null);
+			mtwmValue.setText(null);
+			mtwmFreeValue.setText(null);
+			mtSuperValue.setText(null);
+			mtSuperFreeValue.setText(null);
+			freeValue.setText(null);
+			totalValue.setText(null);
+			tgRemark.setText("");
+			mtRemark.setText("");
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
 		}
@@ -155,6 +164,18 @@ public class CleanListener implements ActionListener {
 
 	public void setShValue(JLabel shValue) {
 		this.shValue = shValue;
+	}
+
+	public void setCashValue(JLabel cashValue) {
+		this.cashValue = cashValue;
+	}
+
+	public void setTgRemark(JLabel tgRemark) {
+		this.tgRemark = tgRemark;
+	}
+
+	public void setMtRemark(JLabel mtRemark) {
+		this.mtRemark = mtRemark;
 	}
 
 }

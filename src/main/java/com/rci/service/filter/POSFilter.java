@@ -37,7 +37,6 @@ import com.rci.tools.StringUtils;
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class POSFilter extends AbstractFilter {
-	private static final Log logger = LogFactory.getLog(POSFilter.class);
 	/* 
 	 * @see com.rci.service.filter.CalculateFilter#support(java.util.Map)
 	 */

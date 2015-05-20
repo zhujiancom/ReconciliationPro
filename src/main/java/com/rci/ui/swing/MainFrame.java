@@ -47,9 +47,12 @@ public class MainFrame extends JFrame {
 	private JTable mainTable; //展示order 列表
 	private JTable itemTable; //展示 orderItem 列表
 	
+	private JLabel cashValue;
 	private JLabel posValue;
 	private JLabel mtValue;
 	private JLabel tgValue;
+	private JLabel tgRemark;
+	private JLabel mtRemark;
 	private JLabel shValue;
 	private JLabel eleFreeValue;
 	private JLabel eleValue;
@@ -67,6 +70,7 @@ public class MainFrame extends JFrame {
 		listener.setTimeInput(timeInput);
 		listener.setEleValue(eleValue);
 		listener.setMtValue(mtValue);
+		listener.setCashValue(cashValue);
 		listener.setPosValue(posValue);
 		listener.setEleFreeValue(eleFreeValue);
 		listener.setTddValue(tddValue);
@@ -78,6 +82,8 @@ public class MainFrame extends JFrame {
 		listener.setMtSuperFreeValue(mtSuperFreeValue);
 		listener.setFreeValue(freeValue);
 		listener.setTotalValue(totalValue);
+		listener.setTgRemark(tgRemark);
+		listener.setMtRemark(mtRemark);
 		queryBtn.registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		queryBtn.addActionListener(listener);
 		
@@ -85,6 +91,7 @@ public class MainFrame extends JFrame {
 		clistener.setTimeInput(timeInput);
 		clistener.setEleValue(eleValue);
 		clistener.setMtValue(mtValue);
+		clistener.setCashValue(cashValue);
 		clistener.setPosValue(posValue);
 		clistener.setEleFreeValue(eleFreeValue);
 		clistener.setTddValue(tddValue);
@@ -96,6 +103,8 @@ public class MainFrame extends JFrame {
 		clistener.setMtSuperFreeValue(mtSuperFreeValue);
 		clistener.setFreeValue(freeValue);
 		clistener.setTotalValue(totalValue);
+		clistener.setTgRemark(tgRemark);
+		clistener.setMtRemark(mtRemark);
 		cleanBtn.addActionListener(clistener);
 		
 		try {
@@ -167,9 +176,16 @@ public class MainFrame extends JFrame {
 		
 		JPanel conclusionPanel = new JPanel();
 		containerPanel.add(conclusionPanel, BorderLayout.SOUTH);
-		conclusionPanel.setLayout(new GridLayout(14, 1));
+		conclusionPanel.setLayout(new GridLayout(15, 1));
 		
-		JLabel pos = new JLabel("收银机入账总额：");
+		JLabel cash = new JLabel("收银机现金入账总额：");
+		cashValue = new JLabel();
+		cashValue.setForeground(Color.RED);
+		JPanel cashPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		cashPanel.add(cash);
+		cashPanel.add(cashValue);
+		
+		JLabel pos = new JLabel("pos机入账总额：");
 		posValue = new JLabel();
 		posValue.setForeground(Color.RED);
 		JPanel posPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -178,17 +194,22 @@ public class MainFrame extends JFrame {
 		
 		JLabel mt = new JLabel("美团入账总额：");
 		mtValue = new JLabel();
+		mtRemark = new JLabel();
 		mtValue.setForeground(Color.RED);
 		JPanel mtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		mtPanel.add(mt);
 		mtPanel.add(mtValue);
+		mtPanel.add(mtRemark);
 		
 		JLabel tg = new JLabel("大众点评团购入账总额：");
+//		JLabel tgRemark = new JLabel("50代金券 1 张，100代金券 0 张，套餐A 0 张，套餐B 2 张，套餐C 2 张");
 		tgValue = new JLabel();
+		tgRemark = new JLabel();
 		tgValue.setForeground(Color.RED);
 		JPanel tgPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		tgPanel.add(tg);
 		tgPanel.add(tgValue);
+		tgPanel.add(tgRemark);
 		
 		JLabel sh = new JLabel("大众点评闪惠入账总额：");
 		shValue = new JLabel();
@@ -260,6 +281,7 @@ public class MainFrame extends JFrame {
 		totalPanel.add(totalLabel);
 		totalPanel.add(totalValue);
 		
+		conclusionPanel.add(cashPanel);
 		conclusionPanel.add(posPanel);
 		conclusionPanel.add(tgPanel);
 		conclusionPanel.add(shPanel);

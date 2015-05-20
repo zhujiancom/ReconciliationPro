@@ -20,6 +20,7 @@ import javax.persistence.Version;
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.BusinessEnums.Vendor;
 
 @Entity
 @Table(name = "bus_tb_scheme")
@@ -64,7 +65,7 @@ public class Scheme extends BaseEntity {
 	
 	private ActivityStatus activityStatus;
 	
-	private String vendor;
+	private Vendor vendor;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -188,11 +189,12 @@ public class Scheme extends BaseEntity {
 	}
 
 	@Column(name="vendor")
-	public String getVendor() {
+	@Enumerated(EnumType.STRING)
+	public Vendor getVendor() {
 		return vendor;
 	}
 
-	public void setVendor(String vendor) {
+	public void setVendor(Vendor vendor) {
 		this.vendor = vendor;
 	}
 
