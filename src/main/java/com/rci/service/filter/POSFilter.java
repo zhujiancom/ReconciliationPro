@@ -49,8 +49,6 @@ public class POSFilter extends AbstractFilter {
 	@Override
 	protected void generateScheme(Order order, FilterChain chain) {
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_POS);
-		BigDecimal totalAmount = BigDecimal.ZERO;
-		
 		String schemeName = order.getSchemeName();
 		if(StringUtils.hasText(schemeName)){
 			schemeName = schemeName+","+"银联支付"+onlineAmount+"元";
@@ -59,17 +57,10 @@ public class POSFilter extends AbstractFilter {
 		}
 		List<OrderItem> items = order.getItems();
 		for(OrderItem item:items){
-			String dishNo=item.getDishNo();
-			isNodiscount(dishNo);
-			BigDecimal singlePrice = item.getPrice();
-			BigDecimal count = item.getCount();
-			BigDecimal countback = item.getCountback();
-			BigDecimal ratepercent = item.getDiscountRate();
-			BigDecimal rate = DigitUtil.precentDown(ratepercent);
-			BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate).setScale(0, BigDecimal.ROUND_CEILING);
-			totalAmount = totalAmount.add(price);
+			isNodiscount(item.getDishNo());
 		}
-		BigDecimal postAmount = DigitUtil.mutiplyDown(totalAmount, new BigDecimal("0.996"),3);
+		
+		BigDecimal postAmount = DigitUtil.mutiplyDown(onlineAmount, new BigDecimal("0.996"),3);
 		order.setSchemeName(schemeName);
 		//保存银联卡支付金额
 		preserveOAR(postAmount,BusinessConstant.POS_ACC,order);
