@@ -1,6 +1,8 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,9 +14,11 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
+import com.rci.bean.entity.Scheme;
 import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
+import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
 
@@ -37,7 +41,7 @@ public class MTWMFilter extends AbstractFilter {
 	public void generateScheme(Order order,FilterChain chain) {
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_MTWM);
 		BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
-		BigDecimal allowanceAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
+//		BigDecimal allowanceAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
 		BigDecimal actualAmount = BigDecimal.ZERO;
 		
 		String schemeName = order.getSchemeName();
@@ -60,24 +64,47 @@ public class MTWMFilter extends AbstractFilter {
 			actualAmount = actualAmount.add(price);
 		}
 		if(freeAmount != null){
-			if(actualAmount.compareTo(new BigDecimal("100")) >= 0 || actualAmount.compareTo(new BigDecimal("50")) >= 0 || actualAmount.compareTo(new BigDecimal("15")) >= 0){
-				allowanceAmount = freeAmount.subtract(new BigDecimal("2"));
-			}
+//			if(actualAmount.compareTo(new BigDecimal("100")) >= 0 || actualAmount.compareTo(new BigDecimal("50")) >= 0 || actualAmount.compareTo(new BigDecimal("15")) >= 0){
+//				allowanceAmount = freeAmount.subtract(new BigDecimal("2"));
+//			}
+//			actualAmount = actualAmount.subtract(freeAmount);
+//			schemeName = schemeName+","+"美团外卖活动补贴"+allowanceAmount+"元";
+//			Map<String,BigDecimal> freeMap = chain.getFreeMap();
+//			if(freeMap.get(order.getPayNo()) == null){
+//				freeMap.put(order.getPayNo(), allowanceAmount);
+//			}
+//			//保存美团外卖补贴金额
+//			preserveOAR(allowanceAmount,BusinessConstant.FREE_MTWM_ACC,order);
 			actualAmount = actualAmount.subtract(freeAmount);
-			schemeName = schemeName+","+"美团外卖活动补贴"+allowanceAmount+"元";
-			Map<String,BigDecimal> freeMap = chain.getFreeMap();
-			if(freeMap.get(order.getPayNo()) == null){
-				freeMap.put(order.getPayNo(), allowanceAmount);
+			List<Scheme> schemes = schemeService.getSchemes(BusinessConstant.PAYMODE_MTWM);
+			for(Scheme scheme:schemes){
+				if(freeAmount.remainder(scheme.getPrice()).compareTo(BigDecimal.ZERO) == 0){
+					String day = order.getDay();
+					try {
+						Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
+						if(orderDate.after(scheme.getStartDate()) && orderDate.before(scheme.getEndDate())){
+							freeAmount = scheme.getPostPrice();
+							schemeName = schemeName+","+scheme.getName();
+							Map<String,BigDecimal> freeMap = chain.getFreeMap();
+							if(freeMap.get(order.getPayNo()) == null){
+								freeMap.put(order.getPayNo(), freeAmount);
+							}
+							//保存美团外卖补贴金额
+							preserveOAR(freeAmount,BusinessConstant.FREE_MTWM_ACC,order);
+							break;
+						}
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
 			}
-			//保存美团外卖补贴金额
-			preserveOAR(allowanceAmount,BusinessConstant.FREE_MTWM_ACC,order);
 		}
 		if(actualAmount.compareTo(onlineAmount) != 0){
 			order.setUnusual(YOrN.Y);
 			logger.warn("--- 【"+order.getPayNo()+"】[美团外卖支付异常] ---， 在线支付金额："+onlineAmount+" , 实际应支付金额： "+actualAmount);
 		}
 		order.setSchemeName(schemeName);
-		//保存饿了么在线支付金额
+		//保存美团外卖在线支付金额
 		preserveOAR(actualAmount,BusinessConstant.MTWM_ACC,order);
 	}
 
