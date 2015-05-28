@@ -54,24 +54,26 @@ public class OrderTable extends JTable {
 		cm.getColumn(9).setPreferredWidth(70);
 		cm.getColumn(10).setHeaderValue("大众点评团购");
 		cm.getColumn(10).setPreferredWidth(105);
-		cm.getColumn(11).setHeaderValue("饿了么");
-		cm.getColumn(11).setPreferredWidth(75);
-		cm.getColumn(12).setHeaderValue("饿了么补贴");
-		cm.getColumn(12).setPreferredWidth(105);
-		cm.getColumn(13).setHeaderValue("淘点点");
-		cm.getColumn(13).setPreferredWidth(75);
-		cm.getColumn(14).setHeaderValue("美团外卖");
+		cm.getColumn(11).setHeaderValue("大众点评闪惠");
+		cm.getColumn(11).setPreferredWidth(105);
+		cm.getColumn(12).setHeaderValue("饿了么");
+		cm.getColumn(12).setPreferredWidth(75);
+		cm.getColumn(13).setHeaderValue("饿了么补贴");
+		cm.getColumn(13).setPreferredWidth(105);
+		cm.getColumn(14).setHeaderValue("淘点点");
 		cm.getColumn(14).setPreferredWidth(75);
-		cm.getColumn(15).setHeaderValue("美团外卖补贴");
-		cm.getColumn(15).setPreferredWidth(105);
-		cm.getColumn(16).setHeaderValue("美团超级代金券");
+		cm.getColumn(15).setHeaderValue("美团外卖");
+		cm.getColumn(15).setPreferredWidth(75);
+		cm.getColumn(16).setHeaderValue("美团外卖补贴");
 		cm.getColumn(16).setPreferredWidth(105);
-		cm.getColumn(17).setHeaderValue("POS机");
-		cm.getColumn(17).setPreferredWidth(75);
-		cm.getColumn(18).setHeaderValue("免单");
+		cm.getColumn(17).setHeaderValue("美团超级代金券");
+		cm.getColumn(17).setPreferredWidth(105);
+		cm.getColumn(18).setHeaderValue("POS机");
 		cm.getColumn(18).setPreferredWidth(75);
-		cm.getColumn(19).setHeaderValue("总金额");
+		cm.getColumn(19).setHeaderValue("免单");
 		cm.getColumn(19).setPreferredWidth(75);
+		cm.getColumn(20).setHeaderValue("总金额");
+		cm.getColumn(20).setPreferredWidth(75);
 	}
 	
 	private class RowMarkReadRenderer extends DefaultTableCellRenderer{
