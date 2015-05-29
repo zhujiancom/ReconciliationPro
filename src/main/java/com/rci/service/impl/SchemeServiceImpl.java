@@ -3,7 +3,9 @@
  */
 package com.rci.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.dozer.Mapper;
@@ -78,6 +80,14 @@ public class SchemeServiceImpl extends BaseService<Scheme, Long> implements
 			vos.add(vo);
 		}
 		return vos;
+	}
+
+	@Override
+	public Scheme getScheme(Vendor vendor, BigDecimal freePrice, Date date) {
+		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
+		dc.add(Restrictions.eq("vendor", vendor)).add(Restrictions.eq("price", freePrice))
+		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
+		return baseDAO.queryUniqueByCriteria(dc);
 	}
 
 }

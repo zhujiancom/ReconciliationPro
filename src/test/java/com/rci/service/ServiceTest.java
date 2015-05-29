@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.DataGenerateType;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.properties.PropertyUtils;
@@ -27,6 +28,9 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	@Resource(name="AccFlowService")
 	private IAccFlowService flowService;
+	
+	@Resource(name="SchemeService")
+	private ISchemeService schemeService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -73,5 +77,12 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 		Scheme s = new Scheme();
 		s.setUnitCode("PC");
 		SchemeVO vo = beanMapper.map(s, SchemeVO.class);
+	}
+	
+	@Test
+	public void testGetScheme() throws ParseException{
+		Date date = DateUtil.parseDate("20150527", "yyyyMMdd");
+		Scheme scheme = schemeService.getScheme(Vendor.MTWM, new BigDecimal("20"), date);
+		System.out.println(scheme.getName()+"-"+scheme.getSpread());
 	}
 }

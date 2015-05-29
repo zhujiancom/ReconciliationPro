@@ -1,5 +1,7 @@
 package com.rci.service;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import com.rci.bean.entity.Scheme;
@@ -12,9 +14,12 @@ public interface ISchemeService {
 	
 	public List<Scheme> getSchemes(String paymodeno);
 	
+	public Scheme getScheme(Vendor vendor,BigDecimal freePrice,Date date);
+	
 	void rwCreateScheme(Scheme scheme);
 	
 	void rwCreateScheme(Scheme[] schemes);
 	
 	public List<SchemeVO> getSchemeVOs(Vendor vendor);
+	
 }
