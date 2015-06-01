@@ -7,7 +7,9 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,8 +28,10 @@ import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
 import com.rci.service.IDataLoaderService;
+import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.ITicketStatisticService;
+import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.model.OrderItemTableModel;
@@ -42,7 +46,9 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private IOrderService orderService;
 	private IDataLoaderService loaderService;
 	private ITicketStatisticService tsService;
+	private IOrderAccountRefService oaService;
 	private JTextField timeInput;
+	private Map<String,BigDecimal> sumMap = new HashMap<String,BigDecimal>();
 	private List<OrderVO> orders;
 	private JLabel posValue;
 	private JLabel cashValue;
@@ -67,6 +73,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		orderService = (IOrderService) SpringUtils.getBean("OrderService");
 		loaderService = (IDataLoaderService) SpringUtils.getBean("DataLoaderService");
 		tsService = (ITicketStatisticService) SpringUtils.getBean("TicketStatisticService");
+		oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
 	}
 	
 	@Override
@@ -74,6 +81,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		String time = timeInput.getText();
 		try{
 			loadOrderData(time);
+			loadSumData(time);
 			cashValue.setText(getTotalAmount(BusinessConstant.CASHMACHINE_ACC).toString());
 			posValue.setText(getTotalAmount(BusinessConstant.POS_ACC).toString());
 			mtValue.setText(getTotalAmount(BusinessConstant.MT_ACC).toString());
@@ -212,103 +220,20 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	}
 	
 	public BigDecimal getTotalAmount(String accountNo){
-		BigDecimal totalAmount = BigDecimal.ZERO;
-		if(CollectionUtils.isEmpty(orders)){
-			return totalAmount;
-		}
-		if(BusinessConstant.POS_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getPosAmount() != null){
-					totalAmount = totalAmount.add(order.getPosAmount());
-				}
+		return sumMap.get(accountNo) == null? BigDecimal.ZERO:sumMap.get(accountNo);
+	}
+	
+	private void loadSumData(String time){
+		try {
+			List<AccountSumResult> sumRes = oaService.querySumAmount(DateUtil.parseDate(time, "yyyyMMdd"));
+			for(AccountSumResult res:sumRes){
+				String accNo = res.getAccNo();
+				BigDecimal amount = res.getSumAmount();
+				sumMap.put(accNo, amount);
 			}
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-		if(BusinessConstant.MT_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getMtAmount() != null){
-					totalAmount = totalAmount.add(order.getMtAmount());
-				}
-			}
-		}
-		if(BusinessConstant.CASHMACHINE_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getCashmachineAmount() != null){
-					totalAmount = totalAmount.add(order.getCashmachineAmount());
-				}
-			}
-		}
-		if(BusinessConstant.DPTG_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getDptgAmount() != null){
-					totalAmount = totalAmount.add(order.getDptgAmount());
-				}
-			}
-		}
-		if(BusinessConstant.DPSH_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getDpshAmount() != null){
-					totalAmount = totalAmount.add(order.getDpshAmount());
-				}
-			}
-		}
-		if(BusinessConstant.ELE_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getEleAmount() != null){
-					totalAmount = totalAmount.add(order.getEleAmount());
-				}
-			}
-		}
-		if(BusinessConstant.TDD_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getTddAmount() != null){
-					totalAmount = totalAmount.add(order.getTddAmount());
-				}
-			}
-		}
-		if(BusinessConstant.MTWM_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getMtwmAmount() != null){
-					totalAmount = totalAmount.add(order.getMtwmAmount());
-				}
-			}
-		}
-		if(BusinessConstant.FREE_MTWM_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getMtwmFreeAmount() != null){
-					totalAmount = totalAmount.add(order.getMtwmFreeAmount());
-				}
-			}
-		}
-		if(BusinessConstant.FREE_ELE_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getEleFreeAmount() != null){
-					totalAmount = totalAmount.add(order.getEleFreeAmount());
-				}
-			}
-		}
-		if(BusinessConstant.FREE_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getFreeAmount() != null){
-					totalAmount = totalAmount.add(order.getFreeAmount());
-				}
-			}
-		}
-		if(BusinessConstant.MT_SUPER_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getMtSuperAmount() != null){
-					totalAmount = totalAmount.add(order.getMtSuperAmount());
-				}
-			}
-		}
-		if(BusinessConstant.FREE_MT_SUPER_ACC.equals(accountNo)){
-			for(OrderVO order:orders){
-				if(order.getMtSuperFreeAmount() != null){
-					totalAmount = totalAmount.add(order.getMtSuperFreeAmount());
-				}
-			}
-		}
-		
-		return totalAmount;
 	}
 
 	public void setPosValue(JLabel posValue) {

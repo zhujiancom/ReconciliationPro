@@ -59,7 +59,7 @@ public class DPSHFilter extends AbstractFilter {
 		}
 		BigDecimal payAmount = totalAmount.subtract(nodiscountAmount);
 		if(payAmount.compareTo(onlineAmount) < 0){
-			order.setUnusual(YOrN.N);
+			order.setUnusual(YOrN.Y);
 			logger.warn("--- 【"+order.getPayNo()+"】[大众闪惠支付异常] ---， 在线支付金额："+onlineAmount+" , 实际应付金额： "+payAmount);
 		}
 		BigDecimal freeAmount = payAmount.divideToIntegralValue(new BigDecimal("100")).multiply(new BigDecimal("12"));
