@@ -58,6 +58,13 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	}
 	
 	@Test
+	public void testBigDecimalDivide(){
+		BigDecimal a = new BigDecimal("161");
+		BigDecimal b = new BigDecimal("100");
+		System.out.println(a.divideToIntegralValue(b));
+	}
+	
+	@Test
 	public void testPropertiesUtils(){
 //		System.out.println(PropertyUtils.getIntegerValue("mtwm.base.free.amount"));
 		System.out.println(PropertyUtils.getBigDecimalValue("mtwm.base.free.amount"));
@@ -82,7 +89,5 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testGetScheme() throws ParseException{
 		Date date = DateUtil.parseDate("20150527", "yyyyMMdd");
-		Scheme scheme = schemeService.getScheme(Vendor.MTWM, new BigDecimal("20"), date);
-		System.out.println(scheme.getName()+"-"+scheme.getSpread());
 	}
 }

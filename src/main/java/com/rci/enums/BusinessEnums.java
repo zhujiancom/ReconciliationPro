@@ -79,7 +79,7 @@ public final class BusinessEnums {
 	}
 	
 	public static enum ActivityStatus{
-		RUNNING,FINISHED
+		ACTIVE,INACTIVE
 	}
 	
 	public static enum Vendor{

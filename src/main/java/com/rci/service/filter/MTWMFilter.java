@@ -69,28 +69,36 @@ public class MTWMFilter extends AbstractFilter {
 			String day = order.getDay();
 			try {
 				Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
-				BigDecimal freePrice = BigDecimal.ZERO;
-				if(totalAmount.compareTo(new BigDecimal("100")) >= 0 && freeAmount.compareTo(new BigDecimal("30")) >=0){
-					freePrice = new BigDecimal("30");
-				}else if(totalAmount.compareTo(new BigDecimal("50")) >= 0 && freeAmount.compareTo(new BigDecimal("20")) >=0){
-					freePrice = new BigDecimal("20");
-				}else if(totalAmount.compareTo(new BigDecimal("15")) >= 0){
-					if(freeAmount.compareTo(new BigDecimal("15")) == 0){
-						//新用户立减
-						freePrice = new BigDecimal("15");
-					}else{
-						freePrice = new BigDecimal("8");
+				List<Scheme> schemes = schemeService.getScheme(Vendor.MTWM, freeAmount, orderDate);
+				Scheme activeScheme = null;
+				for(Scheme scheme:schemes){
+					if(freeAmount.compareTo(new BigDecimal("15")) == 0 && scheme.getPrice().intValue() == 15){
+						//新用户
+						if(activeScheme == null){
+							activeScheme = scheme;
+						}
+					}
+					int c = totalAmount.divideToIntegralValue(scheme.getFloorAmount()).intValue();
+					if(c == 1){
+						if(activeScheme == null){
+							activeScheme = scheme;
+						}
+					}
+					if(totalAmount.compareTo(new BigDecimal("100")) > 0 && c > 1){
+						activeScheme = scheme;
+					}
+					if(activeScheme != null){
+						freeAmount = freeAmount.subtract(activeScheme.getSpread());
+						schemeName = schemeName+","+activeScheme.getName();
+						Map<String,BigDecimal> freeMap = chain.getFreeMap();
+						if(freeMap.get(order.getPayNo()) == null){
+							freeMap.put(order.getPayNo(), freeAmount);
+						}
+						//保存美团外卖补贴金额
+						preserveOAR(freeAmount,BusinessConstant.FREE_MTWM_ACC,order);
+						break;
 					}
 				}
-				Scheme scheme = schemeService.getScheme(Vendor.MTWM, freePrice, orderDate);
-				freeAmount = freeAmount.subtract(scheme.getSpread());
-				schemeName = schemeName+","+scheme.getName();
-				Map<String,BigDecimal> freeMap = chain.getFreeMap();
-				if(freeMap.get(order.getPayNo()) == null){
-					freeMap.put(order.getPayNo(), freeAmount);
-				}
-				//保存美团外卖补贴金额
-				preserveOAR(freeAmount,BusinessConstant.FREE_MTWM_ACC,order);
 			}catch(Exception e){
 				e.printStackTrace();
 			}

@@ -16,8 +16,8 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.Scheme;
 import com.rci.contants.BusinessConstant;
-import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
@@ -60,38 +60,24 @@ public class ELEFilter extends AbstractFilter {
 				actualAmount = actualAmount.add(price);
 			}
 			if(freeAmount != null){
-				actualAmount = actualAmount.subtract(freeAmount);
-//				schemeName = schemeName+","+"饿了么活动补贴"+freeAmount+"元";
-//				Map<String,BigDecimal> freeMap = chain.getFreeMap();
-//				if(freeMap.get(order.getPayNo()) == null){
-//					freeMap.put(order.getPayNo(), freeAmount);
-//				}
-//				//保存饿了么补贴金额
-//				preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
-				List<Scheme> schemes = schemeService.getSchemes(BusinessConstant.PAYMODE_ELE);
-				for(Scheme scheme:schemes){
-					if(scheme.getActivityStatus().equals(ActivityStatus.FINISHED)){
-						continue;
-					}
-					if(freeAmount.remainder(scheme.getPrice()).compareTo(BigDecimal.ZERO) == 0){
-						String day = order.getDay();
-						try {
-							Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
-							if(orderDate.after(scheme.getStartDate()) && orderDate.before(scheme.getEndDate())){
-								freeAmount = scheme.getPostPrice();
-								schemeName = schemeName+","+scheme.getName();
-								Map<String,BigDecimal> freeMap = chain.getFreeMap();
-								if(freeMap.get(order.getPayNo()) == null){
-									freeMap.put(order.getPayNo(), freeAmount);
-								}
-								//保存饿了么补贴金额
-								preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
-								break;
-							}
-						} catch (ParseException e) {
-							e.printStackTrace();
+				try{
+					actualAmount = actualAmount.subtract(freeAmount);
+					String day = order.getDay();
+					Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
+					List<Scheme> schemes = schemeService.getScheme(Vendor.ELE, freeAmount, orderDate);
+					for(Scheme scheme:schemes){
+						freeAmount = freeAmount.subtract(scheme.getSpread());
+						schemeName = schemeName+","+scheme.getName();
+						Map<String,BigDecimal> freeMap = chain.getFreeMap();
+						if(freeMap.get(order.getPayNo()) == null){
+							freeMap.put(order.getPayNo(), freeAmount);
 						}
+						//保存饿了么补贴金额
+						preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
+						break;
 					}
+				}catch(ParseException e){
+					e.printStackTrace();
 				}
 			}
 			if(actualAmount.compareTo(onlineAmount) != 0){

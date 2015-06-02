@@ -48,7 +48,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private ITicketStatisticService tsService;
 	private IOrderAccountRefService oaService;
 	private JTextField timeInput;
-	private Map<String,BigDecimal> sumMap = new HashMap<String,BigDecimal>();
+	private Map<String,BigDecimal> sumMap;
 	private List<OrderVO> orders;
 	private JLabel posValue;
 	private JLabel cashValue;
@@ -224,6 +224,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	}
 	
 	private void loadSumData(String time){
+		sumMap = new HashMap<String,BigDecimal>();
 		try {
 			List<AccountSumResult> sumRes = oaService.querySumAmount(DateUtil.parseDate(time, "yyyyMMdd"));
 			for(AccountSumResult res:sumRes){

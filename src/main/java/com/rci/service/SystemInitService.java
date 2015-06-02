@@ -205,7 +205,7 @@ public class SystemInitService implements InitializingBean{
 		
 		Scheme s11 = new Scheme();
 		s11.setName("饿了么新用户优惠（不叠加）");
-		s11.setActivityStatus(ActivityStatus.RUNNING);
+		s11.setActivityStatus(ActivityStatus.ACTIVE);
 		s11.setPaymodeno("11");
 		s11.setPrice(new BigDecimal("15"));
 		s11.setPostPrice(new BigDecimal("15"));
@@ -216,7 +216,7 @@ public class SystemInitService implements InitializingBean{
 		
 		Scheme s12 = new Scheme();
 		s12.setName("饿了么满20减12");
-		s12.setActivityStatus(ActivityStatus.RUNNING);
+		s12.setActivityStatus(ActivityStatus.ACTIVE);
 		s12.setPaymodeno("11");
 		s12.setPrice(new BigDecimal("12"));
 		s12.setPostPrice(new BigDecimal("9"));

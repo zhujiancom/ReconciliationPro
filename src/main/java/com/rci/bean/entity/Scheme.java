@@ -63,6 +63,9 @@ public class Scheme extends BaseEntity {
 	/* 活动结束时间  */
 	private Date endDate;
 	
+	/* 满减活动下限金额  */
+	private BigDecimal floorAmount;
+	
 	private ActivityStatus activityStatus;
 	
 	private Vendor vendor;
@@ -176,6 +179,21 @@ public class Scheme extends BaseEntity {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	/**
+	 * @return the floorAmount
+	 */
+	@Column(name="floor_amount")
+	public BigDecimal getFloorAmount() {
+		return floorAmount;
+	}
+
+	/**
+	 * @param floorAmount the floorAmount to set
+	 */
+	public void setFloorAmount(BigDecimal floorAmount) {
+		this.floorAmount = floorAmount;
 	}
 
 	@Enumerated(EnumType.STRING)

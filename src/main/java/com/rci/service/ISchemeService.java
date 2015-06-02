@@ -14,7 +14,7 @@ public interface ISchemeService {
 	
 	public List<Scheme> getSchemes(String paymodeno);
 	
-	public Scheme getScheme(Vendor vendor,BigDecimal freePrice,Date date);
+	public List<Scheme> getScheme(Vendor vendor,BigDecimal freePrice,Date date);
 	
 	void rwCreateScheme(Scheme scheme);
 	
