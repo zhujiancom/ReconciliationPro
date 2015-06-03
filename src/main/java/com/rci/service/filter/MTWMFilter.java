@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
@@ -69,35 +70,65 @@ public class MTWMFilter extends AbstractFilter {
 			String day = order.getDay();
 			try {
 				Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
-				List<Scheme> schemes = schemeService.getScheme(Vendor.MTWM, freeAmount, orderDate);
 				Scheme activeScheme = null;
+				List<Scheme> schemes = schemeService.getSchemes(Vendor.MTWM, freeAmount, orderDate);
+				if(CollectionUtils.isEmpty(schemes)){
+					BigDecimal redundant = freeAmount.remainder(new BigDecimal("18"));
+					BigDecimal price = freeAmount.subtract(redundant);
+					Scheme _scheme = schemeService.getScheme(Vendor.MTWM, price, orderDate);
+					if(_scheme != null){
+						activeScheme = _scheme;
+					}else{
+						logger.warn(order.getPayNo()+"---[美团外卖 活动补贴] 没有找到匹配的Scheme -----");
+					}
+				}
 				for(Scheme scheme:schemes){
 					if(freeAmount.compareTo(new BigDecimal("15")) == 0 && scheme.getPrice().intValue() == 15){
 						//新用户
 						if(activeScheme == null){
 							activeScheme = scheme;
+							break;
 						}
 					}
 					int c = totalAmount.divideToIntegralValue(scheme.getFloorAmount()).intValue();
 					if(c == 1){
 						if(activeScheme == null){
 							activeScheme = scheme;
+							break;
 						}
+					}
+					if(c == 0){
+						BigDecimal redundant = freeAmount.remainder(new BigDecimal("18"));
+						BigDecimal price = freeAmount.subtract(redundant);
+						Scheme _scheme = schemeService.getScheme(Vendor.MTWM, price, orderDate);
+						if(_scheme != null){
+							activeScheme = _scheme;
+						}else{
+							redundant = freeAmount.remainder(new BigDecimal("8"));
+							price = freeAmount.subtract(redundant);
+							_scheme = schemeService.getScheme(Vendor.MTWM, price, orderDate);
+							if(_scheme != null){
+								activeScheme = _scheme;
+							}else{
+								logger.warn(order.getPayNo()+"---[美团外卖 活动补贴] 没有找到匹配的Scheme -----");
+							}
+						}
+						break;
 					}
 					if(totalAmount.compareTo(new BigDecimal("100")) > 0 && c > 1){
 						activeScheme = scheme;
-					}
-					if(activeScheme != null){
-						freeAmount = freeAmount.subtract(activeScheme.getSpread());
-						schemeName = schemeName+","+activeScheme.getName();
-						Map<String,BigDecimal> freeMap = chain.getFreeMap();
-						if(freeMap.get(order.getPayNo()) == null){
-							freeMap.put(order.getPayNo(), freeAmount);
-						}
-						//保存美团外卖补贴金额
-						preserveOAR(freeAmount,BusinessConstant.FREE_MTWM_ACC,order);
 						break;
 					}
+				}
+				if(activeScheme != null){
+					freeAmount = freeAmount.subtract(activeScheme.getSpread());
+					schemeName = schemeName+","+activeScheme.getName();
+					Map<String,BigDecimal> freeMap = chain.getFreeMap();
+					if(freeMap.get(order.getPayNo()) == null){
+						freeMap.put(order.getPayNo(), freeAmount);
+					}
+					//保存美团外卖补贴金额
+					preserveOAR(freeAmount,BusinessConstant.FREE_MTWM_ACC,order);
 				}
 			}catch(Exception e){
 				e.printStackTrace();

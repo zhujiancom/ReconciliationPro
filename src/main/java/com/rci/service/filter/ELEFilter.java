@@ -60,12 +60,12 @@ public class ELEFilter extends AbstractFilter {
 				actualAmount = actualAmount.add(price);
 			}
 			if(freeAmount != null){
+				actualAmount = actualAmount.subtract(freeAmount);
+				String day = order.getDay();
 				try{
-					actualAmount = actualAmount.subtract(freeAmount);
-					String day = order.getDay();
 					Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
-					List<Scheme> schemes = schemeService.getScheme(Vendor.ELE, freeAmount, orderDate);
-					for(Scheme scheme:schemes){
+					Scheme scheme = schemeService.getScheme(Vendor.ELE, freeAmount, orderDate);
+					if(scheme != null){
 						freeAmount = freeAmount.subtract(scheme.getSpread());
 						schemeName = schemeName+","+scheme.getName();
 						Map<String,BigDecimal> freeMap = chain.getFreeMap();
@@ -74,7 +74,8 @@ public class ELEFilter extends AbstractFilter {
 						}
 						//保存饿了么补贴金额
 						preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
-						break;
+					}else{
+						logger.warn(order.getPayNo()+"---[饿了么 活动补贴] 没有找到匹配的Scheme -----");
 					}
 				}catch(ParseException e){
 					e.printStackTrace();

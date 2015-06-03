@@ -84,12 +84,21 @@ public class SchemeServiceImpl extends BaseService<Scheme, Long> implements
 	}
 
 	@Override
-	public List<Scheme> getScheme(Vendor vendor, BigDecimal freePrice, Date date) {
+	public List<Scheme> getSchemes(Vendor vendor, BigDecimal freePrice, Date date) {
 		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
 		dc.add(Restrictions.eq("vendor", vendor)).add(Restrictions.ge("price", freePrice))
 		.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
 		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
 		return baseDAO.queryListByCriteria(dc);
+	}
+
+	@Override
+	public Scheme getScheme(Vendor vendor, BigDecimal freePrice, Date date) {
+		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
+		dc.add(Restrictions.eq("vendor", vendor)).add(Restrictions.eq("price", freePrice))
+		.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
+		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
+		return baseDAO.queryUniqueByCriteria(dc);
 	}
 
 }
