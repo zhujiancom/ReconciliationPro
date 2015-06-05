@@ -89,12 +89,12 @@ public class MTFilter extends AbstractFilter {
 			Integer suitACount = suitMap.get(SchemeType.SUIT_32);
 			Integer suitBCount = suitMap.get(SchemeType.SUIT_68);
 			if(suitACount != null && suitACount != 0){
-				Integer beverageAmount = suitACount*5;
+				Integer beverageAmount = suitACount*7;
 				nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
 				bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
 			}
 			if(suitBCount != null && suitBCount != 0){
-				Integer beverageAmount = suitBCount*14;
+				Integer beverageAmount = suitBCount*16;
 				nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
 				bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
 			}
