@@ -1,6 +1,6 @@
 /*
-SQLyog Ultimate v11.11 (64 bit)
-MySQL - 5.6.17 
+SQLyog Ultimate - MySQL GUI v8.2 
+MySQL - 5.1.44-community 
 *********************************************************************
 */
 /*!40101 SET NAMES utf8 */;
@@ -32,6 +32,6 @@ insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `
 insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`) values('25',NULL,'饿了么满20减8','11','6.00','8.00','2.00',NULL,'RMB','0','INACTIVE','2015-05-07','2015-06-20','ELE','20.00');
 insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`) values('26',NULL,'饿了么满25减9','11','6.00','9.00','3.00',NULL,'RMB','0','INACTIVE','2015-05-21','2015-06-30','ELE','25.00');
 insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`) values('27',NULL,'饿了么满25减8','11','5.00','8.00','3.00',NULL,'RMB','0','ACTIVE','2015-06-01','2015-06-15','ELE','25.00');
-insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`) values('28',NULL,'美团外卖新用户首次下单立减15','12','13.00','15.00','2.00',NULL,'RMB','0','ACTIVE','2015-05-30','2015-07-06','MTWM','15.00');
-insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`) values('29',NULL,'美团外卖满15减8','12','6.00','8.00','2.00',NULL,'RMB','0','ACTIVE','2015-05-31','2015-07-06','MTWM','15.00');
+insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`) values('28',NULL,'美团外卖新用户首次下单立减15','12','12.00','15.00','3.00',NULL,'RMB','0','ACTIVE','2015-05-30','2015-07-06','MTWM','15.00');
+insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`) values('29',NULL,'美团外卖满15减8','12','5.00','8.00','3.00',NULL,'RMB','0','ACTIVE','2015-05-31','2015-07-06','MTWM','15.00');
 insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`) values('30',NULL,'美团外卖满50减18','12','13.00','18.00','5.00',NULL,'RMB','0','ACTIVE','2015-05-31','2015-07-06','MTWM','50.00');
