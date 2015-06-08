@@ -57,10 +57,11 @@ public class DPSHFilter extends AbstractFilter {
 				continue;
 			}
 		}
+		/* 最大可在线支付金额 */
 		BigDecimal payAmount = totalAmount.subtract(nodiscountAmount);
 		if(payAmount.compareTo(onlineAmount) < 0){
 			order.setUnusual(YOrN.Y);
-			logger.warn("--- 【"+order.getPayNo()+"】[大众闪惠支付异常] ---， 在线支付金额："+onlineAmount+" , 实际应付金额： "+payAmount);
+			logger.warn("--- 【"+order.getPayNo()+"】[大众闪惠支付异常] ---， 在线支付金额："+onlineAmount+" , 实际最大在线支付金额： "+payAmount+" ,不可在线支付金额："+nodiscountAmount);
 		}
 		BigDecimal freeAmount = payAmount.divideToIntegralValue(new BigDecimal("100")).multiply(new BigDecimal("12"));
 		BigDecimal actualAmount = onlineAmount.subtract(freeAmount);
