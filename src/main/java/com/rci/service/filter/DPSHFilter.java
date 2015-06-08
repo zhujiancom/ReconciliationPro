@@ -63,7 +63,7 @@ public class DPSHFilter extends AbstractFilter {
 			logger.warn("--- 【"+order.getPayNo()+"】[大众闪惠支付异常] ---， 在线支付金额："+onlineAmount+" , 实际应付金额： "+payAmount);
 		}
 		BigDecimal freeAmount = payAmount.divideToIntegralValue(new BigDecimal("100")).multiply(new BigDecimal("12"));
-		BigDecimal actualAmount = payAmount.subtract(freeAmount);
+		BigDecimal actualAmount = onlineAmount.subtract(freeAmount);
 		
 		order.setSchemeName(schemeName);
 		//保存大众闪惠实际到账金额
