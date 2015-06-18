@@ -63,6 +63,7 @@ public class MainFrame extends JFrame {
 	private JLabel mtSuperFreeValue;
 	private JLabel freeValue;
 	private JLabel totalValue;
+	private JLabel expRateValue; //外送率
 	
 	public MainFrame(){
 		initComponent();
@@ -274,6 +275,13 @@ public class MainFrame extends JFrame {
 		freePanel.add(freeLabel);
 		freePanel.add(freeValue);
 		
+		JLabel expRateLabel = new JLabel("外送率：");
+		expRateValue = new JLabel();
+		expRateValue.setForeground(Color.RED);
+		JPanel expRatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		expRatePanel.add(expRateLabel);
+		expRatePanel.add(expRateValue);
+		
 		JLabel totalLabel = new JLabel("当日营业收入总额：");
 		totalValue = new JLabel();
 		totalValue.setForeground(Color.RED);
@@ -294,6 +302,7 @@ public class MainFrame extends JFrame {
 		conclusionPanel.add(mtSuperFreePanel);
 		conclusionPanel.add(tddPanel);
 		conclusionPanel.add(freePanel);
+		conclusionPanel.add(expRatePanel);
 		conclusionPanel.add(totalPanel);
 	}
 }
