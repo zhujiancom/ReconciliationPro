@@ -46,6 +46,31 @@ public interface IDataTransformService {
 	 *
 	 */
 	void transformPaymodeInfo();
+	/**
+	 * 
+	 * Describle(描述)：同步桌号信息
+	 *
+	 * 方法名称：transformTableInfo
+	 *
+	 * 所在类名：IDataTransformService
+	 *
+	 * Create Time:2015年6月18日 下午2:12:08
+	 *
+	 */
+	void transformTableInfo();
 	
+	/**
+	 * 
+	 * Describle(描述)：增量同步菜品信息。 当远程数据库新增菜品后将新增的菜品信息同步到本地数据库
+	 *
+	 * 方法名称：transformDishInfo
+	 *
+	 * 所在类名：IDataTransformService
+	 *
+	 * Create Time:2015年6月18日 下午2:10:23
+	 *  
+	 * @param dishno
+	 * @return
+	 */
 	public Dish transformDishInfo(String dishno);
 }

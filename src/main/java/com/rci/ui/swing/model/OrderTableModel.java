@@ -26,7 +26,7 @@ public class OrderTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 21;
+		return 22;
 	}
 	
 	public OrderVO getOrderAt(int rowIndex){
@@ -40,44 +40,46 @@ public class OrderTableModel extends AbstractTableModel {
 		case 0:
 			return ++rowIndex;
 		case 1:
-			return order.getPayNo();
+			return order.getTableName();
 		case 2:
-			return order.getOriginAmount();
+			return order.getPayNo();
 		case 3:
-			return order.getActualAmount();
+			return order.getOriginAmount();
 		case 4:
-			return order.getNodiscountAmount();
+			return order.getActualAmount();
 		case 5:
-			return order.getSchemeName();
+			return order.getNodiscountAmount();
 		case 6:
-			return order.getSingleDiscount();
+			return order.getSchemeName();
 		case 7:
-			return DateUtil.time2Str(order.getCheckoutTime());
+			return order.getSingleDiscount();
 		case 8:
-			return order.getCashmachineAmount();
+			return DateUtil.time2Str(order.getCheckoutTime());
 		case 9:
-			return order.getMtAmount();
+			return order.getCashmachineAmount();
 		case 10:
-			return order.getDptgAmount();
+			return order.getMtAmount();
 		case 11:
-			return order.getDpshAmount();
+			return order.getDptgAmount();
 		case 12:
-			return order.getEleAmount();
+			return order.getDpshAmount();
 		case 13:
-			return order.getEleFreeAmount();
+			return order.getEleAmount();
 		case 14:
-			return order.getTddAmount();
+			return order.getEleFreeAmount();
 		case 15:
-			return order.getMtwmAmount();
+			return order.getTddAmount();
 		case 16:
-			return order.getMtwmFreeAmount();
+			return order.getMtwmAmount();
 		case 17:
-			return order.getMtSuperAmount();
+			return order.getMtwmFreeAmount();
 		case 18:
-			return order.getPosAmount();
+			return order.getMtSuperAmount();
 		case 19:
-			return order.getFreeAmount();
+			return order.getPosAmount();
 		case 20:
+			return order.getFreeAmount();
+		case 21:
 			return order.getTotalAmount();
 		default:
 			break;

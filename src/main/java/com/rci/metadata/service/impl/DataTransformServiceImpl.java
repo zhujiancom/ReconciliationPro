@@ -24,16 +24,19 @@ import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.Paymode;
+import com.rci.bean.entity.TableInfo;
 import com.rci.metadata.dto.DishDTO;
 import com.rci.metadata.dto.DishTypeDTO;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
 import com.rci.metadata.dto.PaymodeDTO;
+import com.rci.metadata.dto.TableDTO;
 import com.rci.metadata.service.IDataFetchService;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishService;
 import com.rci.service.IOrderService;
 import com.rci.service.IPayModeService;
+import com.rci.service.ITableInfoService;
 import com.rci.tools.DateUtil;
 
 @Service("DataTransformService")
@@ -49,7 +52,8 @@ public class DataTransformServiceImpl implements IDataTransformService {
 	private IPayModeService paymodeService;
 	@Resource(name="OrderService")
 	private IOrderService orderService;
-	
+	@Resource(name="TableInfoService")
+	private ITableInfoService tableService;
 	@Override
 	public List<Order> transformOrderInfo(Date sdate) {
 		Date edate = DateUtil.getEndTimeOfDay(sdate);
@@ -159,6 +163,17 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			}
 		}
 		return container;
+	}
+
+	
+	@Override
+	public void transformTableInfo() {
+		List<TableDTO> tableDTOs = fetchService.fetchTables();
+		List<TableInfo> tables = new ArrayList<TableInfo>();
+		for(TableDTO tdto:tableDTOs){
+			tables.add(beanMapper.map(tdto, TableInfo.class));
+		}
+		tableService.rwCreateTableInfos(tables.toArray(new TableInfo[0]));
 	}
 
 }

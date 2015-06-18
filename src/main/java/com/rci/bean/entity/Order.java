@@ -21,7 +21,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.base.BaseEntity;
@@ -36,8 +35,6 @@ public class Order extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 5047158554635480893L;
 	
-	private Integer version;
-	
 	private Long oid;
 	
 	/* 订单编号   */
@@ -45,6 +42,9 @@ public class Order extends BaseEntity {
 	
 	/* 付费编号 */
 	private String payNo;
+	
+	/* 桌号 */
+	private String tableNo;
 	
 	/* 开桌时间  */
 	private Date openDeskTime;
@@ -325,6 +325,15 @@ public class Order extends BaseEntity {
 		this.nodiscountAmount = nodiscountAmount;
 	}
 
+	@Column(name="table_no")
+	public String getTableNo() {
+		return tableNo;
+	}
+
+	public void setTableNo(String tableNo) {
+		this.tableNo = tableNo;
+	}
+
 	/* 
 	 * @see org.zj.framework.core.entity.BaseEntity#getId()
 	 */
@@ -337,20 +346,6 @@ public class Order extends BaseEntity {
 	/* 
 	 * @see org.zj.framework.core.entity.BaseEntity#getVersion()
 	 */
-	@Override
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	/* 
-	 * @see org.zj.framework.core.entity.BaseEntity#setVersion(java.lang.Integer)
-	 */
-	@Override
-	@Version
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
 	
 	/**
 	 * 

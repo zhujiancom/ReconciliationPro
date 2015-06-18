@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -28,8 +27,6 @@ public class Dish extends BaseEntity{
 	 */
 	private static final long serialVersionUID = -1306827303631905471L;
 
-	private Integer version;
-	
 	private Long did;
 	
 	/* ��Ʒ���  */
@@ -96,17 +93,6 @@ public class Dish extends BaseEntity{
 	@Transient
 	public Serializable getId() {
 		return did;
-	}
-
-	@Override
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	@Override
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 	@Override

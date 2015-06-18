@@ -55,12 +55,17 @@ public class MTSuperFilter extends AbstractFilter {
 			payAmount = payAmount.add(price);
 		}
 		
-		if(onlineAmount.compareTo(payAmount) != 0){
+		if(onlineAmount.compareTo(payAmount) > 0){
 			order.setUnusual(YOrN.Y);
 			logger.warn("---【"+order.getPayNo()+"】[美团超级代金券支付异常]---，  在线支付金额："+onlineAmount+" , 实际最大在线支付金额：  "+payAmount+"， 不可在线支付金额："+nodiscountAmount);
 		}
 		
 		order.setSchemeName(schemeName);
+		//设置订单中不可打折金额
+		if(!nodiscountAmount.equals(BigDecimal.ZERO) && order.getNodiscountAmount() == null){
+			order.setNodiscountAmount(nodiscountAmount);
+		}
+		
 		//保存美团超级代金券在线支付金额
 //		preserveOAR(BigDecimal.TEN,BusinessConstant.FREE_MT_SUPER_ACC,order);
 		BigDecimal chitAmount = new BigDecimal("50");

@@ -99,7 +99,10 @@ public class MTFilter extends AbstractFilter {
 				bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
 			}
 			
-			order.setNodiscountAmount(nodiscountAmount);
+			/*设置订单中不可打折金额*/
+			if(!nodiscountAmount.equals(BigDecimal.ZERO) && order.getNodiscountAmount() == null){
+				order.setNodiscountAmount(nodiscountAmount);
+			}
 			// 分析客户使用了哪些代金券
 			BigDecimal chitAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_MT);
 			BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
@@ -109,9 +112,8 @@ public class MTFilter extends AbstractFilter {
 			if(bediscountAmount.compareTo(chitAmount) < 0){
 				//如果可打折金额小于代金券实际使用金额，则这单属于异常单
 				order.setUnusual(YOrN.Y);
-				logger.warn("---【"+order.getPayNo()+"】[美团支付异常]---， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+". 可打折金额不应该小于代金券支付金额");
+				logger.warn("---【损失单】【"+order.getPayNo()+"】[美团支付异常]---， 实际支付金额："+chitAmount+" ,可打折金额： "+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额");
 			}
-//			schemes.putAll(createSchemes(chitAmount, BusinessConstant.PAYMODE_MT,suitFlag));
 			Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, BusinessConstant.PAYMODE_MT,suitFlag);
 			if(!CollectionUtils.isEmpty(schemes)){
 				createTicketStatistic(order.getDay(), Vendor.MT, schemes);
@@ -131,14 +133,6 @@ public class MTFilter extends AbstractFilter {
 				//保存账户关联信息
 				preserveOAR(postAmount,BusinessConstant.MT_ACC,order);
 			}
-			//计算订余额
-//			BigDecimal balance = chain.getBalance();
-//			logger.debug("MTFilter - balance = "+balance);
-//			if(balance.compareTo(chitAmount) < 0){
-//				logger.error("----【"+order.getPayNo()+"】[美团]数据异常----,余额:"+balance+" , 需支付金额:"+chitAmount+". 余额不能小于需支付金额");
-//			}
-//			balance = balance.subtract(chitAmount);
-//			chain.setBalance(balance);
 	}
 
 	@Override

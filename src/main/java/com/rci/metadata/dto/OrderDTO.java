@@ -31,6 +31,9 @@ public class OrderDTO {
 	/* 付款编号 */
 	private String payNo;
 	
+	/* 桌号 */
+	private String tableNo;
+	
 	/* 开桌时间 */
 	private Timestamp openDeskTime;
 	
@@ -107,6 +110,15 @@ public class OrderDTO {
 
 	public void setPaymode(String paymode) {
 		this.paymode = paymode;
+	}
+
+	@ColumnName("tableno")
+	public String getTableNo() {
+		return tableNo;
+	}
+
+	public void setTableNo(String tableNo) {
+		this.tableNo = tableNo;
 	}
 	
 	

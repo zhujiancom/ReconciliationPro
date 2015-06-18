@@ -48,6 +48,10 @@ http://dozer.sourceforge.net/schema/beanmapping.xsd">
 			<a>realAmount</a>
 			<b>actualAmount</b>
 		</field>
+		<field custom-converter-id="tableConvert">
+			<a>tableNo</a>
+			<b>tableName</b>
+		</field>
 	</mapping>
 	
 	<mapping map-null="false" map-empty-string="false">
@@ -58,4 +62,5 @@ http://dozer.sourceforge.net/schema/beanmapping.xsd">
 			<b>paymode</b>
 		</field>
 	</mapping>
+	
 </mappings>

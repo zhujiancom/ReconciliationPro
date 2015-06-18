@@ -57,6 +57,10 @@ public class DPSHFilter extends AbstractFilter {
 				continue;
 			}
 		}
+		/*设置订单中不可打折金额*/
+		if(!nodiscountAmount.equals(BigDecimal.ZERO) && order.getNodiscountAmount() == null){
+			order.setNodiscountAmount(nodiscountAmount);
+		}
 		/* 最大可在线支付金额 */
 		BigDecimal payAmount = totalAmount.subtract(nodiscountAmount);
 		if(payAmount.compareTo(onlineAmount) < 0){

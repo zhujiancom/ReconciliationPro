@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.BusinessEnums.ActivityStatus;
@@ -30,7 +29,6 @@ public class Scheme extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 1768224421633905991L;
 
-	private Integer version;
 	private Long sid;
 
 	/* 活动或代金券名称 */
@@ -222,14 +220,4 @@ public class Scheme extends BaseEntity {
 		return sid;
 	}
 
-	@Override
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	@Override
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
 }

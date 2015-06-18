@@ -15,6 +15,7 @@ import com.rci.metadata.dto.DishTypeDTO;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
 import com.rci.metadata.dto.PaymodeDTO;
+import com.rci.metadata.dto.TableDTO;
 import com.rci.metadata.service.IDataFetchService;
 /**
  * 
@@ -74,6 +75,12 @@ public class DataFetchServiceImpl implements IDataFetchService {
 	@Override
 	public DishTypeDTO fetchDishTypeByNo(String typeno) {
 		return sqlServerJdbcTemplate.queryForObject(NativeSQLBuilder.QUERY_DISH_TYPE_BY_NO,new Object[]{typeno},new BeanRowMappers<DishTypeDTO>(DishTypeDTO.class));
+	}
+
+	@Override
+	public List<TableDTO> fetchTables() {
+		List<TableDTO> tables = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_TABLES, new BeanRowMappers<TableDTO>(TableDTO.class));
+		return tables;
 	}
 
 }

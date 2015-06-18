@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.CommonEnums;
@@ -44,7 +43,6 @@ public class Account extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -4200368065658607428L;
-	private Integer version;
 	
 	private Long accId;
 	
@@ -192,16 +190,5 @@ public class Account extends BaseEntity {
 	@Transient
 	public Serializable getId() {
 		return accId;
-	}
-
-	@Override
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	@Override
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 }

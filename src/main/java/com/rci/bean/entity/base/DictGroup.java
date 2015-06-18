@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 @Entity
 @Table(name="core_tb_dict_group")
@@ -18,8 +17,6 @@ public class DictGroup extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 267286866602304271L;
-	
-	private Integer version;
 	
 	private Long dgId;
 	
@@ -82,17 +79,6 @@ public class DictGroup extends BaseEntity {
 	@Transient
 	public Serializable getId() {
 		return dgId;
-	}
-
-	@Override
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	@Override
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 }

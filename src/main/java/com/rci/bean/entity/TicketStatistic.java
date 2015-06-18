@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -27,7 +26,6 @@ public class TicketStatistic extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -1872886783289527864L;
-	private Integer version;
 	private Long tid;
 	
 	/* 当日 50元代金券验证数量*/
@@ -161,17 +159,6 @@ public class TicketStatistic extends BaseEntity {
 	@Override
 	public Serializable getId() {
 		return tid;
-	}
-
-	@Override
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	@Override
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 }

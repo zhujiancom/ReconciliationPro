@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.CommonEnums;
@@ -39,8 +38,6 @@ public class Paymode extends BaseEntity {
 	 */
 	private static final long serialVersionUID = -822178586218804839L;
 
-	private Integer version;
-	
 	private Long pmid;
 	
 	private String pmNo;
@@ -103,17 +100,6 @@ public class Paymode extends BaseEntity {
 	@Transient
 	public Serializable getId() {
 		return pmid;
-	}
-
-	@Override
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	@Override
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 }

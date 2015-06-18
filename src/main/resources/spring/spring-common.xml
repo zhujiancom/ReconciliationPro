@@ -21,6 +21,7 @@
 		<property name="customConvertersWithId">
 			<map>
 				<entry key="paymodeConvert" value-ref="PaymodeConverter"/>
+				<entry key="tableConvert" value-ref="TableConverter"/>
 			</map>
 		</property>
 	</bean>

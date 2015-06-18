@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.BusinessEnums;
@@ -27,7 +26,6 @@ public class DataFetchMark extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 6115082810211557433L;
-	private Integer version;
 	
 	private Long markId;
 	
@@ -105,15 +103,4 @@ public class DataFetchMark extends BaseEntity {
 		return markId;
 	}
 
-	@Override
-	@Version
-	public Integer getVersion() {
-		// TODO Auto-generated method stub
-		return version;
-	}
-
-	@Override
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
 }

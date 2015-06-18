@@ -27,6 +27,8 @@ public class OrderVO {
 	private Long orderId;
 
 	private String payNo;
+	
+	private String tableName;
 
 	private BigDecimal originAmount;
 
@@ -111,6 +113,14 @@ public class OrderVO {
 	 */
 	public void setPayNo(String payNo) {
 		this.payNo = payNo;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 
 	/**

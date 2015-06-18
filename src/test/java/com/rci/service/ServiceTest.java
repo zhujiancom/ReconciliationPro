@@ -2,20 +2,25 @@ package com.rci.service;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.dozer.Mapper;
+import org.hibernate.mapping.Collection;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.rci.bean.entity.Scheme;
+import com.rci.bean.entity.TableInfo;
 import com.rci.enums.BusinessEnums.DataGenerateType;
-import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.metadata.dto.TableDTO;
+import com.rci.metadata.service.IDataFetchService;
+import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.properties.PropertyUtils;
@@ -31,6 +36,14 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	@Resource(name="SchemeService")
 	private ISchemeService schemeService;
+	
+	@Resource(name="DataFetchService")
+	private IDataFetchService fetchService;
+	
+	@Resource(name="DataTransformService")
+	private IDataTransformService transformSevice;
+	@Resource(name="TableInfoService")
+	private ITableInfoService tbService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -89,5 +102,32 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testGetScheme() throws ParseException{
 		Date date = DateUtil.parseDate("20150527", "yyyyMMdd");
+	}
+	
+	@Test
+	public void testdozermapperList(){
+		List<TableDTO> tableDTOs = fetchService.fetchTables();
+		List<TableInfo> tables = new ArrayList<TableInfo>();
+//		TableInfo[] tables = new TableInfo[tableDTOs.size()];
+		beanMapper.map(tableDTOs,tables);
+//		System.out.println(tables.length);
+		System.out.println(tables.get(0).getTbName());
+		
+//		for(TableDTO tdto:tableDTOs){
+//			tables.add(beanMapper.map(tdto, TableInfo.class));
+//		}
+//		System.out.println(tables.get(0).getTbName());
+	}
+	
+	@Test
+	public void testTransformTableInfo(){
+		transformSevice.transformTableInfo();
+	}
+	
+	@Test
+	public void testUpdateTableInfo(){
+		TableInfo table = tbService.get(1L);
+		table.setTbName("test");
+		tbService.rwUpdateTableInfo(table);
 	}
 }

@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
 
@@ -25,7 +24,6 @@ public class OrderItem extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 8712829612949997706L;
-	private Integer version;
 
 	private Long itemId;
 
@@ -312,18 +310,4 @@ public class OrderItem extends BaseEntity {
 	/*
 	 * @see org.zj.framework.core.entity.BaseEntity#getVersion()
 	 */
-	@Override
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	/*
-	 * @see
-	 * org.zj.framework.core.entity.BaseEntity#setVersion(java.lang.Integer)
-	 */
-	@Override
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
 }

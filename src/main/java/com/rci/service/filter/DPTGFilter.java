@@ -76,8 +76,6 @@ public class DPTGFilter extends AbstractFilter {
 				suitMap.put(type, suitCount);
 			}
 			BigDecimal singlePrice = item.getPrice();
-//			BigDecimal count = item.getCount();
-//			BigDecimal countBack = item.getCountback();
 			BigDecimal singleRate = item.getDiscountRate();
 			BigDecimal rate = DigitUtil.precentDown(singleRate);
 			BigDecimal originTotalAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countBack)),rate);
@@ -108,8 +106,10 @@ public class DPTGFilter extends AbstractFilter {
 			nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
 			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
 		}
-		
-		order.setNodiscountAmount(nodiscountAmount);
+		//设置订单中不可打折金额
+		if(!nodiscountAmount.equals(BigDecimal.ZERO) && order.getNodiscountAmount() == null){
+			order.setNodiscountAmount(nodiscountAmount);
+		}
 		// 分析客户使用了哪些代金券
 		BigDecimal chitAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_DPTG);
 		BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
@@ -119,7 +119,7 @@ public class DPTGFilter extends AbstractFilter {
 		if(bediscountAmount.compareTo(chitAmount) < 0){
 			//如果可打折金额小于代金券实际使用金额，则这单属于异常单
 			order.setUnusual(YOrN.Y);
-			logger.warn("---【"+order.getPayNo()+"】[大众点评支付异常]---， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+". 可打折金额不应该小于代金券支付金额");
+			logger.warn("---【损失单】【"+order.getPayNo()+"】[大众点评支付异常]---， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额");
 		}
 //		schemes.putAll(createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag));
 		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag);

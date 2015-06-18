@@ -124,7 +124,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 				&& mainTable.getRowSelectionAllowed()){
 			int row = mainTable.getSelectedRow();
 			if(row != -1){
-				String payno = (String) mainTable.getValueAt(row, 1);
+				String payno = (String) mainTable.getValueAt(row, 2);
 				loadItemData(payno);
 			}
 		}

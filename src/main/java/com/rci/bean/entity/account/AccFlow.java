@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.BusinessEnums.DataGenerateType;
@@ -29,7 +28,6 @@ public class AccFlow extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 4671930867994716213L;
-	private Integer version;
 	
 	private Long flowId;
 	
@@ -175,17 +173,6 @@ public class AccFlow extends BaseEntity {
 	@Transient
 	public Serializable getId() {
 		return flowId;
-	}
-
-	@Override
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	@Override
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 }

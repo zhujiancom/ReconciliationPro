@@ -15,7 +15,7 @@ public class NativeSQLBuilder {
 												+ "where ord.ch_billno=?";
 	/* 查询order 信息*/
 	public static final String QUERY_ORDER="select tab.ch_billno 'billno',tab.ch_payno 'payno',detail.ch_paymodeno 'paymode', \n"
-			+"cmaster.num_cost 'originamount',tab.dt_service_begin 'opendesktime',\n"
+			+"cmaster.num_cost 'originamount',tab.dt_service_begin 'opendesktime',tab.ch_tableno 'tableno', \n"
 			+ "cmaster.dt_operdate 'checkouttime',detail.num_realamount 'realamount' \n"
 			+ "from dbo.v_u_table tab \n"
 			+ "join dbo.v_u_checkout_master cmaster \n"
@@ -26,4 +26,10 @@ public class NativeSQLBuilder {
 	
 	/* 查询所有 支付方式*/
 	public static final String QUERY_PAYMODES="select ch_paymodeno,vch_paymode,ch_incomeflag from dbo.v_bt_paymode";
+	
+	/* 查询所有桌号信息  */
+	public static final String QUERY_TABLES="select ch_tableno 'table_no',vch_tablename 'table_name',tb.ch_typeno 'table_type',tbt.vch_typename 'table_type_name' from dbo.v_bt_table tb \n"
+			+ "left join dbo.cybr_bt_table_type tbt \n"
+			+ "on tb.ch_typeno = tbt.ch_typeno";
+	
 }

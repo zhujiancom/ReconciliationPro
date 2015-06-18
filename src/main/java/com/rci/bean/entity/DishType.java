@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.CommonEnums;
@@ -27,7 +26,6 @@ public class DishType extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 6506342777961564482L;
-	private Integer version;
 	
 	private Long dtid;
 	
@@ -95,14 +93,4 @@ public class DishType extends BaseEntity {
 		return dtid;
 	}
 
-	@Override
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	@Override
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
 }

@@ -8,6 +8,7 @@ import com.rci.metadata.dto.DishTypeDTO;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
 import com.rci.metadata.dto.PaymodeDTO;
+import com.rci.metadata.dto.TableDTO;
 
 public interface IDataFetchService {
 	/**
@@ -115,4 +116,17 @@ public interface IDataFetchService {
 	 */
 	List<OrderItemDTO> fetchOrderItems(String orderNo);
 	
+	/**
+	 * 
+	 * Describle(描述)：获取 桌号信息
+	 *
+	 * 方法名称：fetchTables
+	 *
+	 * 所在类名：IDataFetchService
+	 *
+	 * Create Time:2015年6月18日 下午2:27:55
+	 *  
+	 * @return
+	 */
+	List<TableDTO> fetchTables();
 }
