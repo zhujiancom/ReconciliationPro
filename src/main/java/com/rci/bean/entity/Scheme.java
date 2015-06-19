@@ -64,6 +64,9 @@ public class Scheme extends BaseEntity {
 	/* 满减活动下限金额  */
 	private BigDecimal floorAmount;
 	
+	/* 满减活动上限金额 */
+	private BigDecimal ceilAmount;
+	
 	private ActivityStatus activityStatus;
 	
 	private Vendor vendor;
@@ -192,6 +195,15 @@ public class Scheme extends BaseEntity {
 	 */
 	public void setFloorAmount(BigDecimal floorAmount) {
 		this.floorAmount = floorAmount;
+	}
+
+	@Column(name="ceil_amount")
+	public BigDecimal getCeilAmount() {
+		return ceilAmount;
+	}
+
+	public void setCeilAmount(BigDecimal ceilAmount) {
+		this.ceilAmount = ceilAmount;
 	}
 
 	@Enumerated(EnumType.STRING)

@@ -173,4 +173,16 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	public void rwInsertOrders(Order[] orders) {
 		rwCreate(orders);
 	}
+
+	@Override
+	public BigDecimal getOrderCountByDay(String day) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BigDecimal getExpressOrderCountByDay(String day) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

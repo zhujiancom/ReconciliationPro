@@ -1,5 +1,6 @@
 package com.rci.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.rci.bean.entity.Order;
@@ -26,4 +27,34 @@ public interface IOrderService {
 	List<OrderVO> accquireOrderVOsByDay(String day);
 	
 	List<OrderItemVO> queryOrderItemVOsByPayno(String payno);
+	
+	/**
+	 * 
+	 * Describle(描述)：获取当日总单数
+	 *
+	 * 方法名称：getOrderCountByDay
+	 *
+	 * 所在类名：IOrderService
+	 *
+	 * Create Time:2015年6月19日 下午5:03:31
+	 *  
+	 * @param day
+	 * @return
+	 */
+	BigDecimal getOrderCountByDay(String day);
+	
+	/**
+	 * 
+	 * Describle(描述)：获取当日外送单数
+	 *
+	 * 方法名称：getExpressOrderCountByDay
+	 *
+	 * 所在类名：IOrderService
+	 *
+	 * Create Time:2015年6月19日 下午5:03:49
+	 *  
+	 * @param day
+	 * @return
+	 */
+	BigDecimal getExpressOrderCountByDay(String day);
 }

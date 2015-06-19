@@ -31,6 +31,7 @@ import com.rci.service.IDataLoaderService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.ITicketStatisticService;
+import com.rci.service.core.StatisticCenterFacade;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
@@ -45,7 +46,8 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private JTable subTable;
 	private IOrderService orderService;
 	private IDataLoaderService loaderService;
-	private ITicketStatisticService tsService;
+//	private ITicketStatisticService tsService;
+	private StatisticCenterFacade facade;
 	private IOrderAccountRefService oaService;
 	private JTextField timeInput;
 	private Map<String,BigDecimal> sumMap;
@@ -66,13 +68,15 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private JLabel totalValue;
 	private JLabel tgRemark;
 	private JLabel mtRemark;
+	private JLabel expRateValue; //外送率
 	
 	public QueryListener(JTable mainTable,JTable subTable){
 		this.mainTable = mainTable;
 		this.subTable = subTable;
 		orderService = (IOrderService) SpringUtils.getBean("OrderService");
 		loaderService = (IDataLoaderService) SpringUtils.getBean("DataLoaderService");
-		tsService = (ITicketStatisticService) SpringUtils.getBean("TicketStatisticService");
+//		tsService = (ITicketStatisticService) SpringUtils.getBean("TicketStatisticService");
+		facade = (StatisticCenterFacade) SpringUtils.getBean("StatisticCenterFacade");
 		oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
 	}
 	
@@ -96,26 +100,49 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 			mtSuperFreeValue.setText(getTotalAmount(BusinessConstant.FREE_MT_SUPER_ACC).toString());
 			freeValue.setText(getTotalAmount(BusinessConstant.FREE_ACC).toString());
 			totalValue.setText(getTotalDayAmount().toString());
-			tgRemark.setText(getTicketStatistic(Vendor.DZDP));
-			mtRemark.setText(getTicketStatistic(Vendor.MT));
+			tgRemark.setText(getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.DZDP));
+			mtRemark.setText(getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.MT));
+			expRateValue.setText(getExpressRateStatistic(time));
 			mainTable.getSelectionModel().addListSelectionListener(this);
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
+		}catch (ParseException pe) {
+			JOptionPane.showMessageDialog(null, pe.getMessage());
 		}
 	}
+	
+	/**
+	 * 
+	 * Describle(描述)： 统计外送率
+	 *
+	 * 方法名称：getExpressRateStatistic
+	 *
+	 * 所在类名：QueryListener
+	 *
+	 * Create Time:2015年6月19日 下午4:39:11
+	 *  
+	 * @param time
+	 * @return
+	 */
+	public String getExpressRateStatistic(String time){
+		return facade.getExpressRate(time).toString();
+	}
 
-	private String getTicketStatistic(Vendor vendor) {
-		try{
-			String time = timeInput.getText();
-			TicketStatistic ts = tsService.queryTicketStatisticByDate(DateUtil.parseDate(time, "yyyyMMdd"), vendor);
-			if(ts != null){
-				return ts.getName();
-			}
-			return "";
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return "";
+	/**
+	 * 
+	 * Describle(描述)： 统计代金券数量展示
+	 *
+	 * 方法名称：getTicketStatistic
+	 *
+	 * 所在类名：QueryListener
+	 *
+	 * Create Time:2015年6月19日 下午4:38:40
+	 *  
+	 * @param vendor
+	 * @return
+	 */
+	private String getTicketStatistic(Date time,Vendor vendor) {
+		return facade.getTicketStatistic(time, vendor);
 	}
 
 	@Override
@@ -305,5 +332,9 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 
 	public void setMtRemark(JLabel mtRemark) {
 		this.mtRemark = mtRemark;
+	}
+
+	public void setExpRateValue(JLabel expRateValue) {
+		this.expRateValue = expRateValue;
 	}
 }

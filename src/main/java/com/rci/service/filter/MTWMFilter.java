@@ -42,7 +42,6 @@ public class MTWMFilter extends AbstractFilter {
 	public void generateScheme(Order order,FilterChain chain) {
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_MTWM);
 		BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
-//		BigDecimal allowanceAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
 		BigDecimal totalAmount = BigDecimal.ZERO;
 		
 		String schemeName = order.getSchemeName();
@@ -66,69 +65,43 @@ public class MTWMFilter extends AbstractFilter {
 		}
 		BigDecimal actualAmount = totalAmount;
 		if(freeAmount != null){
+			Map<String,BigDecimal> freeMap = chain.getFreeMap();
 			actualAmount = totalAmount.subtract(freeAmount);
 			String day = order.getDay();
 			try {
 				Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
-				Scheme activeScheme = null;
-				List<Scheme> schemes = schemeService.getSchemes(Vendor.MTWM, freeAmount, orderDate);
+				/* 查找美团外卖符合条件的活动 */
+				List<Scheme> schemes = schemeService.getSchemes(Vendor.MTWM,orderDate);
 				if(CollectionUtils.isEmpty(schemes)){
-					BigDecimal redundant = freeAmount.remainder(new BigDecimal("18"));
-					BigDecimal price = freeAmount.subtract(redundant);
-					Scheme _scheme = schemeService.getScheme(Vendor.MTWM, price, orderDate);
-					if(_scheme != null){
-						activeScheme = _scheme;
-					}else{
-						logger.warn(order.getPayNo()+"---[美团外卖 活动补贴] 没有找到匹配的Scheme -----");
-					}
-				}
-				for(Scheme scheme:schemes){
-					if(freeAmount.compareTo(new BigDecimal("15")) == 0 && scheme.getPrice().intValue() == 15){
-						//新用户
-						if(activeScheme == null){
-							activeScheme = scheme;
-							break;
-						}
-					}
-					int c = totalAmount.divideToIntegralValue(scheme.getFloorAmount()).intValue();
-					if(c == 1){
-						if(activeScheme == null){
-							activeScheme = scheme;
-							break;
-						}
-					}
-					if(c == 0){
-						BigDecimal redundant = freeAmount.remainder(new BigDecimal("18"));
-						BigDecimal price = freeAmount.subtract(redundant);
-						Scheme _scheme = schemeService.getScheme(Vendor.MTWM, price, orderDate);
-						if(_scheme != null){
-							activeScheme = _scheme;
-						}else{
-							redundant = freeAmount.remainder(new BigDecimal("8"));
-							price = freeAmount.subtract(redundant);
-							_scheme = schemeService.getScheme(Vendor.MTWM, price, orderDate);
-							if(_scheme != null){
-								activeScheme = _scheme;
-							}else{
-								logger.warn(order.getPayNo()+"---[美团外卖 活动补贴] 没有找到匹配的Scheme -----");
+					logger.warn(order.getPayNo()+"---[美团外卖 ] 没有找到匹配的Scheme -----");
+				}else{
+					for(Scheme scheme:schemes){
+						if(totalAmount.compareTo(scheme.getFloorAmount())>=0 && totalAmount.compareTo(scheme.getCeilAmount()) < 0 ){
+							//满减活动
+							BigDecimal price = scheme.getPrice();
+							BigDecimal redundant = freeAmount.remainder(price);
+							BigDecimal realFreeAmount = redundant.add(scheme.getPostPrice());
+							if(freeMap.get(order.getPayNo()) == null){
+								freeMap.put(order.getPayNo(), realFreeAmount);
 							}
+							schemeName = ","+schemeName+scheme.getName();
+							//保存美团外卖补贴金额
+							preserveOAR(realFreeAmount,BusinessConstant.FREE_MTWM_ACC,order);
+							break;
+						}else if(freeAmount.equals(scheme.getFloorAmount()) && freeAmount.equals(scheme.getCeilAmount())){
+							//新用户下单
+							BigDecimal realFreeAmount = scheme.getPostPrice();
+							if(freeMap.get(order.getPayNo()) == null){
+								freeMap.put(order.getPayNo(), realFreeAmount);
+							}
+							schemeName = ","+schemeName+scheme.getName();
+							//保存美团外卖补贴金额
+							preserveOAR(realFreeAmount,BusinessConstant.FREE_MTWM_ACC,order);
+							break;
+						}else{
+							logger.debug(order.getPayNo()+"--- 【美团外卖方案】："+scheme.getName()+" 不匹配！");
 						}
-						break;
 					}
-					if(totalAmount.compareTo(new BigDecimal("100")) > 0 && c > 1){
-						activeScheme = scheme;
-						break;
-					}
-				}
-				if(activeScheme != null){
-					freeAmount = freeAmount.subtract(activeScheme.getSpread());
-					schemeName = schemeName+","+activeScheme.getName();
-					Map<String,BigDecimal> freeMap = chain.getFreeMap();
-					if(freeMap.get(order.getPayNo()) == null){
-						freeMap.put(order.getPayNo(), freeAmount);
-					}
-					//保存美团外卖补贴金额
-					preserveOAR(freeAmount,BusinessConstant.FREE_MTWM_ACC,order);
 				}
 			}catch(Exception e){
 				e.printStackTrace();
