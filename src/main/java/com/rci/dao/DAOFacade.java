@@ -39,5 +39,21 @@ public interface DAOFacade<T,PK extends Serializable>{
 	public T queryUniqueByCriteria(DetachedCriteria dc);
 	
 	public int executeHQL(String hql);
+	
+	/**
+	 * 
+	 *
+	 * Describle(描述)：获取记录条数
+	 *
+	 * 方法名称：getRowCount
+	 *
+	 * 所在类名：DAOFacade
+	 *
+	 * Create Time:2015年6月19日 下午11:58:30
+	 *  
+	 * @param dc
+	 * @return
+	 */
+	public Long getRowCount(DetachedCriteria dc);
 
 }

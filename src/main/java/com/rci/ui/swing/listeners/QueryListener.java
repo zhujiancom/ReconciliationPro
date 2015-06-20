@@ -125,7 +125,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	 * @return
 	 */
 	public String getExpressRateStatistic(String time){
-		return facade.getExpressRate(time).toString();
+		return facade.getExpressRate(time).toString()+"%";
 	}
 
 	/**

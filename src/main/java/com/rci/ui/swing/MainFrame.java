@@ -85,6 +85,7 @@ public class MainFrame extends JFrame {
 		listener.setTotalValue(totalValue);
 		listener.setTgRemark(tgRemark);
 		listener.setMtRemark(mtRemark);
+		listener.setExpRateValue(expRateValue);
 		queryBtn.registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		queryBtn.addActionListener(listener);
 		
@@ -106,6 +107,7 @@ public class MainFrame extends JFrame {
 		clistener.setTotalValue(totalValue);
 		clistener.setTgRemark(tgRemark);
 		clistener.setMtRemark(mtRemark);
+		clistener.setExpRateValue(expRateValue);
 		cleanBtn.addActionListener(clistener);
 		
 		try {

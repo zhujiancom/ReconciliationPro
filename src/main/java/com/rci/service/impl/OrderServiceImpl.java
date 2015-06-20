@@ -5,11 +5,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.dozer.Mapper;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -176,13 +178,19 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 
 	@Override
 	public BigDecimal getOrderCountByDay(String day) {
-		// TODO Auto-generated method stub
-		return null;
+		DetachedCriteria dc = DetachedCriteria.forClass(Order.class);
+		dc.setProjection(Projections.rowCount()).add(Restrictions.eq("day", day));
+		Long count =  baseDAO.getRowCount(dc);
+		return new BigDecimal(count);
 	}
 
 	@Override
 	public BigDecimal getExpressOrderCountByDay(String day) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT COUNT(1) as 'count' FROM bus_tb_order o LEFT JOIN bus_tb_table t ON o.table_no=t.table_no \n"
+				+ "WHERE o.day='"+day+"' \n"
+				+ "AND t.table_type='03'";
+		List<Map<String,Object>> countMapList =  baseDAO.queryListBySQL(sql);
+		Long count = (Long) countMapList.get(0).get("count");
+		return new BigDecimal(count);
 	}
 }

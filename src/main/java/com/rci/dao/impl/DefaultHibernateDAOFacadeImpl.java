@@ -317,4 +317,14 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 	public int executeHQL(String hql){
 		return getCurrentSession().createQuery(hql).executeUpdate();
 	}
+
+	/* 
+	 * @see com.rci.dao.DAOFacade#getRowCount(org.hibernate.criterion.DetachedCriteria)
+	 */
+	@Override
+	public Long getRowCount(DetachedCriteria dc) {
+		CriteriaImpl criteria = (CriteriaImpl) dc.getExecutableCriteria(getCurrentSession());
+		Long count = (Long) criteria.uniqueResult();
+		return count;
+	}
 }

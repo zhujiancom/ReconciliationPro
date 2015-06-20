@@ -9,7 +9,6 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.dozer.Mapper;
-import org.hibernate.mapping.Collection;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,6 +20,7 @@ import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.metadata.dto.TableDTO;
 import com.rci.metadata.service.IDataFetchService;
 import com.rci.metadata.service.IDataTransformService;
+import com.rci.service.core.StatisticCenterFacade;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.properties.PropertyUtils;
@@ -44,6 +44,10 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	private IDataTransformService transformSevice;
 	@Resource(name="TableInfoService")
 	private ITableInfoService tbService;
+	@Resource(name="OrderService")
+	private IOrderService orderService;
+	@Resource(name="StatisticCenterFacade")
+	private StatisticCenterFacade facade;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -129,5 +133,20 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 		TableInfo table = tbService.get(1L);
 		table.setTbName("test");
 		tbService.rwUpdateTableInfo(table);
+	}
+	
+	@Test
+	public void testRowCountOfOrder(){
+		orderService.getOrderCountByDay("20150618");
+	}
+	
+	@Test
+	public void testRowCountOfExpressRateOrder(){
+		orderService.getExpressOrderCountByDay("20150618");
+	}
+	
+	@Test
+	public void testGetExpressRate(){
+		System.out.println(facade.getExpressRate("20150618"));
 	}
 }
