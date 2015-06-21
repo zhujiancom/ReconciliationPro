@@ -10,11 +10,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.ISchemeService;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.model.DZDPSchemeModel;
@@ -43,22 +46,23 @@ public class SystemInitHandler extends JFrame {
 	 */
 	private static final long serialVersionUID = -4393899033664657099L;
 	private ISchemeService schemeSverice;
+	private IDataTransformService transformSevice;
 	
 	public SystemInitHandler(){
 		schemeSverice = (ISchemeService) SpringUtils.getBean("SchemeService");
+		transformSevice = (IDataTransformService) SpringUtils.getBean("DataTransformService");
 	}
 //
 //	
 	public ActionListener dataInit(){
-//		return new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				service.init();
-//				JOptionPane.showMessageDialog(null, "数据初始化成功！");
-//			}
-//		};
-		return null;
+		return new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				transformSevice.transformTableInfo();
+				JOptionPane.showMessageDialog(null, "数据初始化成功！");
+			}
+		};
 	}
 //	
 	public ActionListener settings(){
