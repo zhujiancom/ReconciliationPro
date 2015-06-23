@@ -128,14 +128,17 @@ public class MainFrame extends JFrame {
 		JMenu helpMenu = new JMenu("帮助");
 		menubar.add(sysMenu);
 		menubar.add(helpMenu);
-		JMenuItem dataInit = new JMenuItem("数据初始化");
+		JMenuItem dataInit = new JMenuItem("系统初始化");
+		JMenuItem baseReset = new JMenuItem("基础数据重置");
 		JMenuItem settings = new JMenuItem("方案设置");
 		JMenuItem helpInfo = new JMenuItem("帮助信息");
 		sysMenu.add(dataInit);
+		sysMenu.add(baseReset);
 		sysMenu.add(settings);
 		helpMenu.add(helpInfo);
 		SystemInitHandler handler = new SystemInitHandler();
 		dataInit.addActionListener(handler.dataInit());
+		baseReset.addActionListener(handler.baseReset());
 		settings.addActionListener(handler.settings());
 		helpMenu.addActionListener(new ActionListener() {
 			@Override

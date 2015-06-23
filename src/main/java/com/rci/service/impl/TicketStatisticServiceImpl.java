@@ -2,19 +2,21 @@ package com.rci.service.impl;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.TicketStatistic;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.ITicketStatisticService;
-import com.rci.service.base.BaseService;
+import com.rci.service.base.BaseServiceImpl;
 import com.rci.tools.DateUtil;
 
 @Service("TicketStatisticService")
-public class TicketStatisticServiceImpl extends BaseService<TicketStatistic, Long> implements ITicketStatisticService{
+public class TicketStatisticServiceImpl extends BaseServiceImpl<TicketStatistic, Long> implements ITicketStatisticService{
 
 	@Override
 	public TicketStatistic queryTicketStatisticByDate(Date date, Vendor vendor) {
@@ -23,22 +25,15 @@ public class TicketStatisticServiceImpl extends BaseService<TicketStatistic, Lon
 		return baseDAO.queryUniqueByCriteria(dc);
 	}
 
-	@Override
-	public void rwCreateTicketStatistic(TicketStatistic ts) {
-		super.rwCreate(ts);
-	}
 
 	@Override
-	public void rwUpdateTicketStatistic(TicketStatistic ts) {
-		super.rwUpdate(ts);
-	}
-
-	@Override
-	public void rwDeleteTicketStatistic(String time) {
+	public void deleteTicketStatistic(String time) {
 		try {
-			String date = DateUtil.date2Str(DateUtil.parseDate(time,"yyyyMMdd"));
-			String hql = "delete TicketStatistic ts where ts.date='"+date+"'";
-			baseDAO.executeHQL(hql);
+			Date date = DateUtil.parseDate(time,"yyyyMMdd");
+			DetachedCriteria dc = DetachedCriteria.forClass(TicketStatistic.class);
+			dc.add(Restrictions.eq("date", date));
+			List<TicketStatistic> tss = baseDAO.queryListByCriteria(dc);
+			((ITicketStatisticService)AopContext.currentProxy()).rwDelete(tss.toArray(new TicketStatistic[0]));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

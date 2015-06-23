@@ -4,6 +4,7 @@
 package com.rci.service;
 
 import com.rci.bean.entity.account.Account;
+import com.rci.service.base.IBaseService;
 
 /**
  * @author zj
@@ -19,14 +20,34 @@ import com.rci.bean.entity.account.Account;
  * remark (备注):
  *
  */
-public interface IAccountService {
+public interface IAccountService extends IBaseService<Account, Long>{
+	/**
+	 * 
+	 * Describle(描述)： 根据账户号获取账户
+	 *
+	 * 方法名称：getAccByNo
+	 *
+	 * 所在类名：IAccountService
+	 *
+	 * Create Time:2015年6月23日 上午11:03:39
+	 *  
+	 * @param accNo
+	 * @return
+	 */
 	Account getAccByNo(String accNo);
 	
+	/**
+	 * 
+	 * Describle(描述)： 根据主键获取账户
+	 *
+	 * 方法名称：getAccount
+	 *
+	 * 所在类名：IAccountService
+	 *
+	 * Create Time:2015年6月23日 上午11:03:56
+	 *  
+	 * @param id
+	 * @return
+	 */
 	Account getAccount(Long id);
-	
-	void rwUpdateAccount(Account account);
-	
-	void rwCreateAccount(Account account);
-	
-	void rwCreateAccount(Account[] accounts);
 }

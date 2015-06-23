@@ -51,7 +51,7 @@ public class SystemInitService implements InitializingBean{
 		
 		init();
 		
-		markService.rwSystemInit();//系统初始化完成标记
+		markService.rwInitSystem();//系统初始化完成标记
 	}
 	
 	//硬编码初始数据
@@ -65,7 +65,7 @@ public class SystemInitService implements InitializingBean{
 		//4. 设置饮料为不可打折菜品类型
 		DishType dishType = dishTypeService.queryDishTypeByNo("23");
 		dishType.setNotDiscount(YOrN.Y);
-		dishTypeService.rwUpdateDishType(dishType);
+		dishTypeService.rwUpdate(dishType);
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public class SystemInitService implements InitializingBean{
 		accounts.add(account11);
 		accounts.add(account12);
 		accounts.add(account13);
-		accService.rwCreateAccount(accounts.toArray(new Account[0]));
+		accService.rwCreate(accounts.toArray(new Account[0]));
 	}
 	
 	/**
@@ -228,7 +228,7 @@ public class SystemInitService implements InitializingBean{
 		schemes.add(s1);schemes.add(s2);schemes.add(s3);schemes.add(s4);schemes.add(s5);
 		schemes.add(s6);schemes.add(s7);schemes.add(s8);schemes.add(s9);schemes.add(s10);
 		schemes.add(s11);schemes.add(s12);
-		schemeService.rwCreateScheme(schemes.toArray(new Scheme[0]));
+		schemeService.rwCreate(schemes.toArray(new Scheme[0]));
 	}
 
 	/**

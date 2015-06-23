@@ -4,9 +4,10 @@ import java.util.Date;
 
 import com.rci.bean.entity.TicketStatistic;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.service.base.IBaseService;
 
 
-public interface ITicketStatisticService {
+public interface ITicketStatisticService extends IBaseService<TicketStatistic, Long>{
 	/**
 	 * 
 	 * Describle(描述)：根据日期和平台查找代金券统计数据
@@ -23,9 +24,6 @@ public interface ITicketStatisticService {
 	 */
 	TicketStatistic queryTicketStatisticByDate(Date date,Vendor vendor);
 	
-	void rwCreateTicketStatistic(TicketStatistic ts);
 	
-	void rwUpdateTicketStatistic(TicketStatistic ts);
-	
-	void rwDeleteTicketStatistic(String time);
+	void deleteTicketStatistic(String time);
 }

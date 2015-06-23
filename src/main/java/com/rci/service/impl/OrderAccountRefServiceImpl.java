@@ -8,16 +8,16 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.ResultTransformer;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.service.IOrderAccountRefService;
-import com.rci.service.base.BaseService;
-import com.rci.tools.DateUtil;
+import com.rci.service.base.BaseServiceImpl;
 
 @Service("OrderAccountRefService")
 public class OrderAccountRefServiceImpl extends
-		BaseService<OrderAccountRef, Long> implements IOrderAccountRefService{
+		BaseServiceImpl<OrderAccountRef, Long> implements IOrderAccountRefService{
 
 	@Override
 	public List<OrderAccountRef> getOARef(String billno) {
@@ -26,19 +26,17 @@ public class OrderAccountRefServiceImpl extends
 		return baseDAO.queryListByCriteria(dc);
 	}
 
-	/* 
-	 * @see com.rci.service.IOrderAccountRefService#rwInsertOra(com.rci.bean.entity.OrderAccountRef)
-	 */
-	@Override
-	public void rwInsertOar(OrderAccountRef oar) {
-		rwCreate(oar);
-	}
 
 	@Override
-	public void rwDeleteOar(Date date) {
-		String hql = "delete OrderAccountRef oa where oa.postTime='"+DateUtil.date2Str(date)+"'";
-		int deleteFlag = baseDAO.executeHQL(hql);
-		logger().debug("删除成功标识："+deleteFlag);
+	public void deleteOar(Date date) {
+//		String hql = "delete OrderAccountRef oa where oa.postTime='"+DateUtil.date2Str(date)+"'";
+//		int deleteFlag = baseDAO.executeHQL(hql);
+//		logger().debug("删除成功标识："+deleteFlag);
+		
+		DetachedCriteria dc = DetachedCriteria.forClass(OrderAccountRef.class);
+		dc.add(Restrictions.eq("postTime", date));
+		List<OrderAccountRef> oars = baseDAO.queryListByCriteria(dc);
+		((IOrderAccountRefService)AopContext.currentProxy()).rwDelete(oars.toArray(new OrderAccountRef[0]));
 	}
 
 	@Override

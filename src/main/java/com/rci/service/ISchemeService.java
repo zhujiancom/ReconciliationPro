@@ -7,9 +7,10 @@ import java.util.List;
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.service.base.IBaseService;
 import com.rci.ui.swing.vos.SchemeVO;
 
-public interface ISchemeService {
+public interface ISchemeService extends IBaseService<Scheme, Long>{
 	public Scheme getScheme(SchemeType type,String paymodeno);
 	
 	public List<Scheme> getSchemes(String paymodeno);
@@ -18,10 +19,6 @@ public interface ISchemeService {
 	public List<Scheme> getSchemes(Vendor vendor,Date date);
 	
 	public Scheme getScheme(Vendor vendor,BigDecimal freePrice,Date date);
-	
-	void rwCreateScheme(Scheme scheme);
-	
-	void rwCreateScheme(Scheme[] schemes);
 	
 	public List<SchemeVO> getSchemeVOs(Vendor vendor);
 	

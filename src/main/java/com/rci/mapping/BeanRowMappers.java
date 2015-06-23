@@ -69,6 +69,9 @@ public class BeanRowMappers<T> implements RowMapper<T> {
 					if(ptype == Integer.class){
 						wMethod.invoke(obj, rs.getInt(columnName.value()));
 					}
+					if(Enum.class.isAssignableFrom(ptype)){
+						wMethod.invoke(obj, enumValue(ptype,rs.getString(columnName.value())));
+					}
 				}
 			}
 		} catch (Exception e1) {
@@ -77,4 +80,31 @@ public class BeanRowMappers<T> implements RowMapper<T> {
 		return obj;
 	}
 
+	/**
+	 * 
+	 * Describle(描述)：转换成Enum类型
+	 *
+	 * 方法名称：enumValue
+	 *
+	 * 所在类名：BeanRowMappers
+	 *
+	 * Create Time:2015年6月23日 上午8:56:27
+	 *  
+	 * @param toClass
+	 * @param o
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Enum<?> enumValue(Class toClass, Object o) {
+		Enum result = null;
+		if (o == null)
+			result = null;
+		else if (o instanceof String[])
+			result = Enum.valueOf(toClass, ((String[]) (String[]) o)[0]);
+		else if (o instanceof String) {
+			result = Enum.valueOf(toClass, (String) o);
+		}
+		return result;
+	}
+	
 }

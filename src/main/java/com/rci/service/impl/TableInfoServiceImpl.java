@@ -1,30 +1,18 @@
 package com.rci.service.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.TableInfo;
 import com.rci.service.ITableInfoService;
-import com.rci.service.base.BaseService;
+import com.rci.service.base.BaseServiceImpl;
 
 @Service("TableInfoService")
-public class TableInfoServiceImpl extends BaseService<TableInfo, Long>  implements ITableInfoService {
-	
-	@Override
-	public void rwCreateTableInfos(TableInfo[] tables) {
-		super.rwCreate(tables);
-	}
-
-	@Override
-	public void rwUpdateTableInfo(TableInfo table) {
-		super.rwUpdate(table);
-	}
-
-	@Override
-	public TableInfo get(Long id) {
-		return super.get(id);
-	}
+public class TableInfoServiceImpl extends BaseServiceImpl<TableInfo,Long>  implements ITableInfoService {
 
 	@Override
 	public TableInfo getTableInfoByNo(String tableno) {
@@ -33,4 +21,9 @@ public class TableInfoServiceImpl extends BaseService<TableInfo, Long>  implemen
 		return baseDAO.queryUniqueByCriteria(dc);
 	}
 
+	@Override
+	public void deleteAll() {
+		List<TableInfo> tables = super.getAll();
+		((ITableInfoService)AopContext.currentProxy()).rwDelete(tables.toArray(new TableInfo[0]));
+	}
 }

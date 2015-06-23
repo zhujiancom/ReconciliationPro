@@ -13,6 +13,7 @@ import org.dozer.Mapper;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -26,13 +27,13 @@ import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
-import com.rci.service.base.BaseService;
+import com.rci.service.base.BaseServiceImpl;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.vos.OrderItemVO;
 import com.rci.ui.swing.vos.OrderVO;
 
 @Service("OrderService")
-public class OrderServiceImpl extends BaseService<Order, Long> implements
+public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 		IOrderService {
 	@Autowired
 	private Mapper beanMapper;
@@ -42,21 +43,6 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	private IDishService dishService;
 	@Resource(name="DataTransformService")
 	private IDataTransformService transformService;
-
-	@Override
-	public Order getOrder(Long pk) {
-		return super.get(pk);
-	}
-
-	@Override
-	public void rwInsertOrder(Order order) {
-		rwCreate(order);
-	}
-	
-	@Override
-	public void rwUpdateOrder(Order order){
-		rwUpdate(order);
-	}
 
 	@Override
 	public List<Order> queryAllDayOrders() {
@@ -156,24 +142,16 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	}
 
 	@Override
-	public void rwDeleteOrders(Order[] orders) {
-		baseDAO.delete(orders);
-	}
-
-	@Override
-	public void rwDeleteOrders(String day) {
+	public void deleteOrders(String day) {
 		List<Order> orders = queryOrdersByDay(day);
-		baseDAO.delete(orders.toArray(new Order[0]));
+		for(Order order:orders){
+			((IOrderService)AopContext.currentProxy()).rwDelete(order.getOid());
+		}
 		try {
-			oaService.rwDeleteOar(DateUtil.parseDate(day, "yyyyMMdd"));
+			oaService.deleteOar(DateUtil.parseDate(day, "yyyyMMdd"));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void rwInsertOrders(Order[] orders) {
-		rwCreate(orders);
 	}
 
 	@Override

@@ -86,15 +86,6 @@ public abstract class AbstractFilter implements CalculateFilter {
 		return false;
 	}
 	
-//	protected Boolean isBeverage(String dishNo){
-//		Dish dish = dishService.findDishByNo(dishNo);
-//		String typeName = dish.getDishType().getDtName();
-//		if("饮料".equals(typeName)){
-//			return true;
-//		}
-//		return false;
-//	}
-	
 	protected SchemeType getSuitSchemeType(String dishNo){
 		Dish dish = dishService.findDishByNo(dishNo);
 		if(dish.getDishName().indexOf("套餐A") != -1){
@@ -253,8 +244,8 @@ public abstract class AbstractFilter implements CalculateFilter {
 		oar.setPostTime(order.getCheckoutTime());
 		oar.setRealAmount(postAmount);
 		//保存关联数据
-		oarService.rwInsertOar(oar);
-		orderService.rwUpdateOrder(order);
+		oarService.rwCreate(oar);
+		orderService.rwUpdate(order);
 	}
 	
 	protected void createTicketStatistic(String day,Vendor vendor,Map<SchemeType,SchemeWrapper> schemes){
@@ -271,7 +262,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 			ts.setSuit98(schemes.get(SchemeType.SUIT_98)==null?0:schemes.get(SchemeType.SUIT_98).getCount());
 			ts.setVendor(vendor);
 			ts.setDate(queryDate);
-			statisticService.rwCreateTicketStatistic(ts);
+			statisticService.rwCreate(ts);
 		}else{
 			Integer chit50 = schemes.get(SchemeType.CHIT_50)==null?0:schemes.get(SchemeType.CHIT_50).getCount();
 			if(chit50 > 0){
@@ -293,7 +284,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 			if(suit98 > 0){
 				ts.setSuit98(ts.getSuit98()+suit98);
 			}
-			statisticService.rwUpdateTicketStatistic(ts);
+			statisticService.rwUpdate(ts);
 		}
 	} catch (ParseException e) {
 		e.printStackTrace();

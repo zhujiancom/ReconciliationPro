@@ -68,7 +68,7 @@ public class DishType extends BaseEntity {
 		this.dtName = dtName;
 	}
 
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,mappedBy="dishType")
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY,mappedBy="dishType")
 	public List<Dish> getDishes() {
 		return dishes;
 	}

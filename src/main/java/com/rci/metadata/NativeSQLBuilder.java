@@ -2,20 +2,20 @@ package com.rci.metadata;
 
 public class NativeSQLBuilder {
 	/* 查询单个菜品 */
-	public static final String QUERY_DISH_BY_NO="select ch_dishno,vch_dishname,ch_typeno,num_price1 from dbo.v_bt_dish where ch_dishno=?";
+	public static final String QUERY_DISH_BY_NO="select rtrim(ch_dishno) 'ch_dishno',vch_dishname,rtrim(ch_typeno) 'ch_typeno',num_price1,ch_stopflag from dbo.v_bt_dish where ch_dishno=?";
 	/* 查询单个菜品类型 */
-	public static final String QUERY_DISH_TYPE_BY_NO="select ch_typeno,vch_typename from dbo.cybr_bt_dish_type where ch_typeno=?";
+	public static final String QUERY_DISH_TYPE_BY_NO="select rtrim(ch_typeno) 'ch_typeno',vch_typename from dbo.cybr_bt_dish_type where ch_typeno=?";
 	/* 查询所有菜品 */
-	public static final String QUERY_DISH_By_TYPENO="select ch_dishno,vch_dishname,ch_typeno,num_price1 from dbo.v_bt_dish where ch_typeno=?";
+	public static final String QUERY_DISH_By_TYPENO="select rtrim(ch_dishno) 'ch_dishno',vch_dishname,rtrim(ch_typeno) 'ch_typeno',num_price1,ch_stopflag from dbo.v_bt_dish where ch_typeno=?";
 	/* 查询所有 菜品类型*/
-	public static final String QUERY_DISH_TYPE="select ch_typeno,vch_typename from dbo.cybr_bt_dish_type";
+	public static final String QUERY_DISH_TYPE="select rtrim(ch_typeno) 'ch_typeno',vch_typename from dbo.cybr_bt_dish_type";
 	/* 查询order detail 信息*/
-	public static final String QUERY_ORDERITEM="select ord.ch_billno 'billno',ord.ch_payno 'payno',ord.ch_dishno 'dishno',ord.ch_suitflag 'suitflag',ord.ch_suitno 'suitno',ord.num_num count,\n"
+	public static final String QUERY_ORDERITEM="select rtrim(ord.ch_billno) 'billno',rtrim(ord.ch_payno) 'payno',rtrim(ord.ch_dishno) 'dishno',ord.ch_suitflag 'suitflag',rtrim(ord.ch_suitno) 'suitno',ord.num_num count,\n"
 												+ "ord.num_back countback,ord.num_price 'price',ord.int_discount 'discount',ord.dt_operdate 'consumeTime' from dbo.v_u_orderdish ord \n"
 												+ "where ord.ch_billno=?";
 	/* 查询order 信息*/
-	public static final String QUERY_ORDER="select tab.ch_billno 'billno',tab.ch_payno 'payno',detail.ch_paymodeno 'paymode', \n"
-			+"cmaster.num_cost 'originamount',tab.dt_service_begin 'opendesktime',tab.ch_tableno 'tableno', \n"
+	public static final String QUERY_ORDER="select rtrim(tab.ch_billno) 'billno',rtrim(tab.ch_payno) 'payno',detail.ch_paymodeno 'paymode', \n"
+			+"cmaster.num_cost 'originamount',tab.dt_service_begin 'opendesktime',rtrim(tab.ch_tableno) 'tableno', \n"
 			+ "cmaster.dt_operdate 'checkouttime',detail.num_realamount 'realamount' \n"
 			+ "from dbo.v_u_table tab \n"
 			+ "join dbo.v_u_checkout_master cmaster \n"
@@ -28,7 +28,7 @@ public class NativeSQLBuilder {
 	public static final String QUERY_PAYMODES="select ch_paymodeno,vch_paymode,ch_incomeflag from dbo.v_bt_paymode";
 	
 	/* 查询所有桌号信息  */
-	public static final String QUERY_TABLES="select ch_tableno 'table_no',vch_tablename 'table_name',tb.ch_typeno 'table_type',tbt.vch_typename 'table_type_name' from dbo.v_bt_table tb \n"
+	public static final String QUERY_TABLES="select rtrim(ch_tableno) 'table_no',vch_tablename 'table_name',rtrim(tb.ch_typeno) 'table_type',tbt.vch_typename 'table_type_name' from dbo.v_bt_table tb \n"
 			+ "left join dbo.cybr_bt_table_type tbt \n"
 			+ "on tb.ch_typeno = tbt.ch_typeno";
 	

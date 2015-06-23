@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.ISchemeService;
+import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.model.DZDPSchemeModel;
 import com.rci.ui.swing.model.DZDPSchemeTable;
@@ -47,20 +48,46 @@ public class SystemInitHandler extends JFrame {
 	private static final long serialVersionUID = -4393899033664657099L;
 	private ISchemeService schemeSverice;
 	private IDataTransformService transformSevice;
+	private IMetadataService metadataService;
 	
 	public SystemInitHandler(){
 		schemeSverice = (ISchemeService) SpringUtils.getBean("SchemeService");
 		transformSevice = (IDataTransformService) SpringUtils.getBean("DataTransformService");
+		metadataService = (IMetadataService)SpringUtils.getBean("MetadataService");
 	}
 //
 //	
 	public ActionListener dataInit(){
+//		return new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				transformSevice.transformTableInfo();
+//				JOptionPane.showMessageDialog(null, "数据初始化成功！");
+//			}
+//		};
+		return null;
+	}
+	
+	/**
+	 * 
+	 * Describle(描述)：基础数据重置
+	 *
+	 * 方法名称：baseReset
+	 *
+	 * 所在类名：SystemInitHandler
+	 *
+	 * Create Time:2015年6月23日 下午2:14:18
+	 *  
+	 * @return
+	 */
+	public ActionListener baseReset(){
 		return new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				transformSevice.transformTableInfo();
-				JOptionPane.showMessageDialog(null, "数据初始化成功！");
+				metadataService.resetMetadata();
+				JOptionPane.showMessageDialog(null, "基础数据重置成功！");
 			}
 		};
 	}

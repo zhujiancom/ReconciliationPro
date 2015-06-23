@@ -75,10 +75,10 @@ public class CleanListener implements ActionListener {
 			if(!DateUtil.isDateFormat(time,"yyyyMMdd")){
 				ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "日期格式错误");
 			}
-			orderService.rwDeleteOrders(time);
-			markService.rwDeleteMark(time);
+			orderService.deleteOrders(time);
+			markService.deleteMark(time);
 			accFlowService.rwDeleteFlowInfo(time,DataGenerateType.AUTO);
-			tsService.rwDeleteTicketStatistic(time);
+			tsService.deleteTicketStatistic(time);
 			cashValue.setText(null);
 			posValue.setText(null);
 			mtValue.setText(null);

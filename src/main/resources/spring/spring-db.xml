@@ -91,7 +91,7 @@
 		<property name="nestedTransactionAllowed" value="true"></property>
 	</bean>
 	
-	<!-- 注解风格支持 -->
+	<!-- 注解风格支持 - 开启暴露Aop代理到ThreadLocal支持-->
 	<aop:aspectj-autoproxy expose-proxy="true"/>
 	
 	<!-- XML 风格支持 -->

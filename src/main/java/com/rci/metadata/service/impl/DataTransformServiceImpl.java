@@ -34,6 +34,7 @@ import com.rci.metadata.dto.TableDTO;
 import com.rci.metadata.service.IDataFetchService;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishService;
+import com.rci.service.IDishTypeService;
 import com.rci.service.IOrderService;
 import com.rci.service.IPayModeService;
 import com.rci.service.ITableInfoService;
@@ -48,6 +49,8 @@ public class DataTransformServiceImpl implements IDataTransformService {
 	private Mapper beanMapper;
 	@Resource(name="DishService")
 	private IDishService dishService;
+	@Resource(name="DishTypeService")
+	private IDishTypeService dishTypeService;
 	@Resource(name="PayModeService")
 	private IPayModeService paymodeService;
 	@Resource(name="OrderService")
@@ -78,7 +81,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			value.setItems(items);
 			orders.add(value);
 		}
-		orderService.rwInsertOrders(orders.toArray(new Order[0]));
+		orderService.rwCreate(orders.toArray(new Order[0]));
 		return orders;
 	}
 
@@ -94,21 +97,21 @@ public class DataTransformServiceImpl implements IDataTransformService {
 				Dish dish = beanMapper.map(dishDTO, Dish.class);
 				dish.setDishType(type);
 				dishes.add(dish);
-				dishService.rwSaveDish(dish);
+				dishService.rwCreate(dish);
 			}
 		}
 	}
 	
 	public Dish transformDishInfo(String dishno){
 		DishDTO dishDTO = fetchService.fetchDishByNo(dishno);
-		DishType dType= dishService.findDishTypeByTypeNo(dishDTO.getDishType());
+		DishType dType= dishTypeService.queryDishTypeByNo(dishDTO.getDishType());
 		if(dType == null){
 			DishTypeDTO dTypeDTO = fetchService.fetchDishTypeByNo(dishDTO.getDishType());
 			dType = beanMapper.map(dTypeDTO, DishType.class);
 		}
 		Dish dish = beanMapper.map(dishDTO, Dish.class);
 		dish.setDishType(dType);
-		dishService.rwSaveDish(dish);
+		dishService.rwCreate(dish);
 		return dish;
 	}
 
@@ -120,7 +123,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			Paymode mode = beanMapper.map(modeDTO, Paymode.class);
 			paymodes.add(mode);
 		}
-		paymodeService.rwCreatePayMode(paymodes.toArray(new Paymode[0]));
+		paymodeService.rwCreate(paymodes.toArray(new Paymode[0]));
 	}
 	
 	/**
@@ -173,7 +176,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 		for(TableDTO tdto:tableDTOs){
 			tables.add(beanMapper.map(tdto, TableInfo.class));
 		}
-		tableService.rwCreateTableInfos(tables.toArray(new TableInfo[0]));
+		tableService.rwCreate(tables.toArray(new TableInfo[0]));
 	}
 
 }

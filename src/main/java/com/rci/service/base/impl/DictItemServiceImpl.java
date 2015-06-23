@@ -7,11 +7,11 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.base.DictItem;
-import com.rci.service.base.BaseService;
+import com.rci.service.base.BaseServiceImpl;
 import com.rci.service.base.IDictItemService;
 
 @Service("DictionaryService")
-public class DictItemServiceImpl extends BaseService<DictItem, Long> implements
+public class DictItemServiceImpl extends BaseServiceImpl<DictItem, Long> implements
 		IDictItemService {
 
 	@Override

@@ -10,23 +10,12 @@ import org.springframework.stereotype.Service;
 import com.rci.bean.entity.account.AccFlow;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.service.IAccFlowService;
-import com.rci.service.base.BaseService;
+import com.rci.service.base.BaseServiceImpl;
 import com.rci.tools.DateUtil;
 
 @Service("AccFlowService")
-public class AccFlowServiceImpl extends BaseService<AccFlow, Long> implements
+public class AccFlowServiceImpl extends BaseServiceImpl<AccFlow, Long> implements
 		IAccFlowService {
-
-	@Override
-	public void rwCreateAccFlow(AccFlow flow) {
-		super.rwCreate(flow);
-	}
-
-	@Override
-	public void rwUpdateAccFlow(AccFlow flow) {
-		super.rwUpdate(flow);
-	}
-	
 	@Override
 	public void rwDeleteFlowInfo(String time,DataGenerateType generateType) {
 		try {

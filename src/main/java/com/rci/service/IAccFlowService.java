@@ -4,12 +4,9 @@ import java.util.Date;
 
 import com.rci.bean.entity.account.AccFlow;
 import com.rci.enums.BusinessEnums.DataGenerateType;
+import com.rci.service.base.IBaseService;
 
-public interface IAccFlowService {
-	void rwCreateAccFlow(AccFlow flow);
-	
-	void rwUpdateAccFlow(AccFlow flow);
-	
+public interface IAccFlowService extends IBaseService<AccFlow, Long>{
 	/**
 	 * 
 	 * Describle(描述)：删除指定日期的流水

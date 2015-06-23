@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.account.Account;
 import com.rci.service.IAccountService;
-import com.rci.service.base.BaseService;
+import com.rci.service.base.BaseServiceImpl;
 
 /**
  * @author zj
@@ -26,7 +26,7 @@ import com.rci.service.base.BaseService;
  *
  */
 @Service("AccountService")
-public class AccountServiceImpl extends BaseService<Account, Long> implements IAccountService{
+public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implements IAccountService{
 
 	/* 
 	 * @see com.rci.service.IAccountService#getAccByNo(java.lang.String)
@@ -42,21 +42,6 @@ public class AccountServiceImpl extends BaseService<Account, Long> implements IA
 	@Override
 	public Account getAccount(Long id) {
 		return baseDAO.get(id);
-	}
-
-	@Override
-	public void rwUpdateAccount(Account account) {
-		super.rwUpdate(account);
-	}
-
-	@Override
-	public void rwCreateAccount(Account account) {
-		super.rwCreate(account);
-	}
-
-	@Override
-	public void rwCreateAccount(Account[] accounts) {
-		super.rwCreate(accounts);
 	}
 
 }

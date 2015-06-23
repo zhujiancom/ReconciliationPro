@@ -14,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.TableInfo;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.metadata.dto.TableDTO;
 import com.rci.metadata.service.IDataFetchService;
 import com.rci.metadata.service.IDataTransformService;
+import com.rci.service.core.IMetadataService;
 import com.rci.service.core.StatisticCenterFacade;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
@@ -48,6 +50,16 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	private IOrderService orderService;
 	@Resource(name="StatisticCenterFacade")
 	private StatisticCenterFacade facade;
+	@Resource(name="DishTypeService")
+	private IDishTypeService dishtypeService;
+	@Resource(name="FetchMarkService")
+	private IFetchMarkService markService;
+	@Resource(name="PayModeService")
+	private IPayModeService paymodeService;
+	@Resource(name="TicketStatisticService")
+	private ITicketStatisticService ticketService;
+	@Resource(name="MetadataService")
+	private IMetadataService metadataService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -132,7 +144,12 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	public void testUpdateTableInfo(){
 		TableInfo table = tbService.get(1L);
 		table.setTbName("test");
-		tbService.rwUpdateTableInfo(table);
+		tbService.rwUpdate(table);
+	}
+	
+	@Test
+	public void testDeleteTableInfo(){
+		tbService.deleteAll();
 	}
 	
 	@Test
@@ -148,5 +165,49 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testGetExpressRate(){
 		System.out.println(facade.getExpressRate("20150618"));
+	}
+	
+	@Test
+	public void testDishTypeDelete(){
+//		dishtypeService.rwDelete(2L);
+		dishtypeService.deleteAll();
+//		DishType type = dishtypeService.get(3L);
+//		dishtypeService.delete(type);
+//		List<DishType> types = dishtypeService.getAll();
+//		for(DishType type:types){
+//			System.out.println(type.getDtid());
+//			dishtypeService.delete(type);
+//		}
+	}
+	
+	@Test
+	public void testTransformDish(){
+		transformSevice.transformDishInfo();
+	}
+	
+	@Test
+	public void testMarkDelete(){
+		markService.deleteMark("20150310");
+//		markService.rwDeleteMark("20150426");
+	}
+	
+	@Test
+	public void testMarkOrder(){
+		markService.markOrder("20150310");
+	}
+	
+	@Test
+	public void testPayModeAll(){
+		paymodeService.deleteAll();
+	}
+	
+	@Test
+	public void testDeleteTicketStatistic(){
+		ticketService.deleteTicketStatistic("20150518");
+	}
+	
+	@Test
+	public void testClearMetadata(){
+		metadataService.clearMetadata();
 	}
 }

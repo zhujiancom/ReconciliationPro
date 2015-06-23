@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +20,23 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.rci.bean.entity.base.BaseEntity;
+import com.rci.enums.CommonEnums.YOrN;
 
+/**
+ * 
+ * remark (备注):菜品
+ *
+ * @author zj
+ *	
+ * 项目名称：ReconciliationPro
+ *
+ * 类名称：Dish
+ *
+ * 包名称：com.rci.bean.entity
+ *
+ * Create Time: 2015年6月23日 上午8:43:12
+ *
+ */
 @Entity
 @Table(name="bus_tb_dish")
 public class Dish extends BaseEntity{
@@ -29,17 +47,20 @@ public class Dish extends BaseEntity{
 
 	private Long did;
 	
-	/* ��Ʒ���  */
+	/* 菜品编号 */
 	private String dishNo;
 	
-	/* ��Ʒ���   */
+	/* 菜品名称   */
 	private String dishName;
 	
-	/* ��Ʒ�۸�  */
+	/* 菜品单价 */
 	private BigDecimal dishPrice;
 	
-	/* ��Ʒ����  */
+	/* 菜品类型  */
 	private DishType dishType;
+	
+	/* 是否停用 */
+	private YOrN stopFlag;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -87,6 +108,16 @@ public class Dish extends BaseEntity{
 
 	public void setDishType(DishType dishType) {
 		this.dishType = dishType;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="stop_flag")
+	public YOrN getStopFlag() {
+		return stopFlag;
+	}
+
+	public void setStopFlag(YOrN stopFlag) {
+		this.stopFlag = stopFlag;
 	}
 
 	@Override

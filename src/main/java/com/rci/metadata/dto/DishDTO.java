@@ -6,6 +6,7 @@ package com.rci.metadata.dto;
 import java.math.BigDecimal;
 
 import com.rci.annotation.ColumnName;
+import com.rci.enums.CommonEnums.YOrN;
 
 /**
  * @author zj
@@ -35,6 +36,9 @@ public class DishDTO {
 	
 	/* 产品类型  */
 	private String dishType;
+	
+	/* 是否停用 */
+	private YOrN stopFlag;
 
 	@ColumnName("ch_dishno")
 	public String getDishNo() {
@@ -70,5 +74,14 @@ public class DishDTO {
 
 	public void setDishType(String dishType) {
 		this.dishType = dishType;
+	}
+
+	@ColumnName("ch_stopflag")
+	public YOrN getStopFlag() {
+		return stopFlag;
+	}
+
+	public void setStopFlag(YOrN stopFlag) {
+		this.stopFlag = stopFlag;
 	}
 }

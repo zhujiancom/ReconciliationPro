@@ -58,14 +58,14 @@ public class DataLoaderService implements IDataLoaderService {
 		if(mark == null){ 
 			//1. 如果今天还没有加载过数据，则加载
 			orders = transformService.transformOrderInfo(date);
-			markService.rwOrderMark(day);
+			markService.markOrder(day);
 		}else{
 			//2. 如果加载过数据，则判断当前时间是否在保存点之后，如果在并且在当天24点之前，则做增量查询
 			Date savepoint = mark.getSavepoint();
 			if(savepoint != null && savepoint.before(queryEndofDate)){
 				orders = transformService.transformOrderInfo(savepoint);
 				mark.setSavepoint(DateUtil.getCurrentDate());
-				markService.rwUpdateMark(mark);
+				markService.rwUpdate(mark);
 			}
 		}
 		//解析订单各种账户收入的金额，判断订单使用的方案
@@ -106,12 +106,12 @@ public class DataLoaderService implements IDataLoaderService {
 				flow.setTime(date);
 				flow.setFlowType(FlowType.IN);
 				flow.setGenerateType(DataGenerateType.AUTO);
-				accFlowService.rwCreateAccFlow(flow);
+				accFlowService.rwCreate(flow);
 				//2. 更新账户信息
 				updateAccountInfo(accId, amount);
 			}else if(flow.getAmount().compareTo(amount) != 0){
 				flow.setAmount(amount);
-				accFlowService.rwUpdateAccFlow(flow);
+				accFlowService.rwUpdate(flow);
 				//2. 更新账户信息
 				BigDecimal difference = amount.subtract(flow.getAmount()); //差额
 				updateAccountInfo(accId, difference);
@@ -149,6 +149,6 @@ public class DataLoaderService implements IDataLoaderService {
 		
 		account.setEarningAmount(earning);
 		account.setBalance(balance);
-		accService.rwUpdateAccount(account);
+		accService.rwUpdate(account);
 	}
 }

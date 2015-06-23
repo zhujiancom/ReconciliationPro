@@ -4,10 +4,13 @@
 package com.rci.service.base;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.dao.impl.DefaultHibernateDAOFacadeImpl;
@@ -18,34 +21,26 @@ import com.rci.dao.impl.DefaultHibernateDAOFacadeImpl;
  * @Date 2014年7月25日
  *	
  */
-public abstract class BaseService<T extends BaseEntity, PK extends Serializable>{
-	private transient Log logger = LogFactory.getLog(BaseService.class);
+public class BaseServiceImpl<T extends BaseEntity, PK extends Serializable> implements IBaseService<T,PK>{
+	private transient Log logger = LogFactory.getLog(BaseServiceImpl.class);
 	@Autowired
 	protected DefaultHibernateDAOFacadeImpl<T, PK> baseDAO;
 
 	protected Log logger(){
 		if(logger == null){
-			return LogFactory.getLog(BaseService.class);
+			return LogFactory.getLog(BaseServiceImpl.class);
 		}else{
 			return logger;
 		}
 	}
 
-	/**
-	 * 
-	 * Describle(描述)： 创建
-	 *
-	 * 方法名称：rwCreate
-	 *
-	 * 所在类名：BaseService
-	 *
-	 * Create Time:2015年4月23日 下午4:56:02
-	 *  
-	 * @param entity
-	 */
+	@Override
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void rwCreate(T entity){
 		baseDAO.save(entity);
 	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void rwCreate(T[] entities){
 		baseDAO.save(entities);
 	}
@@ -62,9 +57,11 @@ public abstract class BaseService<T extends BaseEntity, PK extends Serializable>
 	 *  
 	 * @param entity
 	 */
+	@Override
 	public void rwUpdate(T entity){
 		baseDAO.update(entity);
 	}
+	@Override
 	public void rwUpdate(T[] entity){
 		baseDAO.update(entity);
 	}
@@ -81,9 +78,13 @@ public abstract class BaseService<T extends BaseEntity, PK extends Serializable>
 	 *  
 	 * @param pk
 	 */
+	@Override
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void rwDelete(PK pk){
 		baseDAO.delete(pk);
 	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void rwDelete(T[] entities){
 		baseDAO.delete(entities);
 	}
@@ -101,7 +102,12 @@ public abstract class BaseService<T extends BaseEntity, PK extends Serializable>
 	 * @param pk
 	 * @return
 	 */
+	@Override
 	public T get(PK pk){
 		return baseDAO.get(pk);
+	}
+	@Override
+	public List<T> getAll(){
+		return baseDAO.getAll();
 	}
 }

@@ -19,7 +19,7 @@ import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.ISchemeService;
-import com.rci.service.base.BaseService;
+import com.rci.service.base.BaseServiceImpl;
 import com.rci.ui.swing.vos.SchemeVO;
 
 /**
@@ -37,7 +37,7 @@ import com.rci.ui.swing.vos.SchemeVO;
  *
  */
 @Service("SchemeService")
-public class SchemeServiceImpl extends BaseService<Scheme, Long> implements
+public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 		ISchemeService {
 	@Autowired
 	private Mapper beanMapper;
@@ -48,16 +48,6 @@ public class SchemeServiceImpl extends BaseService<Scheme, Long> implements
 		sdc.add(Restrictions.eq("type", type)).add(Restrictions.eq("paymodeno", paymodeno));
 		Scheme scheme = baseDAO.queryUniqueByCriteria(sdc);
 		return scheme;
-	}
-
-	@Override
-	public void rwCreateScheme(Scheme scheme) {
-		super.rwCreate(scheme);
-	}
-
-	@Override
-	public void rwCreateScheme(Scheme[] schemes) {
-		super.rwCreate(schemes);
 	}
 
 	/* 
