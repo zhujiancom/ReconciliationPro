@@ -51,6 +51,7 @@ public class MainFrame extends JFrame {
 	private JLabel posValue;
 	private JLabel mtValue;
 	private JLabel tgValue;
+	private JLabel lsValue;
 	private JLabel tgRemark;
 	private JLabel mtRemark;
 	private JLabel shValue;
@@ -86,6 +87,7 @@ public class MainFrame extends JFrame {
 		listener.setTgRemark(tgRemark);
 		listener.setMtRemark(mtRemark);
 		listener.setExpRateValue(expRateValue);
+		listener.setLsValue(lsValue);
 		queryBtn.registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		queryBtn.addActionListener(listener);
 		
@@ -108,6 +110,7 @@ public class MainFrame extends JFrame {
 		clistener.setTgRemark(tgRemark);
 		clistener.setMtRemark(mtRemark);
 		clistener.setExpRateValue(expRateValue);
+		clistener.setLsValue(lsValue);
 		cleanBtn.addActionListener(clistener);
 		
 		try {
@@ -273,6 +276,13 @@ public class MainFrame extends JFrame {
 		mtSuperFreePanel.add(mtSuperFreeLabel);
 		mtSuperFreePanel.add(mtSuperFreeValue);
 		
+		JLabel lsLabel = new JLabel("拉手网：");
+		lsValue = new JLabel();
+		lsValue.setForeground(Color.RED);
+		JPanel lsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		lsPanel.add(lsLabel);
+		lsPanel.add(lsValue);
+		
 		JLabel freeLabel = new JLabel("总免单金额：");
 		freeValue = new JLabel();
 		freeValue.setForeground(Color.RED);
@@ -302,7 +312,8 @@ public class MainFrame extends JFrame {
 		conclusionPanel.add(elePanel);
 		conclusionPanel.add(eleFreePanel);
 		conclusionPanel.add(mtwmPanel);
-		conclusionPanel.add(mtwmFreePanel);
+//		conclusionPanel.add(mtwmFreePanel);
+		conclusionPanel.add(lsPanel);
 		conclusionPanel.add(mtSuperPanel);
 		conclusionPanel.add(mtSuperFreePanel);
 		conclusionPanel.add(tddPanel);

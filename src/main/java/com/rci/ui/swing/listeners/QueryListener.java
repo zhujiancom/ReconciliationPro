@@ -69,6 +69,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private JLabel tgRemark;
 	private JLabel mtRemark;
 	private JLabel expRateValue; //外送率
+	private JLabel lsValue;
 	
 	public QueryListener(JTable mainTable,JTable subTable){
 		this.mainTable = mainTable;
@@ -99,6 +100,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 			mtSuperValue.setText(getTotalAmount(BusinessConstant.MT_SUPER_ACC).toString());
 			mtSuperFreeValue.setText(getTotalAmount(BusinessConstant.FREE_MT_SUPER_ACC).toString());
 			freeValue.setText(getTotalAmount(BusinessConstant.FREE_ACC).toString());
+			lsValue.setText(getTotalAmount(BusinessConstant.LS_ACC).toString());
 			totalValue.setText(getTotalDayAmount().toString());
 			tgRemark.setText(getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.DZDP));
 			mtRemark.setText(getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.MT));
@@ -336,5 +338,9 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 
 	public void setExpRateValue(JLabel expRateValue) {
 		this.expRateValue = expRateValue;
+	}
+
+	public void setLsValue(JLabel lsValue) {
+		this.lsValue = lsValue;
 	}
 }

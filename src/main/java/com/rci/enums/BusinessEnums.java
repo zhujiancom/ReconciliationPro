@@ -83,6 +83,6 @@ public final class BusinessEnums {
 	}
 	
 	public static enum Vendor{
-		ELE,DZDP,MTWM,MT
+		ELE,DZDP,MTWM,MT,LS
 	}
 }

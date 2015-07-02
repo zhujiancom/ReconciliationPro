@@ -47,6 +47,7 @@ public class CleanListener implements ActionListener {
 	private JLabel tgRemark;
 	private JLabel mtRemark;
 	private JLabel expRateValue;
+	private JLabel lsValue;
 	
 	public CleanListener(JTable mainTable,JTable subTable){
 		this.mainTable = mainTable;
@@ -93,6 +94,7 @@ public class CleanListener implements ActionListener {
 			mtSuperFreeValue.setText(null);
 			freeValue.setText(null);
 			totalValue.setText(null);
+			lsValue.setText(null);
 			tgRemark.setText("");
 			mtRemark.setText("");
 			expRateValue.setText("");
@@ -184,6 +186,10 @@ public class CleanListener implements ActionListener {
 	 */
 	public void setExpRateValue(JLabel expRateValue) {
 		this.expRateValue = expRateValue;
+	}
+
+	public void setLsValue(JLabel lsValue) {
+		this.lsValue = lsValue;
 	}
 
 }
