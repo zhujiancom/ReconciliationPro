@@ -1,6 +1,6 @@
 /*
-SQLyog Ultimate v11.11 (64 bit)
-MySQL - 5.6.17 
+SQLyog Ultimate - MySQL GUI v8.2 
+MySQL - 5.6.20 
 *********************************************************************
 */
 /*!40101 SET NAMES utf8 */;
@@ -39,4 +39,5 @@ insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `
 insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('32',NULL,'美团外卖满15减7','12','4.00','7.00','3.00',NULL,'RMB','0','ACTIVE','2015-06-17','2015-07-06','MTWM','15.00','50.00');
 insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('33',NULL,'美团外卖满50减15','12','10.00','15.00','5.00',NULL,'RMB','0','ACTIVE','2015-06-17','2015-07-06','MTWM','50.00','1000.00');
 insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('34',NULL,'饿了么满25减11','11','8.00','11.00','3.00',NULL,'RMB','0','ACTIVE','2015-07-01','2015-07-31','ELE','25.00',NULL);
-insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('35',NULL,'Frypan单人休闲餐B','13','31.60','32.00',NULL,'SUIT_32','PKG','0','ACTIVE',NULL,NULL,'LS',NULL,NULL);
+insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('35',NULL,'Frypan单人休闲餐B','14','31.60','32.00',NULL,'SUIT_32','PKG','0','ACTIVE',NULL,NULL,'LS',NULL,NULL);
+insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('36',NULL,'饿了么新用户优惠15（不叠加）','11','12.00','15.00','3.00',NULL,'RMB','0','ACTIVE','2015-07-01','2015-07-31','ELE','15.00',NULL);
