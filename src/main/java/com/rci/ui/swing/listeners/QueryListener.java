@@ -21,20 +21,22 @@ import javax.swing.table.TableColumnModel;
 
 import org.springframework.util.CollectionUtils;
 
-import com.rci.bean.entity.TicketStatistic;
+import com.rci.bean.entity.EleSDStatistic;
 import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
 import com.rci.service.IDataLoaderService;
+import com.rci.service.IELESDStatisticService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
-import com.rci.service.ITicketStatisticService;
 import com.rci.service.core.StatisticCenterFacade;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
+import com.rci.tools.StringUtils;
+import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.model.OrderItemTableModel;
 import com.rci.ui.swing.model.OrderTable;
 import com.rci.ui.swing.model.OrderTableModel;
@@ -71,12 +73,14 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private JLabel expRateValue; //外送率
 	private JLabel lsValue;
 	
+	private JTextField eleOnlinePayAmount; //饿了么刷单在线支付总金额
+	private JTextField eleOrderCount;    //饿了么刷单数量
+	
 	public QueryListener(JTable mainTable,JTable subTable){
 		this.mainTable = mainTable;
 		this.subTable = subTable;
 		orderService = (IOrderService) SpringUtils.getBean("OrderService");
 		loaderService = (IDataLoaderService) SpringUtils.getBean("DataLoaderService");
-//		tsService = (ITicketStatisticService) SpringUtils.getBean("TicketStatisticService");
 		facade = (StatisticCenterFacade) SpringUtils.getBean("StatisticCenterFacade");
 		oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
 	}
@@ -84,6 +88,17 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String time = timeInput.getText();
+		String elePayAmountText = eleOnlinePayAmount.getText();
+		String eleOrderCountText = eleOrderCount.getText();
+		BigDecimal elePayAmount = BigDecimal.ZERO;
+		if(StringUtils.hasText(elePayAmountText)){
+			elePayAmount = new BigDecimal(elePayAmountText);	
+		}
+		BigDecimal eleOCount = BigDecimal.ZERO;
+		if(StringUtils.hasText(eleOrderCountText)){
+			eleOCount = new BigDecimal(eleOrderCountText);
+		}
+		
 		try{
 			loadOrderData(time);
 			loadSumData(time);
@@ -92,8 +107,23 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 			mtValue.setText(getTotalAmount(BusinessConstant.MT_ACC).toString());
 			tgValue.setText(getTotalAmount(BusinessConstant.DPTG_ACC).toString());
 			shValue.setText(getTotalAmount(BusinessConstant.DPSH_ACC).toString());
-			eleFreeValue.setText(getTotalAmount(BusinessConstant.FREE_ELE_ACC).toString());
+			BigDecimal allowanceAmount = BigDecimal.ZERO;
+			Date date = DateUtil.parseDate(time,"yyyyMMdd");
+			if(!elePayAmount.equals(BigDecimal.ZERO) && !eleOCount.equals(BigDecimal.ZERO)){
+				IELESDStatisticService elesdService = (IELESDStatisticService) SpringUtils.getBean("ELESDStatisticService");
+				if(!elesdService.isExistData(date)){ //没有当日刷单统计信息
+					EleSDStatistic elesd = new EleSDStatistic();
+					elesd.setPayAmount(elePayAmount);
+					elesd.setSdCount(eleOCount);
+					elesd.setSdDate(date);
+					elesdService.saveSDInfo(elesd);
+				}
+			}
 			eleValue.setText(getTotalAmount(BusinessConstant.ELE_ACC).toString());
+			allowanceAmount = facade.getSDAllowanceAmount(date);
+			BigDecimal totalFreeAmount = getTotalAmount(BusinessConstant.FREE_ELE_ACC).add(allowanceAmount);
+			eleFreeValue.setText(totalFreeAmount.toString());
+			
 			tddValue.setText(getTotalAmount(BusinessConstant.TDD_ACC).toString());
 			mtwmValue.setText(getTotalAmount(BusinessConstant.MTWM_ACC).toString());
 			mtwmFreeValue.setText(getTotalAmount(BusinessConstant.FREE_MTWM_ACC).toString());
@@ -342,5 +372,21 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 
 	public void setLsValue(JLabel lsValue) {
 		this.lsValue = lsValue;
+	}
+
+	public JTextField getEleOnlinePayAmount() {
+		return eleOnlinePayAmount;
+	}
+
+	public void setEleOnlinePayAmount(JTextField eleOnlinePayAmount) {
+		this.eleOnlinePayAmount = eleOnlinePayAmount;
+	}
+
+	public JTextField getEleOrderCount() {
+		return eleOrderCount;
+	}
+
+	public void setEleOrderCount(JTextField eleOrderCount) {
+		this.eleOrderCount = eleOrderCount;
 	}
 }

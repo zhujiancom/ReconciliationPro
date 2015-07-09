@@ -39,6 +39,12 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = -8216786708977859424L;
 	
+	/**
+	 * 饿了么刷单参数设置
+	 */
+	private JTextField eleOnlinePayAmount; //饿了么刷单在线支付总金额
+	private JTextField eleOrderCount;    //饿了么刷单数量
+	
 	private JButton queryBtn;
 	private JButton cleanBtn;
 	private JTextField timeInput;
@@ -88,6 +94,8 @@ public class MainFrame extends JFrame {
 		listener.setMtRemark(mtRemark);
 		listener.setExpRateValue(expRateValue);
 		listener.setLsValue(lsValue);
+		listener.setEleOnlinePayAmount(eleOnlinePayAmount);
+		listener.setEleOrderCount(eleOrderCount);
 		queryBtn.registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		queryBtn.addActionListener(listener);
 		
@@ -150,11 +158,22 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
+		//饿了么刷单金额设置
+		JLabel eleOnlinePayLabel = new JLabel("饿了么刷单在线支付总金额");
+		eleOnlinePayAmount = new JTextField(5);
+		JLabel eleOrderCountLabel = new JLabel("饿了么刷单数量");
+		eleOrderCount = new JTextField(5);
+		
 		JPanel formPanel = new JPanel();
 		JLabel rciTime = new JLabel("日期");
 		timeInput = new JTextField(10);
 		queryBtn = new JButton("查询");
 		cleanBtn = new JButton("清空");
+		formPanel.add(eleOnlinePayLabel);
+		formPanel.add(eleOnlinePayAmount);
+		formPanel.add(eleOrderCountLabel);
+		formPanel.add(eleOrderCount);
+		
 		formPanel.add(rciTime);
 		formPanel.add(timeInput);
 		formPanel.add(queryBtn);

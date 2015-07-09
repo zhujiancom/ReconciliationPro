@@ -2,17 +2,21 @@ package com.rci.ui.swing.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
 import com.rci.service.IAccFlowService;
+import com.rci.service.IELESDStatisticService;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderService;
 import com.rci.service.ITicketStatisticService;
@@ -29,6 +33,7 @@ public class CleanListener implements ActionListener {
 	private IFetchMarkService markService;
 	private IAccFlowService accFlowService;
 	private ITicketStatisticService tsService;
+	private IELESDStatisticService elesdService;
 	private JTextField timeInput;
 	private JLabel posValue;
 	private JLabel cashValue;
@@ -56,6 +61,7 @@ public class CleanListener implements ActionListener {
 		markService = (IFetchMarkService) SpringUtils.getBean("FetchMarkService");
 		accFlowService = (IAccFlowService) SpringUtils.getBean("AccFlowService");
 		tsService = (ITicketStatisticService) SpringUtils.getBean("TicketStatisticService");
+		elesdService = (IELESDStatisticService) SpringUtils.getBean("ELESDStatisticService");
 	}
 	
 	@Override
@@ -80,6 +86,7 @@ public class CleanListener implements ActionListener {
 			markService.deleteMark(time);
 			accFlowService.rwDeleteFlowInfo(time,DataGenerateType.AUTO);
 			tsService.deleteTicketStatistic(time);
+			elesdService.clearDataByDate(DateUtil.parseDate(time, "yyyyMMdd"));
 			cashValue.setText(null);
 			posValue.setText(null);
 			mtValue.setText(null);
@@ -100,6 +107,9 @@ public class CleanListener implements ActionListener {
 			expRateValue.setText("");
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 

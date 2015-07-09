@@ -36,4 +36,19 @@ public interface StatisticCenterFacade {
 	 * @return
 	 */
 	BigDecimal getExpressRate(String time);
+	
+	/**
+	 * 
+	 * Describle(描述)：获取刷单获取的补贴金额
+	 *
+	 * 方法名称：getSDAllowanceAmount
+	 *
+	 * 所在类名：StatisticCenterFacade
+	 *
+	 * Create Time:2015年7月9日 下午3:00:49
+	 *  
+	 * @param date
+	 * @return
+	 */
+	BigDecimal getSDAllowanceAmount(Date date);
 }
