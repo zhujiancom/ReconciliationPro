@@ -275,6 +275,17 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		for(OrderVO order:orders){
 			totalAmount = totalAmount.add(order.getTotalAmount());
 		}
+		String time = timeInput.getText();
+		Date date;
+		try {
+			date = DateUtil.parseDate(time, "yyyyMMdd");
+			BigDecimal allowanceAmount = facade.getSDAllowanceAmount(date);
+			if(allowanceAmount != null){
+				totalAmount = totalAmount.add(allowanceAmount);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		return totalAmount;
 	}
 	
