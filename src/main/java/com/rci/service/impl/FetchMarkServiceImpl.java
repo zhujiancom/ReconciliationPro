@@ -74,4 +74,11 @@ public class FetchMarkServiceImpl extends BaseServiceImpl<DataFetchMark, Long>
 		((IFetchMarkService)AopContext.currentProxy()).rwCreate(mark);
 	}
 
+	@Override
+	public void rwInitStock() {
+		DataFetchMark mark = new DataFetchMark(MarkType.STOCK_INIT);
+		mark.setMarkFlag(CommonEnums.YOrN.Y);
+		baseDAO.save(mark);
+	}
+
 }

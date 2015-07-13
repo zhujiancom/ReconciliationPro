@@ -1,6 +1,8 @@
 package com.rci.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 import com.rci.bean.entity.Order;
 
@@ -45,4 +47,6 @@ public interface IDataLoaderService {
 	 * @param orderNo
 	 */
 	void generateAccountFlow(Date date) throws Exception;
+	
+	void addStockOpLog(Order order,Map<String,BigDecimal> stockMap);
 }

@@ -14,10 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Scheme;
+import com.rci.bean.entity.StockOpLog;
 import com.rci.bean.entity.TableInfo;
 import com.rci.enums.BusinessEnums.DataGenerateType;
+import com.rci.enums.BusinessEnums.StockOpType;
 import com.rci.metadata.dto.TableDTO;
 import com.rci.metadata.service.IDataFetchService;
 import com.rci.metadata.service.IDataTransformService;
@@ -60,6 +61,8 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	private ITicketStatisticService ticketService;
 	@Resource(name="MetadataService")
 	private IMetadataService metadataService;
+	@Resource(name="StockService")
+	private IStockService stockService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -209,5 +212,16 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testClearMetadata(){
 		metadataService.clearMetadata();
+	}
+	
+	@Test
+	public void testInsertStockLog(){
+		StockOpLog sol = new StockOpLog();
+		sol.setDay("20150711");
+		sol.setConsumeTime(DateUtil.getCurrentDate());
+		sol.setDishName("雪碧");
+		sol.setConsumeAmount(new BigDecimal(2));
+		sol.setType(StockOpType.CONSUME);
+		stockService.insertStockOpLog(sol);
 	}
 }

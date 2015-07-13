@@ -19,7 +19,7 @@ public final class BusinessEnums {
 	 *
 	 */
 	public static enum MarkType{
-		SYSTEM_INIT,ORDER_FETCH
+		SYSTEM_INIT,ORDER_FETCH,STOCK_INIT
 	}
 	
 	/**
@@ -84,5 +84,28 @@ public final class BusinessEnums {
 	
 	public static enum Vendor{
 		ELE,DZDP,MTWM,MT,LS
+	}
+	
+	public static enum StockOpType{
+		/**
+		 * 总量增加
+		 */
+		GROSS_INCREASEMENT,
+		/**
+		 * 总量减少
+		 */
+		GROSS_DECREASEMENT,
+		/**
+		 * 余量增加
+		 */
+		BALANCE_INCREASEMENT,
+		/**
+		 * 余量减少
+		 */
+		BALANCE_DECREASEMENT,
+		/**
+		 * 正常消费
+		 */
+		CONSUME
 	}
 }
