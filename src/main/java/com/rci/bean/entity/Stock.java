@@ -47,7 +47,7 @@ public class Stock extends BaseEntity {
 	/* 库存编号 */
 	private String sno;
 
-	/* 库存管理材料编号  123,563,452 以逗号隔开*/
+	/* 库存管理材料编号 */
 	private String dishNo;
 
 	/* 库存管理材料名称 */

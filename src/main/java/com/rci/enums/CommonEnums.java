@@ -15,6 +15,9 @@ public final class CommonEnums {
 			return Boolean.TRUE.toString().equals(flag) ? Y : N;
 		}
 		public static boolean isY(YOrN yn){
+			if(yn == null){
+				return false;
+			}
 			return Y.equals(yn);
 		}
 	}

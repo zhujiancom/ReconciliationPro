@@ -3,6 +3,12 @@ package com.rci.ui.swing.vos;
 import java.math.BigDecimal;
 
 public class StockVO {
+	/* 库存编号 */
+	private String sno;
+
+	/* 库存管理材料编号 */
+	private String dishNo;
+	
 	private String dishName;
 
 	/* 库存总量 */
@@ -13,6 +19,22 @@ public class StockVO {
 
 	/* 余量 */
 	private BigDecimal balanceAmount;
+
+	public String getSno() {
+		return sno;
+	}
+
+	public void setSno(String sno) {
+		this.sno = sno;
+	}
+
+	public String getDishNo() {
+		return dishNo;
+	}
+
+	public void setDishNo(String dishNo) {
+		this.dishNo = dishNo;
+	}
 
 	public String getDishName() {
 		return dishName;

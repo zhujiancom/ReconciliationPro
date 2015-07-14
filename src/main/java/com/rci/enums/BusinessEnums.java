@@ -88,7 +88,7 @@ public final class BusinessEnums {
 	
 	public static enum StockOpType{
 		/**
-		 * 总量增加
+		 * 总量增加,进货
 		 */
 		GROSS_INCREASEMENT,
 		/**

@@ -61,10 +61,17 @@ public class StockOpLog extends BaseEntity {
 	/* 菜品消费数量  */
 	private BigDecimal consumeAmount;
 	
+	/* 进货数量 */
+	private BigDecimal restockAmount;
+	
 	/* 库存数量操作类型   */
 	private StockOpType type;
 	
 	public StockOpLog(){}
+	
+	public StockOpLog(String sno){
+		this.sno = sno;
+	}
 	
 	public StockOpLog(String dishNo,BigDecimal amount){
 		this.dishNo = dishNo;
@@ -135,6 +142,15 @@ public class StockOpLog extends BaseEntity {
 
 	public void setConsumeAmount(BigDecimal consumeAmount) {
 		this.consumeAmount = consumeAmount;
+	}
+
+	@Column(name="restock_amount")
+	public BigDecimal getRestockAmount() {
+		return restockAmount;
+	}
+
+	public void setRestockAmount(BigDecimal restockAmount) {
+		this.restockAmount = restockAmount;
 	}
 
 	@Enumerated(EnumType.STRING)

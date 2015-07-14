@@ -8,26 +8,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeListener;
 import java.util.List;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.JTable;
 
 import com.rci.enums.BusinessEnums.Vendor;
-import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.ISchemeService;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.model.DZDPSchemeModel;
 import com.rci.ui.swing.model.DZDPSchemeTable;
+import com.rci.ui.swing.model.StockTable;
 import com.rci.ui.swing.vos.SchemeVO;
 
 /**
@@ -52,12 +47,10 @@ public class SystemInitHandler extends JFrame {
 	 */
 	private static final long serialVersionUID = -4393899033664657099L;
 	private ISchemeService schemeSverice;
-	private IDataTransformService transformSevice;
 	private IMetadataService metadataService;
 	
 	public SystemInitHandler(){
 		schemeSverice = (ISchemeService) SpringUtils.getBean("SchemeService");
-		transformSevice = (IDataTransformService) SpringUtils.getBean("DataTransformService");
 		metadataService = (IMetadataService)SpringUtils.getBean("MetadataService");
 	}
 //
@@ -80,20 +73,23 @@ public class SystemInitHandler extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFrame frame = new JFrame("库存设置/查看");
-				Container contentPane  = frame.getContentPane();
 				JPanel mainPanel = new JPanel();
-				JLabel gross = new JLabel("库存总量：");
-				JTextField grossInput = new JTextField(5);
-				JLabel consume = new JLabel("消费数量：");
-				JTextField consumeInput = new JTextField(5);
-				JButton save = new JButton(new AbstractAction() {
-					
+				JScrollPane mainScrollPane = new JScrollPane();
+				mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				JTable stockTable = new StockTable();
+				mainScrollPane.setViewportView(stockTable);
+				mainPanel.add(mainScrollPane);
+				frame.add(mainScrollPane);
+				
+				frame.setSize(800, 600);
+				frame.addWindowListener(new WindowAdapter() {
 					@Override
-					public void actionPerformed(ActionEvent e) {
-						
-						
+					public void windowClosed(WindowEvent e) {
+						super.windowClosed(e);
 					}
 				});
+				frame.setLocationRelativeTo(null); // 相对居中, 在frame设置size之后
+				frame.setVisible(true);
 			}
 			
 		};

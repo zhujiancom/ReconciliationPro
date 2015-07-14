@@ -98,11 +98,12 @@ public class DataLoaderService implements IDataLoaderService {
 		//更新库存表
 		for(Iterator<Entry<String,BigDecimal>> it=stockMap.entrySet().iterator();it.hasNext();){
 			Entry<String,BigDecimal> entry = it.next();
-			String dishNo = entry.getKey();
+			String sno = entry.getKey();
 			BigDecimal amount = entry.getValue();
-			Stock stock = stockService.getStockByDishNo(dishNo);
+//			Stock stock = stockService.getStockByDishNo(dishNo);
+			Stock stock = stockService.getStockBySno(sno);
 			if(stock == null){
-				throw new ServiceException(SERVICE.DATA_ERROR, dishNo+" - 该菜品不在库存控制范围内！");
+				throw new ServiceException(SERVICE.DATA_ERROR, sno+" - 该菜品不在库存控制范围内！");
 			}else{
 				BigDecimal balanceAmount = stock.getBalanceAmount().subtract(amount);
 				BigDecimal consumeAmount = stock.getConsumeAmount().add(amount);

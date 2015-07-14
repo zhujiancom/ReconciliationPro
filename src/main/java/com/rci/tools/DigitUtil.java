@@ -2,6 +2,8 @@ package com.rci.tools;
 
 import java.math.BigDecimal;
 
+import org.hibernate.service.spi.ServiceException;
+
 public class DigitUtil {
 	/**
 	 * 计算两数相乘
@@ -63,5 +65,40 @@ public class DigitUtil {
 	public static BigDecimal add(BigDecimal src,Double d){
 		return add(src,d,2);
 	}
+	
+	/**
+	 * 
+	 * Describle(描述)：字符串转换成BigDecimal类型
+	 *
+	 * 方法名称：stringTobigDecimal
+	 *
+	 * 所在类名：DigitUtil
+	 *
+	 * Create Time:2015年7月14日 下午3:26:21
+	 *  
+	 * @param str
+	 * @param scale
+	 * @param round
+	 * @return
+	 */
+	public static BigDecimal stringTobigDecimal(String str,int scale,int round){
+		if(!StringUtils.hasText(str)){
+			return BigDecimal.ZERO;
+		}
+		try{
+			BigDecimal result = new BigDecimal(str);
+			result.setScale(scale, round);
+			return result;
+		}catch(NumberFormatException nfe){
+			throw new ServiceException("字符串【"+str+"】不能转成BigDecimal", nfe.getCause());
+		}
+	}
+	public static BigDecimal stringTobigDecimal(String str,int scale){
+		return stringTobigDecimal(str,scale,BigDecimal.ROUND_HALF_UP);
+	}
+	public static BigDecimal stringTobigDecimal(String str){
+		return stringTobigDecimal(str,0,BigDecimal.ROUND_HALF_UP);
+	}
+	
 	
 }

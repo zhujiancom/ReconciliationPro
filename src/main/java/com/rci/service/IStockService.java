@@ -36,6 +36,21 @@ public interface IStockService extends IBaseService<Stock, Long> {
 	 */
 	Stock getStockByDishNo(String dishNo);
 	
+	/**
+	 * 
+	 * Describle(描述)： 根据库存编号查找
+	 *
+	 * 方法名称：getStockBySno
+	 *
+	 * 所在类名：IStockService
+	 *
+	 * Create Time:2015年7月14日 下午3:06:25
+	 *  
+	 * @param sno
+	 * @return
+	 */
+	Stock getStockBySno(String sno);
+	
 	
 	/**
 	 * 
@@ -52,5 +67,20 @@ public interface IStockService extends IBaseService<Stock, Long> {
 	 * @param balance
 	 */
 	void rwInitStock(String dishNo,BigDecimal gross,BigDecimal balance);
+	
+	/**
+	 * 
+	 * Describle(描述)：进货
+	 *
+	 * 方法名称：rwRestock
+	 *
+	 * 所在类名：IStockService
+	 *
+	 * Create Time:2015年7月14日 下午3:04:31
+	 *  
+	 * @param sno
+	 * @param amount
+	 */
+	void rwRestock(String sno,BigDecimal amount);
 	
 }
