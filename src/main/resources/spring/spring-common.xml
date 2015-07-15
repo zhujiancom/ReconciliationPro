@@ -39,4 +39,27 @@
 	</util:list>
 	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>
+	
+	<bean name="fetchdataJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="com.rci.timer.FetchDataMonitor"/>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="timeout" value="0"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="fetchdataJob"/>
+		<property name="startDelay" value="0"/>
+		<property name="repeatInterval" value="1800000"/>
+	</bean>
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="simpleTrigger"/>
+			</list>
+		</property>
+	</bean>
 </beans>

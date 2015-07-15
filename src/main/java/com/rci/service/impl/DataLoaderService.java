@@ -201,13 +201,6 @@ public class DataLoaderService implements IDataLoaderService {
 			if(dish != null){
 				if(YOrN.isY(dish.getStockFlag())){
 					BigDecimal amount = item.getCount().subtract(item.getCountback());
-					BigDecimal storeAmount = stockMap.get(dishNo);
-					if(storeAmount != null){
-						storeAmount = storeAmount.add(amount);
-					}else{
-						storeAmount = amount;
-					}
-					
 					StockOpLog sol = new StockOpLog(dishNo,amount);
 					sol.setConsumeTime(item.getConsumeTime());
 					sol.setDay(order.getDay());
@@ -216,6 +209,12 @@ public class DataLoaderService implements IDataLoaderService {
 					Stock stock = stockService.getStockByDishNo(dishNo);
 					if(stock != null){
 						sol.setSno(stock.getSno());
+						BigDecimal storeAmount = stockMap.get(stock.getSno());
+						if(storeAmount != null){
+							storeAmount = storeAmount.add(amount);
+						}else{
+							storeAmount = amount;
+						}
 						stockMap.put(stock.getSno(), storeAmount);
 					}
 					stockService.insertStockOpLog(sol);
