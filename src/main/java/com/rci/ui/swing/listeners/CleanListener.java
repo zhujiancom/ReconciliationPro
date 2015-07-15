@@ -105,6 +105,7 @@ public class CleanListener implements ActionListener {
 			tgRemark.setText("");
 			mtRemark.setText("");
 			expRateValue.setText("");
+			JOptionPane.showMessageDialog(null, "日期："+time+" 数据清除成功！");
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
 		} catch (ParseException e1) {
