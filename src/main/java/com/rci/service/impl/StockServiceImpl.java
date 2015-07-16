@@ -110,7 +110,9 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
 			public Object transformTuple(Object[] tuple, String[] aliases) {
 				String sno = (String) tuple[0];
 				BigDecimal amount = (BigDecimal) tuple[1];
-				stockMap.put(sno, amount);
+				if(amount != null){
+					stockMap.put(sno, amount);
+				}
 				return null;
 			}
 			

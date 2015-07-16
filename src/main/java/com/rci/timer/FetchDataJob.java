@@ -3,6 +3,8 @@
  */
 package com.rci.timer;
 
+import java.util.Calendar;
+
 import javax.annotation.Resource;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,7 +34,7 @@ public class FetchDataJob {
 	
 	@Scheduled(fixedRate=1800000)
 	public void fetchData(){
-		dataloadService.load(DateUtil.getCurrentDate());
+		dataloadService.load(DateUtil.truncate(DateUtil.getCurrentDate(),Calendar.DATE));
 	}
 	
 }
