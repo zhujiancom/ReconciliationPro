@@ -141,7 +141,7 @@ public class MainFrame extends JFrame {
 		menubar.add(helpMenu);
 		JMenuItem dataInit = new JMenuItem("系统初始化");
 		JMenuItem baseReset = new JMenuItem("基础数据重置");
-		JMenuItem stockInit = new JMenuItem("库存数据初始化");
+		JMenuItem stockInit = new JMenuItem("库存设置/查看");
 		JMenuItem helpInfo = new JMenuItem("帮助信息");
 		sysMenu.add(dataInit);
 		sysMenu.add(baseReset);
@@ -149,7 +149,7 @@ public class MainFrame extends JFrame {
 		helpMenu.add(helpInfo);
 		SystemInitHandler handler = new SystemInitHandler();
 		dataInit.addActionListener(handler.dataInit());
-		baseReset.addActionListener(handler.baseReset());
+		baseReset.addActionListener(handler.baseReset(baseReset));
 		stockInit.addActionListener(handler.stockInit());
 		helpMenu.addActionListener(new ActionListener() {
 			@Override

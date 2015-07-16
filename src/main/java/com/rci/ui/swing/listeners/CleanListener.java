@@ -9,8 +9,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import org.apache.commons.lang.time.DateUtils;
-
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
@@ -19,6 +17,7 @@ import com.rci.service.IAccFlowService;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderService;
+import com.rci.service.IStockService;
 import com.rci.service.ITicketStatisticService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
@@ -34,6 +33,7 @@ public class CleanListener implements ActionListener {
 	private IAccFlowService accFlowService;
 	private ITicketStatisticService tsService;
 	private IELESDStatisticService elesdService;
+	private IStockService stockService;
 	private JTextField timeInput;
 	private JLabel posValue;
 	private JLabel cashValue;
@@ -62,6 +62,7 @@ public class CleanListener implements ActionListener {
 		accFlowService = (IAccFlowService) SpringUtils.getBean("AccFlowService");
 		tsService = (ITicketStatisticService) SpringUtils.getBean("TicketStatisticService");
 		elesdService = (IELESDStatisticService) SpringUtils.getBean("ELESDStatisticService");
+		stockService = (IStockService) SpringUtils.getBean("StockService");
 	}
 	
 	@Override
@@ -87,6 +88,7 @@ public class CleanListener implements ActionListener {
 			accFlowService.rwDeleteFlowInfo(time,DataGenerateType.AUTO);
 			tsService.deleteTicketStatistic(time);
 			elesdService.clearDataByDate(DateUtil.parseDate(time, "yyyyMMdd"));
+			stockService.clearStockByDay(time);
 			cashValue.setText(null);
 			posValue.setText(null);
 			mtValue.setText(null);

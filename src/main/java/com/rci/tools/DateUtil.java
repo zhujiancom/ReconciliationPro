@@ -158,11 +158,12 @@ public class DateUtil extends DateUtils {
 	 * @Date 2014年10月21日
 	 */
 	public static Date getLastDayOfMonth(Date date) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.roll(Calendar.DAY_OF_MONTH, -1);
-		return cal.getTime();
+//		Calendar cal = Calendar.getInstance();
+//		cal.setTime(date);
+//		cal.set(Calendar.DAY_OF_MONTH, 1);
+//		cal.roll(Calendar.DAY_OF_MONTH, -1);
+//		return cal.getTime();
+		return addDays(ceiling(date,Calendar.MONTH), -1);
 	}
 
 	/**
@@ -174,10 +175,11 @@ public class DateUtil extends DateUtils {
 	 * @Date 2014年10月21日
 	 */
 	public static Date getFirstDayOfMonth(Date date) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		return cal.getTime();
+//		Calendar cal = Calendar.getInstance();
+//		cal.setTime(date);
+//		cal.set(Calendar.DAY_OF_MONTH, 1);
+//		return cal.getTime();
+		return addMonths(ceiling(date,Calendar.MONTH), -1);
 	}
 
 	/**
@@ -190,7 +192,7 @@ public class DateUtil extends DateUtils {
 	public static Date getCurrentDate() {
 		return getCurrentDate(TimeZone.getDefault());
 	}
-
+	
 	/**
 	 * 
 	 * @Function 指定timezone,获取当前时间
@@ -259,13 +261,13 @@ public class DateUtil extends DateUtils {
 	 * @return
 	 */
 	public static Date getStartTimeOfDay(Date date) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		return c.getTime();
+//		Calendar c = Calendar.getInstance();
+//		c.setTime(date);
+//		c.set(Calendar.HOUR_OF_DAY, 0);
+//		c.set(Calendar.MINUTE, 0);
+//		c.set(Calendar.SECOND, 0);
+//		c.set(Calendar.MILLISECOND, 0);
+		return truncate(date, Calendar.DATE);
 	}
 	
 	public static boolean isDateFormat(String dateStr){

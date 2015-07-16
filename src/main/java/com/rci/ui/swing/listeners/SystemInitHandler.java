@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -107,17 +108,19 @@ public class SystemInitHandler extends JFrame {
 	 *  
 	 * @return
 	 */
-	public ActionListener baseReset(){
+	public ActionListener baseReset(JMenuItem mt){
 		return new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				metadataService.resetMetadata();
-				JOptionPane.showMessageDialog(null, "基础数据重置成功！");
+				if(JOptionPane.showConfirmDialog(null, "确定重置基础数据吗？","警告",JOptionPane.YES_NO_OPTION) == 0){
+					metadataService.resetMetadata();
+					JOptionPane.showMessageDialog(null, "基础数据重置成功！");
+				}
 			}
 		};
 	}
-//	
+	
 	public ActionListener settings(){
 		return new ActionListener() {
 			@Override

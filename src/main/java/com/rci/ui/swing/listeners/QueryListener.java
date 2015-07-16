@@ -36,7 +36,6 @@ import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
-import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.model.OrderItemTableModel;
 import com.rci.ui.swing.model.OrderTable;
 import com.rci.ui.swing.model.OrderTableModel;

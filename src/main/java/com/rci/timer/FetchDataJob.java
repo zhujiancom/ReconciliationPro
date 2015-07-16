@@ -5,9 +5,8 @@ package com.rci.timer;
 
 import javax.annotation.Resource;
 
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.rci.service.IDataLoaderService;
 import com.rci.tools.DateUtil;
@@ -26,17 +25,14 @@ import com.rci.tools.DateUtil;
  * Create Time: 2015年7月15日 下午11:16:28
  *
  */
-public class FetchDataMonitor extends QuartzJobBean {
+@Component("fetchDataJob")
+public class FetchDataJob {
 	@Resource(name="DataLoaderService")
 	private IDataLoaderService dataloadService;
-
-	/* 
-	 * @see org.springframework.scheduling.quartz.QuartzJobBean#executeInternal(org.quartz.JobExecutionContext)
-	 */
-	@Override
-	protected void executeInternal(JobExecutionContext arg0)
-			throws JobExecutionException {
+	
+	@Scheduled(fixedRate=1800000)
+	public void fetchData(){
 		dataloadService.load(DateUtil.getCurrentDate());
 	}
-
+	
 }

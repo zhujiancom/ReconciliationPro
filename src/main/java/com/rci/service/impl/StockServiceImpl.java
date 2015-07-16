@@ -1,11 +1,19 @@
 package com.rci.service.impl;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.ResultTransformer;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.Dish;
@@ -82,6 +90,54 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
 		dc.add(Restrictions.eq("sno", sno));
 		return baseDAO.queryUniqueByCriteria(dc);
 	}
+
+	@Override
+	public void clearStockByDay(String day) {
+		final Map<String,BigDecimal> stockMap = new HashMap<String,BigDecimal>();
+		DetachedCriteria dc = DetachedCriteria.forClass(StockOpLog.class);
+		dc.setProjection(Projections.projectionList()
+					.add(Projections.property("sno"))
+					.add(Projections.sum("consumeAmount"))
+					.add(Projections.groupProperty("sno")));
+		dc.add(Restrictions.eq("day", day)).setResultTransformer(new ResultTransformer() {
+			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -4259136921987833057L;
+
+			@Override
+			public Object transformTuple(Object[] tuple, String[] aliases) {
+				String sno = (String) tuple[0];
+				BigDecimal amount = (BigDecimal) tuple[1];
+				stockMap.put(sno, amount);
+				return null;
+			}
+			
+			@SuppressWarnings("rawtypes")
+			@Override
+			public List transformList(List collection) {
+				return collection;
+			}
+		});
+		//获取stocklog
+		baseDAO.queryListByCriteria(dc);
+		Stock[] stocks = new Stock[stockMap.keySet().size()];
+		int index = 0;
+		for(Iterator<Entry<String,BigDecimal>> it=stockMap.entrySet().iterator();it.hasNext();index++){
+			Entry<String,BigDecimal> entry = it.next();
+			String sno = entry.getKey();
+			BigDecimal amount = entry.getValue();
+			Stock stock = getStockBySno(sno);
+			stock.setBalanceAmount(stock.getBalanceAmount().add(amount));
+			stock.setConsumeAmount(stock.getConsumeAmount().subtract(amount));
+			stocks[index] = stock;
+		}
+		//更新stocks
+		((IStockService)AopContext.currentProxy()).rwUpdate(stocks);
+		oplogService.clearStockLogByDay(day);
+	}
+	
 	
 	
 }

@@ -224,4 +224,9 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 		sol.setType(StockOpType.CONSUME);
 		stockService.insertStockOpLog(sol);
 	}
+	
+	@Test
+	public void testCleanStock(){
+		stockService.clearStockByDay("20150715");
+	}
 }

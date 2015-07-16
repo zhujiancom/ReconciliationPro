@@ -83,4 +83,18 @@ public interface IStockService extends IBaseService<Stock, Long> {
 	 */
 	void rwRestock(String sno,BigDecimal amount);
 	
+	/**
+	 * 
+	 * Describle(描述)：清空指定日期的库存信息
+	 *
+	 * 方法名称：clearStockByDay
+	 *
+	 * 所在类名：IStockService
+	 *
+	 * Create Time:2015年7月16日 下午2:33:56
+	 *  
+	 * @param day
+	 */
+	void clearStockByDay(String day);
+	
 }

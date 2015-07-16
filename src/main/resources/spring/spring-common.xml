@@ -5,6 +5,7 @@
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
            					http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 							http://www.springframework.org/schema/context
@@ -14,7 +15,9 @@
 							http://www.springframework.org/schema/aop
 							http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 							http://www.springframework.org/schema/util
-							http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+							http://www.springframework.org/schema/util/spring-util-4.0.xsd
+							http://www.springframework.org/schema/task
+							http://www.springframework.org/schema/task/spring-task-4.0.xsd">
 	<bean id="beanMapper" class="org.dozer.spring.DozerBeanMapperFactoryBean"
 		scope="singleton">
 		<property name="mappingFiles" value="classpath*:/dozer/*Mapping.xml" />
@@ -40,26 +43,29 @@
 	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>
 	
-	<bean name="fetchdataJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="com.rci.timer.FetchDataMonitor"/>
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="timeout" value="0"/>
-			</map>
-		</property>
-	</bean>
+<!-- 	<BEAN NAME="FETCHDATAJOB" CLASS="ORG.SPRINGFRAMEWORK.SCHEDULING.QUARTZ.JOBDETAILBEAN"> -->
+<!-- 		<PROPERTY NAME="JOBCLASS" VALUE="COM.RCI.TIMER.FETCHDATAMONITOR"/> -->
+<!-- 		<PROPERTY NAME="JOBDATAASMAP"> -->
+<!-- 			<MAP> -->
+<!-- 				<ENTRY KEY="TIMEOUT" VALUE="0"/> -->
+<!-- 			</MAP> -->
+<!-- 		</PROPERTY> -->
+<!-- 	</BEAN> -->
 	
-	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-		<property name="jobDetail" ref="fetchdataJob"/>
-		<property name="startDelay" value="0"/>
-		<property name="repeatInterval" value="1800000"/>
-	</bean>
+<!-- 	<BEAN ID="SIMPLETRIGGER" CLASS="ORG.SPRINGFRAMEWORK.SCHEDULING.QUARTZ.SIMPLETRIGGERBEAN"> -->
+<!-- 		<PROPERTY NAME="JOBDETAIL" REF="FETCHDATAJOB"/> -->
+<!-- 		<PROPERTY NAME="STARTDELAY" VALUE="0"/> -->
+<!-- 		<PROPERTY NAME="REPEATINTERVAL" VALUE="1800000"/> -->
+<!-- 	</BEAN> -->
 	
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list>
-				<ref bean="simpleTrigger"/>
-			</list>
-		</property>
-	</bean>
+<!-- 	<BEAN CLASS="ORG.SPRINGFRAMEWORK.SCHEDULING.QUARTZ.SCHEDULERFACTORYBEAN"> -->
+<!-- 		<PROPERTY NAME="TRIGGERS"> -->
+<!-- 			<LIST> -->
+<!-- 				<REF BEAN="SIMPLETRIGGER"/> -->
+<!-- 			</LIST> -->
+<!-- 		</PROPERTY> -->
+<!-- 	</BEAN> -->
+	<task:annotation-driven scheduler="dataFetchScheduler" mode="proxy"/>
+	<task:scheduler id="dataFetchScheduler" pool-size="10"/>
+	
 </beans>
