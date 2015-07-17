@@ -43,7 +43,7 @@ public class FetchDataJob {
 	 * Create Time:2015年7月17日 上午11:28:51
 	 *
 	 */
-	@Scheduled(cron="0 0/30 10-23 * * ? ?")
+	@Scheduled(cron="0 0/30 10-23 * * ?")
 	public void fetchData(){
 		dataloadService.load(DateUtil.truncate(DateUtil.getCurrentDate(),Calendar.DATE));
 	}
