@@ -35,6 +35,9 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 	@Override
 	public BigDecimal getExpressRate(String time) {
 		BigDecimal allCount = orderService.getOrderCountByDay(time);
+		if(allCount== null || allCount.equals(BigDecimal.ZERO)){
+			return BigDecimal.ZERO;
+		}
 		BigDecimal expressCount = orderService.getExpressOrderCountByDay(time);
 		BigDecimal rate = expressCount.divide(allCount, 4, BigDecimal.ROUND_HALF_EVEN).movePointRight(2);
 		return rate;
