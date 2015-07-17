@@ -32,7 +32,18 @@ public class FetchDataJob {
 	@Resource(name="DataLoaderService")
 	private IDataLoaderService dataloadService;
 	
-	@Scheduled(fixedRate=1800000)
+	/**
+	 * 
+	 * Describle(描述)：每天上午10点到下午23点每隔半小时触发一次
+	 *
+	 * 方法名称：fetchData
+	 *
+	 * 所在类名：FetchDataJob
+	 *
+	 * Create Time:2015年7月17日 上午11:28:51
+	 *
+	 */
+	@Scheduled(cron="0 0/30 10-23 * * ?")
 	public void fetchData(){
 		dataloadService.load(DateUtil.truncate(DateUtil.getCurrentDate(),Calendar.DATE));
 	}
