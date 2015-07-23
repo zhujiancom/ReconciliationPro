@@ -61,7 +61,7 @@ public class DPTGFilter extends AbstractFilter {
 				// 2.如果是套餐内菜品，则过滤
 				continue;
 			}
-			if ("P".equals(item.getSuitFlag())) {
+			if (count.compareTo(countBack) != 0 && "P".equals(item.getSuitFlag())) {
 				if (!suitFlag) {
 					suitFlag = true;
 				}

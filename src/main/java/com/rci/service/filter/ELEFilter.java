@@ -46,7 +46,6 @@ public class ELEFilter extends AbstractFilter {
 				schemeName = "饿了么在线支付"+onlineAmount+"元";
 			}
 			
-			
 			List<OrderItem> items = order.getItems();
 			for(OrderItem item:items){
 				String dishNo=item.getDishNo();
@@ -87,7 +86,7 @@ public class ELEFilter extends AbstractFilter {
 			}
 			order.setSchemeName(schemeName);
 			//保存饿了么在线支付金额
-			preserveOAR(actualAmount,BusinessConstant.ELE_ACC,order);
+			preserveOAR(onlineAmount,BusinessConstant.ELE_ACC,order);
 	}
 
 

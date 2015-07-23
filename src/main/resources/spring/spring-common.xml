@@ -43,29 +43,28 @@
 	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>
 	
-<!-- 	<BEAN NAME="FETCHDATAJOB" CLASS="ORG.SPRINGFRAMEWORK.SCHEDULING.QUARTZ.JOBDETAILBEAN"> -->
-<!-- 		<PROPERTY NAME="JOBCLASS" VALUE="COM.RCI.TIMER.FETCHDATAMONITOR"/> -->
-<!-- 		<PROPERTY NAME="JOBDATAASMAP"> -->
-<!-- 			<MAP> -->
-<!-- 				<ENTRY KEY="TIMEOUT" VALUE="0"/> -->
-<!-- 			</MAP> -->
-<!-- 		</PROPERTY> -->
-<!-- 	</BEAN> -->
-	
-<!-- 	<BEAN ID="SIMPLETRIGGER" CLASS="ORG.SPRINGFRAMEWORK.SCHEDULING.QUARTZ.SIMPLETRIGGERBEAN"> -->
-<!-- 		<PROPERTY NAME="JOBDETAIL" REF="FETCHDATAJOB"/> -->
-<!-- 		<PROPERTY NAME="STARTDELAY" VALUE="0"/> -->
-<!-- 		<PROPERTY NAME="REPEATINTERVAL" VALUE="1800000"/> -->
-<!-- 	</BEAN> -->
-	
-<!-- 	<BEAN CLASS="ORG.SPRINGFRAMEWORK.SCHEDULING.QUARTZ.SCHEDULERFACTORYBEAN"> -->
-<!-- 		<PROPERTY NAME="TRIGGERS"> -->
-<!-- 			<LIST> -->
-<!-- 				<REF BEAN="SIMPLETRIGGER"/> -->
-<!-- 			</LIST> -->
-<!-- 		</PROPERTY> -->
-<!-- 	</BEAN> -->
-	<task:annotation-driven scheduler="dataFetchScheduler" mode="proxy"/>
 	<task:scheduler id="dataFetchScheduler" pool-size="10"/>
+	<task:executor id="executor" pool-size="5" />
+	<task:annotation-driven scheduler="dataFetchScheduler" mode="proxy" executor="executor"/>
+	
+	<!-- 将fetchDataQuartz注入到job中 -->
+	<bean id="fetchDataJobs" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="fetchDataJob"/>
+		<property name="targetMethod" value="fetchData"/>
+		<property name="concurrent" value="false"/>
+	</bean>
+	<!-- 将job注入到定时触发器 -->
+	<bean id="fetchTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="fetchDataJobs"/>
+		<property name="cronExpression" value="0 0/10 10-23 * * ?"/>
+	</bean>
+	<!-- 将触发器注入任务工程 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="fetchTrigger"/>
+			</list>
+		</property>
+	</bean>
 	
 </beans>

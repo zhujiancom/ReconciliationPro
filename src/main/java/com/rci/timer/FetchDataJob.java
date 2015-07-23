@@ -7,7 +7,8 @@ import java.util.Calendar;
 
 import javax.annotation.Resource;
 
-import org.springframework.scheduling.annotation.Scheduled;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
 import com.rci.service.IDataLoaderService;
@@ -29,12 +30,13 @@ import com.rci.tools.DateUtil;
  */
 @Component("fetchDataJob")
 public class FetchDataJob {
+	private static final Log logger = LogFactory.getLog(FetchDataJob.class);
 	@Resource(name="DataLoaderService")
 	private IDataLoaderService dataloadService;
 	
 	/**
 	 * 
-	 * Describle(描述)：每天上午10点到下午23点每隔半小时触发一次
+	 * Describle(描述)：每天上午10点到下午23点每隔10分钟触发一次
 	 *
 	 * 方法名称：fetchData
 	 *
@@ -43,9 +45,9 @@ public class FetchDataJob {
 	 * Create Time:2015年7月17日 上午11:28:51
 	 *
 	 */
-	@Scheduled(cron="0 0/30 10-23 * * ?")
+//	@Scheduled(cron="0 0/10 10-23 * * ?")
 	public void fetchData(){
+		logger.info("fetch data from SQLServer");
 		dataloadService.load(DateUtil.truncate(DateUtil.getCurrentDate(),Calendar.DATE));
 	}
-	
 }
