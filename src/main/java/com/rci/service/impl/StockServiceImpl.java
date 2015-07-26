@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -30,6 +32,7 @@ import com.rci.tools.DateUtil;
 @Service("StockService")
 public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
 		IStockService {
+	private Log logger = LogFactory.getLog(StockServiceImpl.class);
 	@Resource(name="StockOpLogService")
 	private IStockOpLogService oplogService;
 	@Resource(name="FetchMarkService")
@@ -131,6 +134,9 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
 			String sno = entry.getKey();
 			BigDecimal amount = entry.getValue();
 			Stock stock = getStockBySno(sno);
+			if(stock == null){
+				logger.error("sno = "+sno+" - stock is null");
+			}
 			stock.setBalanceAmount(stock.getBalanceAmount().add(amount));
 			stock.setConsumeAmount(stock.getConsumeAmount().subtract(amount));
 			stocks[index] = stock;
