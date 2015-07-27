@@ -10,12 +10,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.ISchemeService;
@@ -23,7 +23,6 @@ import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.model.DZDPSchemeModel;
 import com.rci.ui.swing.model.DZDPSchemeTable;
-import com.rci.ui.swing.model.StockTable;
 import com.rci.ui.swing.vos.SchemeVO;
 
 /**
@@ -41,7 +40,7 @@ import com.rci.ui.swing.vos.SchemeVO;
  * remark (备注): 系统初始化
  *
  */
-public class SystemInitHandler extends JFrame {
+public class ActionHandler extends JFrame {
 
 	/**
 	 * 
@@ -50,7 +49,7 @@ public class SystemInitHandler extends JFrame {
 	private ISchemeService schemeSverice;
 	private IMetadataService metadataService;
 	
-	public SystemInitHandler(){
+	public ActionHandler(){
 		schemeSverice = (ISchemeService) SpringUtils.getBean("SchemeService");
 		metadataService = (IMetadataService)SpringUtils.getBean("MetadataService");
 	}
@@ -68,34 +67,6 @@ public class SystemInitHandler extends JFrame {
 		return null;
 	}
 	
-	public ActionListener stockInit(){
-		return new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrame frame = new JFrame("库存设置/查看");
-				JPanel mainPanel = new JPanel();
-				JScrollPane mainScrollPane = new JScrollPane();
-				mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-				JTable stockTable = new StockTable();
-				mainScrollPane.setViewportView(stockTable);
-				mainPanel.add(mainScrollPane);
-				frame.add(mainScrollPane);
-				
-				frame.setSize(800, 600);
-				frame.addWindowListener(new WindowAdapter() {
-					@Override
-					public void windowClosed(WindowEvent e) {
-						super.windowClosed(e);
-					}
-				});
-				frame.setLocationRelativeTo(null); // 相对居中, 在frame设置size之后
-				frame.setVisible(true);
-			}
-			
-		};
-	}
-	
 	/**
 	 * 
 	 * Describle(描述)：基础数据重置
@@ -108,7 +79,7 @@ public class SystemInitHandler extends JFrame {
 	 *  
 	 * @return
 	 */
-	public ActionListener baseReset(JMenuItem mt){
+	public ActionListener baseReset(){
 		return new ActionListener() {
 			
 			@Override
@@ -194,4 +165,52 @@ public class SystemInitHandler extends JFrame {
 		};
 	}
 
+	/**
+	 * 
+	 * Describle(描述)：饿了么刷单补贴金额设置
+	 *
+	 * 方法名称：eleSdAllowanceSet
+	 *
+	 * 所在类名：ActionHandler
+	 *
+	 * Create Time:2015年7月27日 下午4:58:43
+	 *  
+	 * @return
+	 */
+	public ActionListener eleSdAllowanceSet(){
+		return new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				final JFrame frame = new JFrame("每单补贴金额设置");
+				JPanel subpanel = new JPanel();
+				frame.add(subpanel);
+				final JTextField amountInput = new JTextField(10);
+				JButton saveBtn = new JButton("确定");
+				saveBtn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						frame.dispose();
+					}
+				});
+				
+				subpanel.add(amountInput);
+				subpanel.add(saveBtn);
+				
+				
+				frame.setSize(300, 100);
+				frame.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosed(WindowEvent e) {
+						super.windowClosed(e);
+					}
+				});
+				frame.setLocationRelativeTo(null); // 相对居中, 在frame设置size之后
+				frame.setVisible(true);
+			}
+			
+		};
+	}
+	
 }

@@ -2221,3 +2221,65 @@ INFO   | jvm 1    | 2015/07/16 16:55:41 | 2015-07-16 16:55:41,038 [WARN] - [Wrap
 INFO   | jvm 1    | 2015/07/16 16:55:41 | Hibernate: select this_.markid as markid1_2_0_, this_.version as version2_2_0_, this_.mark_flag as mark_fla3_2_0_, this_.rci_date as rci_date4_2_0_, this_.savepoint as savepoin5_2_0_, this_.type as type6_2_0_ from bus_tb_datafetch_mark this_ where this_.type=?
 INFO   | jvm 1    | 2015/07/16 16:55:42 | Hibernate: select this_.markid as markid1_2_0_, this_.version as version2_2_0_, this_.mark_flag as mark_fla3_2_0_, this_.rci_date as rci_date4_2_0_, this_.savepoint as savepoin5_2_0_, this_.type as type6_2_0_ from bus_tb_datafetch_mark this_ where this_.rci_date=? and this_.type=?
 INFO   | jvm 1    | 2015/07/16 16:55:42 | 2015-07-16 16:55:42,098 [WARN] - [dataFetchScheduler-1] com.jolbox.bonecp.BoneCPConfig  - LogStatementsEnabled is set to true, but log4j level is not set at DEBUG. Disabling statement logging.
+NOTICE | wrapper  | 2015/07/16 17:05:28 | 
+NOTICE | wrapper  | 2015/07/16 17:05:28 | --------------------------------------------------------------------
+NOTICE | wrapper  | 2015/07/16 17:05:28 | This trial license will shutdown in 5 minute(s).
+NOTICE | wrapper  | 2015/07/16 17:05:28 | --------------------------------------------------------------------
+NOTICE | wrapper  | 2015/07/16 17:05:28 | 
+NOTICE | wrapper  | 2015/07/16 17:09:48 | 
+NOTICE | wrapper  | 2015/07/16 17:09:48 | --------------------------------------------------------------------
+NOTICE | wrapper  | 2015/07/16 17:09:48 | This trial license will shutdown in 1 minute(s).
+NOTICE | wrapper  | 2015/07/16 17:09:48 | --------------------------------------------------------------------
+NOTICE | wrapper  | 2015/07/16 17:09:48 | 
+STATUS | wrapper  | 2015/07/16 17:10:32 | Machine is shutting down.
+STATUS | wrapper  | 2015/07/16 17:10:35 | <-- Wrapper Stopped
+STATUS | wrapper  | 2015/07/17 11:12:47 | --> Wrapper Started as Service
+STATUS | wrapper  | 2015/07/17 11:12:48 | Java Service Wrapper Professional Edition 32-bit 3.5.26
+STATUS | wrapper  | 2015/07/17 11:12:48 |   Copyright (C) 1999-2014 Tanuki Software, Ltd. All Rights Reserved.
+STATUS | wrapper  | 2015/07/17 11:12:48 |     http://wrapper.tanukisoftware.com
+NOTICE | wrapper  | 2015/07/17 11:12:48 | 
+NOTICE | wrapper  | 2015/07/17 11:12:48 | --------------------------------------------------------------------
+NOTICE | wrapper  | 2015/07/17 11:12:48 | Thank you for your interest in the Java Service Wrapper.
+NOTICE | wrapper  | 2015/07/17 11:12:48 | 
+NOTICE | wrapper  | 2015/07/17 11:12:48 | You are running with a full featured trial License Key which will
+NOTICE | wrapper  | 2015/07/17 11:12:48 | allow you to run or restart the Java Service Wrapper as many times
+NOTICE | wrapper  | 2015/07/17 11:12:48 | as you like.  Each invocation of the Wrapper will shutdown
+NOTICE | wrapper  | 2015/07/17 11:12:48 | automatically after 15 minutes.
+NOTICE | wrapper  | 2015/07/17 11:12:48 | 
+NOTICE | wrapper  | 2015/07/17 11:12:48 | This limited trial License Key is useful for quick configuration
+NOTICE | wrapper  | 2015/07/17 11:12:48 | tests on various machines without the need to request a trial
+NOTICE | wrapper  | 2015/07/17 11:12:48 | license.  If more time is required, you can also immediately obtain
+NOTICE | wrapper  | 2015/07/17 11:12:48 | a one-month Free trial license:
+NOTICE | wrapper  | 2015/07/17 11:12:48 |   http://wrapper.tanukisoftware.com/trial
+NOTICE | wrapper  | 2015/07/17 11:12:48 | 
+NOTICE | wrapper  | 2015/07/17 11:12:48 | The Java Service Wrapper requires a License Key to activate the
+NOTICE | wrapper  | 2015/07/17 11:12:48 | software.  License Keys can be purchased on the Java Service Wrapper
+NOTICE | wrapper  | 2015/07/17 11:12:48 | web site:
+NOTICE | wrapper  | 2015/07/17 11:12:48 |   http://wrapper.tanukisoftware.com/purchase
+NOTICE | wrapper  | 2015/07/17 11:12:48 | 
+NOTICE | wrapper  | 2015/07/17 11:12:48 | This trial License Key in intended for testing and development and
+NOTICE | wrapper  | 2015/07/17 11:12:48 | should not be used as part of a production environment.
+NOTICE | wrapper  | 2015/07/17 11:12:48 | --------------------------------------------------------------------
+NOTICE | wrapper  | 2015/07/17 11:12:48 | 
+STATUS | wrapper  | 2015/07/17 11:12:48 | 
+STATUS | wrapper  | 2015/07/17 11:12:48 | Launching a JVM...
+INFO   | jvm 1    | 2015/07/17 11:12:53 | WrapperManager: Initializing...
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager: 
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager: WARNING - Unable to load the Wrapper's native library because none of the
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager:           following files:
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager:             wrapper-windows-x86-64.dll
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager:             wrapper.dll
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager:           could be located on the following java.library.path:
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager:             E:\WorkSpace\ReconciliationPro\ReconciliationService\bin\.
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager:           Please see the documentation for the wrapper.java.library.path
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager:           configuration property.
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager:           System signals will not be handled correctly.
+INFO   | jvm 1    | 2015/07/17 11:12:56 | WrapperManager: 
+INFO   | jvm 1    | 2015/07/17 11:12:59 | 2015-07-17 11:12:59,726 [WARN] - [WrapperSimpleAppMain] com.jolbox.bonecp.BoneCPConfig  - LogStatementsEnabled is set to true, but log4j level is not set at DEBUG. Disabling statement logging.
+INFO   | jvm 1    | 2015/07/17 11:13:00 | 2015-07-17 11:13:00,132 [WARN] - [WrapperSimpleAppMain] com.jolbox.bonecp.BoneCP  - Thread close connection monitoring has been enabled. This will negatively impact on your performance. Only enable this option for debugging purposes!
+INFO   | jvm 1    | 2015/07/17 11:13:02 | 2015-07-17 11:13:02,284 [WARN] - [WrapperSimpleAppMain] org.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+INFO   | jvm 1    | 2015/07/17 11:13:03 | Hibernate: select this_.markid as markid1_2_0_, this_.version as version2_2_0_, this_.mark_flag as mark_fla3_2_0_, this_.rci_date as rci_date4_2_0_, this_.savepoint as savepoin5_2_0_, this_.type as type6_2_0_ from bus_tb_datafetch_mark this_ where this_.type=?
+INFO   | jvm 1    | 2015/07/17 11:13:03 | Hibernate: select this_.markid as markid1_2_0_, this_.version as version2_2_0_, this_.mark_flag as mark_fla3_2_0_, this_.rci_date as rci_date4_2_0_, this_.savepoint as savepoin5_2_0_, this_.type as type6_2_0_ from bus_tb_datafetch_mark this_ where this_.rci_date=? and this_.type=?
+INFO   | jvm 1    | 2015/07/17 11:13:03 | 2015-07-17 11:13:03,673 [WARN] - [dataFetchScheduler-1] com.jolbox.bonecp.BoneCPConfig  - LogStatementsEnabled is set to true, but log4j level is not set at DEBUG. Disabling statement logging.
+STATUS | wrapper  | 2015/07/17 11:17:00 | <-- Wrapper Stopped
+STATUS | wrapperm | 2015/07/17 14:03:42 | ReconciliationService service removed.

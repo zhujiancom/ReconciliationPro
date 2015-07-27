@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
@@ -17,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -30,7 +27,8 @@ import com.rci.config.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.listeners.CleanListener;
 import com.rci.ui.swing.listeners.QueryListener;
-import com.rci.ui.swing.listeners.SystemInitHandler;
+import com.rci.ui.swing.listeners.StockListener;
+import com.rci.ui.swing.listeners.ActionHandler;
 import com.rci.ui.swing.model.OrderTable;
 
 public class MainFrame extends JFrame {
@@ -133,30 +131,10 @@ public class MainFrame extends JFrame {
 		BorderLayout layout = new BorderLayout(0, 10);
 		containerPanel.setLayout(layout);
 		
+		/* 创建 菜单条*/
 		JMenuBar menubar = new JMenuBar();
+		buildMenuBar(menubar);
 		this.setJMenuBar(menubar);
-		JMenu sysMenu = new JMenu("系统");
-		JMenu helpMenu = new JMenu("帮助");
-		menubar.add(sysMenu);
-		menubar.add(helpMenu);
-		JMenuItem dataInit = new JMenuItem("系统初始化");
-		JMenuItem baseReset = new JMenuItem("基础数据重置");
-		JMenuItem stockInit = new JMenuItem("库存设置/查看");
-		JMenuItem helpInfo = new JMenuItem("帮助信息");
-		sysMenu.add(dataInit);
-		sysMenu.add(baseReset);
-		sysMenu.add(stockInit);
-		helpMenu.add(helpInfo);
-		SystemInitHandler handler = new SystemInitHandler();
-		dataInit.addActionListener(handler.dataInit());
-		baseReset.addActionListener(handler.baseReset(baseReset));
-		stockInit.addActionListener(handler.stockInit());
-		helpMenu.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "帮助信息。。。。。");
-			}
-		});
 		
 		//饿了么刷单金额设置
 		JLabel eleOnlinePayLabel = new JLabel("饿了么刷单在线支付总金额");
@@ -339,5 +317,43 @@ public class MainFrame extends JFrame {
 		conclusionPanel.add(freePanel);
 		conclusionPanel.add(expRatePanel);
 		conclusionPanel.add(totalPanel);
+	}
+	
+	/**
+	 * 
+	 * Describle(描述)：构建menu bar 内容
+	 *
+	 * 方法名称：buildMenuBar
+	 *
+	 * 所在类名：MainFrame
+	 *
+	 * Create Time:2015年7月27日 上午9:37:04
+	 *  
+	 * @param menubar
+	 */
+	public void buildMenuBar(JMenuBar menubar){
+		JMenu system = new JMenu("系统");
+		JMenu view = new JMenu("查看");
+		JMenu setting = new JMenu("设置");
+		
+		menubar.add(system);
+		menubar.add(view);
+		menubar.add(setting);
+		JMenuItem sysInit = new JMenuItem("系统初始化");
+		JMenuItem baseReset = new JMenuItem("基础数据重置");
+		JMenuItem viewStock = new JMenuItem("库存查看");
+		JMenuItem setStock = new JMenuItem("库存进货");
+		JMenuItem elesdallowance = new JMenuItem("饿了么刷单补贴设置");
+		system.add(sysInit);
+		system.add(baseReset);
+		view.add(viewStock);
+		setting.add(setStock);
+		setting.add(elesdallowance);
+		ActionHandler handler = new ActionHandler();
+		sysInit.addActionListener(handler.dataInit());
+		baseReset.addActionListener(handler.baseReset());
+		viewStock.addActionListener(StockListener.VIEW);
+		setStock.addActionListener(StockListener.RESTOCK);
+//		elesdallowance.addActionListener();
 	}
 }

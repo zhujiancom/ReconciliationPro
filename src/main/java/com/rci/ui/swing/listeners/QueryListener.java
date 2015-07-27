@@ -245,8 +245,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		this.orders = ordervos;
 		OrderTableModel otm = new OrderTableModel(orders);
 		mainTable.setModel(otm);
-		OrderTable ot = (OrderTable) mainTable; 
-		ot.markRed();
+		OrderTable ot = (OrderTable)mainTable;
 		ot.setHeaderLabel();
 		if(!CollectionUtils.isEmpty(ordervos)){
 			OrderVO order = otm.getOrderAt(0);

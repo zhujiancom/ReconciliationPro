@@ -15,17 +15,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import com.rci.contants.BusinessConstant;
 import com.rci.service.IStockService;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.SpringUtils;
+import com.rci.ui.swing.renderers.AbstractLineRedMarkRenderer;
 import com.rci.ui.swing.vos.StockVO;
 
 public class StockTable extends JTable {
@@ -33,8 +33,9 @@ public class StockTable extends JTable {
 	 * 
 	 */
 	private static final long serialVersionUID = -6631773169791610714L;
-
-	public StockTable(){
+	private String action;
+	public StockTable(String action){
+		this.action = action;
 		IMetadataService metadataService = (IMetadataService)SpringUtils.getBean("MetadataService");
 		List<StockVO> stocks = metadataService.displayStocks();
 		StockTableModel stockModel = new StockTableModel(stocks);
@@ -44,21 +45,30 @@ public class StockTable extends JTable {
 	}
 	
 	public void setHeaderLabel(){
+		StockTableRedMarkRenderer redmarkRenderer = new StockTableRedMarkRenderer();
 		TableColumnModel cm = this.getColumnModel();
 		cm.getColumn(0).setHeaderValue("库存编号");
 		cm.getColumn(0).setPreferredWidth(75);
+		cm.getColumn(0).setCellRenderer(redmarkRenderer);
 		cm.getColumn(1).setHeaderValue("名称");
 		cm.getColumn(1).setPreferredWidth(75);
+		cm.getColumn(1).setCellRenderer(redmarkRenderer);
 		cm.getColumn(2).setHeaderValue("总量");
 		cm.getColumn(2).setPreferredWidth(105);
+		cm.getColumn(2).setCellRenderer(redmarkRenderer);
 		cm.getColumn(3).setHeaderValue("已消费数量");
 		cm.getColumn(3).setPreferredWidth(75);
+		cm.getColumn(3).setCellRenderer(redmarkRenderer);
 		cm.getColumn(4).setHeaderValue("剩余数量");
 		cm.getColumn(4).setPreferredWidth(75);
-		TableColumn operateCol = cm.getColumn(5);
-		operateCol.setHeaderValue("操作");
-		operateCol.setCellRenderer(new MyJButtonCellRenderer());
-		operateCol.setCellEditor(new MyJButtonCellEditor());
+		cm.getColumn(4).setCellRenderer(redmarkRenderer);
+		if(BusinessConstant.RESTOCK_ACTION.equals(this.action)){
+			TableColumn operateCol = cm.getColumn(5);
+			operateCol.setPreferredWidth(50);
+			operateCol.setHeaderValue("操作");
+			operateCol.setCellRenderer(new MyJButtonCellRenderer());
+			operateCol.setCellEditor(new MyJButtonCellEditor());
+		}
 	}
 	
 	private class MyJButtonCellRenderer implements TableCellRenderer{
@@ -74,7 +84,7 @@ public class StockTable extends JTable {
 		
 		private void initButton(){
 			this.btn = new JButton();
-			this.btn.setBounds(0, 0, 60, 25);
+			this.btn.setBounds(20, 0, 60, 25);
 		}
 		
 		private void initPanel(){
@@ -116,7 +126,7 @@ public class StockTable extends JTable {
 		
 		private void initButton(){
 			this.btn = new JButton();
-			this.btn.setBounds(0, 0, 60, 25);
+			this.btn.setBounds(20, 0, 60, 25);
 			btn.addActionListener(new ActionListener() {
 				
 				@Override
@@ -180,6 +190,21 @@ public class StockTable extends JTable {
 		
 	}
 	
+	/**
+	 * 
+	 * remark (备注):Stock Model
+	 *
+	 * @author zj
+	 *	
+	 * 项目名称：ReconciliationPro
+	 *
+	 * 类名称：StockTableModel
+	 *
+	 * 包名称：com.rci.ui.swing.model
+	 *
+	 * Create Time: 2015年7月27日 下午2:52:51
+	 *
+	 */
 	private class StockTableModel extends AbstractTableModel{
 		/**
 		 * 
@@ -189,13 +214,6 @@ public class StockTable extends JTable {
 		
 		public StockTableModel(List<StockVO> stocks){
 			this.stocks = stocks;
-			super.addTableModelListener(new TableModelListener() {
-				
-				@Override
-				public void tableChanged(TableModelEvent e) {
-					
-				}
-			});
 		}
 		
 		@Override
@@ -210,10 +228,17 @@ public class StockTable extends JTable {
 		public int getRowCount() {
 			return stocks.size();
 		}
+		
+		public StockVO getStockAt(int rowIndex){
+			return stocks.get(rowIndex);
+		}
 
 		@Override
 		public int getColumnCount() {
-			return 6;
+			if(action.equals(BusinessConstant.RESTOCK_ACTION)){
+				return 6;
+			}
+			return 5;
 		}
 
 		@Override
@@ -229,7 +254,7 @@ public class StockTable extends JTable {
 			case 3:
 				return stock.getConsumeAmount();
 			case 4:
-				return "<html><font color='red'>"+stock.getBalanceAmount()+"</font></html>";
+				return stock.getBalanceAmount();
 			case 5:
 				return stock.getSno();
 			default:
@@ -241,5 +266,38 @@ public class StockTable extends JTable {
 		public void setStocks(List<StockVO> stocks) {
 			this.stocks = stocks;
 		}
+	}
+	
+	/**
+	 * 
+	 * remark (备注): if stock's balance amount <= 0, mark red
+	 *
+	 * @author zj
+	 *	
+	 * 项目名称：ReconciliationPro
+	 *
+	 * 类名称：StockTableRedMarkRenderer
+	 *
+	 * 包名称：com.rci.ui.swing.model
+	 *
+	 * Create Time: 2015年7月27日 下午2:53:02
+	 *
+	 */
+	private class StockTableRedMarkRenderer extends AbstractLineRedMarkRenderer<StockTableModel>{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -7471535707441144408L;
+
+		@Override
+		public boolean markRed(StockTableModel tm, int rowIndex) {
+			StockVO stock = tm.getStockAt(rowIndex);
+			if(stock.getBalanceAmount().compareTo(BigDecimal.ZERO) <= 0){
+				return true;
+			}
+			return false;
+		}
+		
 	}
 }

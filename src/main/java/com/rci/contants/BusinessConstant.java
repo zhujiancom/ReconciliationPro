@@ -38,4 +38,8 @@ public class BusinessConstant {
 	public static final String PAYMODE_FREE=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_FREE);
 	public static final String PAYMODE_MTSUPER=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_MT_SUPER);
 	public static final String PAYMODE_POS=(String) PropertyUtils.getProperties(PropertyConstants.PAYMODE_POS);
+	
+	/*ACTIONS*/
+	public static final String VIEW_ACTION="VIEW";
+	public static final String RESTOCK_ACTION="RESTOCK";
 }
