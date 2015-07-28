@@ -43,13 +43,13 @@ public class OrderTable extends JTable {
 		cm.getColumn(5).setPreferredWidth(75);
 		cm.getColumn(5).setCellRenderer(redmarkRenderer);
 		cm.getColumn(6).setHeaderValue("折扣方案");
-		cm.getColumn(6).setPreferredWidth(175);
+		cm.getColumn(6).setPreferredWidth(215);
 		cm.getColumn(6).setCellRenderer(redmarkRenderer);
 		cm.getColumn(7).setHeaderValue("有临时折扣方案");
 		cm.getColumn(7).setPreferredWidth(45);
 		cm.getColumn(7).setCellRenderer(redmarkRenderer);
 		cm.getColumn(8).setHeaderValue("结账时间");
-		cm.getColumn(8).setPreferredWidth(140);
+		cm.getColumn(8).setPreferredWidth(100);
 		cm.getColumn(8).setCellRenderer(redmarkRenderer);
 		cm.getColumn(9).setHeaderValue("收银机现金");
 		cm.getColumn(9).setPreferredWidth(70);

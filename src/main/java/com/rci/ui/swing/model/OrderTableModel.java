@@ -54,7 +54,7 @@ public class OrderTableModel extends AbstractTableModel {
 		case 7:
 			return order.getSingleDiscount();
 		case 8:
-			return DateUtil.time2Str(order.getCheckoutTime());
+			return DateUtil.getTimeStampOfDate(order.getCheckoutTime());
 		case 9:
 			return order.getCashmachineAmount();
 		case 10:

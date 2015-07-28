@@ -293,7 +293,7 @@ public class StockTable extends JTable {
 		@Override
 		public boolean markRed(StockTableModel tm, int rowIndex) {
 			StockVO stock = tm.getStockAt(rowIndex);
-			if(stock.getBalanceAmount().compareTo(BigDecimal.ZERO) <= 0){
+			if(stock.getBalanceAmount().compareTo(BigDecimal.TEN) <= 0){
 				return true;
 			}
 			return false;

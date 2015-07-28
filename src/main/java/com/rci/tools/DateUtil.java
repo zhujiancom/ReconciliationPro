@@ -253,6 +253,26 @@ public class DateUtil extends DateUtils {
 		c.set(Calendar.MILLISECOND, 0);
 		return c.getTime();
 	}
+	
+	/**
+	 * 
+	 * Describle(描述)：截取时分秒。 
+	 * 例： 如果给定时间 2015-07-36 16:34:33 , 得到结果为 16:34:33
+	 *
+	 * 方法名称：getTimeStampOfDate
+	 *
+	 * 所在类名：DateUtil
+	 *
+	 * Create Time:2015年7月28日 下午4:34:27
+	 *  
+	 * @param date
+	 * @return
+	 */
+	public static String getTimeStampOfDate(Date date){
+		return getFragmentInHours(date,Calendar.DATE)+":"+
+				getFragmentInMinutes(date,Calendar.HOUR_OF_DAY)+":"+
+				getFragmentInSeconds(date,Calendar.MINUTE);
+	}
 
 	/**
 	 * 获取一天的零点时间
