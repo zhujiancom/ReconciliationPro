@@ -11,10 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
@@ -39,45 +38,33 @@ import com.rci.tools.StringUtils;
 import com.rci.ui.swing.model.OrderItemTableModel;
 import com.rci.ui.swing.model.OrderTable;
 import com.rci.ui.swing.model.OrderTableModel;
+import com.rci.ui.swing.views.ConculsionPanel;
+import com.rci.ui.swing.views.ContentPanel;
+import com.rci.ui.swing.views.QueryFormPanel;
 import com.rci.ui.swing.vos.OrderItemVO;
 import com.rci.ui.swing.vos.OrderVO;
 
 public class QueryListener implements ActionListener,ListSelectionListener {
 	private JTable mainTable;
 	private JTable subTable;
+	private JTextArea textArea; //警告日志展示面板
+	private ContentPanel contentPane;
+	private ConculsionPanel conclusionPane;
 	private IOrderService orderService;
 	private IDataLoaderService loaderService;
-//	private ITicketStatisticService tsService;
 	private StatisticCenterFacade facade;
 	private IOrderAccountRefService oaService;
-	private JTextField timeInput;
 	private Map<String,BigDecimal> sumMap;
 	private List<OrderVO> orders;
-	private JLabel posValue;
-	private JLabel cashValue;
-	private JLabel mtValue;
-	private JLabel tgValue;
-	private JLabel shValue;
-	private JLabel eleFreeValue;
-	private JLabel eleValue;
-	private JLabel tddValue;
-	private JLabel mtwmValue;
-	private JLabel mtwmFreeValue;
-	private JLabel freeValue;
-	private JLabel mtSuperValue;
-	private JLabel mtSuperFreeValue;
-	private JLabel totalValue;
-	private JLabel tgRemark;
-	private JLabel mtRemark;
-	private JLabel expRateValue; //外送率
-	private JLabel lsValue;
+	private String time;
 	
-	private JTextField eleOnlinePayAmount; //饿了么刷单在线支付总金额
-	private JTextField eleOrderCount;    //饿了么刷单数量
+	private QueryFormPanel queryPanel;
 	
-	public QueryListener(JTable mainTable,JTable subTable){
-		this.mainTable = mainTable;
-		this.subTable = subTable;
+	public QueryListener(ContentPanel contentPane){
+		this.contentPane = contentPane;
+		mainTable = contentPane.getMainTable();
+		subTable = contentPane.getItemTable();
+		textArea = contentPane.getTextArea();
 		orderService = (IOrderService) SpringUtils.getBean("OrderService");
 		loaderService = (IDataLoaderService) SpringUtils.getBean("DataLoaderService");
 		facade = (StatisticCenterFacade) SpringUtils.getBean("StatisticCenterFacade");
@@ -86,9 +73,9 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String time = timeInput.getText();
-		String elePayAmountText = eleOnlinePayAmount.getText();
-		String eleOrderCountText = eleOrderCount.getText();
+		time = queryPanel.getTimeInput().getText();
+		String elePayAmountText = queryPanel.getEleOnlinePayAmount().getText();
+		String eleOrderCountText = queryPanel.getEleOrderCount().getText();
 		BigDecimal elePayAmount = BigDecimal.ZERO;
 		if(StringUtils.hasText(elePayAmountText)){
 			elePayAmount = new BigDecimal(elePayAmountText);	
@@ -101,39 +88,16 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		try{
 			loadOrderData(time);
 			loadSumData(time);
-			cashValue.setText(getTotalAmount(BusinessConstant.CASHMACHINE_ACC).toString());
-			posValue.setText(getTotalAmount(BusinessConstant.POS_ACC).toString());
-			mtValue.setText(getTotalAmount(BusinessConstant.MT_ACC).toString());
-			tgValue.setText(getTotalAmount(BusinessConstant.DPTG_ACC).toString());
-			shValue.setText(getTotalAmount(BusinessConstant.DPSH_ACC).toString());
-			BigDecimal allowanceAmount = BigDecimal.ZERO;
+			/* 保存饿了么刷单信息  */
 			Date date = DateUtil.parseDate(time,"yyyyMMdd");
-			if(!elePayAmount.equals(BigDecimal.ZERO) && !eleOCount.equals(BigDecimal.ZERO)){
-				IELESDStatisticService elesdService = (IELESDStatisticService) SpringUtils.getBean("ELESDStatisticService");
-				if(!elesdService.isExistData(date)){ //没有当日刷单统计信息
-					EleSDStatistic elesd = new EleSDStatistic();
-					elesd.setPayAmount(elePayAmount);
-					elesd.setSdCount(eleOCount);
-					elesd.setSdDate(date);
-					elesdService.saveSDInfo(elesd);
-				}
-			}
-			eleValue.setText(getTotalAmount(BusinessConstant.ELE_ACC).toString());
-			allowanceAmount = facade.getSDAllowanceAmount(date);
-			BigDecimal totalFreeAmount = getTotalAmount(BusinessConstant.FREE_ELE_ACC).add(allowanceAmount);
-			eleFreeValue.setText(totalFreeAmount.toString());
+			IELESDStatisticService elesdService = (IELESDStatisticService) SpringUtils.getBean("ELESDStatisticService");
+			EleSDStatistic elesd = new EleSDStatistic();
+			elesd.setPayAmount(elePayAmount);
+			elesd.setSdCount(eleOCount);
+			elesd.setSdDate(date);
+			elesdService.saveSDInfo(elesd);
 			
-			tddValue.setText(getTotalAmount(BusinessConstant.TDD_ACC).toString());
-			mtwmValue.setText(getTotalAmount(BusinessConstant.MTWM_ACC).toString());
-			mtwmFreeValue.setText(getTotalAmount(BusinessConstant.FREE_MTWM_ACC).toString());
-			mtSuperValue.setText(getTotalAmount(BusinessConstant.MT_SUPER_ACC).toString());
-			mtSuperFreeValue.setText(getTotalAmount(BusinessConstant.FREE_MT_SUPER_ACC).toString());
-			freeValue.setText(getTotalAmount(BusinessConstant.FREE_ACC).toString());
-			lsValue.setText(getTotalAmount(BusinessConstant.LS_ACC).toString());
-			totalValue.setText(getTotalDayAmount().toString());
-			tgRemark.setText(getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.DZDP));
-			mtRemark.setText(getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.MT));
-			expRateValue.setText(getExpressRateStatistic(time));
+			conclusionPane.updateUI(this);
 			mainTable.getSelectionModel().addListSelectionListener(this);
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
@@ -172,7 +136,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	 * @param vendor
 	 * @return
 	 */
-	private String getTicketStatistic(Date time,Vendor vendor) {
+	public String getTicketStatistic(Date time,Vendor vendor) {
 		return facade.getTicketStatistic(time, vendor);
 	}
 
@@ -257,15 +221,20 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		mainTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 
-	public JTextField getTimeInput() {
-		return timeInput;
-	}
-
-	public void setTimeInput(JTextField timeInput) {
-		this.timeInput = timeInput;
-	}
-	
-	public BigDecimal getTotalDayAmount(){
+	/**
+	 * 
+	 * Describle(描述)：统计一天的收入总额
+	 *
+	 * 方法名称：getTotalDayAmount
+	 *
+	 * 所在类名：QueryListener
+	 *
+	 * Create Time:2015年7月29日 上午10:44:52
+	 *  
+	 * @param time
+	 * @return
+	 */
+	public BigDecimal getTotalDayAmount(String time){
 		BigDecimal totalAmount = new BigDecimal(BigInteger.ZERO,2);
 		if(CollectionUtils.isEmpty(orders)){
 			return totalAmount;
@@ -273,7 +242,6 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		for(OrderVO order:orders){
 			totalAmount = totalAmount.add(order.getTotalAmount());
 		}
-		String time = timeInput.getText();
 		Date date;
 		try {
 			date = DateUtil.parseDate(time, "yyyyMMdd");
@@ -285,6 +253,12 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 			e.printStackTrace();
 		}
 		return totalAmount;
+	}
+	
+	public BigDecimal getELEAllowanceAmount(Date date){
+		BigDecimal allowanceAmount = BigDecimal.ZERO;
+		allowanceAmount = facade.getSDAllowanceAmount(date);
+		return getTotalAmount(BusinessConstant.FREE_ELE_ACC).add(allowanceAmount);
 	}
 	
 	public BigDecimal getTotalAmount(String accountNo){
@@ -305,97 +279,35 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		}
 	}
 
-	public void setPosValue(JLabel posValue) {
-		this.posValue = posValue;
+	public ConculsionPanel getConclusionPane() {
+		return conclusionPane;
 	}
 
-	public void setMtValue(JLabel mtValue) {
-		this.mtValue = mtValue;
+	public void setConclusionPane(ConculsionPanel conclusionPane) {
+		this.conclusionPane = conclusionPane;
 	}
 
-	public void setTgValue(JLabel tgValue) {
-		this.tgValue = tgValue;
+	public QueryFormPanel getQueryPanel() {
+		return queryPanel;
 	}
 
-	public void setEleValue(JLabel eleValue) {
-		this.eleValue = eleValue;
+	public void setQueryPanel(QueryFormPanel queryPanel) {
+		this.queryPanel = queryPanel;
 	}
 
-	public void setTddValue(JLabel tddValue) {
-		this.tddValue = tddValue;
+	public String getTime() {
+		return time;
 	}
 
-	public void setMtwmValue(JLabel mtwmValue) {
-		this.mtwmValue = mtwmValue;
+	public void setTime(String time) {
+		this.time = time;
 	}
 
-	public void setEleFreeValue(JLabel eleFreeValue) {
-		this.eleFreeValue = eleFreeValue;
+	public JTextArea getTextArea() {
+		return textArea;
 	}
 
-	public void setMtwmFreeValue(JLabel mtwmFreeValue) {
-		this.mtwmFreeValue = mtwmFreeValue;
-	}
-
-	public void setFreeValue(JLabel freeValue) {
-		this.freeValue = freeValue;
-	}
-
-	public void setTotalValue(JLabel totalValue) {
-		this.totalValue = totalValue;
-	}
-
-	/**
-	 * @param mtSuperValue the mtSuperValue to set
-	 */
-	public void setMtSuperValue(JLabel mtSuperValue) {
-		this.mtSuperValue = mtSuperValue;
-	}
-
-	/**
-	 * @param mtSuperFreeValue the mtSuperFreeValue to set
-	 */
-	public void setMtSuperFreeValue(JLabel mtSuperFreeValue) {
-		this.mtSuperFreeValue = mtSuperFreeValue;
-	}
-
-	public void setShValue(JLabel shValue) {
-		this.shValue = shValue;
-	}
-
-	public void setCashValue(JLabel cashValue) {
-		this.cashValue = cashValue;
-	}
-
-	public void setTgRemark(JLabel tgRemark) {
-		this.tgRemark = tgRemark;
-	}
-
-	public void setMtRemark(JLabel mtRemark) {
-		this.mtRemark = mtRemark;
-	}
-
-	public void setExpRateValue(JLabel expRateValue) {
-		this.expRateValue = expRateValue;
-	}
-
-	public void setLsValue(JLabel lsValue) {
-		this.lsValue = lsValue;
-	}
-
-	public JTextField getEleOnlinePayAmount() {
-		return eleOnlinePayAmount;
-	}
-
-	public void setEleOnlinePayAmount(JTextField eleOnlinePayAmount) {
-		this.eleOnlinePayAmount = eleOnlinePayAmount;
-	}
-
-	public JTextField getEleOrderCount() {
-		return eleOrderCount;
-	}
-
-	public void setEleOrderCount(JTextField eleOrderCount) {
-		this.eleOrderCount = eleOrderCount;
+	public void setTextArea(JTextArea textArea) {
+		this.textArea = textArea;
 	}
 }

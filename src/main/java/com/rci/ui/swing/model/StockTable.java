@@ -34,14 +34,21 @@ public class StockTable extends JTable {
 	 */
 	private static final long serialVersionUID = -6631773169791610714L;
 	private String action;
+	
+	public StockTable(){}
+	
 	public StockTable(String action){
 		this.action = action;
+		setModel();
+		setHeaderLabel();
+		this.setRowHeight(30);
+	}
+	
+	public void setModel(){
 		IMetadataService metadataService = (IMetadataService)SpringUtils.getBean("MetadataService");
 		List<StockVO> stocks = metadataService.displayStocks();
 		StockTableModel stockModel = new StockTableModel(stocks);
-		setModel(stockModel);
-		setHeaderLabel();
-		this.setRowHeight(30);
+		super.setModel(stockModel);
 	}
 	
 	public void setHeaderLabel(){
@@ -205,7 +212,7 @@ public class StockTable extends JTable {
 	 * Create Time: 2015年7月27日 下午2:52:51
 	 *
 	 */
-	private class StockTableModel extends AbstractTableModel{
+	public class StockTableModel extends AbstractTableModel{
 		/**
 		 * 
 		 */

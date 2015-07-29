@@ -44,6 +44,9 @@ public class ELESDStatisticServiceImpl extends BaseServiceImpl<EleSDStatistic,Lo
 
 	@Override
 	public void saveSDInfo(EleSDStatistic elesd) {
+		if(elesd.getPayAmount().equals(BigDecimal.ZERO) || elesd.getSdCount().equals(BigDecimal.ZERO) || isExistData(elesd.getSdDate())){
+			return;
+		}
 		List<Scheme> schemes = schemeService.getSchemes(Vendor.ELE, elesd.getSdDate());
 		BigDecimal perAllowanceAmount = BigDecimal.ZERO;
 		if(!CollectionUtils.isEmpty(schemes)){

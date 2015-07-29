@@ -51,4 +51,6 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 		}
 		return BigDecimal.ZERO;
 	}
+	
+	
 }
