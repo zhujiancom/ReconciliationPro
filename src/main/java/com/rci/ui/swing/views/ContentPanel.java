@@ -1,5 +1,7 @@
 package com.rci.ui.swing.views;
 
+import java.awt.Color;
+
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -46,9 +48,17 @@ public class ContentPanel extends JSplitPane {
 		rTopScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		itemTable = new JTable();
 		rTopScrollPane.setViewportView(itemTable);
-		JTextArea textArea = new JTextArea();
+		
+		textArea = new JTextArea(10,0);
+		textArea.setEditable(false);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setForeground(Color.RED);
+		JScrollPane rBottomScrollPane = new JScrollPane(textArea); //将表格加入到滚动条组件中
+		rBottomScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		rBottomScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		rightPane.add(rTopScrollPane);
-		rightPane.add(textArea);
+		rightPane.add(rBottomScrollPane);
 		
 		this.add(mainScrollPane);
 		this.add(rightPane);
@@ -76,6 +86,7 @@ public class ContentPanel extends JSplitPane {
 		datacleaner.deleteTicketStatistic(time);
 		datacleaner.deleteELESDInfo(time);
 		datacleaner.deleteStockInfo(time);
+		textArea.setText("");
 	}
 
 	public JTable getMainTable() {

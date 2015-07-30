@@ -85,6 +85,9 @@ public class Order extends BaseEntity {
 	/* 不可打折金额   */
 	private BigDecimal nodiscountAmount;
 	
+	/* 订单错误原因信息*/
+	private String warningInfo;
+	
 	/**
 	 * @return the oid
 	 */
@@ -368,5 +371,14 @@ public class Order extends BaseEntity {
 		}else{
 			paymodes = paymodes+","+paymodeNo;
 		}
+	}
+
+	@Column(name="warning_info")
+	public String getWarningInfo() {
+		return warningInfo;
+	}
+
+	public void setWarningInfo(String warningInfo) {
+		this.warningInfo = warningInfo;
 	}
 }

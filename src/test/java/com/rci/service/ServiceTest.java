@@ -19,6 +19,7 @@ import com.rci.bean.entity.StockOpLog;
 import com.rci.bean.entity.TableInfo;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.enums.BusinessEnums.StockOpType;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.metadata.dto.TableDTO;
 import com.rci.metadata.service.IDataFetchService;
 import com.rci.metadata.service.IDataTransformService;
@@ -228,5 +229,11 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testCleanStock(){
 		stockService.clearStockByDay("20150715");
+	}
+	
+	@Test
+	public void testGetValidOrderCount(){
+		Long result = oaService.getValidOrderCount(DateUtil.parseDate("2015-07-29"), Vendor.ELE);
+		System.out.println(result);
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
+import java.math.BigDecimal;
 import java.text.ParseException;
 
 import javax.swing.Box;
@@ -28,6 +29,8 @@ public class ConculsionPanel extends JPanel {
 	private JLabel lsValue;
 	private JLabel tgRemark;
 	private JLabel mtRemark;
+	private DisplayLabel<String,Long> eleRemark;
+	private DisplayLabel<String,BigDecimal> eleSdRemark;
 	private JLabel shValue;
 	private JLabel eleFreeValue;
 	private JLabel eleValue;
@@ -38,7 +41,7 @@ public class ConculsionPanel extends JPanel {
 	private JLabel mtSuperFreeValue;
 	private JLabel freeValue;
 	private JLabel totalValue;
-	private JLabel expRateValue; //外送率
+//	private JLabel expRateValue; //外送率
 	
 	public ConculsionPanel(){
 		buildPane();
@@ -118,19 +121,26 @@ public class ConculsionPanel extends JPanel {
 		shPanel.add(sh);
 		shPanel.add(shValue);
 		/* 饿了么补贴金额统计  */
-		JLabel eleFreeLabel = new JLabel("饿了么补贴总额：");
+		JLabel eleFreeLabel = new JLabel("饿了么补贴金额：");
 		eleFreeValue = new JLabel();
 		eleFreeValue.setForeground(Color.RED);
+		eleSdRemark = new DisplayLabel<String, BigDecimal>("刷单补贴金额");
+		eleSdRemark.setForeground(Color.BLUE);
 		JPanel eleFreePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		eleFreePanel.add(eleFreeLabel);
 		eleFreePanel.add(eleFreeValue);
+		eleFreePanel.add(eleSdRemark);
 		/* 饿了么在线支付统计  */
 		JLabel ele = new JLabel("饿了么入账总额：");
 		eleValue = new JLabel();
 		eleValue.setForeground(Color.RED);
 		JPanel elePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		eleRemark = new DisplayLabel<String,Long>("有效订单","单");
+		eleRemark.setForeground(Color.BLUE);
 		elePanel.add(ele);
 		elePanel.add(eleValue);
+		elePanel.add(eleRemark);
+		
 		/* 淘点点统计  */
 		JLabel tdd = new JLabel("淘点点入账总额：");
 		tddValue = new JLabel();
@@ -181,12 +191,12 @@ public class ConculsionPanel extends JPanel {
 		freePanel.add(freeLabel);
 		freePanel.add(freeValue);
 		/* 外送率统计  */
-		JLabel expRateLabel = new JLabel("外送率：");
-		expRateValue = new JLabel();
-		expRateValue.setForeground(Color.RED);
-		JPanel expRatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		expRatePanel.add(expRateLabel);
-		expRatePanel.add(expRateValue);
+//		JLabel expRateLabel = new JLabel("外送率：");
+//		expRateValue = new JLabel();
+//		expRateValue.setForeground(Color.RED);
+//		JPanel expRatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+//		expRatePanel.add(expRateLabel);
+//		expRatePanel.add(expRateValue);
 		/* 当日营业额统计  */
 		JLabel totalLabel = new JLabel("当日营业收入总额：");
 		totalValue = new JLabel();
@@ -206,8 +216,8 @@ public class ConculsionPanel extends JPanel {
 		fifthGroup.add(mtSuperPanel);
 		sixthGroup.add(tddPanel);
 		sixthGroup.add(freePanel);
-		sevenGroup.add(expRatePanel);
-		sevenGroup.add(Box.createHorizontalStrut(90));
+//		sevenGroup.add(expRatePanel);
+//		sevenGroup.add(Box.createHorizontalStrut(90));
 		sevenGroup.add(totalPanel);
 		
 		this.add(firstGroup);
@@ -237,23 +247,27 @@ public class ConculsionPanel extends JPanel {
 //		lsValue.setText("");
 		tgRemark.setText("");
 		mtRemark.setText("");
-		expRateValue.setText("");
+		eleRemark.setText("");
+//		expRateValue.setText("");
 	}
 	
 	public void updateUI(QueryListener listener) throws ParseException {
+		String time = listener.getTime();
 		getCashValue().setText(listener.getTotalAmount(BusinessConstant.CASHMACHINE_ACC).toString());
 		getPosValue().setText(listener.getTotalAmount(BusinessConstant.POS_ACC).toString());
 		getMtValue().setText(listener.getTotalAmount(BusinessConstant.MT_ACC).toString());
 		getTgValue().setText(listener.getTotalAmount(BusinessConstant.DPTG_ACC).toString());
 		getShValue().setText(listener.getTotalAmount(BusinessConstant.DPSH_ACC).toString());
 		getEleValue().setText(listener.getTotalAmount(BusinessConstant.ELE_ACC).toString());
-		getEleFreeValue().setText(listener.getELEAllowanceAmount(DateUtil.parseDate(listener.getTime(), "yyyyMMdd")).toString());
+		getEleFreeValue().setText(listener.getTotalAmount(BusinessConstant.FREE_ELE_ACC).toString());
+		getEleSdRemark().setText(listener.getELESDAllowanceAmount(DateUtil.parseDate(time, "yyyyMMdd")));
 		getTddValue().setText(listener.getTotalAmount(BusinessConstant.TDD_ACC).toString());
 		getMtSuperValue().setText(listener.getTotalAmount(BusinessConstant.MT_SUPER_ACC).toString());
-		getTotalValue().setText(listener.getTotalDayAmount(listener.getTime()).toString());
-		getTgRemark().setText(listener.getTicketStatistic(DateUtil.parseDate(listener.getTime(), "yyyyMMdd"),Vendor.DZDP));
-		getMtRemark().setText(listener.getTicketStatistic(DateUtil.parseDate(listener.getTime(), "yyyyMMdd"),Vendor.MT));
-		getExpRateValue().setText(listener.getExpressRateStatistic(listener.getTime()));
+		getTotalValue().setText(listener.getTotalDayAmount(time).toString());
+		getTgRemark().setText(listener.getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.DZDP));
+		getMtRemark().setText(listener.getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.MT));
+		getEleRemark().setText(listener.getValidCount(time, Vendor.ELE));
+//		getExpRateValue().setText(listener.getExpressRateStatistic(time));
 //		mtwmValue.setText(getTotalAmount(BusinessConstant.MTWM_ACC).toString());
 //		mtwmFreeValue.setText(getTotalAmount(BusinessConstant.FREE_MTWM_ACC).toString());
 //		lsValue.setText(getTotalAmount(BusinessConstant.LS_ACC).toString());		
@@ -361,11 +375,21 @@ public class ConculsionPanel extends JPanel {
 	public void setTotalValue(JLabel totalValue) {
 		this.totalValue = totalValue;
 	}
-	public JLabel getExpRateValue() {
-		return expRateValue;
+
+	public DisplayLabel<String, Long> getEleRemark() {
+		return eleRemark;
 	}
-	public void setExpRateValue(JLabel expRateValue) {
-		this.expRateValue = expRateValue;
+
+	public void setEleRemark(DisplayLabel<String, Long> eleRemark) {
+		this.eleRemark = eleRemark;
+	}
+
+	public DisplayLabel<String, BigDecimal> getEleSdRemark() {
+		return eleSdRemark;
+	}
+
+	public void setEleSdRemark(DisplayLabel<String, BigDecimal> eleSdRemark) {
+		this.eleSdRemark = eleSdRemark;
 	}
 
 }

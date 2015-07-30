@@ -84,6 +84,8 @@ public class OrderVO {
 	private BigDecimal nodiscountAmount;
 
 	private CommonEnums.YOrN singleDiscount;
+	
+	private String warningInfo;
 
 	/**
 	 * @return the orderId
@@ -411,6 +413,14 @@ public class OrderVO {
 
 	public void setPosAmount(BigDecimal posAmount) {
 		this.posAmount = posAmount;
+	}
+
+	public String getWarningInfo() {
+		return warningInfo;
+	}
+
+	public void setWarningInfo(String warningInfo) {
+		this.warningInfo = warningInfo;
 	}
 
 }

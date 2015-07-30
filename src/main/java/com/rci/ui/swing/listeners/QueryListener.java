@@ -21,7 +21,6 @@ import javax.swing.table.TableColumnModel;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.EleSDStatistic;
-import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
@@ -36,7 +35,6 @@ import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
 import com.rci.ui.swing.model.OrderItemTableModel;
-import com.rci.ui.swing.model.OrderTable;
 import com.rci.ui.swing.model.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
@@ -76,6 +74,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		time = queryPanel.getTimeInput().getText();
 		String elePayAmountText = queryPanel.getEleOnlinePayAmount().getText();
 		String eleOrderCountText = queryPanel.getEleOrderCount().getText();
+		String elePerAllowanceText = queryPanel.getElePerAllowanceAmount().getText();
 		BigDecimal elePayAmount = BigDecimal.ZERO;
 		if(StringUtils.hasText(elePayAmountText)){
 			elePayAmount = new BigDecimal(elePayAmountText);	
@@ -83,6 +82,10 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		BigDecimal eleOCount = BigDecimal.ZERO;
 		if(StringUtils.hasText(eleOrderCountText)){
 			eleOCount = new BigDecimal(eleOrderCountText);
+		}
+		BigDecimal eleAllowance = BigDecimal.ZERO;
+		if(StringUtils.hasText(elePerAllowanceText)){
+			eleAllowance = new BigDecimal(elePerAllowanceText);
 		}
 		
 		try{
@@ -94,6 +97,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 			EleSDStatistic elesd = new EleSDStatistic();
 			elesd.setPayAmount(elePayAmount);
 			elesd.setSdCount(eleOCount);
+			elesd.setPerAllowanceAmount(eleAllowance);
 			elesd.setSdDate(date);
 			elesdService.saveSDInfo(elesd);
 			
@@ -187,6 +191,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	 * @throws ParseException 
 	 */
 	public void loadOrderData(String time) throws ServiceException{
+		textArea.setText("");
 		if(!DateUtil.isDateFormat(time,"yyyyMMdd")){
 			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "日期格式错误");
 		}
@@ -207,15 +212,18 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		loaderService.load(queryDate);
 		List<OrderVO> ordervos = orderService.accquireOrderVOsByDay(time);
 		this.orders = ordervos;
-		OrderTableModel otm = new OrderTableModel(orders);
-		mainTable.setModel(otm);
-		OrderTable ot = (OrderTable)mainTable;
-		ot.setHeaderLabel();
+		OrderTableModel otm = (OrderTableModel) mainTable.getModel();
+		otm.setOrders(orders);
 		if(!CollectionUtils.isEmpty(ordervos)){
 			OrderVO order = otm.getOrderAt(0);
 			loadItemData(order.getPayNo());
 			mainTable.setRowSelectionAllowed(true);
 			mainTable.setRowSelectionInterval(0, 0);
+			for(OrderVO ov:orders){
+				if(StringUtils.hasText(ov.getWarningInfo())){
+					textArea.append("【"+ov.getPayNo()+"】"+ov.getWarningInfo());
+				}
+			}
 		}
 		mainTable.setRowHeight(20);
 		mainTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -255,14 +263,49 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		return totalAmount;
 	}
 	
-	public BigDecimal getELEAllowanceAmount(Date date){
-		BigDecimal allowanceAmount = BigDecimal.ZERO;
-		allowanceAmount = facade.getSDAllowanceAmount(date);
-		return getTotalAmount(BusinessConstant.FREE_ELE_ACC).add(allowanceAmount);
+	/**
+	 * 
+	 * Describle(描述)： 获取饿了么刷单补贴金额
+	 *
+	 * 方法名称：getELESDAllowanceAmount
+	 *
+	 * 所在类名：QueryListener
+	 *
+	 * Create Time:2015年7月30日 下午1:58:46
+	 *  
+	 * @param date
+	 * @return
+	 */
+	public BigDecimal getELESDAllowanceAmount(Date date){
+		return facade.getSDAllowanceAmount(date);
 	}
 	
 	public BigDecimal getTotalAmount(String accountNo){
 		return sumMap.get(accountNo) == null? BigDecimal.ZERO:sumMap.get(accountNo);
+	}
+	
+	/**
+	 * 
+	 * Describle(描述)： 获取平台有效单数
+	 *
+	 * 方法名称：getValidCount
+	 *
+	 * 所在类名：QueryListener
+	 *
+	 * Create Time:2015年7月30日 下午1:58:05
+	 *  
+	 * @param time
+	 * @param vendor
+	 * @return
+	 */
+	public Long getValidCount(String time,Vendor vendor){
+		try {
+			Date postTime = DateUtil.parseDate(time,"yyyyMMdd");
+			return oaService.getValidOrderCount(postTime, vendor);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return 0L;
 	}
 	
 	private void loadSumData(String time){
@@ -303,11 +346,11 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		this.time = time;
 	}
 
-	public JTextArea getTextArea() {
-		return textArea;
+	public ContentPanel getContentPane() {
+		return contentPane;
 	}
 
-	public void setTextArea(JTextArea textArea) {
-		this.textArea = textArea;
+	public void setContentPane(ContentPanel contentPane) {
+		this.contentPane = contentPane;
 	}
 }

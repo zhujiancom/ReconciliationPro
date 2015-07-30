@@ -20,6 +20,7 @@ public class QueryFormPanel extends JPanel {
 	 */
 	private JTextField eleOnlinePayAmount; // 饿了么刷单在线支付总金额
 	private JTextField eleOrderCount; // 饿了么刷单数量
+	private JTextField elePerAllowanceAmount; // 每单补贴金额
 
 	private JButton queryBtn;
 	private JButton cleanBtn;
@@ -46,6 +47,8 @@ public class QueryFormPanel extends JPanel {
 		eleOnlinePayAmount = new JTextField(5);
 		JLabel eleOrderCountLabel = new JLabel("饿了么刷单数量");
 		eleOrderCount = new JTextField(5);
+		JLabel elePerAllowanceLabel = new JLabel("每单优惠金额");
+		elePerAllowanceAmount = new JTextField(5);
 
 		JLabel rciTime = new JLabel("日期");
 		timeInput = new JTextField(10);
@@ -55,6 +58,8 @@ public class QueryFormPanel extends JPanel {
 		this.add(eleOnlinePayAmount);
 		this.add(eleOrderCountLabel);
 		this.add(eleOrderCount);
+		this.add(elePerAllowanceLabel);
+		this.add(elePerAllowanceAmount);
 
 		this.add(rciTime);
 		this.add(timeInput);
@@ -103,5 +108,13 @@ public class QueryFormPanel extends JPanel {
 
 	public void setTimeInput(JTextField timeInput) {
 		this.timeInput = timeInput;
+	}
+
+	public JTextField getElePerAllowanceAmount() {
+		return elePerAllowanceAmount;
+	}
+
+	public void setElePerAllowanceAmount(JTextField elePerAllowanceAmount) {
+		this.elePerAllowanceAmount = elePerAllowanceAmount;
 	}
 }

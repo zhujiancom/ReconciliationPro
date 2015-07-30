@@ -87,4 +87,24 @@ public interface DataCleanFacade {
 	 * @param time
 	 */
 	public void deleteStockInfo(String time);
+	
+	/**
+	 * 
+	 * Describle(描述)：删除一整天所有相关信息
+	 * 1.删除所有订单信息
+	 * 2.删除所有标记信息
+	 * 3.删除所有流水信息
+	 * 4.删除所有代金券统计信息
+	 * 5.删除饿了么刷单统计信息
+	 * 6.删除当日库存消费信息
+	 *
+	 * 方法名称：cleanAllOfOneDay
+	 *
+	 * 所在类名：DataCleanFacade
+	 *
+	 * Create Time:2015年7月30日 上午8:49:51
+	 *  
+	 * @param time
+	 */
+	public void cleanAllOfOneDay(String time);
 }

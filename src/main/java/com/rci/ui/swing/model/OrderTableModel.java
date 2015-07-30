@@ -14,6 +14,11 @@ public class OrderTableModel extends AbstractTableModel {
 	 */
 	private static final long serialVersionUID = -4006879882193678115L;
 	private List<OrderVO> orders = Collections.emptyList();
+	private int columnNum;
+	
+	public OrderTableModel(int columnNum){
+		this.columnNum = columnNum;
+	}
 	
 	public OrderTableModel(List<OrderVO> orders){
 		this.orders = orders;
@@ -26,7 +31,7 @@ public class OrderTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 20;
+		return this.columnNum;
 	}
 	
 	public OrderVO getOrderAt(int rowIndex){
@@ -93,6 +98,14 @@ public class OrderTableModel extends AbstractTableModel {
 		if(old > 0){
 			super.fireTableRowsDeleted(rowCount,old-1);
 		}
+	}
+
+	public List<OrderVO> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<OrderVO> orders) {
+		this.orders = orders;
 	}
 
 }

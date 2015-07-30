@@ -85,10 +85,12 @@ public class MainFrame extends JFrame {
 		JMenu system = new JMenu("系统");
 		JMenu view = new JMenu("查看");
 		JMenu setting = new JMenu("设置");
+		JMenu statistic = new JMenu("统计");
 		
 		menubar.add(system);
 		menubar.add(view);
 		menubar.add(setting);
+		menubar.add(statistic);
 		JMenuItem sysInit = new JMenuItem("系统初始化");
 		JMenuItem baseReset = new JMenuItem("基础数据重置");
 		JMenuItem viewStock = new JMenuItem("库存查看");
@@ -97,6 +99,13 @@ public class MainFrame extends JFrame {
 		system.add(baseReset);
 		view.add(viewStock);
 		setting.add(setStock);
+		
+		JMenuItem expressRate = new JMenuItem("外送率统计"); //展示当月外送率统计信息表
+		JMenuItem earning = new JMenuItem("营业额统计");
+		statistic.add(expressRate);
+		statistic.add(earning);
+		
+		
 		ActionHandler handler = new ActionHandler();
 		sysInit.addActionListener(handler.dataInit());
 		baseReset.addActionListener(handler.baseReset());

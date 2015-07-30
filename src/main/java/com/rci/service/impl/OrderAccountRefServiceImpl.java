@@ -12,6 +12,7 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.OrderAccountRef;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.base.BaseServiceImpl;
 
@@ -102,5 +103,13 @@ public class OrderAccountRefServiceImpl extends
 		public void setSumAmount(BigDecimal sumAmount) {
 			this.sumAmount = sumAmount;
 		}
+	}
+
+	@Override
+	public Long getValidOrderCount(Date postTime, Vendor vendor) {
+		DetachedCriteria dc = DetachedCriteria.forClass(OrderAccountRef.class);
+		dc.setProjection(Projections.projectionList().add(Projections.rowCount())).add(Restrictions.eq("accNo", vendor.name())).add(Restrictions.eq("postTime", postTime));
+		Long count = baseDAO.getRowCount(dc);
+		return count;
 	}
 }

@@ -49,7 +49,7 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 		if(elesd != null){
 			return elesd.getAllowanceAmount();
 		}
-		return BigDecimal.ZERO;
+		return null;
 	}
 	
 	

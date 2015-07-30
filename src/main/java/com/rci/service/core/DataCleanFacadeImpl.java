@@ -66,4 +66,14 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 		stockService.clearStockByDay(time);
 	}
 
+	@Override
+	public void cleanAllOfOneDay(String time) {
+		deleteOrders(time);
+		deleteMark(time);
+		deleteFlowInfo(time,DataGenerateType.AUTO);
+		deleteTicketStatistic(time);
+		deleteELESDInfo(time);
+		deleteStockInfo(time);
+	}
+
 }
