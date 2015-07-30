@@ -17,6 +17,7 @@ import com.rci.config.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.listeners.ActionHandler;
 import com.rci.ui.swing.listeners.CleanListener;
+import com.rci.ui.swing.listeners.ExpressRateListener;
 import com.rci.ui.swing.listeners.QueryListener;
 import com.rci.ui.swing.listeners.StockListener;
 import com.rci.ui.swing.views.ConculsionPanel;
@@ -111,6 +112,7 @@ public class MainFrame extends JFrame {
 		baseReset.addActionListener(handler.baseReset());
 		viewStock.addActionListener(StockListener.VIEW);
 		setStock.addActionListener(StockListener.RESTOCK);
+		expressRate.addActionListener(new ExpressRateListener());
 		return menubar;
 	}
 }

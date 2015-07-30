@@ -248,6 +248,7 @@ public class ConculsionPanel extends JPanel {
 		tgRemark.setText("");
 		mtRemark.setText("");
 		eleRemark.setText("");
+		eleSdRemark.setText("");
 //		expRateValue.setText("");
 	}
 	

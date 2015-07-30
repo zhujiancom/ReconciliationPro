@@ -25,6 +25,7 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.Paymode;
 import com.rci.bean.entity.TableInfo;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.dto.DishDTO;
 import com.rci.metadata.dto.DishTypeDTO;
 import com.rci.metadata.dto.OrderDTO;
@@ -92,6 +93,9 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			DishTypeDTO typeDTO = typeDTOs.get(i);
 			List<DishDTO> dishDTOs = fetchService.fetchAllDishesByType(typeDTO.getTypeno());
 			DishType type = beanMapper.map(typeDTO, DishType.class);
+			if("23".equals(typeDTO.getTypeno())){
+				type.setNotDiscount(YOrN.Y);
+			}
 			List<Dish> dishes = new LinkedList<Dish>();
 			for(DishDTO dishDTO:dishDTOs){
 				Dish dish = beanMapper.map(dishDTO, Dish.class);
