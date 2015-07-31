@@ -2,6 +2,8 @@ package com.rci.ui.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JComponent;
@@ -19,10 +21,11 @@ import com.rci.ui.swing.listeners.ActionHandler;
 import com.rci.ui.swing.listeners.CleanListener;
 import com.rci.ui.swing.listeners.ExpressRateListener;
 import com.rci.ui.swing.listeners.QueryListener;
-import com.rci.ui.swing.listeners.StockListener;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
 import com.rci.ui.swing.views.QueryFormPanel;
+import com.rci.ui.swing.views.builder.PopWindowBuilder;
+import com.rci.ui.swing.views.builder.WindowBuilderFactory;
 
 public class MainFrame extends JFrame {
 	/**
@@ -110,9 +113,31 @@ public class MainFrame extends JFrame {
 		ActionHandler handler = new ActionHandler();
 		sysInit.addActionListener(handler.dataInit());
 		baseReset.addActionListener(handler.baseReset());
-		viewStock.addActionListener(StockListener.VIEW);
-		setStock.addActionListener(StockListener.RESTOCK);
+		viewStock.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PopWindowBuilder winBuilder = WindowBuilderFactory.createViewStockWinBuilder();
+				winBuilder.retrieveWindow();
+			}
+		});
+		setStock.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PopWindowBuilder winBuilder = WindowBuilderFactory.createReStockWinBuilder();
+				winBuilder.retrieveWindow();
+			}
+		});
 		expressRate.addActionListener(new ExpressRateListener());
+		earning.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PopWindowBuilder winBuilder = WindowBuilderFactory.createTurnoverWinBuilder();
+				winBuilder.retrieveWindow();
+			}
+		});
 		return menubar;
 	}
 }

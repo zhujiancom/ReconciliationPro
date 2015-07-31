@@ -2,8 +2,10 @@ package com.rci.service.core;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.ui.swing.vos.ExpressRateVO;
 
 public interface StatisticCenterFacade {
 	/**
@@ -51,4 +53,34 @@ public interface StatisticCenterFacade {
 	 * @return
 	 */
 	BigDecimal getSDAllowanceAmount(Date date);
+	
+	/**
+	 * 
+	 * Describle(描述)：搜索当月每天的外送率数据
+	 *
+	 * 方法名称：getExpressRateList
+	 *
+	 * 所在类名：StatisticCenterFacade
+	 *
+	 * Create Time:2015年7月31日 下午1:53:17
+	 *  
+	 * @return
+	 */
+	List<ExpressRateVO> getExpressRateList();
+	
+	/**
+	 * 
+	 * Describle(描述)：搜索指定日期范围的每天的外送率数据
+	 *
+	 * 方法名称：getExpressRateList
+	 *
+	 * 所在类名：StatisticCenterFacade
+	 *
+	 * Create Time:2015年7月31日 下午1:54:38
+	 *  
+	 * @param sdate
+	 * @param edate
+	 * @return
+	 */
+	List<ExpressRateVO> getExpressRateList(Date sdate,Date edate);
 }

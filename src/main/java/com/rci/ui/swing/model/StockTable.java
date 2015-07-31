@@ -28,29 +28,29 @@ import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.renderers.AbstractLineRedMarkRenderer;
 import com.rci.ui.swing.vos.StockVO;
 
-public class StockTable extends JTable {
+public class StockTable extends BaseTable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6631773169791610714L;
 	private String action;
 	
-	public StockTable(){}
-	
-	public StockTable(String action){
+	public StockTable(int columnNum,String action){
+		super();
 		this.action = action;
-		setModel();
+		setModel(columnNum);
 		setHeaderLabel();
-		this.setRowHeight(30);
 	}
 	
-	public void setModel(){
+	@Override
+	public void setModel(int columnNum){
 		IMetadataService metadataService = (IMetadataService)SpringUtils.getBean("MetadataService");
 		List<StockVO> stocks = metadataService.displayStocks();
-		StockTableModel stockModel = new StockTableModel(stocks);
+		StockTableModel stockModel = new StockTableModel(columnNum,stocks);
 		super.setModel(stockModel);
 	}
 	
+	@Override
 	public void setHeaderLabel(){
 		StockTableRedMarkRenderer redmarkRenderer = new StockTableRedMarkRenderer();
 		TableColumnModel cm = this.getColumnModel();
@@ -218,14 +218,20 @@ public class StockTable extends JTable {
 		 */
 		private static final long serialVersionUID = 2069979813018653831L;
 		private List<StockVO> stocks = Collections.emptyList();
+		private int columnNum;
 		
-		public StockTableModel(List<StockVO> stocks){
+		public StockTableModel(int columnNum){
+			this.columnNum = columnNum;
+		}
+		
+		public StockTableModel(int columnNum,List<StockVO> stocks){
+			this(columnNum);
 			this.stocks = stocks;
 		}
 		
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			if(columnIndex == 5){
+			if(columnIndex == columnNum-1){
 				return true;
 			}
 			return false;
@@ -243,9 +249,9 @@ public class StockTable extends JTable {
 		@Override
 		public int getColumnCount() {
 			if(action.equals(BusinessConstant.RESTOCK_ACTION)){
-				return 6;
+				return columnNum;
 			}
-			return 5;
+			return columnNum-1;
 		}
 
 		@Override
@@ -272,6 +278,18 @@ public class StockTable extends JTable {
 
 		public void setStocks(List<StockVO> stocks) {
 			this.stocks = stocks;
+		}
+
+		public int getColumnNum() {
+			return columnNum;
+		}
+
+		public void setColumnNum(int columnNum) {
+			this.columnNum = columnNum;
+		}
+
+		public List<StockVO> getStocks() {
+			return stocks;
 		}
 	}
 	
