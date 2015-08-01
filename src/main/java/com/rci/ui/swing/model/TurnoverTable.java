@@ -19,6 +19,7 @@ public class TurnoverTable extends JTable {
 	public TurnoverTable(int columnNum){
 		super(new TurnoverTableModel(columnNum));
 		setHeaderLabel();
+		this.setRowHeight(30);
 	}
 	
 	public void setHeaderLabel(){
@@ -47,6 +48,8 @@ public class TurnoverTable extends JTable {
 		cm.getColumn(10).setMinWidth(105);
 		cm.getColumn(11).setHeaderValue("在线优惠");
 		cm.getColumn(11).setMinWidth(105);
+		cm.getColumn(12).setHeaderValue("当日总收入");
+		cm.getColumn(12).setMinWidth(225);
 	}
 
 	public static class TurnoverTableModel extends AbstractTableModel{
@@ -99,8 +102,38 @@ public class TurnoverTable extends JTable {
 				return "<html><font color='green'>"+turnover.getTsFreeAmount()+"</font></html>";
 			case 11:
 				return "<html><font color='green'>"+turnover.getOnlineFreeAmount()+"</font></html>";
+			case 12:
+				return turnover.getTotalAmount();
 			}
 			return null;
+		}
+
+		/**
+		 * @return the columnNum
+		 */
+		public int getColumnNum() {
+			return columnNum;
+		}
+
+		/**
+		 * @param columnNum the columnNum to set
+		 */
+		public void setColumnNum(int columnNum) {
+			this.columnNum = columnNum;
+		}
+
+		/**
+		 * @return the turnovers
+		 */
+		public List<TurnoverVO> getTurnovers() {
+			return turnovers;
+		}
+
+		/**
+		 * @param turnovers the turnovers to set
+		 */
+		public void setTurnovers(List<TurnoverVO> turnovers) {
+			this.turnovers = turnovers;
 		}
 		
 	}

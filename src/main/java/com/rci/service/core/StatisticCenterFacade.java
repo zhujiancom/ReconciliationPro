@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.ui.swing.vos.ExpressRateVO;
+import com.rci.ui.swing.vos.TurnoverVO;
 
 public interface StatisticCenterFacade {
 	/**
@@ -83,4 +84,21 @@ public interface StatisticCenterFacade {
 	 * @return
 	 */
 	List<ExpressRateVO> getExpressRateList(Date sdate,Date edate);
+	
+	/**
+	 * 
+	 *
+	 * Describle(描述)：统计指定日期范围的每日营业数据
+	 *
+	 * 方法名称：getTurnoverList
+	 *
+	 * 所在类名：StatisticCenterFacade
+	 *
+	 * Create Time:2015年8月1日 上午1:13:10
+	 *  
+	 * @param sdate
+	 * @param edate
+	 * @return
+	 */
+	List<TurnoverVO> getTurnoverList(Date sdate,Date edate);
 }

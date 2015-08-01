@@ -19,6 +19,7 @@ public class BusinessConstant {
 	public static final String FREE_MTWM_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_FREE_MTWM);
 	public static final String CASHMACHINE_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_CASHMACHINE);
 	public static final String FREE_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_FREE);
+	public static final String FREE_ONLINE_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_FREE_ONLINE);
 	public static final String CASH_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_CASH);
 	public static final String DEPOSIT_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_DEPOSIT);
 	public static final String POS_ACC=(String) PropertyUtils.getProperties(PropertyConstants.ACCOUNT_POS);

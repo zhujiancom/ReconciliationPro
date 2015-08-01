@@ -29,6 +29,12 @@ public class TurnoverVO {
 	
 	/* 在线订单优惠 */
 	private BigDecimal onlineFreeAmount;
+	
+	private BigDecimal totalAmount;
+	
+	public TurnoverVO(Date date){
+		this.date = date;
+	}
 
 	public Date getDate() {
 		return date;
@@ -39,7 +45,7 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getCashMachineAmount() {
-		return cashMachineAmount;
+		return cashMachineAmount == null ? BigDecimal.ZERO:cashMachineAmount;
 	}
 
 	public void setCashMachineAmount(BigDecimal cashMachineAmount) {
@@ -47,7 +53,7 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getMtAmount() {
-		return mtAmount;
+		return mtAmount == null ? BigDecimal.ZERO:mtAmount;
 	}
 
 	public void setMtAmount(BigDecimal mtAmount) {
@@ -55,7 +61,7 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getMtSuperAmount() {
-		return mtSuperAmount;
+		return mtSuperAmount == null ? BigDecimal.ZERO:mtSuperAmount;
 	}
 
 	public void setMtSuperAmount(BigDecimal mtSuperAmount) {
@@ -63,7 +69,7 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getDptgAmount() {
-		return dptgAmount;
+		return dptgAmount == null ? BigDecimal.ZERO:dptgAmount;
 	}
 
 	public void setDptgAmount(BigDecimal dptgAmount) {
@@ -71,7 +77,7 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getDpshAmount() {
-		return dpshAmount;
+		return dpshAmount == null ? BigDecimal.ZERO:dpshAmount;
 	}
 
 	public void setDpshAmount(BigDecimal dpshAmount) {
@@ -79,7 +85,7 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getEleAmount() {
-		return eleAmount;
+		return eleAmount == null ? BigDecimal.ZERO:eleAmount;
 	}
 
 	public void setEleAmount(BigDecimal eleAmount) {
@@ -87,7 +93,7 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getElebtAmount() {
-		return elebtAmount;
+		return elebtAmount == null ? BigDecimal.ZERO:elebtAmount;
 	}
 
 	public void setElebtAmount(BigDecimal elebtAmount) {
@@ -95,7 +101,7 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getTddAmount() {
-		return tddAmount;
+		return tddAmount == null ? BigDecimal.ZERO:tddAmount;
 	}
 
 	public void setTddAmount(BigDecimal tddAmount) {
@@ -103,7 +109,7 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getPosAmount() {
-		return posAmount;
+		return posAmount == null ? BigDecimal.ZERO:posAmount;
 	}
 
 	public void setPosAmount(BigDecimal posAmount) {
@@ -111,7 +117,7 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getTsFreeAmount() {
-		return tsFreeAmount;
+		return tsFreeAmount == null ? BigDecimal.ZERO:tsFreeAmount;
 	}
 
 	public void setTsFreeAmount(BigDecimal tsFreeAmount) {
@@ -119,11 +125,54 @@ public class TurnoverVO {
 	}
 
 	public BigDecimal getOnlineFreeAmount() {
-		return onlineFreeAmount;
+		return onlineFreeAmount == null ? BigDecimal.ZERO:onlineFreeAmount;
 	}
 
 	public void setOnlineFreeAmount(BigDecimal onlineFreeAmount) {
 		this.onlineFreeAmount = onlineFreeAmount;
+	}
+
+	/**
+	 * @return the totalAmount
+	 */
+	public BigDecimal getTotalAmount() {
+//		totalAmount = BigDecimal.ZERO;
+//		if(cashMachineAmount != null){
+//			totalAmount = totalAmount.add(cashMachineAmount);
+//		}
+//		if(mtAmount != null){
+//			totalAmount = totalAmount.add(mtAmount);
+//		}
+//		if(mtSuperAmount != null){
+//			totalAmount = totalAmount.add(mtSuperAmount);
+//		}
+//		if(dptgAmount != null){
+//			totalAmount = totalAmount.add(dptgAmount);
+//		}
+//		if(dpshAmount != null){
+//			totalAmount = totalAmount.add(dpshAmount);
+//		}
+//		if(eleAmount != null){
+//			totalAmount = totalAmount.add(eleAmount);
+//		}
+//		/* 饿了么补贴金额  */
+//		if(elebtAmount != null){
+//			totalAmount = totalAmount.add(elebtAmount);
+//		}
+//		if(tddAmount != null){
+//			totalAmount = totalAmount.add(tddAmount);
+//		}
+//		if(posAmount != null){
+//			totalAmount = totalAmount.add(posAmount);
+//		}
+		return totalAmount;
+	}
+
+	/**
+	 * @param totalAmount the totalAmount to set
+	 */
+	public void setTotalAmount(BigDecimal totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 
 }

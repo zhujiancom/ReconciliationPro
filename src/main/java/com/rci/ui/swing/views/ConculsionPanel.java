@@ -186,7 +186,7 @@ public class ConculsionPanel extends JPanel {
 		/* 总免单金额统计  */
 		JLabel freeLabel = new JLabel("总免单金额：");
 		freeValue = new JLabel();
-		freeValue.setForeground(Color.RED);
+		freeValue.setForeground(Color.GREEN);
 		JPanel freePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		freePanel.add(freeLabel);
 		freePanel.add(freeValue);
@@ -264,6 +264,7 @@ public class ConculsionPanel extends JPanel {
 		getEleSdRemark().setText(listener.getELESDAllowanceAmount(DateUtil.parseDate(time, "yyyyMMdd")));
 		getTddValue().setText(listener.getTotalAmount(BusinessConstant.TDD_ACC).toString());
 		getMtSuperValue().setText(listener.getTotalAmount(BusinessConstant.MT_SUPER_ACC).toString());
+		getFreeValue().setText(listener.getTotalAmount(BusinessConstant.FREE_ACC).toString());
 		getTotalValue().setText(listener.getTotalDayAmount(time).toString());
 		getTgRemark().setText(listener.getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.DZDP));
 		getMtRemark().setText(listener.getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.MT));

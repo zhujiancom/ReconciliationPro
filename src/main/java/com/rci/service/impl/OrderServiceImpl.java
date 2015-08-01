@@ -111,6 +111,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 						vo.setFreeAmount(amount);
 						totalAmount = totalAmount.subtract(amount);
 					}
+					if (BusinessConstant.FREE_ONLINE_ACC.equals(accountNo)){
+						totalAmount = totalAmount.subtract(amount);
+					}
 				}
 				vo.setSchemeName(order.getSchemeName());
 				vo.setTotalAmount(totalAmount);

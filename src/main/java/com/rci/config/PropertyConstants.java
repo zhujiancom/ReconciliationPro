@@ -40,6 +40,7 @@ public class PropertyConstants{
 	public static final String ACCOUNT_ELE="account.ele";
 	public static final String ACCOUNT_TDD="account.tdd";
 	public static final String ACCOUNT_FREE="account.free";
+	public static final String ACCOUNT_FREE_ONLINE="account.free.online";
 	public static final String ACCOUNT_FREE_MTWM="account.free.mtwm";
 	public static final String ACCOUNT_FREE_ELE="account.free.ele";
 	public static final String ACCOUNT_CASHMACHINE="account.cashmachine";
