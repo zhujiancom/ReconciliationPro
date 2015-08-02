@@ -21,7 +21,7 @@ public class OrderTable extends JTable {
 	private static final long serialVersionUID = 4935140318205918006L;
 	
 	public OrderTable(){
-		super(new OrderTableModel(20));
+		super(new OrderTableModel(19));
 		setHeaderLabel();
 	}
 	
@@ -51,53 +51,53 @@ public class OrderTable extends JTable {
 		cm.getColumn(5).setHeaderValue("不可打折金额");
 		cm.getColumn(5).setMinWidth(105);
 		cm.getColumn(5).setCellRenderer(redmarkRenderer);
-		cm.getColumn(6).setHeaderValue("折扣方案");
-		cm.getColumn(6).setMinWidth(215);
+//		cm.getColumn(6).setHeaderValue("折扣方案");
+//		cm.getColumn(6).setMinWidth(215);
+//		cm.getColumn(6).setCellRenderer(redmarkRenderer);
+		cm.getColumn(6).setHeaderValue("有临时折扣方案");
+		cm.getColumn(6).setMinWidth(45);
 		cm.getColumn(6).setCellRenderer(redmarkRenderer);
-		cm.getColumn(7).setHeaderValue("有临时折扣方案");
-		cm.getColumn(7).setMinWidth(45);
+		cm.getColumn(7).setHeaderValue("结账时间");
+		cm.getColumn(7).setMinWidth(100);
 		cm.getColumn(7).setCellRenderer(redmarkRenderer);
-		cm.getColumn(8).setHeaderValue("结账时间");
-		cm.getColumn(8).setMinWidth(100);
+		cm.getColumn(8).setHeaderValue("收银机现金");
+		cm.getColumn(8).setMinWidth(70);
 		cm.getColumn(8).setCellRenderer(redmarkRenderer);
-		cm.getColumn(9).setHeaderValue("收银机现金");
+		cm.getColumn(9).setHeaderValue("美团入账");
 		cm.getColumn(9).setMinWidth(70);
 		cm.getColumn(9).setCellRenderer(redmarkRenderer);
-		cm.getColumn(10).setHeaderValue("美团入账");
-		cm.getColumn(10).setMinWidth(70);
+		cm.getColumn(10).setHeaderValue("大众点评团购");
+		cm.getColumn(10).setMinWidth(105);
 		cm.getColumn(10).setCellRenderer(redmarkRenderer);
-		cm.getColumn(11).setHeaderValue("大众点评团购");
+		cm.getColumn(11).setHeaderValue("大众点评闪惠");
 		cm.getColumn(11).setMinWidth(105);
 		cm.getColumn(11).setCellRenderer(redmarkRenderer);
-		cm.getColumn(12).setHeaderValue("大众点评闪惠");
-		cm.getColumn(12).setMinWidth(105);
+		cm.getColumn(12).setHeaderValue("饿了么");
+		cm.getColumn(12).setMinWidth(75);
 		cm.getColumn(12).setCellRenderer(redmarkRenderer);
-		cm.getColumn(13).setHeaderValue("饿了么");
-		cm.getColumn(13).setMinWidth(75);
+		cm.getColumn(13).setHeaderValue("饿了么补贴");
+		cm.getColumn(13).setMinWidth(105);
 		cm.getColumn(13).setCellRenderer(redmarkRenderer);
-		cm.getColumn(14).setHeaderValue("饿了么补贴");
-		cm.getColumn(14).setMinWidth(105);
+		cm.getColumn(14).setHeaderValue("淘点点");
+		cm.getColumn(14).setMinWidth(75);
 		cm.getColumn(14).setCellRenderer(redmarkRenderer);
-		cm.getColumn(15).setHeaderValue("淘点点");
-		cm.getColumn(15).setMinWidth(75);
-		cm.getColumn(15).setCellRenderer(redmarkRenderer);
 //		cm.getColumn(16).setHeaderValue("美团外卖");
 //		cm.getColumn(16).setPreferredWidth(75);
 //		cm.getColumn(16).setCellRenderer(redmarkRenderer);
 //		cm.getColumn(17).setHeaderValue("美团外卖补贴");
 //		cm.getColumn(17).setPreferredWidth(105);
-		cm.getColumn(16).setHeaderValue("美团超级代金券");
-		cm.getColumn(16).setMinWidth(105);
+		cm.getColumn(15).setHeaderValue("美团超级代金券");
+		cm.getColumn(15).setMinWidth(105);
+		cm.getColumn(15).setCellRenderer(redmarkRenderer);
+		cm.getColumn(16).setHeaderValue("POS机");
+		cm.getColumn(16).setMinWidth(75);
 		cm.getColumn(16).setCellRenderer(redmarkRenderer);
-		cm.getColumn(17).setHeaderValue("POS机");
+		cm.getColumn(17).setHeaderValue("免单");
 		cm.getColumn(17).setMinWidth(75);
 		cm.getColumn(17).setCellRenderer(redmarkRenderer);
-		cm.getColumn(18).setHeaderValue("免单");
+		cm.getColumn(18).setHeaderValue("总金额");
 		cm.getColumn(18).setMinWidth(75);
-		cm.getColumn(18).setCellRenderer(redmarkRenderer);
-		cm.getColumn(19).setHeaderValue("总金额");
-		cm.getColumn(19).setMinWidth(75);
-		cm.getColumn(19).setCellRenderer(zeromarkRenderer);
+		cm.getColumn(18).setCellRenderer(zeromarkRenderer);
 	}
 	
 	/**

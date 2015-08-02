@@ -56,35 +56,35 @@ public class OrderTableModel extends AbstractTableModel {
 			return order.getNodiscountAmount();
 		case 6:
 			return order.getSchemeName();
+//		case 7:
+//			return order.getSingleDiscount();
 		case 7:
-			return order.getSingleDiscount();
-		case 8:
 			return DateUtil.getTimeStampOfDate(order.getCheckoutTime());
-		case 9:
+		case 8:
 			return order.getCashmachineAmount();
-		case 10:
+		case 9:
 			return order.getMtAmount();
-		case 11:
+		case 10:
 			return order.getDptgAmount();
-		case 12:
+		case 11:
 			return order.getDpshAmount();
-		case 13:
+		case 12:
 			return order.getEleAmount();
-		case 14:
+		case 13:
 			return order.getEleFreeAmount();
-		case 15:
+		case 14:
 			return order.getTddAmount();
 //		case 16:
 //			return order.getMtwmAmount();
 //		case 17:
 //			return order.getMtwmFreeAmount();
-		case 16:
+		case 15:
 			return order.getMtSuperAmount();
-		case 17:
+		case 16:
 			return order.getPosAmount();
-		case 18:
+		case 17:
 			return order.getFreeAmount();
-		case 19:
+		case 18:
 			return order.getTotalAmount();
 		default:
 			break;

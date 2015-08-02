@@ -75,6 +75,8 @@ public class ELEFilter extends AbstractFilter {
 						preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
 					}else{
 						logger.warn(order.getPayNo()+"---[饿了么 活动补贴] 没有找到匹配的Scheme -----");
+						String warningInfo = "[饿了么 活动补贴]--- 没有找到匹配的Scheme";
+						order.setWarningInfo(warningInfo);
 					}
 				}catch(ParseException e){
 					e.printStackTrace();
@@ -83,6 +85,8 @@ public class ELEFilter extends AbstractFilter {
 			if(actualAmount.compareTo(onlineAmount) != 0){
 				order.setUnusual(YOrN.Y);
 				logger.warn("--- 【"+order.getPayNo()+"】[饿了么在线支付异常] ---， 在线支付金额："+onlineAmount+" , 实际支付金额： "+actualAmount);
+				String warningInfo = "[饿了么在线支付异常]--- 在线支付金额："+onlineAmount+" , 应支付金额： "+actualAmount;
+				order.setWarningInfo(warningInfo);
 			}
 			order.setSchemeName(schemeName);
 			//保存饿了么在线支付金额

@@ -65,6 +65,8 @@ public class TDDFilter extends AbstractFilter {
 		if(tddAmount.compareTo(onlineAmount) != 0){
 			order.setUnusual(YOrN.Y);
 			logger.warn("--- 【"+order.getPayNo()+"】[淘点点支付异常] ---， 在线支付金额："+onlineAmount+" , 实际支付金额： "+tddAmount);
+			String warningInfo = "[淘点点支付异常]---  在线支付金额："+onlineAmount+" , 实际支付金额： "+tddAmount;
+			order.setWarningInfo(warningInfo);
 		}
 		order.setSchemeName(schemeName);
 		//保存淘点点在线支付金额

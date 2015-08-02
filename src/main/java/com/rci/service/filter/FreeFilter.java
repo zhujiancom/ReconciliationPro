@@ -50,6 +50,8 @@ public class FreeFilter extends AbstractFilter {
 		if(normalAmount.compareTo(BigDecimal.ZERO) < 0){
 			logger.error("----【"+order.getPayNo()+"】[免单金额异常] --- , 免单金额超出了原价");
 			order.setUnusual(YOrN.Y);
+			String warningInfo = "[免单金额异常]--- 免单金额超出了原价";
+			order.setWarningInfo(warningInfo);
 		}
 		order.setSchemeName(schemeName);
 		preserveOAR(normalAmount, BusinessConstant.FREE_ACC, order);

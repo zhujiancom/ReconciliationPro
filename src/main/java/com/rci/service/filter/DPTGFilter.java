@@ -120,6 +120,8 @@ public class DPTGFilter extends AbstractFilter {
 			//如果可打折金额小于代金券实际使用金额，则这单属于异常单
 			order.setUnusual(YOrN.Y);
 			logger.warn("---【损失单】【"+order.getPayNo()+"】[大众点评支付异常]---， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额");
+			String warningInfo = "[大众团购支付异常]--- 实际支付金额："+chitAmount+", 可打折金额："+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额";
+			order.setWarningInfo(warningInfo);
 		}
 //		schemes.putAll(createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag));
 		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag);

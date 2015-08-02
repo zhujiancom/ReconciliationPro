@@ -59,6 +59,8 @@ public class CashFilter extends AbstractFilter {
 					//如果收银机显示现金收入和计算收入不相符时，报异常
 					order.setUnusual(YOrN.Y);
 					logger.debug("--- 【"+order.getPayNo()+"】[收银机支付异常] ---，#8折优惠# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
+					String warningInfo = "[收银机支付异常]--- #8折优惠#收银机实际入账金额："+cashAmount+",应入账金额："+actualAmount;
+					order.setWarningInfo(warningInfo);
 				}
 				if(StringUtils.hasText(schemeName)){
 					schemeName = schemeName+",店内现金优惠-"+actualAmount;
@@ -80,6 +82,8 @@ public class CashFilter extends AbstractFilter {
 			}
 			else{
 				logger.error("----【"+order.getPayNo()+"】[收银机支付异常] ---, 实际金额不应该大于原价");
+				String warningInfo = "[收银机支付异常]--- 收银机实际入账金额："+cashAmount+" 不应大于原价："+originAmount;
+				order.setWarningInfo(warningInfo);
 			}
 	}
 

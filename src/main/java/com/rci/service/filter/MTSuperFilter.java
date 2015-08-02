@@ -58,6 +58,8 @@ public class MTSuperFilter extends AbstractFilter {
 		if(onlineAmount.compareTo(payAmount) > 0){
 			order.setUnusual(YOrN.Y);
 			logger.warn("---【"+order.getPayNo()+"】[美团超级代金券支付异常]---，  在线支付金额："+onlineAmount+" , 实际最大在线支付金额：  "+payAmount+"， 不可在线支付金额："+nodiscountAmount);
+			String warningInfo = "[美团超级代金券支付异常]---   在线支付金额："+onlineAmount+" , 实际最大在线支付金额：  "+payAmount+"， 不可在线支付金额："+nodiscountAmount;
+			order.setWarningInfo(warningInfo);
 		}
 		
 		order.setSchemeName(schemeName);
