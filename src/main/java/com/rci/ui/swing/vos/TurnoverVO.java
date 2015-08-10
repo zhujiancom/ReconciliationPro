@@ -1,10 +1,9 @@
 package com.rci.ui.swing.vos;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class TurnoverVO {
-	private Date date;
+	private String displayTitle;
 	
 	private BigDecimal cashMachineAmount;
 	
@@ -20,6 +19,9 @@ public class TurnoverVO {
 	
 	private BigDecimal elebtAmount;
 	
+	/* 饿了么刷单补贴 */
+	private BigDecimal elesdAmount;
+	
 	private BigDecimal tddAmount;
 	
 	private BigDecimal posAmount;
@@ -32,16 +34,16 @@ public class TurnoverVO {
 	
 	private BigDecimal totalAmount;
 	
-	public TurnoverVO(Date date){
-		this.date = date;
+	public TurnoverVO(String displayTitle){
+		this.displayTitle = displayTitle;
 	}
 
-	public Date getDate() {
-		return date;
+	public String getDisplayTitle() {
+		return displayTitle;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDisplayTitle(String displayTitle) {
+		this.displayTitle = displayTitle;
 	}
 
 	public BigDecimal getCashMachineAmount() {
@@ -136,36 +138,7 @@ public class TurnoverVO {
 	 * @return the totalAmount
 	 */
 	public BigDecimal getTotalAmount() {
-//		totalAmount = BigDecimal.ZERO;
-//		if(cashMachineAmount != null){
-//			totalAmount = totalAmount.add(cashMachineAmount);
-//		}
-//		if(mtAmount != null){
-//			totalAmount = totalAmount.add(mtAmount);
-//		}
-//		if(mtSuperAmount != null){
-//			totalAmount = totalAmount.add(mtSuperAmount);
-//		}
-//		if(dptgAmount != null){
-//			totalAmount = totalAmount.add(dptgAmount);
-//		}
-//		if(dpshAmount != null){
-//			totalAmount = totalAmount.add(dpshAmount);
-//		}
-//		if(eleAmount != null){
-//			totalAmount = totalAmount.add(eleAmount);
-//		}
-//		/* 饿了么补贴金额  */
-//		if(elebtAmount != null){
-//			totalAmount = totalAmount.add(elebtAmount);
-//		}
-//		if(tddAmount != null){
-//			totalAmount = totalAmount.add(tddAmount);
-//		}
-//		if(posAmount != null){
-//			totalAmount = totalAmount.add(posAmount);
-//		}
-		return totalAmount;
+		return totalAmount == null ? BigDecimal.ZERO:totalAmount;
 	}
 
 	/**
@@ -173,6 +146,14 @@ public class TurnoverVO {
 	 */
 	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+
+	public BigDecimal getElesdAmount() {
+		return elesdAmount == null ? BigDecimal.ZERO:elesdAmount;
+	}
+
+	public void setElesdAmount(BigDecimal elesdAmount) {
+		this.elesdAmount = elesdAmount;
 	}
 
 }

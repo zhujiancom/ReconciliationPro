@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
@@ -39,8 +40,8 @@ public class POSFilter extends AbstractFilter {
 	 * @see com.rci.service.filter.CalculateFilter#support(java.util.Map)
 	 */
 	@Override
-	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(BusinessConstant.PAYMODE_POS);
+	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
+		return paymodeMapping.containsKey(PaymodeCode.POS);
 	}
 
 	/* 
@@ -48,7 +49,7 @@ public class POSFilter extends AbstractFilter {
 	 */
 	@Override
 	protected void generateScheme(Order order, FilterChain chain) {
-		BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_POS);
+		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.POS);
 		String schemeName = order.getSchemeName();
 		if(StringUtils.hasText(schemeName)){
 			schemeName = schemeName+","+"银联支付"+onlineAmount+"元";
@@ -63,7 +64,8 @@ public class POSFilter extends AbstractFilter {
 		BigDecimal postAmount = DigitUtil.mutiplyDown(onlineAmount, new BigDecimal("0.996"),3);
 		order.setSchemeName(schemeName);
 		//保存银联卡支付金额
-		preserveOAR(postAmount,BusinessConstant.POS_ACC,order);
+		preserveOAR(postAmount,AccountCode.POS,order);
+		preserveOAR(onlineAmount.subtract(postAmount),AccountCode.FREE_ONLINE,order);
 	}
 
 	/* 

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.rci.bean.entity.Order;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 
 public class FilterChain implements CalculateFilter {
 	LinkedList<CalculateFilter> filters = new LinkedList<CalculateFilter>();
@@ -35,7 +36,7 @@ public class FilterChain implements CalculateFilter {
 	}
 
 	@Override
-	public boolean support(Map<String, BigDecimal> paymodeMapping) {
+	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
 		throw new UnsupportedOperationException();
 	}
 

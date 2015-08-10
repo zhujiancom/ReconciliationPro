@@ -15,7 +15,8 @@ import org.springframework.stereotype.Component;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.Scheme;
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
@@ -29,14 +30,14 @@ public class ELEFilter extends AbstractFilter {
 	private static final Log logger = LogFactory.getLog(ELEFilter.class);
 
 	@Override
-	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(BusinessConstant.PAYMODE_ELE);
+	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
+		return paymodeMapping.containsKey(PaymodeCode.ELE);
 	}
 
 	@Override
 	public void generateScheme(Order order, FilterChain chain) {
-			BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_ELE);
-			BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
+			BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ELE);
+			BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
 			BigDecimal actualAmount = BigDecimal.ZERO;
 			
 			String schemeName = order.getSchemeName();
@@ -72,7 +73,8 @@ public class ELEFilter extends AbstractFilter {
 							freeMap.put(order.getPayNo(), freeAmount);
 						}
 						//保存饿了么补贴金额
-						preserveOAR(freeAmount,BusinessConstant.FREE_ELE_ACC,order);
+						preserveOAR(freeAmount,AccountCode.FREE_ELE,order);
+						preserveOAR(scheme.getSpread(),AccountCode.FREE_ONLINE,order);
 					}else{
 						logger.warn(order.getPayNo()+"---[饿了么 活动补贴] 没有找到匹配的Scheme -----");
 						String warningInfo = "[饿了么 活动补贴]--- 没有找到匹配的Scheme";
@@ -90,7 +92,7 @@ public class ELEFilter extends AbstractFilter {
 			}
 			order.setSchemeName(schemeName);
 			//保存饿了么在线支付金额
-			preserveOAR(onlineAmount,BusinessConstant.ELE_ACC,order);
+			preserveOAR(onlineAmount,AccountCode.ELE,order);
 	}
 
 

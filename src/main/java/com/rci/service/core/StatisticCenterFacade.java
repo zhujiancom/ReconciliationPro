@@ -101,4 +101,19 @@ public interface StatisticCenterFacade {
 	 * @return
 	 */
 	List<TurnoverVO> getTurnoverList(Date sdate,Date edate);
+	
+	/**
+	 * 
+	 * Describle(描述)：统计各账户的收入的总额
+	 *
+	 * 方法名称：getTrunoverSum
+	 *
+	 * 所在类名：StatisticCenterFacade
+	 *
+	 * Create Time:2015年8月3日 上午10:47:45
+	 *  
+	 * @param itmes
+	 * @return
+	 */
+//	TurnoverVO getTrunoverSum(List<TurnoverVO> itmes);
 }

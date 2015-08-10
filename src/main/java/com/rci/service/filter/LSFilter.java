@@ -15,7 +15,8 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
@@ -34,8 +35,8 @@ public class LSFilter extends AbstractFilter {
 	private Map<SchemeType, Integer> suitMap;
 	
 	@Override
-	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(BusinessConstant.PAYMODE_LS);
+	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
+		return paymodeMapping.containsKey(PaymodeCode.LS);
 	}
 
 	@Override
@@ -111,8 +112,8 @@ public class LSFilter extends AbstractFilter {
 			order.setNodiscountAmount(nodiscountAmount);
 		}
 		// 分析客户使用了哪些代金券
-		BigDecimal chitAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_LS);
-		BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
+		BigDecimal chitAmount = order.getPaymodeMapping().get(PaymodeCode.LS);
+		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
 		if(freeAmount!=null){
 			bediscountAmount = bediscountAmount.subtract(freeAmount);
 		}
@@ -122,7 +123,7 @@ public class LSFilter extends AbstractFilter {
 			logger.warn("---【损失单】【"+order.getPayNo()+"】[拉手网支付异常]---， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额");
 		}
 //		schemes.putAll(createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag));
-		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag);
+		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, PaymodeCode.LS,suitFlag);
 		if(!CollectionUtils.isEmpty(schemes)){
 			createTicketStatistic(order.getDay(), Vendor.LS, schemes);
 			String schemeName = order.getSchemeName();
@@ -139,7 +140,7 @@ public class LSFilter extends AbstractFilter {
 			}
 			order.setSchemeName(schemeName);
 			//保存账户关联信息
-			preserveOAR(postAmount,BusinessConstant.LS_ACC,order);
+			preserveOAR(postAmount,AccountCode.LS,order);
 		}
 	}
 

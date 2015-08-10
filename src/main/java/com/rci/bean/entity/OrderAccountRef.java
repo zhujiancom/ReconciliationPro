@@ -9,6 +9,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +20,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.rci.bean.entity.base.BaseEntity;
+import com.rci.enums.BusinessEnums.AccountCode;
 
 /**
  * @author zj
@@ -47,7 +50,7 @@ public class OrderAccountRef extends BaseEntity {
 	
 	private Long accId;
 	
-	private String accNo;
+	private AccountCode accNo;
 	
 	private BigDecimal realAmount;
 	
@@ -75,12 +78,13 @@ public class OrderAccountRef extends BaseEntity {
 		this.accId = accId;
 	}
 
+	@Enumerated(EnumType.STRING)
 	@Column(name="accno")
-	public String getAccNo() {
+	public AccountCode getAccNo() {
 		return accNo;
 	}
 
-	public void setAccNo(String accNo) {
+	public void setAccNo(AccountCode accNo) {
 		this.accNo = accNo;
 	}
 

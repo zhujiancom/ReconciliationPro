@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.account.Account;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.service.IAccountService;
 import com.rci.service.base.BaseServiceImpl;
 
@@ -32,9 +33,9 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implement
 	 * @see com.rci.service.IAccountService#getAccByNo(java.lang.String)
 	 */
 	@Override
-	public Account getAccByNo(String accNo) {
+	public Account getAccByNo(AccountCode accNo) {
 		DetachedCriteria dc = DetachedCriteria.forClass(Account.class);
-		dc.add(Restrictions.eq("accNo", accNo));
+		dc.add(Restrictions.eq("accNo", accNo.name()));
 		Account account = baseDAO.queryUniqueByCriteria(dc);
 		return account;
 	}

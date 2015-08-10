@@ -69,8 +69,11 @@ public class OrderVO {
 	/* 饿了么活动补贴免单金额  */
 	private BigDecimal eleFreeAmount;
 	
-	/* 正常免单金额 */
+	/* 堂食免单金额 */
 	private BigDecimal freeAmount;
+	
+	/* 在线免单金额  */
+	private BigDecimal onlineFreeAmount;
 	
 	/* 美团超级代金券金额*/
 	private BigDecimal mtSuperAmount;
@@ -421,6 +424,14 @@ public class OrderVO {
 
 	public void setWarningInfo(String warningInfo) {
 		this.warningInfo = warningInfo;
+	}
+
+	public BigDecimal getOnlineFreeAmount() {
+		return onlineFreeAmount;
+	}
+
+	public void setOnlineFreeAmount(BigDecimal onlineFreeAmount) {
+		this.onlineFreeAmount = onlineFreeAmount;
 	}
 
 }

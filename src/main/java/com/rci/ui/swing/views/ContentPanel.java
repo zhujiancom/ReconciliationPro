@@ -18,7 +18,7 @@ import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
 import com.rci.ui.swing.model.OrderItemTableModel;
 import com.rci.ui.swing.model.OrderTable;
-import com.rci.ui.swing.model.OrderTableModel;
+import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 
 public class ContentPanel extends JSplitPane {
 	/**

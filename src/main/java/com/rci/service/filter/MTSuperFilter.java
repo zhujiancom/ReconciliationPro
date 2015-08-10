@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
@@ -21,13 +22,13 @@ import com.rci.tools.StringUtils;
 public class MTSuperFilter extends AbstractFilter {
 
 	@Override
-	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(BusinessConstant.PAYMODE_MTSUPER);
+	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
+		return paymodeMapping.containsKey(PaymodeCode.MTSUPER);
 	}
 
 	@Override
 	protected void generateScheme(Order order, FilterChain chain) {
-		BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_MTSUPER);
+		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.MTSUPER);
 		/* 最大可在线支付金额 */
 		BigDecimal payAmount = BigDecimal.ZERO;
 		BigDecimal nodiscountAmount = BigDecimal.ZERO;
@@ -74,11 +75,12 @@ public class MTSuperFilter extends AbstractFilter {
 		BigDecimal count = onlineAmount.divideToIntegralValue(chitAmount);
 		BigDecimal singleActualAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(chitAmount, new BigDecimal("0.88")),new BigDecimal("0.99"));
 		BigDecimal totalChitAmount = DigitUtil.mutiplyDown(singleActualAmount, count);
-//		BigDecimal balance = onlineAmount.subtract(chitAmount.multiply(count)).subtract(BigDecimal.TEN);
 		BigDecimal balance = onlineAmount.subtract(chitAmount.multiply(count));
+		BigDecimal onlineFreeAmount = DigitUtil.mutiplyDown(chitAmount.subtract(singleActualAmount),count);
 		/* 入账金额  */
 		BigDecimal postAmount = totalChitAmount.add(balance);
-		preserveOAR(postAmount,BusinessConstant.MT_SUPER_ACC,order);
+		preserveOAR(postAmount,AccountCode.MT_SUPER,order);
+		preserveOAR(onlineFreeAmount,AccountCode.FREE_ONLINE,order);
 	}
 
 	@Override

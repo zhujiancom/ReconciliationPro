@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
@@ -23,13 +24,13 @@ import com.rci.tools.StringUtils;
 public class TDDFilter extends AbstractFilter {
 
 	@Override
-	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(BusinessConstant.PAYMODE_TDD);
+	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
+		return paymodeMapping.containsKey(PaymodeCode.TDD);
 	}
 
 	@Override
 	public void generateScheme(Order order,FilterChain chain) {
-		BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_TDD);
+		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.TDD);
 		BigDecimal totalAmount = BigDecimal.ZERO; //订单总金额
 		BigDecimal tddAmount = BigDecimal.ZERO; //淘点点支付金额
 		
@@ -53,11 +54,11 @@ public class TDDFilter extends AbstractFilter {
 			totalAmount = totalAmount.add(price);
 		}
 		BigDecimal otherAmount = BigDecimal.ZERO;
-		for(Iterator<Entry<String,BigDecimal>> it = order.getPaymodeMapping().entrySet().iterator();it.hasNext();){
-			Entry<String,BigDecimal> entry = it.next();
-			String paymode = entry.getKey();
+		for(Iterator<Entry<PaymodeCode,BigDecimal>> it = order.getPaymodeMapping().entrySet().iterator();it.hasNext();){
+			Entry<PaymodeCode,BigDecimal> entry = it.next();
+			PaymodeCode paymode = entry.getKey();
 			BigDecimal amount = entry.getValue();
-			if(!BusinessConstant.PAYMODE_TDD.equals(paymode)){
+			if(!PaymodeCode.TDD.equals(paymode)){
 				otherAmount = otherAmount.add(amount);
 			}
 		}
@@ -70,7 +71,7 @@ public class TDDFilter extends AbstractFilter {
 		}
 		order.setSchemeName(schemeName);
 		//保存淘点点在线支付金额
-		preserveOAR(tddAmount,BusinessConstant.TDD_ACC,order);
+		preserveOAR(tddAmount,AccountCode.TDD,order);
 	}
 
 	@Override

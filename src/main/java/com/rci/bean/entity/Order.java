@@ -24,6 +24,7 @@ import javax.persistence.Transient;
 
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.base.BaseEntity;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums;
 import com.rci.tools.StringUtils;
@@ -59,7 +60,7 @@ public class Order extends BaseEntity {
 	private BigDecimal originPrice;
 	
 	/* 订单支付方式对应金额 */
-	private Map<String,BigDecimal> paymodeMapping=new HashMap<String,BigDecimal>();
+	private Map<PaymodeCode,BigDecimal> paymodeMapping=new HashMap<PaymodeCode,BigDecimal>();
 	
 	/* 订单所有的支付方式 ，用(,)逗号分割*/
 	private String paymodes;
@@ -201,14 +202,14 @@ public class Order extends BaseEntity {
 	 * @return the paymodeMapping
 	 */
 	@Transient
-	public Map<String, BigDecimal> getPaymodeMapping() {
+	public Map<PaymodeCode, BigDecimal> getPaymodeMapping() {
 		return paymodeMapping;
 	}
 
 	/**
 	 * @param paymodeMapping the paymodeMapping to set
 	 */
-	public void setPaymodeMapping(Map<String, BigDecimal> paymodeMapping) {
+	public void setPaymodeMapping(Map<PaymodeCode, BigDecimal> paymodeMapping) {
 		this.paymodeMapping = paymodeMapping;
 	}
 
@@ -365,7 +366,7 @@ public class Order extends BaseEntity {
 	 * @param amount
 	 */
 	public void addPayMode(String paymodeNo,BigDecimal amount){
-		paymodeMapping.put(paymodeNo, amount);
+		paymodeMapping.put(PaymodeCode.paymodeCode(paymodeNo), amount);
 		if(!StringUtils.hasLength(paymodes)){
 			paymodes = paymodeNo;
 		}else{

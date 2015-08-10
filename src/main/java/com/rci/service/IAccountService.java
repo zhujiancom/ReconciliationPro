@@ -4,6 +4,7 @@
 package com.rci.service;
 
 import com.rci.bean.entity.account.Account;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.service.base.IBaseService;
 
 /**
@@ -34,7 +35,7 @@ public interface IAccountService extends IBaseService<Account, Long>{
 	 * @param accNo
 	 * @return
 	 */
-	Account getAccByNo(String accNo);
+	Account getAccByNo(AccountCode accNo);
 	
 	/**
 	 * 

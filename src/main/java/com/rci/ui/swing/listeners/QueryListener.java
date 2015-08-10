@@ -21,6 +21,7 @@ import javax.swing.table.TableColumnModel;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.EleSDStatistic;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
@@ -35,7 +36,7 @@ import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
 import com.rci.ui.swing.model.OrderItemTableModel;
-import com.rci.ui.swing.model.OrderTableModel;
+import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
 import com.rci.ui.swing.views.QueryFormPanel;
@@ -52,7 +53,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private IDataLoaderService loaderService;
 	private StatisticCenterFacade facade;
 	private IOrderAccountRefService oaService;
-	private Map<String,BigDecimal> sumMap;
+	private Map<AccountCode,BigDecimal> sumMap;
 	private List<OrderVO> orders;
 	private String time;
 	
@@ -280,7 +281,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		return facade.getSDAllowanceAmount(date);
 	}
 	
-	public BigDecimal getTotalAmount(String accountNo){
+	public BigDecimal getTotalAmount(AccountCode accountNo){
 		return sumMap.get(accountNo) == null? BigDecimal.ZERO:sumMap.get(accountNo);
 	}
 	
@@ -301,7 +302,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	public Long getValidCount(String time,Vendor vendor){
 		try {
 			Date postTime = DateUtil.parseDate(time,"yyyyMMdd");
-			return oaService.getValidOrderCount(postTime, vendor);
+			return oaService.getValidOrderCount(postTime, AccountCode.valueOf(vendor.name()));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -309,11 +310,11 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	}
 	
 	private void loadSumData(String time){
-		sumMap = new HashMap<String,BigDecimal>();
+		sumMap = new HashMap<AccountCode,BigDecimal>();
 		try {
 			List<AccountSumResult> sumRes = oaService.querySumAmount(DateUtil.parseDate(time, "yyyyMMdd"));
 			for(AccountSumResult res:sumRes){
-				String accNo = res.getAccNo();
+				AccountCode accNo = res.getAccNo();
 				BigDecimal amount = res.getSumAmount();
 				sumMap.put(accNo, amount);
 			}

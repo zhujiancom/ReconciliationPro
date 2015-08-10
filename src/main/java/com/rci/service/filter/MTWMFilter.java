@@ -15,7 +15,8 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.Scheme;
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
@@ -34,14 +35,14 @@ public class MTWMFilter extends AbstractFilter {
 	private static final Log logger = LogFactory.getLog(MTWMFilter.class);
 	
 	@Override
-	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(BusinessConstant.PAYMODE_MTWM);
+	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
+		return paymodeMapping.containsKey(PaymodeCode.MTWM);
 	}
 
 	@Override
 	public void generateScheme(Order order,FilterChain chain) {
-		BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_MTWM);
-		BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
+		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.MTWM);
+		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
 		BigDecimal totalAmount = BigDecimal.ZERO;
 		
 		String schemeName = order.getSchemeName();
@@ -86,7 +87,7 @@ public class MTWMFilter extends AbstractFilter {
 							}
 							schemeName = ","+schemeName+scheme.getName();
 							//保存美团外卖补贴金额
-							preserveOAR(realFreeAmount,BusinessConstant.FREE_MTWM_ACC,order);
+							preserveOAR(realFreeAmount,AccountCode.FREE_MTWM,order);
 							break;
 						}else if(freeAmount.equals(scheme.getFloorAmount()) && freeAmount.equals(scheme.getCeilAmount())){
 							//新用户下单
@@ -96,7 +97,7 @@ public class MTWMFilter extends AbstractFilter {
 							}
 							schemeName = ","+schemeName+scheme.getName();
 							//保存美团外卖补贴金额
-							preserveOAR(realFreeAmount,BusinessConstant.FREE_MTWM_ACC,order);
+							preserveOAR(realFreeAmount,AccountCode.FREE_MTWM,order);
 							break;
 						}else{
 							logger.debug(order.getPayNo()+"--- 【美团外卖方案】："+scheme.getName()+" 不匹配！");
@@ -113,7 +114,7 @@ public class MTWMFilter extends AbstractFilter {
 		}
 		order.setSchemeName(schemeName);
 		//保存美团外卖在线支付金额
-		preserveOAR(onlineAmount,BusinessConstant.MTWM_ACC,order);
+		preserveOAR(onlineAmount,AccountCode.MTWM,order);
 	}
 
 	@Override

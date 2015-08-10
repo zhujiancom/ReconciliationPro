@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
@@ -25,13 +26,13 @@ import com.rci.tools.StringUtils;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class CashFilter extends AbstractFilter {
 	@Override
-	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(BusinessConstant.PAYMODE_CASHMACHINE);
+	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
+		return paymodeMapping.containsKey(PaymodeCode.CASH_MACHINE);
 	}
 
 	@Override
 	public void generateScheme(Order order,FilterChain chain) {
-			BigDecimal cashAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_CASHMACHINE);
+			BigDecimal cashAmount = order.getPaymodeMapping().get(PaymodeCode.CASH_MACHINE);
 			BigDecimal originAmount = order.getOriginPrice();
 			BigDecimal actualAmount = BigDecimal.ZERO;
 			List<OrderItem> items = order.getItems();
@@ -68,7 +69,7 @@ public class CashFilter extends AbstractFilter {
 					schemeName = "店内现金优惠-"+actualAmount;
 				}
 				order.setSchemeName(schemeName);
-				preserveOAR(actualAmount, BusinessConstant.CASHMACHINE_ACC, order);
+				preserveOAR(actualAmount, AccountCode.CASH_MACHINE, order);
 			}
 			else if(actualAmount.compareTo(originAmount)==0){
 				//无折扣
@@ -78,7 +79,7 @@ public class CashFilter extends AbstractFilter {
 					schemeName = "现金支付-"+cashAmount;
 				}
 				order.setSchemeName(schemeName);
-				preserveOAR(cashAmount, BusinessConstant.CASHMACHINE_ACC, order);
+				preserveOAR(cashAmount, AccountCode.CASH_MACHINE, order);
 			}
 			else{
 				logger.error("----【"+order.getPayNo()+"】[收银机支付异常] ---, 实际金额不应该大于原价");

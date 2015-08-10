@@ -12,7 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.EleSDStatistic;
 import com.rci.bean.entity.TicketStatistic;
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IOrderAccountRefService;
@@ -120,6 +120,7 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 	@Override
 	public List<TurnoverVO> getTurnoverList(Date sdate, Date edate) {
 		List<TurnoverVO> resultList = new ArrayList<TurnoverVO>();
+		TurnoverVO sum = new TurnoverVO("总计");
 		if(edate == null){
 			edate = DateUtil.getCurrentDate();
 		}
@@ -128,6 +129,7 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 			TurnoverVO vo = buildTurnoverVO(position);
 			if(vo != null){
 				resultList.add(vo);
+				buildTurnoverSum(sum,vo);
 			}
 			position = DateUtil.addDays(position, -1);
 		}
@@ -136,55 +138,68 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 			TurnoverVO vo = buildTurnoverVO(position);
 			if(vo != null){
 				resultList.add(vo);
+				buildTurnoverSum(sum,vo);
 			}
 		}
+		resultList.add(sum);
 		return resultList;
+	}
+	
+	private TurnoverVO buildTurnoverSum(TurnoverVO sum,TurnoverVO item){
+		if(sum == null){
+			sum = new TurnoverVO("总计");
+		}
+		sum.setCashMachineAmount(sum.getCashMachineAmount().add(item.getCashMachineAmount()));
+		sum.setDpshAmount(sum.getDpshAmount().add(item.getDpshAmount()));
+		sum.setDptgAmount(sum.getDptgAmount().add(item.getDptgAmount()));
+		sum.setEleAmount(sum.getEleAmount().add(item.getEleAmount()));
+		sum.setElebtAmount(sum.getElebtAmount().add(item.getElebtAmount()));
+		sum.setElesdAmount(sum.getElesdAmount().add(item.getElesdAmount()));
+		sum.setMtAmount(sum.getMtAmount().add(item.getMtAmount()));
+		sum.setMtSuperAmount(sum.getMtSuperAmount().add(item.getMtSuperAmount()));
+		sum.setOnlineFreeAmount(sum.getOnlineFreeAmount().add(item.getOnlineFreeAmount()));
+		sum.setPosAmount(sum.getPosAmount().add(item.getPosAmount()));
+		sum.setTddAmount(sum.getTddAmount().add(item.getTddAmount()));
+		sum.setTsFreeAmount(sum.getTsFreeAmount().add(item.getTsFreeAmount()));
+		sum.setTotalAmount(sum.getTotalAmount().add(item.getTotalAmount()));
+		return sum;
 	}
 	
 	private TurnoverVO buildTurnoverVO(Date position){
 		List<AccountSumResult> results = oarService.querySumAmount(position);
 		if(!CollectionUtils.isEmpty(results)){
-			TurnoverVO vo = new TurnoverVO(position);
+			TurnoverVO vo = new TurnoverVO(DateUtil.date2Str(position));
 			BigDecimal totalAmount = BigDecimal.ZERO;
 			for(AccountSumResult sumResult:results){
-				String accountNo = sumResult.getAccNo();
+				AccountCode accountNo = sumResult.getAccNo();
 				BigDecimal amount = sumResult.getSumAmount();
 				totalAmount = totalAmount.add(amount);
-				if (BusinessConstant.CASHMACHINE_ACC.equals(accountNo)) {
-					vo.setCashMachineAmount(amount);
-				}
-				if (BusinessConstant.POS_ACC.equals(accountNo)) {
-					vo.setPosAmount(amount);
-				}
-				if (BusinessConstant.MT_ACC.equals(accountNo)) {
-					vo.setMtAmount(amount);
-				}
-				if (BusinessConstant.DPTG_ACC.equals(accountNo)) {
-					vo.setDptgAmount(amount);
-				}
-				if (BusinessConstant.DPSH_ACC.equals(accountNo)) {
-					vo.setDpshAmount(amount);
-				}
-				if (BusinessConstant.ELE_ACC.equals(accountNo)) {
-					vo.setEleAmount(amount);
-				}
-				if (BusinessConstant.TDD_ACC.equals(accountNo)) {
-					vo.setTddAmount(amount);
-				}
-				if (BusinessConstant.FREE_ELE_ACC.equals(accountNo)) {
-					vo.setElebtAmount(amount);
-				}
-				if (BusinessConstant.MT_SUPER_ACC.equals(accountNo)){
-					vo.setMtSuperAmount(amount);
-				}
-				if (BusinessConstant.FREE_ACC.equals(accountNo)) {
+				switch(accountNo){
+				case CASH_MACHINE:vo.setCashMachineAmount(amount);break;
+				case POS:vo.setPosAmount(amount);break;
+				case MT:vo.setMtAmount(amount);break;
+				case DPTG:vo.setDptgAmount(amount);break;
+				case DPSH:vo.setDpshAmount(amount);break;
+				case ELE:vo.setEleAmount(amount);break;
+				case FREE_ELE:vo.setElebtAmount(amount);break;
+				case TDD:vo.setTddAmount(amount);break;
+				case MT_SUPER:vo.setMtSuperAmount(amount);break;
+				case FREE:
 					vo.setTsFreeAmount(amount);
 					totalAmount = totalAmount.subtract(amount);
-				}
-				if (BusinessConstant.FREE_ONLINE_ACC.equals(accountNo)){
+					break;
+				case FREE_ONLINE:
 					vo.setOnlineFreeAmount(amount);
 					totalAmount = totalAmount.subtract(amount);
+					break;
+				default:
+						break;
 				}
+			}
+			BigDecimal elesdAmount = getSDAllowanceAmount(position);
+			if(elesdAmount != null){
+				vo.setElesdAmount(elesdAmount);
+				totalAmount = totalAmount.add(elesdAmount);
 			}
 			vo.setTotalAmount(totalAmount);
 			return vo;

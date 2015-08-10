@@ -34,7 +34,6 @@ import com.rci.ui.swing.vos.TurnoverVO;
 public class TurnoverWinBuilder implements PopWindowBuilder {
 	private JPanel queryPane;
 	private JScrollPane contentPane;
-	private JPanel conclusionPane;
 	private JTable table;
 	private JTextField sdateInput;
 	private JTextField edateInput;
@@ -70,7 +69,8 @@ public class TurnoverWinBuilder implements PopWindowBuilder {
 
 	@Override
 	public void createContentPane() {
-		table = new TurnoverTable(13);
+		table = new TurnoverTable(14);
+		((TurnoverTable)table).makeStatisticRowFace();
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		contentPane = new JScrollPane(table);
 		contentPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

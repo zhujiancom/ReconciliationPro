@@ -21,6 +21,8 @@ import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.TicketStatistic;
 import com.rci.bean.entity.account.Account;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
@@ -122,7 +124,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 * @param suitFlag
 	 * @return
 	 */
-	protected Map<SchemeType,SchemeWrapper> createSchemes(BigDecimal amount, String paymodeno,boolean suitFlag) {
+	protected Map<SchemeType,SchemeWrapper> createSchemes(BigDecimal amount, PaymodeCode paymode,boolean suitFlag) {
 		Map<SchemeType,SchemeWrapper> schemes = new HashMap<SchemeType,SchemeWrapper>();
 		BigDecimal suitAmount = BigDecimal.ZERO;
 		// 1.如果有套餐
@@ -131,7 +133,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 				Entry<SchemeType, Integer> entry = it.next();
 				SchemeType type = entry.getKey();
 				Integer count = entry.getValue();
-				Scheme scheme = schemeService.getScheme(type, paymodeno);
+				Scheme scheme = schemeService.getScheme(type, paymode.getPaymodeno());
 				BigDecimal suitPrice = scheme.getPrice();
 				suitAmount = suitAmount.add(suitPrice.multiply(new BigDecimal(count)));
 				SchemeWrapper schemewrapper = new SchemeWrapper(scheme,count);
@@ -139,7 +141,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 			}
 		}
 		BigDecimal leftAmount = amount.subtract(suitAmount);
-		loopSchemes(leftAmount.intValue(),schemes,paymodeno);
+		loopSchemes(leftAmount.intValue(),schemes,paymode.getPaymodeno());
 		return schemes;
 	}
 	
@@ -222,6 +224,27 @@ public abstract class AbstractFilter implements CalculateFilter {
 	
 	/**
 	 * 
+	 * Describle(描述)：计算代金券优惠金额
+	 *
+	 * 方法名称：calculateOnlineFreeAmount
+	 *
+	 * 所在类名：AbstractFilter
+	 *
+	 * Create Time:2015年8月3日 下午4:28:36
+	 *  
+	 * @param scheme
+	 * @param count
+	 * @return
+	 */
+	protected BigDecimal calculateOnlineFreeAmount(Scheme scheme,Integer count){
+		BigDecimal onlineFreeAmount = BigDecimal.ZERO;
+		BigDecimal singlePrice = scheme.getPrice().subtract(scheme.getPostPrice());
+		onlineFreeAmount = DigitUtil.mutiplyDown(singlePrice,new BigDecimal(count));
+		return onlineFreeAmount;
+	}
+	
+	/**
+	 * 
 	 *
 	 * Describle(描述)：保存订单和账户关联信息
 	 *
@@ -235,7 +258,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 * @param accNo
 	 * @param order
 	 */
-	protected void preserveOAR(BigDecimal postAmount,String accNo,Order order){
+	protected void preserveOAR(BigDecimal postAmount,AccountCode accNo,Order order){
 		OrderAccountRef oar = new OrderAccountRef();
 		Account account = accService.getAccByNo(accNo);
 		oar.setAccId(account.getAccId());

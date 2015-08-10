@@ -15,7 +15,8 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
@@ -27,8 +28,8 @@ import com.rci.tools.StringUtils;
 public class MTFilter extends AbstractFilter {
 	private Map<SchemeType, Integer> suitMap;
 	@Override
-	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(BusinessConstant.PAYMODE_MT);
+	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
+		return paymodeMapping.containsKey(PaymodeCode.MT);
 	}
 
 	@Override
@@ -104,8 +105,8 @@ public class MTFilter extends AbstractFilter {
 				order.setNodiscountAmount(nodiscountAmount);
 			}
 			// 分析客户使用了哪些代金券
-			BigDecimal chitAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_MT);
-			BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_FREE);
+			BigDecimal chitAmount = order.getPaymodeMapping().get(PaymodeCode.MT);
+			BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
 			if(freeAmount!=null){
 				bediscountAmount = bediscountAmount.subtract(freeAmount);
 			}
@@ -116,11 +117,12 @@ public class MTFilter extends AbstractFilter {
 				String warningInfo = "[美团支付异常]--- 实际支付金额："+chitAmount+" ,可打折金额： "+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额";
 				order.setWarningInfo(warningInfo);
 			}
-			Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, BusinessConstant.PAYMODE_MT,suitFlag);
+			Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, PaymodeCode.MT,suitFlag);
 			if(!CollectionUtils.isEmpty(schemes)){
 				createTicketStatistic(order.getDay(), Vendor.MT, schemes);
 				String schemeName = order.getSchemeName();
 				BigDecimal postAmount = BigDecimal.ZERO;
+				BigDecimal onlineFreeAmount = BigDecimal.ZERO;
 				for(Iterator<Entry<SchemeType,SchemeWrapper>> it=schemes.entrySet().iterator();it.hasNext();){
 					Entry<SchemeType,SchemeWrapper> entry = it.next();
 					SchemeWrapper wrapper = entry.getValue();
@@ -130,10 +132,12 @@ public class MTFilter extends AbstractFilter {
 						schemeName = wrapper.getName();
 					}
 					postAmount = postAmount.add(calculateTG(wrapper.getScheme(), wrapper.getCount()));
+					onlineFreeAmount = onlineFreeAmount.add(calculateOnlineFreeAmount(wrapper.getScheme(), wrapper.getCount()));
 				}
 				order.setSchemeName(schemeName);
 				//保存账户关联信息
-				preserveOAR(postAmount,BusinessConstant.MT_ACC,order);
+				preserveOAR(postAmount,AccountCode.MT,order);
+				preserveOAR(onlineFreeAmount,AccountCode.FREE_ONLINE,order);
 			}
 	}
 

@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
@@ -24,13 +25,13 @@ public class DPSHFilter extends AbstractFilter {
 	private static final Log logger = LogFactory.getLog(DPSHFilter.class);
 	
 	@Override
-	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(BusinessConstant.PAYMODE_DPSH);
+	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
+		return paymodeMapping.containsKey(PaymodeCode.DPSH);
 	}
 
 	@Override
 	protected void generateScheme(Order order, FilterChain chain) {
-		BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.PAYMODE_DPSH);
+		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.DPSH);
 		/* 不能使用闪惠支付的菜品总额 。 即酒水和配料 */
 		BigDecimal nodiscountAmount = BigDecimal.ZERO;
 		BigDecimal totalAmount = BigDecimal.ZERO;
@@ -74,7 +75,8 @@ public class DPSHFilter extends AbstractFilter {
 		
 		order.setSchemeName(schemeName);
 		//保存大众闪惠实际到账金额
-		preserveOAR(actualAmount,BusinessConstant.DPSH_ACC,order);
+		preserveOAR(actualAmount,AccountCode.DPSH,order);
+		preserveOAR(freeAmount,AccountCode.FREE_ONLINE,order);
 	}
 
 	@Override

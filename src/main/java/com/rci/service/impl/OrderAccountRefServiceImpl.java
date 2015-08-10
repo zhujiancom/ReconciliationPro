@@ -12,7 +12,7 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.OrderAccountRef;
-import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.base.BaseServiceImpl;
 
@@ -54,7 +54,9 @@ public class OrderAccountRefServiceImpl extends
 
 			@Override
 			public Object transformTuple(Object[] tuple, String[] aliases) {
-				return new AccountSumResult((Long)tuple[2],(String)tuple[1],(BigDecimal)tuple[0]);
+				String accountNo = tuple[1].toString();
+				AccountCode accCode = AccountCode.valueOf(accountNo);
+				return new AccountSumResult((Long)tuple[2],accCode,(BigDecimal)tuple[0]);
 			}
 			
 			@SuppressWarnings("rawtypes")
@@ -69,11 +71,11 @@ public class OrderAccountRefServiceImpl extends
 	public static class AccountSumResult{
 		private Long accId;
 		
-		private String accNo;
+		private AccountCode accNo;
 		
 		private BigDecimal sumAmount;
 
-		public AccountSumResult(Long accId, String accNo, BigDecimal sumAmount) {
+		public AccountSumResult(Long accId, AccountCode accNo, BigDecimal sumAmount) {
 			super();
 			this.accId = accId;
 			this.accNo = accNo;
@@ -88,11 +90,11 @@ public class OrderAccountRefServiceImpl extends
 			this.accId = accId;
 		}
 
-		public String getAccNo() {
+		public AccountCode getAccNo() {
 			return accNo;
 		}
 
-		public void setAccNo(String accNo) {
+		public void setAccNo(AccountCode accNo) {
 			this.accNo = accNo;
 		}
 
@@ -106,9 +108,9 @@ public class OrderAccountRefServiceImpl extends
 	}
 
 	@Override
-	public Long getValidOrderCount(Date postTime, Vendor vendor) {
+	public Long getValidOrderCount(Date postTime, AccountCode account) {
 		DetachedCriteria dc = DetachedCriteria.forClass(OrderAccountRef.class);
-		dc.setProjection(Projections.projectionList().add(Projections.rowCount())).add(Restrictions.eq("accNo", vendor.name())).add(Restrictions.eq("postTime", postTime));
+		dc.setProjection(Projections.projectionList().add(Projections.rowCount())).add(Restrictions.eq("accNo", account)).add(Restrictions.eq("postTime", postTime));
 		Long count = baseDAO.getRowCount(dc);
 		return count;
 	}

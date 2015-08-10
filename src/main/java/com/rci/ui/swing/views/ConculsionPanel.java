@@ -12,7 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.listeners.QueryListener;
@@ -254,17 +254,17 @@ public class ConculsionPanel extends JPanel {
 	
 	public void updateUI(QueryListener listener) throws ParseException {
 		String time = listener.getTime();
-		getCashValue().setText(listener.getTotalAmount(BusinessConstant.CASHMACHINE_ACC).toString());
-		getPosValue().setText(listener.getTotalAmount(BusinessConstant.POS_ACC).toString());
-		getMtValue().setText(listener.getTotalAmount(BusinessConstant.MT_ACC).toString());
-		getTgValue().setText(listener.getTotalAmount(BusinessConstant.DPTG_ACC).toString());
-		getShValue().setText(listener.getTotalAmount(BusinessConstant.DPSH_ACC).toString());
-		getEleValue().setText(listener.getTotalAmount(BusinessConstant.ELE_ACC).toString());
-		getEleFreeValue().setText(listener.getTotalAmount(BusinessConstant.FREE_ELE_ACC).toString());
+		getCashValue().setText(listener.getTotalAmount(AccountCode.CASH_MACHINE).toString());
+		getPosValue().setText(listener.getTotalAmount(AccountCode.POS).toString());
+		getMtValue().setText(listener.getTotalAmount(AccountCode.MT).toString());
+		getTgValue().setText(listener.getTotalAmount(AccountCode.DPTG).toString());
+		getShValue().setText(listener.getTotalAmount(AccountCode.DPSH).toString());
+		getEleValue().setText(listener.getTotalAmount(AccountCode.ELE).toString());
+		getEleFreeValue().setText(listener.getTotalAmount(AccountCode.FREE_ELE).toString());
 		getEleSdRemark().setText(listener.getELESDAllowanceAmount(DateUtil.parseDate(time, "yyyyMMdd")));
-		getTddValue().setText(listener.getTotalAmount(BusinessConstant.TDD_ACC).toString());
-		getMtSuperValue().setText(listener.getTotalAmount(BusinessConstant.MT_SUPER_ACC).toString());
-		getFreeValue().setText(listener.getTotalAmount(BusinessConstant.FREE_ACC).toString());
+		getTddValue().setText(listener.getTotalAmount(AccountCode.TDD).toString());
+		getMtSuperValue().setText(listener.getTotalAmount(AccountCode.MT_SUPER).toString());
+		getFreeValue().setText(listener.getTotalAmount(AccountCode.FREE).toString());
 		getTotalValue().setText(listener.getTotalDayAmount(time).toString());
 		getTgRemark().setText(listener.getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.DZDP));
 		getMtRemark().setText(listener.getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.MT));

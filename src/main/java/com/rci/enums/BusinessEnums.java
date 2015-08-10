@@ -1,5 +1,8 @@
 package com.rci.enums;
 
+import java.util.EnumSet;
+
+
 public final class BusinessEnums {
 	private BusinessEnums(){}
 	
@@ -107,5 +110,37 @@ public final class BusinessEnums {
 		 * 正常消费
 		 */
 		CONSUME
+	}
+	
+	public static enum AccountCode{
+		MT,MTWM,MT_SUPER,FREE_MT_SUPER,DPTG,DPSH,
+		ELE,TDD,FREE,FREE_ONLINE,FREE_MTWM,FREE_ELE,
+		CASH_MACHINE,POS,LS;
+	}
+	
+	public static enum PaymodeCode{
+		CASH_MACHINE("00"),ELE("11"),MTWM("12"),
+		TDD("96"),DPTG("98"),LS(""),DPSH("13"),
+		MT("99"),FREE("YY"),MTSUPER("87"),POS("03"),
+		UNKNOW("");
+		
+		private String paymodeno;
+		private PaymodeCode(String paymodeno){
+			this.paymodeno = paymodeno;
+		}
+		
+		public String getPaymodeno(){
+			return paymodeno;
+		}
+		
+		public static PaymodeCode paymodeCode(String payno){
+			EnumSet<PaymodeCode> enumSet = EnumSet.allOf(PaymodeCode.class);
+			for(PaymodeCode code:enumSet){
+				if(code.getPaymodeno().equals(payno)){
+					return code;
+				}
+			}
+			return UNKNOW;
+		}
 	}
 }
