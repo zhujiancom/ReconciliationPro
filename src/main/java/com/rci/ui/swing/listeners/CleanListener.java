@@ -21,14 +21,21 @@ public class CleanListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String time = queryPanel.getTimeInput().getText();
-		try{
-			contentPane.clearData(time);
-			conclusionPane.clearData();
-			JOptionPane.showMessageDialog(null, "日期："+time+" 数据清除成功！");
-		}catch(ServiceException se){
-			JOptionPane.showMessageDialog(null, se.getMessage());
-		}
+		final String time = queryPanel.getTimeInput().getText();
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				try{
+					contentPane.clearData(time);
+					conclusionPane.clearData();
+					JOptionPane.showMessageDialog(null, "日期："+time+" 数据清除成功！");
+				}catch(ServiceException se){
+					JOptionPane.showMessageDialog(null, se.getMessage());
+				}
+			}
+			
+		}).start();;
 	}
 
 	public ConculsionPanel getConclusionPane() {

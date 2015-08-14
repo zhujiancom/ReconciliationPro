@@ -16,7 +16,8 @@ import com.rci.service.core.DataCleanFacade;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
-import com.rci.ui.swing.model.OrderItemTableModel;
+import com.rci.ui.swing.model.OrderItemTable;
+import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
 import com.rci.ui.swing.model.OrderTable;
 import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 
@@ -46,7 +47,7 @@ public class ContentPanel extends JSplitPane {
 		rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));
 		JScrollPane rTopScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		rTopScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		itemTable = new JTable();
+		itemTable = new OrderItemTable();
 		rTopScrollPane.setViewportView(itemTable);
 		
 		textArea = new JTextArea(10,0);

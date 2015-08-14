@@ -27,6 +27,8 @@ public class OrderTable extends JTable {
 	public OrderTable(){
 		super(new OrderTableModel(20));
 		setHeaderLabel();
+		this.setRowHeight(20);
+		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 	
 	public void setHeaderLabel(){

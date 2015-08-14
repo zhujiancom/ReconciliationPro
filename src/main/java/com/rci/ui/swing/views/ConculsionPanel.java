@@ -5,17 +5,26 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.math.BigDecimal;
-import java.text.ParseException;
+import java.math.BigInteger;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.springframework.util.CollectionUtils;
+
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.service.IOrderAccountRefService;
+import com.rci.service.IOrderService;
+import com.rci.service.core.StatisticCenterFacade;
 import com.rci.tools.DateUtil;
-import com.rci.ui.swing.listeners.QueryListener;
+import com.rci.tools.SpringUtils;
+import com.rci.ui.swing.vos.OrderVO;
 
 public class ConculsionPanel extends JPanel {
 	/**
@@ -42,9 +51,13 @@ public class ConculsionPanel extends JPanel {
 	private JLabel freeValue;
 	private JLabel totalValue;
 //	private JLabel expRateValue; //外送率
+	private Map<AccountCode,BigDecimal> sumMap;
+	private Date queryDate;  //统计日期
+	private StatisticCenterFacade facade;
 	
 	public ConculsionPanel(){
 		buildPane();
+		facade = (StatisticCenterFacade) SpringUtils.getBean("StatisticCenterFacade");
 	}
 	
 	/**
@@ -252,27 +265,123 @@ public class ConculsionPanel extends JPanel {
 //		expRateValue.setText("");
 	}
 	
-	public void updateUI(QueryListener listener) throws ParseException {
-		String time = listener.getTime();
-		getCashValue().setText(listener.getTotalAmount(AccountCode.CASH_MACHINE).toString());
-		getPosValue().setText(listener.getTotalAmount(AccountCode.POS).toString());
-		getMtValue().setText(listener.getTotalAmount(AccountCode.MT).toString());
-		getTgValue().setText(listener.getTotalAmount(AccountCode.DPTG).toString());
-		getShValue().setText(listener.getTotalAmount(AccountCode.DPSH).toString());
-		getEleValue().setText(listener.getTotalAmount(AccountCode.ELE).toString());
-		getEleFreeValue().setText(listener.getTotalAmount(AccountCode.FREE_ELE).toString());
-		getEleSdRemark().setText(listener.getELESDAllowanceAmount(DateUtil.parseDate(time, "yyyyMMdd")));
-		getTddValue().setText(listener.getTotalAmount(AccountCode.TDD).toString());
-		getMtSuperValue().setText(listener.getTotalAmount(AccountCode.MT_SUPER).toString());
-		getFreeValue().setText(listener.getTotalAmount(AccountCode.FREE).toString());
-		getTotalValue().setText(listener.getTotalDayAmount(time).toString());
-		getTgRemark().setText(listener.getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.DZDP));
-		getMtRemark().setText(listener.getTicketStatistic(DateUtil.parseDate(time, "yyyyMMdd"),Vendor.MT));
-		getEleRemark().setText(listener.getValidCount(time, Vendor.ELE));
-//		getExpRateValue().setText(listener.getExpressRateStatistic(time));
-//		mtwmValue.setText(getTotalAmount(BusinessConstant.MTWM_ACC).toString());
-//		mtwmFreeValue.setText(getTotalAmount(BusinessConstant.FREE_MTWM_ACC).toString());
-//		lsValue.setText(getTotalAmount(BusinessConstant.LS_ACC).toString());		
+	public void refreshUI() {
+		getCashValue().setText(getTotalAmount(AccountCode.CASH_MACHINE).toString());
+		getPosValue().setText(getTotalAmount(AccountCode.POS).toString());
+		getMtValue().setText(getTotalAmount(AccountCode.MT).toString());
+		getTgValue().setText(getTotalAmount(AccountCode.DPTG).toString());
+		getShValue().setText(getTotalAmount(AccountCode.DPSH).toString());
+		getEleValue().setText(getTotalAmount(AccountCode.ELE).toString());
+		getEleFreeValue().setText(getTotalAmount(AccountCode.FREE_ELE).toString());
+		getEleSdRemark().setText(getELESDAllowanceAmount(queryDate));
+		getTddValue().setText(getTotalAmount(AccountCode.TDD).toString());
+		getMtSuperValue().setText(getTotalAmount(AccountCode.MT_SUPER).toString());
+		getFreeValue().setText(getTotalAmount(AccountCode.FREE).toString());
+		getTotalValue().setText(getTotalDayAmount(queryDate).toString());
+		getTgRemark().setText(getTicketStatistic(queryDate,Vendor.DZDP));
+		getMtRemark().setText(getTicketStatistic(queryDate,Vendor.MT));
+		getEleRemark().setText(getValidCount(queryDate, Vendor.ELE));
+	}
+	
+	/**
+	 * 
+	 * Describle(描述)： 统计不同账户今日的入账总额
+	 *
+	 * 方法名称：getTotalAmount
+	 *
+	 * 所在类名：OrderDataLoader
+	 *
+	 * Create Time:2015年8月14日 下午3:14:55
+	 *  
+	 * @param accountNo
+	 * @return
+	 */
+	public BigDecimal getTotalAmount(AccountCode accountNo){
+		return sumMap.get(accountNo) == null? BigDecimal.ZERO:sumMap.get(accountNo);
+	}
+	
+	/**
+	 * 
+	 * Describle(描述)：获取饿了么平台有效单数
+	 *
+	 * 方法名称：getValidCount
+	 *
+	 * 所在类名：OrderDataLoader
+	 *
+	 * Create Time:2015年8月14日 下午3:12:52
+	 *  
+	 * @param postTime
+	 * @param vendor
+	 * @return
+	 */
+	public Long getValidCount(Date postTime,Vendor vendor){
+		IOrderAccountRefService oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
+		return oaService.getValidOrderCount(postTime, AccountCode.valueOf(vendor.name()));
+	}
+	
+	/**
+	 * 
+	 * Describle(描述)：统计一天的收入总额
+	 *
+	 * 方法名称：getTotalDayAmount
+	 *
+	 * 所在类名：ConculsionPanel
+	 *
+	 * Create Time:2015年8月14日 下午3:28:54
+	 *  
+	 * @param time
+	 * @return
+	 */
+	public BigDecimal getTotalDayAmount(Date date){
+		BigDecimal totalAmount = new BigDecimal(BigInteger.ZERO,2);
+		IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
+		String time = DateUtil.date2Str(date, "yyyyMMdd");
+		List<OrderVO> orders = orderService.accquireOrderVOsByDay(time);
+		if(CollectionUtils.isEmpty(orders)){
+			return totalAmount;
+		}
+		for(OrderVO order:orders){
+			totalAmount = totalAmount.add(order.getTotalAmount());
+		}
+		BigDecimal allowanceAmount = facade.getSDAllowanceAmount(date);
+		if(allowanceAmount != null){
+			totalAmount = totalAmount.add(allowanceAmount);
+		}
+		return totalAmount;
+	}
+	
+	/**
+	 * 
+	 * Describle(描述)： 统计代金券数量展示
+	 *
+	 * 方法名称：getTicketStatistic
+	 *
+	 * 所在类名：QueryListener
+	 *
+	 * Create Time:2015年6月19日 下午4:38:40
+	 *  
+	 * @param vendor
+	 * @return
+	 */
+	public String getTicketStatistic(Date time,Vendor vendor) {
+		return facade.getTicketStatistic(time, vendor);
+	}
+	
+	/**
+	 * 
+	 * Describle(描述)： 获取饿了么刷单补贴金额
+	 *
+	 * 方法名称：getELESDAllowanceAmount
+	 *
+	 * 所在类名：QueryListener
+	 *
+	 * Create Time:2015年7月30日 下午1:58:46
+	 *  
+	 * @param date
+	 * @return
+	 */
+	public BigDecimal getELESDAllowanceAmount(Date date){
+		return facade.getSDAllowanceAmount(date);
 	}
 	
 	public JLabel getCashValue() {
@@ -392,6 +501,22 @@ public class ConculsionPanel extends JPanel {
 
 	public void setEleSdRemark(DisplayLabel<String, BigDecimal> eleSdRemark) {
 		this.eleSdRemark = eleSdRemark;
+	}
+
+	public Map<AccountCode, BigDecimal> getSumMap() {
+		return sumMap;
+	}
+
+	public void setSumMap(Map<AccountCode, BigDecimal> sumMap) {
+		this.sumMap = sumMap;
+	}
+
+	public Date getQueryDate() {
+		return queryDate;
+	}
+
+	public void setQueryDate(Date queryDate) {
+		this.queryDate = queryDate;
 	}
 
 }
