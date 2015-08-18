@@ -66,6 +66,7 @@ public class ContentPanel extends JSplitPane {
 	}
 	
 	public void clearData(String time){
+		textArea.setText("");
 		if(mainTable.getModel() instanceof OrderTableModel){
 			OrderTableModel orderModel = (OrderTableModel) mainTable.getModel();
 			orderModel.setRowCount(0);
@@ -87,7 +88,6 @@ public class ContentPanel extends JSplitPane {
 		datacleaner.deleteTicketStatistic(time);
 		datacleaner.deleteELESDInfo(time);
 		datacleaner.deleteStockInfo(time);
-		textArea.setText("");
 	}
 
 	public JTable getMainTable() {

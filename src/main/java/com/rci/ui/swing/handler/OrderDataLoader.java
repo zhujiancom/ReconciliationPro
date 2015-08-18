@@ -58,7 +58,7 @@ public class OrderDataLoader implements Runnable {
 			loadItemData(order.getPayNo());
 			for(OrderVO ov:ordervos){
 				if(StringUtils.hasText(ov.getWarningInfo())){
-					contentPane.getTextArea().append("【"+ov.getPayNo()+"】"+ov.getWarningInfo());
+					contentPane.getTextArea().append("【"+ov.getPayNo()+"】"+ov.getWarningInfo()+"\n");
 				}
 			}
 		}

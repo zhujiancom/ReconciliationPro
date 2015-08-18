@@ -66,9 +66,9 @@ public class MTFilter extends AbstractFilter {
 					suitMap.put(type, suitCount);
 				}
 				
-				BigDecimal singlePrice = item.getPrice();
 //				BigDecimal count = item.getCount();
 //				BigDecimal countBack = item.getCountback();
+				BigDecimal singlePrice = item.getPrice();
 				BigDecimal singleRate = item.getDiscountRate();
 				BigDecimal rate = DigitUtil.precentDown(singleRate);
 				BigDecimal originTotalAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countBack)),rate);
