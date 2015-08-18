@@ -99,10 +99,12 @@ public class MainFrame extends JFrame {
 		JMenuItem baseReset = new JMenuItem("基础数据重置");
 		JMenuItem viewStock = new JMenuItem("库存查看");
 		JMenuItem setStock = new JMenuItem("库存进货");
+		JMenuItem stockManagement = new JMenuItem("库存管理");
 		system.add(sysInit);
 		system.add(baseReset);
 		view.add(viewStock);
 		setting.add(setStock);
+		setting.add(stockManagement);
 		
 		JMenuItem expressRate = new JMenuItem("外送率统计"); //展示当月外送率统计信息表
 		JMenuItem earning = new JMenuItem("营业额统计");
@@ -113,6 +115,7 @@ public class MainFrame extends JFrame {
 		ActionHandler handler = new ActionHandler();
 		sysInit.addActionListener(handler.dataInit());
 		baseReset.addActionListener(handler.baseReset());
+		//库存查看事件
 		viewStock.addActionListener(new ActionListener() {
 			
 			@Override
@@ -121,6 +124,7 @@ public class MainFrame extends JFrame {
 				winBuilder.retrieveWindow();
 			}
 		});
+		//库存进货时间
 		setStock.addActionListener(new ActionListener() {
 			
 			@Override
@@ -129,12 +133,23 @@ public class MainFrame extends JFrame {
 				winBuilder.retrieveWindow();
 			}
 		});
+		//外送率统计事件
 		expressRate.addActionListener(new ExpressRateListener());
+		//营业额统计事件
 		earning.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				PopWindowBuilder winBuilder = WindowBuilderFactory.createTurnoverWinBuilder();
+				winBuilder.retrieveWindow();
+			}
+		});
+		//库存管理事件
+		stockManagement.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PopWindowBuilder winBuilder = WindowBuilderFactory.createStockManagementWinBuilder();
 				winBuilder.retrieveWindow();
 			}
 		});

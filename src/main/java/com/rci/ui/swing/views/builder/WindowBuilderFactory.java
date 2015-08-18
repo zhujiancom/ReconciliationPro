@@ -39,7 +39,37 @@ public class WindowBuilderFactory {
 		return new StockWinBuilder(BusinessConstant.RESTOCK_ACTION);
 	}
 	
+	/**
+	 * 
+	 *
+	 * Describle(描述)：创建营业额统计窗口
+	 *
+	 * 方法名称：createTurnoverWinBuilder
+	 *
+	 * 所在类名：WindowBuilderFactory
+	 *
+	 * Create Time:2015年8月18日 下午10:49:25
+	 *  
+	 * @return
+	 */
 	public static TurnoverWinBuilder createTurnoverWinBuilder(){
 		return new TurnoverWinBuilder();
+	}
+	
+	/**
+	 * 
+	 *
+	 * Describle(描述)： 创建库存管理窗口
+	 *
+	 * 方法名称：createStockManagementWinBuilder
+	 *
+	 * 所在类名：WindowBuilderFactory
+	 *
+	 * Create Time:2015年8月18日 下午10:50:15
+	 *  
+	 * @return
+	 */
+	public static StockManagementWinBuilder createStockManagementWinBuilder(){
+		return new StockManagementWinBuilder();
 	}
 }
