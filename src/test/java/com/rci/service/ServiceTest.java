@@ -29,6 +29,7 @@ import com.rci.service.core.StatisticCenterFacade;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.properties.PropertyUtils;
+import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.SchemeVO;
 
 @ContextConfiguration({"classpath:spring/spring-db.xml","classpath:spring/spring-common.xml"})
@@ -55,6 +56,8 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	private StatisticCenterFacade facade;
 	@Resource(name="DishTypeService")
 	private IDishTypeService dishtypeService;
+	@Resource(name="DishService")
+	private IDishService dishService;
 	@Resource(name="FetchMarkService")
 	private IFetchMarkService markService;
 	@Resource(name="PayModeService")
@@ -242,5 +245,12 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	public void testPaymodeCodeEnum(){
 		System.out.println(PaymodeCode.paymodeCode("18"));
 		System.out.println(PaymodeCode.ELE.getPaymodeno());
+	}
+	
+	@Test
+	public void testQueryDishes(){
+		List<DishVO> dishes = dishService.queryDishes(false);
+		System.out.println(dishes.size());
+		
 	}
 }

@@ -100,6 +100,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			for(DishDTO dishDTO:dishDTOs){
 				Dish dish = beanMapper.map(dishDTO, Dish.class);
 				dish.setDishType(type);
+				dish.setStockFlag(YOrN.N);
 				dishes.add(dish);
 				dishService.rwCreate(dish);
 			}
@@ -114,6 +115,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			dType = beanMapper.map(dTypeDTO, DishType.class);
 		}
 		Dish dish = beanMapper.map(dishDTO, Dish.class);
+		dish.setStockFlag(YOrN.N);
 		dish.setDishType(dType);
 		dishService.rwCreate(dish);
 		return dish;
