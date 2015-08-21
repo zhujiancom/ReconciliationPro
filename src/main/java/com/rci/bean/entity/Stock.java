@@ -62,10 +62,20 @@ public class Stock extends BaseEntity {
 	/* 余量 */
 	private BigDecimal balanceAmount;
 	
+	/* 单位 */
+	private String unit;
+	
 	public Stock(){}
 	
-	public Stock(String dishNo,BigDecimal gross,BigDecimal balanceAmount){
+	public Stock(String dishNo){
 		this.dishNo = dishNo;
+		this.gross = BigDecimal.ZERO;
+		this.balanceAmount = BigDecimal.ZERO;
+		this.consumeAmount = BigDecimal.ZERO;
+	}
+	
+	public Stock(String dishNo,BigDecimal gross,BigDecimal balanceAmount){
+		this(dishNo);
 		this.gross = gross;
 		this.balanceAmount = balanceAmount;
 	}
@@ -152,6 +162,15 @@ public class Stock extends BaseEntity {
 
 	public void setBalanceAmount(BigDecimal balanceAmount) {
 		this.balanceAmount = balanceAmount;
+	}
+
+	@Column(name="unit")
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	@Override

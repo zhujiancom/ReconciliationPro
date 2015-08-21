@@ -11,23 +11,27 @@ import javax.annotation.Resource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dozer.Mapper;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Stock;
 import com.rci.bean.entity.StockOpLog;
 import com.rci.enums.BusinessEnums.StockOpType;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.service.IDishService;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.IStockOpLogService;
 import com.rci.service.IStockService;
 import com.rci.service.base.BaseServiceImpl;
 import com.rci.tools.DateUtil;
+import com.rci.ui.swing.vos.StockVO;
 
 @Service("StockService")
 public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
@@ -39,6 +43,9 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
 	private IFetchMarkService markService;
 	@Resource(name="DishService")
 	private IDishService dishService;
+	
+	@Autowired
+	private Mapper beanMapper;
 	
 	@Override
 	public void insertStockOpLog(StockOpLog sol) {
@@ -56,16 +63,38 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
 		return stock;
 	}
 	
-	
+	@Override
+	public StockVO getStock(String dishNo){
+		DetachedCriteria dc = DetachedCriteria.forClass(Stock.class);
+		dc.add(Restrictions.eq("dishNo", dishNo));
+		Stock stock = baseDAO.queryUniqueByCriteria(dc);
+		if(stock != null && stock.getPsid() != 0){
+			stock = get(stock.getPsid());
+		}
+		return beanMapper.map(stock, StockVO.class);
+	}
 
 	@Override
-	public void rwInitStock(String dishNo, BigDecimal gross, BigDecimal balance) {
-		Stock stock = new Stock(dishNo,gross,balance);
-		BigDecimal consumeAmount = gross.subtract(balance);
-		stock.setConsumeAmount(consumeAmount);
+	public void rwAddStock(String dishNo) {
+		Stock stock = new Stock(dishNo);
 		Dish dish = dishService.findDishByNo(dishNo);
+		dish.setStockFlag(YOrN.Y);
+		dishService.rwupdateDishInfo(dish);
 		stock.setDishName(dish.getDishName());
+		stock.setSno(dishNo);
+		stock.setLevel(1);
+		stock.setPsid(0L);
 		super.rwCreate(stock);
+	}
+	
+	
+	@Override
+	public void rwRemoveStock(Long stockId){
+		Stock stock = get(stockId);
+		Dish dish = dishService.findDishByNo(stock.getDishNo());
+		dish.setStockFlag(YOrN.N);
+		dishService.rwupdateDishInfo(dish);
+		super.rwDelete(stockId);
 	}
 
 	@Override

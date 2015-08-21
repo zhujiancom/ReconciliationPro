@@ -26,8 +26,12 @@ public class DishListModel extends AbstractListModel {
 
 	@Override
 	public Object getElementAt(int index) {
-		DishVO dish = dishes.get(index);
+		DishVO dish = getDishAt(index);
 		return dish.getDishName();
+	}
+	
+	public DishVO getDishAt(int index){
+		return dishes.get(index);
 	}
 
 	public List<DishVO> getDishes() {
@@ -38,4 +42,14 @@ public class DishListModel extends AbstractListModel {
 		this.dishes = dishes;
 	}
 
+	public void addElement(DishVO dish){
+		int index = dishes.size();
+		dishes.add(dish);
+		fireIntervalAdded(this,index,index);
+	}
+	
+	public void removeElementAt(int index){
+		dishes.remove(index);
+		fireIntervalRemoved(this, index, index);
+	}
 }

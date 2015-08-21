@@ -3,6 +3,8 @@ package com.rci.ui.swing.vos;
 import java.math.BigDecimal;
 
 public class StockVO {
+	private Long sid;
+	
 	/* 库存编号 */
 	private String sno;
 
@@ -19,6 +21,17 @@ public class StockVO {
 
 	/* 余量 */
 	private BigDecimal balanceAmount;
+	
+	/* 单位 */
+	private String unit;
+
+	public Long getSid() {
+		return sid;
+	}
+
+	public void setSid(Long sid) {
+		this.sid = sid;
+	}
 
 	public String getSno() {
 		return sno;
@@ -66,5 +79,13 @@ public class StockVO {
 
 	public void setBalanceAmount(BigDecimal balanceAmount) {
 		this.balanceAmount = balanceAmount;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 }

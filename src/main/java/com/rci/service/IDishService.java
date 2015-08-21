@@ -9,5 +9,9 @@ import com.rci.ui.swing.vos.DishVO;
 public interface IDishService extends IBaseService<Dish, Long>{
 	public Dish findDishByNo(String no);
 	
+	public DishVO queryDish(String no);
+	
 	public List<DishVO> queryDishes(boolean isStocked);
+	
+	public void rwupdateDishInfo(Dish dish);
 }

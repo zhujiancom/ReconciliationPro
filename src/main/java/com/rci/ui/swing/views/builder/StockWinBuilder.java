@@ -41,7 +41,7 @@ public class StockWinBuilder implements PopWindowBuilder {
 	public void createContentPane() {
 		mainScrollPane = new JScrollPane();
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		stockTable = new StockTable(6,action);
+		stockTable = new StockTable(7,action);
 		mainScrollPane.setViewportView(stockTable);
 	}
 

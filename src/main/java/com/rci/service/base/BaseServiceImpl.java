@@ -87,6 +87,11 @@ public class BaseServiceImpl<T extends BaseEntity, PK extends Serializable> impl
 	}
 	@Override
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
+	public void rwDelete(T entity){
+		baseDAO.delete(entity);
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void rwDelete(T[] entities){
 		baseDAO.delete(entities);
 	}

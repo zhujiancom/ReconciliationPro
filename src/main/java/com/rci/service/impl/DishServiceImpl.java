@@ -3,8 +3,6 @@ package com.rci.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.dozer.Mapper;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
@@ -14,16 +12,12 @@ import org.springframework.stereotype.Service;
 import com.rci.bean.entity.Dish;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.service.IDishService;
-import com.rci.service.IDishTypeService;
 import com.rci.service.base.BaseServiceImpl;
 import com.rci.ui.swing.vos.DishVO;
 
 @Service("DishService")
 public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 		IDishService {
-	@Resource(name="DishTypeService")
-	private IDishTypeService dishTypeService;
-	
 	@Autowired
 	private Mapper beanMapper;
 	
@@ -34,6 +28,8 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 		Dish dish = baseDAO.queryUniqueByCriteria(dc);
 		return dish;
 	}
+	
+	
 
 	@Override
 	public List<DishVO> queryDishes(boolean isStocked) {
@@ -47,4 +43,20 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 		}
 		return dishVos;
 	}
+
+
+
+	@Override
+	public DishVO queryDish(String no) {
+		Dish dish = findDishByNo(no);
+		return beanMapper.map(dish, DishVO.class);
+	}
+
+
+
+	@Override
+	public void rwupdateDishInfo(Dish dish) {
+		baseDAO.update(dish);
+	}
+
 }

@@ -1,6 +1,5 @@
 package com.rci.service.core;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,11 +59,6 @@ public class MetadataServiceImpl implements IMetadataService {
 		
 		/* 清除桌号  */
 		tableService.deleteAll();
-	}
-
-	@Override
-	public void stockInit(String dishNo, BigDecimal gross, BigDecimal balance) {
-		stockService.rwInitStock(dishNo, gross, balance);
 	}
 
 	@Override

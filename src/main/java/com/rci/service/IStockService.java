@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.rci.bean.entity.Stock;
 import com.rci.bean.entity.StockOpLog;
 import com.rci.service.base.IBaseService;
+import com.rci.ui.swing.vos.StockVO;
 
 public interface IStockService extends IBaseService<Stock, Long> {
 	/**
@@ -36,6 +37,8 @@ public interface IStockService extends IBaseService<Stock, Long> {
 	 */
 	Stock getStockByDishNo(String dishNo);
 	
+	public StockVO getStock(String dishNo);
+	
 	/**
 	 * 
 	 * Describle(描述)： 根据库存编号查找
@@ -54,7 +57,7 @@ public interface IStockService extends IBaseService<Stock, Long> {
 	
 	/**
 	 * 
-	 * Describle(描述)： 库存数据初始化
+	 * Describle(描述)： 添加菜品到库存管理
 	 *
 	 * 方法名称：rwInitStock
 	 *
@@ -63,10 +66,22 @@ public interface IStockService extends IBaseService<Stock, Long> {
 	 * Create Time:2015年7月13日 下午3:57:30
 	 *  
 	 * @param dishNo
-	 * @param gross
-	 * @param balance
 	 */
-	void rwInitStock(String dishNo,BigDecimal gross,BigDecimal balance);
+	void rwAddStock(String dishNo);
+	
+	/**
+	 * 
+	 * Describle(描述)： 从库存管理中移除菜品
+	 *
+	 * 方法名称：rwRemoveStock
+	 *
+	 * 所在类名：IStockService
+	 *
+	 * Create Time:2015年8月21日 下午3:03:35
+	 *  
+	 * @param stockId
+	 */
+	void rwRemoveStock(Long stockId);
 	
 	/**
 	 * 

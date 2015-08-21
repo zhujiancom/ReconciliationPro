@@ -5,7 +5,13 @@ package com.rci.ui.swing.views.builder;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -13,15 +19,25 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import org.springframework.util.CollectionUtils;
 
 import com.rci.service.IDishService;
+import com.rci.service.IStockService;
+import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
+import com.rci.tools.StringUtils;
 import com.rci.ui.swing.model.DishListModel;
+import com.rci.ui.swing.model.StockListModel;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.vos.DishVO;
+import com.rci.ui.swing.vos.StockVO;
 
 /**
  * remark (备注):
@@ -39,6 +55,18 @@ import com.rci.ui.swing.vos.DishVO;
  */
 public class StockManagementWinBuilder implements PopWindowBuilder {
 	private JPanel contentPane;
+	
+	private JList lList;
+	
+	private JList rList;
+	
+	private Map<Integer,DishVO> lmap;
+	
+	private Map<Integer,StockVO> rmap;
+	
+	private IDishService dishService;
+	
+	private IStockService stockService;
 
 	/* 
 	 * @see com.rci.ui.swing.views.builder.PopWindowBuilder#retrieveWindow()
@@ -79,6 +107,61 @@ public class StockManagementWinBuilder implements PopWindowBuilder {
 		contentPane.add(leftPane);
 		contentPane.add(operationPane);
 		contentPane.add(rightPane);
+		
+		inBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(CollectionUtils.isEmpty(lmap)){
+					JOptionPane.showMessageDialog(null, "请选择要加入库存管理的菜品");
+				}else{
+					for(Iterator<Entry<Integer,DishVO>> it = lmap.entrySet().iterator();it.hasNext();){
+						Entry<Integer,DishVO> entry = it.next();
+						Integer index = entry.getKey();
+						DishVO dish = entry.getValue();
+						DishListModel lmodel = (DishListModel) lList.getModel();
+						lmodel.removeElementAt(index);
+						StockListModel rmodel = (StockListModel) rList.getModel();
+						if(stockService == null){
+							stockService = (IStockService) SpringUtils.getBean("StockService");
+						}
+						stockService.rwAddStock(dish.getDishNo());
+						StockVO stock = stockService.getStock(dish.getDishNo());
+						rmodel.addElement(stock);
+					}
+				}
+			}
+		});
+		
+		outBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(CollectionUtils.isEmpty(rmap)){
+					JOptionPane.showMessageDialog(null, "请选择要移除库存管理的菜品");
+				}else{
+					for(Iterator<Entry<Integer,StockVO>> it = rmap.entrySet().iterator();it.hasNext();){
+						Entry<Integer,StockVO> entry = it.next();
+						Integer index = entry.getKey();
+						StockVO stock = entry.getValue();
+						String dishNo = stock.getDishNo();
+						if(!StringUtils.hasText(dishNo)){
+							JOptionPane.showMessageDialog(null, "不能移动");
+							return ;
+						}
+						StockListModel rmodel = (StockListModel) rList.getModel();
+						rmodel.removeElementAt(index);
+						if(stockService == null){
+							stockService = (IStockService) SpringUtils.getBean("StockService");
+						}
+						stockService.rwRemoveStock(stock.getSid());
+						DishListModel lmodel = (DishListModel) lList.getModel();
+						DishVO dish = dishService.queryDish(dishNo);
+						lmodel.addElement(dish);
+					}
+				}
+			}
+		});
 	}
 	
 	/**
@@ -103,13 +186,32 @@ public class StockManagementWinBuilder implements PopWindowBuilder {
 		leftPane.add(llable);
 		leftPane.add(Box.createVerticalStrut(5));
 		leftPane.add(lscrollPane);
-		IDishService dishService = (IDishService) SpringUtils.getBean("DishService");
+		dishService = (IDishService) SpringUtils.getBean("DishService");
 		List<DishVO> dishes = dishService.queryDishes(false);
 		ListModel lmodel = new DishListModel(dishes);
-		JList ldishList = new JList(lmodel);
-		ldishList.setVisibleRowCount(20);
-		ldishList.setBorder(BorderFactory.createTitledBorder("未加入库存控制菜品"));
-		lscrollPane.setViewportView(ldishList);
+		lList = new JList(lmodel);
+		lList.setVisibleRowCount(20);
+//		ldishList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		lList.setBorder(BorderFactory.createTitledBorder("未加入库存控制菜品"));
+		lList.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if(!e.getValueIsAdjusting()){
+					JList list = (JList) e.getSource();
+					int index = list.getSelectedIndex();
+					if(index == -1){
+						index = 0;
+					}
+					DishListModel dishModel = (DishListModel) list.getModel();
+					DishVO dish = (DishVO) dishModel.getDishAt(index);
+					System.out.println(index+"-"+dish.getDishNo()+"-"+dish.getDishName());
+					lmap = new HashMap<Integer,DishVO>();
+					lmap.put(index, dish);
+				}
+			}
+		});
+		lscrollPane.setViewportView(lList);
 		return leftPane;
 	}
 	
@@ -135,13 +237,30 @@ public class StockManagementWinBuilder implements PopWindowBuilder {
 		rightPane.add(rlable);
 		rightPane.add(Box.createVerticalStrut(5));
 		rightPane.add(rscrollPane);
-		IDishService dishService = (IDishService) SpringUtils.getBean("DishService");
-		List<DishVO> dishes = dishService.queryDishes(true);
-		ListModel rmodel = new DishListModel(dishes);
-		JList rdishList = new JList(rmodel);
-		rdishList.setVisibleRowCount(20);
-		rdishList.setBorder(BorderFactory.createTitledBorder("已加入库存控制菜品"));
-		rscrollPane.setViewportView(rdishList);
+		IMetadataService metadataService = (IMetadataService)SpringUtils.getBean("MetadataService");
+		List<StockVO> stocks = metadataService.displayStocks();
+		ListModel rmodel = new StockListModel(stocks);
+		rList = new JList(rmodel);
+		rList.setVisibleRowCount(20);
+		rList.setBorder(BorderFactory.createTitledBorder("已加入库存控制菜品"));
+		rList.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if(!e.getValueIsAdjusting()){
+					JList list = (JList) e.getSource();
+					int index = list.getSelectedIndex();
+					if(index == -1){
+						index = 0;
+					}
+					StockListModel stockModel = (StockListModel) list.getModel();
+					StockVO stock = (StockVO) stockModel.getStockAt(index);
+					rmap = new HashMap<Integer,StockVO>();
+					rmap.put(index, stock);
+				}
+			}
+		});
+		rscrollPane.setViewportView(rList);
 		return rightPane;
 	}
 

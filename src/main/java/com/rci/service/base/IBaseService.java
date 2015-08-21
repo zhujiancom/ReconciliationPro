@@ -50,6 +50,7 @@ public interface IBaseService<T extends BaseEntity, PK extends Serializable> {
 	 * @param pk
 	 */
 	public void rwDelete(PK pk);
+	public void rwDelete(T entity);
 	public void rwDelete(T[] entities);
 	
 	/**

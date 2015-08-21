@@ -69,8 +69,11 @@ public class StockTable extends BaseTable {
 		cm.getColumn(4).setHeaderValue("剩余数量");
 		cm.getColumn(4).setPreferredWidth(75);
 		cm.getColumn(4).setCellRenderer(redmarkRenderer);
+		cm.getColumn(5).setHeaderValue("单位");
+		cm.getColumn(5).setPreferredWidth(75);
+		cm.getColumn(5).setCellRenderer(redmarkRenderer);
 		if(BusinessConstant.RESTOCK_ACTION.equals(this.action)){
-			TableColumn operateCol = cm.getColumn(5);
+			TableColumn operateCol = cm.getColumn(6);
 			operateCol.setPreferredWidth(50);
 			operateCol.setHeaderValue("操作");
 			operateCol.setCellRenderer(new MyJButtonCellRenderer());
@@ -269,6 +272,8 @@ public class StockTable extends BaseTable {
 			case 4:
 				return stock.getBalanceAmount();
 			case 5:
+				return stock.getUnit();
+			case 6:
 				return stock.getSno();
 			default:
 					break;

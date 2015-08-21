@@ -40,7 +40,7 @@ public class TurnoverWinBuilder implements PopWindowBuilder {
 	
 	@Override
 	public PopWindow retrieveWindow() {
-		PopWindow turnoverWindow = new PopWindow();
+		PopWindow turnoverWindow = new PopWindow("营业额统计");
 		createQueryPane();
 		createContentPane();
 		Container containerPanel = turnoverWindow.getContentPane();

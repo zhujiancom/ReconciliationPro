@@ -1,6 +1,5 @@
 package com.rci.service.core;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.rci.bean.entity.Dish;
@@ -63,22 +62,6 @@ public interface IMetadataService {
 	 * @return
 	 */
 	Dish getDishByNo(String dishNo);
-	
-	/**
-	 * 
-	 * Describle(描述)：库存初始化
-	 *
-	 * 方法名称：stockInit
-	 *
-	 * 所在类名：IMetadataService
-	 *
-	 * Create Time:2015年7月13日 下午3:49:21
-	 *  
-	 * @param dishNo
-	 * @param gross
-	 * @param balance
-	 */
-	void stockInit(String dishNo,BigDecimal gross,BigDecimal balance);
 	
 	List<StockVO> displayStocks();
 }
