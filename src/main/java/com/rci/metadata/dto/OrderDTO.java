@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import com.rci.annotation.ColumnName;
+import com.rci.annotation.ExcelColumn;
 
 /**
  * @author zj
@@ -50,6 +51,7 @@ public class OrderDTO {
 	private String paymode;
 
 	@ColumnName("billno")
+	@ExcelColumn("订单号")
 	public String getOrderNo() {
 		return orderNo;
 	}
@@ -59,6 +61,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("payno")
+	@ExcelColumn("付款编号")
 	public String getPayNo() {
 		return payNo;
 	}
@@ -68,6 +71,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("opendesktime")
+	@ExcelColumn("开桌时间")
 	public Timestamp getOpenDeskTime() {
 		return openDeskTime;
 	}
@@ -77,6 +81,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("checkouttime")
+	@ExcelColumn("结账时间")
 	public Timestamp getCheckoutTime() {
 		return checkoutTime;
 	}
@@ -86,6 +91,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("originamount")
+	@ExcelColumn("原价")
 	public BigDecimal getOriginAmount() {
 		return originAmount;
 	}
@@ -95,6 +101,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("realamount")
+	@ExcelColumn("实收金额")
 	public BigDecimal getRealAmount() {
 		return realAmount;
 	}
@@ -104,6 +111,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("paymode")
+	@ExcelColumn("支付方式")
 	public String getPaymode() {
 		return paymode;
 	}
@@ -113,6 +121,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("tableno")
+	@ExcelColumn("桌号")
 	public String getTableNo() {
 		return tableNo;
 	}

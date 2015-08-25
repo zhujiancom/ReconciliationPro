@@ -32,4 +32,14 @@ public class NativeSQLBuilder {
 			+ "left join dbo.cybr_bt_table_type tbt \n"
 			+ "on tb.ch_typeno = tbt.ch_typeno";
 	
+//	public static final String QUERY_ORDER_TO_EXCEL="select cd.int_flowID 'flowId',rtrim(cd.ch_payno) 'payno',rtrim(cm.bill_no) billno, \n"
+//			+ "rtrim(cd.ch_paymodeno) 'paymodeno',cd.num_payamount 'payamount',cd.num_change 'change',cd.num_realamount 'realamount', \n"
+//			+ "rtrim(t.ch_tableno) 'tableno',t.dt_service_begin 'opendesktime',cm.dt_operdate 'checkouttime' \n"
+//			+ "from dbo.v_u_checkout_detail cd \n"
+//			+ "join dbo.v_u_checkout_master cm \n"
+//			+ "on cd.ch_payno = cm.ch_payno \n"
+//			+ "join dbo.v_u_table t \n"
+//			+ "on cm.ch_billno = t.ch_billno \n"
+//			+ "where cd.dt_operate = ?";
+	
 }
