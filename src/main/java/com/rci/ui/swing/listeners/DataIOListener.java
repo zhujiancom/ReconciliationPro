@@ -13,30 +13,36 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
-import com.rci.bean.entity.Order;
-import com.rci.bean.entity.Stock;
+import org.springframework.util.CollectionUtils;
+
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.exceptions.ServiceException;
-import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
 import com.rci.metadata.service.IDataFetchService;
-import com.rci.service.IFetchMarkService;
+import com.rci.service.IDataLoaderService;
+import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
-import com.rci.service.filter.FilterChain;
+import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.service.utils.IExImportService;
 import com.rci.service.utils.excel.ExcelExImportService;
 import com.rci.service.utils.excel.ExcelSheet;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
+import com.rci.tools.StringUtils;
+import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
+import com.rci.ui.swing.model.OrderTable.OrderTableModel;
+import com.rci.ui.swing.views.ConculsionPanel;
+import com.rci.ui.swing.views.ContentPanel;
+import com.rci.ui.swing.vos.OrderItemVO;
+import com.rci.ui.swing.vos.OrderVO;
 
 public class DataIOListener implements ActionListener {
 	public static final int EXPORT = 0;
@@ -45,6 +51,12 @@ public class DataIOListener implements ActionListener {
 	private int action;
 	
 	private IDataFetchService fetchService;
+	
+	private ContentPanel contentPane;
+	
+	private ConculsionPanel conclusionPane;
+	
+	private Map<AccountCode,BigDecimal> sumMap;
 	
 	public DataIOListener(int action){
 		this.action = action;
@@ -217,46 +229,39 @@ public class DataIOListener implements ActionListener {
 				
 				@Override
 				public void run() {
-					IExImportService excelService = (IExImportService) SpringUtils.getBean("ExcelExImportService");
-					IFetchMarkService markService = (IFetchMarkService) SpringUtils.getBean("FetchMarkService");
-					IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
 					String fileName = chooser.getSelectedFile().getName();
 					String day = fileName.substring(0,fileName.indexOf("."));
 					try {
 						Date date = DateUtil.parseDate(day, "yyyyMMdd");
 						BufferedInputStream bin = new BufferedInputStream(new FileInputStream(new File(chooser.getSelectedFile().getAbsolutePath())));
-						excelService.importFrom(bin);
-						markService.markOrder(day);
-						
-						List<Order> orders = orderService.queryOrdersByDay(day);
-						//解析订单各种账户收入的金额，判断订单使用的方案
-						Map<String,BigDecimal> stockMap = new HashMap<String,BigDecimal>();
-						for(Order order:orders){
-							parseOrder(order);
-							//插入库存变更记录
-							addStockOpLog(order,stockMap);
-						}
-						//更新库存表
-						for(Iterator<Entry<String,BigDecimal>> it=stockMap.entrySet().iterator();it.hasNext();){
-							Entry<String,BigDecimal> entry = it.next();
-							String sno = entry.getKey();
-							BigDecimal amount = entry.getValue();
-//							Stock stock = stockService.getStockByDishNo(dishNo);
-							Stock stock = stockService.getStockBySno(sno);
-							if(stock == null){
-								throw new ServiceException(SERVICE.DATA_ERROR, sno+" - 该菜品不在库存控制范围内！");
-							}else{
-								BigDecimal balanceAmount = stock.getBalanceAmount().subtract(amount);
-								BigDecimal consumeAmount = stock.getConsumeAmount().add(amount);
-								stock.setBalanceAmount(balanceAmount);
-								stock.setConsumeAmount(consumeAmount);
-								stockService.rwUpdate(stock);
+						IDataLoaderService loaderService = (IDataLoaderService) SpringUtils.getBean("ExcelDataLoaderService");
+						loaderService.load(bin, date);
+						JOptionPane.showMessageDialog(null, "导入成功");
+						IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
+						List<OrderVO> ordervos = orderService.accquireOrderVOsByDay(day);
+						OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
+						otm.setOrders(ordervos);
+						otm.fireTableDataChanged();
+						if(!CollectionUtils.isEmpty(ordervos)){
+							OrderVO order = otm.getOrderAt(0);
+							contentPane.getMainTable().setRowSelectionAllowed(true);
+							contentPane.getMainTable().setRowSelectionInterval(0, 0);
+							loadItemData(order.getPayNo());
+							for(OrderVO ov:ordervos){
+								if(StringUtils.hasText(ov.getWarningInfo())){
+									contentPane.getTextArea().append("【"+ov.getPayNo()+"】"+ov.getWarningInfo()+"\n");
+								}
 							}
 						}
-						
-						JOptionPane.showMessageDialog(null, "导入成功");
+						//2. 根据订单数据统计今日收入明细
+						loadSumData(date);
+						conclusionPane.refreshUI();
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					} catch(ServiceException se){
+						JOptionPane.showMessageDialog(null, se.getMessage());
 					}
 				}
 			}).start();
@@ -268,18 +273,61 @@ public class DataIOListener implements ActionListener {
 		}
 	}
 	
-	public void parseOrder(Order order) {
-		FilterChain chain = new FilterChain();
-		chain.addFilters(filters);
-		chain.doFilter(order, chain);
+	public void loadItemData(String payno){
+		IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
+		List<OrderItemVO> orderItems = orderService.queryOrderItemVOsByPayno(payno);
+		OrderItemTableModel oitm = (OrderItemTableModel) contentPane.getItemTable().getModel();
+		oitm.setItems(orderItems);
+		oitm.fireTableDataChanged();
 	}
-
+	
+	private void loadSumData(Date date){
+		sumMap = new HashMap<AccountCode,BigDecimal>();
+		IOrderAccountRefService oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
+		List<AccountSumResult> sumRes = oaService.querySumAmount(date);
+		for(AccountSumResult res:sumRes){
+			AccountCode accNo = res.getAccNo();
+			BigDecimal amount = res.getSumAmount();
+			sumMap.put(accNo, amount);
+		}
+		conclusionPane.setQueryDate(date);
+		conclusionPane.setSumMap(sumMap);
+	}
+	
 	public int getAction() {
 		return action;
 	}
 
 	public void setAction(int action) {
 		this.action = action;
+	}
+
+	/**
+	 * @return the contentPane
+	 */
+	public ContentPanel getContentPane() {
+		return contentPane;
+	}
+
+	/**
+	 * @param contentPane the contentPane to set
+	 */
+	public void setContentPane(ContentPanel contentPane) {
+		this.contentPane = contentPane;
+	}
+
+	/**
+	 * @return the conclusionPane
+	 */
+	public ConculsionPanel getConclusionPane() {
+		return conclusionPane;
+	}
+
+	/**
+	 * @param conclusionPane the conclusionPane to set
+	 */
+	public void setConclusionPane(ConculsionPanel conclusionPane) {
+		this.conclusionPane = conclusionPane;
 	}
 
 }

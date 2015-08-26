@@ -67,8 +67,6 @@ public class MainFrame extends JFrame {
 		Container containerPanel = this.getContentPane();
 		BorderLayout layout = new BorderLayout(0, 10);
 		containerPanel.setLayout(layout);
-		/* 绑定菜单条 */
-		this.setJMenuBar(buildMenuBar());
 		/* 绑定查询form */
 		containerPanel.add(queryPanel, BorderLayout.NORTH);
 		/* 绑定订单内容和警告日志展示列表 */
@@ -76,6 +74,8 @@ public class MainFrame extends JFrame {
 		containerPanel.add(contentPane, BorderLayout.CENTER);
 		/* 绑定 总结页脚 */
 		containerPanel.add(conclusionPane, BorderLayout.SOUTH);
+		/* 绑定菜单条 */
+		this.setJMenuBar(buildMenuBar());
 	}
 
 	/**
@@ -173,7 +173,10 @@ public class MainFrame extends JFrame {
 		dataExport.addActionListener(new DataIOListener(DataIOListener.EXPORT));
 		
 		//数据导入
-		dataImport.addActionListener(new DataIOListener(DataIOListener.IMPORT));
+		DataIOListener dataImportListener = new DataIOListener(DataIOListener.IMPORT);
+		dataImportListener.setConclusionPane(conclusionPane);
+		dataImportListener.setContentPane(contentPane);
+		dataImport.addActionListener(dataImportListener);
 		return menubar;
 	}
 }

@@ -1,8 +1,6 @@
 package com.rci.service.utils.excel;
 
 import java.beans.PropertyDescriptor;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -57,6 +55,8 @@ public class ExcelExImportService implements IExImportService {
 	private Mapper beanMapper;
 	@Resource(name="OrderService")
 	private IOrderService orderService;
+	
+	private List<Order> orders;
 	
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -163,7 +163,7 @@ public class ExcelExImportService implements IExImportService {
 		try {
 			workbook = new HSSFWorkbook(in);
 			HSSFSheet orderSheet = workbook.getSheetAt(0);
-			readOrderInfo(orderSheet);
+			setOrders(readOrderInfo(orderSheet));
 		} catch (IOException ioe) {
 			ExceptionManage.throwServiceException(SERVICE.EXCEL_OPERATION, ioe);
 		} catch (Exception e) {
@@ -186,11 +186,11 @@ public class ExcelExImportService implements IExImportService {
 	 * @throws IllegalAccessException 
 	 * @throws IllegalArgumentException 
 	 */
-	private void readOrderInfo(HSSFSheet sheet) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+	private List<Order> readOrderInfo(HSSFSheet sheet) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
 		List<Order> orders = new ArrayList<Order>();
 		int rowNum = sheet.getLastRowNum();
 		List<OrderDTO> orderDTOs = new ArrayList<OrderDTO>();
-		for(int j=1;j<rowNum;j++){
+		for(int j=1;j<=rowNum;j++){
 			HSSFRow row = sheet.getRow(j);
 			OrderDTO orderDTO = new OrderDTO();
 			PropertyDescriptor[] pdrs = BeanUtils.getPropertyDescriptors(OrderDTO.class);
@@ -242,6 +242,7 @@ public class ExcelExImportService implements IExImportService {
 			orders.add(value);
 		}
 		orderService.rwCreate(orders.toArray(new Order[0]));
+		return orders;
 	}
 	
 	/**
@@ -262,8 +263,8 @@ public class ExcelExImportService implements IExImportService {
 	private Map<String,List<OrderItemDTO>> readOrderItemInfo(HSSFSheet sheet) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
 		Map<String,List<OrderItemDTO>> itemsMapping = new HashMap<String,List<OrderItemDTO>>();
 		int rowNum = sheet.getLastRowNum();
-		List<OrderItemDTO> orderItemDTOs = new ArrayList<OrderItemDTO>();
-		for(int j=1;j<rowNum;j++){
+//		List<OrderItemDTO> orderItemDTOs = new ArrayList<OrderItemDTO>();
+		for(int j=1;j<=rowNum;j++){
 			HSSFRow row = sheet.getRow(j);
 			OrderItemDTO orderItemDTO = new OrderItemDTO();
 			PropertyDescriptor[] pdrs = BeanUtils.getPropertyDescriptors(OrderItemDTO.class);
@@ -295,12 +296,15 @@ public class ExcelExImportService implements IExImportService {
 			}
 			String key = orderItemDTO.getBillNo();
 			if(itemsMapping.containsKey(key)){
-				orderItemDTOs = itemsMapping.get(key);
+				List<OrderItemDTO> orderItemDTOs = itemsMapping.get(key);
 				orderItemDTOs.add(orderItemDTO);
+				itemsMapping.put(key, orderItemDTOs);
 			}else{
+				List<OrderItemDTO> orderItemDTOs = new ArrayList<OrderItemDTO>();
 				orderItemDTOs.add(orderItemDTO);
+				itemsMapping.put(key, orderItemDTOs);
 			}
-			itemsMapping.put(key, orderItemDTOs);
+			
 		}
 		return itemsMapping;
 	}
@@ -346,6 +350,20 @@ public class ExcelExImportService implements IExImportService {
 
 	public void setCustomSheets(List<ExcelSheet> customSheets) {
 		this.customSheets = customSheets;
+	}
+
+	/**
+	 * @return the orders
+	 */
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	/**
+	 * @param orders the orders to set
+	 */
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
 
 }
