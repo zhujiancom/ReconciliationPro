@@ -66,6 +66,12 @@ public class DataFetchServiceImpl implements IDataFetchService {
 		List<OrderItemDTO> items = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_ORDERITEM,new Object[]{orderNo},new BeanRowMappers<OrderItemDTO>(OrderItemDTO.class));
 		return items;
 	}
+	
+	@Override
+	public List<OrderItemDTO> fetchOrderItems(Date sdate,Date edate){
+		List<OrderItemDTO> items = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_ORDERITEM_BY_DATE,new Object[]{sdate,edate},new BeanRowMappers<OrderItemDTO>(OrderItemDTO.class));
+		return items;
+	}
 
 	@Override
 	public DishDTO fetchDishByNo(String dishno) {

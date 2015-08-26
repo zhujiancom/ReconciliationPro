@@ -118,6 +118,22 @@ public interface IDataFetchService {
 	
 	/**
 	 * 
+	 * Describle(描述)：获取一个时间范围内的所有点单详细信息
+	 *
+	 * 方法名称：fetchOrderItems
+	 *
+	 * 所在类名：IDataFetchService
+	 *
+	 * Create Time:2015年8月26日 上午9:43:46
+	 *  
+	 * @param sdate
+	 * @param edate
+	 * @return
+	 */
+	List<OrderItemDTO> fetchOrderItems(Date sdate,Date edate);
+	
+	/**
+	 * 
 	 * Describle(描述)：获取 桌号信息
 	 *
 	 * 方法名称：fetchTables

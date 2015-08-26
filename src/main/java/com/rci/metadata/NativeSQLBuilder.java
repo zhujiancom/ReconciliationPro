@@ -13,6 +13,10 @@ public class NativeSQLBuilder {
 	public static final String QUERY_ORDERITEM="select rtrim(ord.ch_billno) 'billno',rtrim(ord.ch_payno) 'payno',rtrim(ord.ch_dishno) 'dishno',ord.ch_suitflag 'suitflag',rtrim(ord.ch_suitno) 'suitno',ord.num_num count,\n"
 												+ "ord.num_back countback,ord.num_price 'price',ord.int_discount 'discount',ord.dt_operdate 'consumeTime' from dbo.v_u_orderdish ord \n"
 												+ "where ord.ch_billno=?";
+	/* 查询order detail 信息*/
+	public static final String QUERY_ORDERITEM_BY_DATE="select rtrim(ord.ch_billno) 'billno',rtrim(ord.ch_payno) 'payno',rtrim(ord.ch_dishno) 'dishno',ord.ch_suitflag 'suitflag',rtrim(ord.ch_suitno) 'suitno',ord.num_num count,\n"
+												+ "ord.num_back countback,ord.num_price 'price',ord.int_discount 'discount',ord.dt_operdate 'consumeTime' from dbo.v_u_orderdish ord \n"
+												+ "where ord.dt_operdate between ? and ?";
 	/* 查询order 信息*/
 	public static final String QUERY_ORDER="select rtrim(tab.ch_billno) 'billno',rtrim(tab.ch_payno) 'payno',detail.ch_paymodeno 'paymode', \n"
 			+"cmaster.num_cost 'originamount',tab.dt_service_begin 'opendesktime',rtrim(tab.ch_tableno) 'tableno', \n"

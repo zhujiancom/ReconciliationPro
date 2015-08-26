@@ -51,7 +51,7 @@ public class OrderDTO {
 	private String paymode;
 
 	@ColumnName("billno")
-	@ExcelColumn("订单号")
+	@ExcelColumn(value="订单号",index=0)
 	public String getOrderNo() {
 		return orderNo;
 	}
@@ -61,7 +61,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("payno")
-	@ExcelColumn("付款编号")
+	@ExcelColumn(value="付款编号",index=1)
 	public String getPayNo() {
 		return payNo;
 	}
@@ -71,7 +71,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("opendesktime")
-	@ExcelColumn("开桌时间")
+	@ExcelColumn(value="开桌时间",index=6)
 	public Timestamp getOpenDeskTime() {
 		return openDeskTime;
 	}
@@ -81,7 +81,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("checkouttime")
-	@ExcelColumn("结账时间")
+	@ExcelColumn(value="结账时间",index=7)
 	public Timestamp getCheckoutTime() {
 		return checkoutTime;
 	}
@@ -91,7 +91,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("originamount")
-	@ExcelColumn("原价")
+	@ExcelColumn(value="原价",index=2)
 	public BigDecimal getOriginAmount() {
 		return originAmount;
 	}
@@ -101,7 +101,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("realamount")
-	@ExcelColumn("实收金额")
+	@ExcelColumn(value="实收金额",index=3)
 	public BigDecimal getRealAmount() {
 		return realAmount;
 	}
@@ -111,7 +111,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("paymode")
-	@ExcelColumn("支付方式")
+	@ExcelColumn(value="支付方式",index=4)
 	public String getPaymode() {
 		return paymode;
 	}
@@ -121,7 +121,7 @@ public class OrderDTO {
 	}
 
 	@ColumnName("tableno")
-	@ExcelColumn("桌号")
+	@ExcelColumn(value="桌号",index=5)
 	public String getTableNo() {
 		return tableNo;
 	}

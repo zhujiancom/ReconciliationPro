@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import com.rci.annotation.ColumnName;
+import com.rci.annotation.ExcelColumn;
 
 public class OrderItemDTO {
 	/* 订单编号 */
@@ -37,6 +38,7 @@ public class OrderItemDTO {
 	private Timestamp consumeTime;
 
 	@ColumnName("billno")
+	@ExcelColumn(value="订单号",index=0)
 	public String getBillNo() {
 		return billNo;
 	}
@@ -46,6 +48,7 @@ public class OrderItemDTO {
 	}
 
 	@ColumnName("payno")
+	@ExcelColumn(value="付款编号",index=1)
 	public String getPayNo() {
 		return payNo;
 	}
@@ -55,6 +58,7 @@ public class OrderItemDTO {
 	}
 
 	@ColumnName("dishno")
+	@ExcelColumn(value="菜品编号",index=2)
 	public String getDishNo() {
 		return dishNo;
 	}
@@ -64,6 +68,7 @@ public class OrderItemDTO {
 	}
 
 	@ColumnName("suitno")
+	@ExcelColumn(value="套餐编号",index=3)
 	public String getSuitNo() {
 		return suitNo;
 	}
@@ -73,6 +78,7 @@ public class OrderItemDTO {
 	}
 
 	@ColumnName("suitflag")
+	@ExcelColumn(value="是否套餐",index=4)
 	public String getSuitFlag() {
 		return suitFlag;
 	}
@@ -82,6 +88,7 @@ public class OrderItemDTO {
 	}
 
 	@ColumnName("discount")
+	@ExcelColumn(value="折扣信息",index=5)
 	public BigDecimal getDiscountRate() {
 		return discountRate;
 	}
@@ -91,6 +98,7 @@ public class OrderItemDTO {
 	}
 
 	@ColumnName("count")
+	@ExcelColumn(value="销售数量",index=6)
 	public BigDecimal getCount() {
 		return count;
 	}
@@ -100,6 +108,7 @@ public class OrderItemDTO {
 	}
 
 	@ColumnName("countback")
+	@ExcelColumn(value="退菜数量",index=7)
 	public BigDecimal getCountback() {
 		return countback;
 	}
@@ -109,6 +118,7 @@ public class OrderItemDTO {
 	}
 
 	@ColumnName("price")
+	@ExcelColumn(value="单价",index=8)
 	public BigDecimal getPrice() {
 		return price;
 	}
@@ -118,6 +128,7 @@ public class OrderItemDTO {
 	}
 
 	@ColumnName("consumeTime")
+	@ExcelColumn(value="消费时间",index=9)
 	public Timestamp getConsumeTime() {
 		return consumeTime;
 	}

@@ -15,7 +15,7 @@ public class ExceptionConstant{
 	}
 
 	public enum SERVICE{
-		LOGIN,LOGOUT,TIME_FORMAT,DATA_ERROR,EXCEL_GENERATION
+		LOGIN,LOGOUT,TIME_FORMAT,DATA_ERROR,EXCEL_OPERATION
 	}
 
 	public enum Tools{
