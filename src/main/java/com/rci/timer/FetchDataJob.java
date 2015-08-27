@@ -31,7 +31,7 @@ import com.rci.tools.DateUtil;
 @Component("fetchDataJob")
 public class FetchDataJob {
 	private static final Log logger = LogFactory.getLog(FetchDataJob.class);
-	@Resource(name="DataLoaderService")
+	@Resource(name="DBDataLoaderService")
 	private IDataLoaderService dataloadService;
 	
 	/**

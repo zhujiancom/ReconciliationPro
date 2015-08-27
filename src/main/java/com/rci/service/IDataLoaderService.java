@@ -1,10 +1,12 @@
 package com.rci.service;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
 import com.rci.bean.entity.Order;
+import com.rci.exceptions.ServiceException;
 
 public interface IDataLoaderService {
 	/**
@@ -20,6 +22,8 @@ public interface IDataLoaderService {
 	 * @param date
 	 */
 	void load(Date date);
+	
+	void load(InputStream in,Date date) throws ServiceException;
 	/**
 	 * 
 	 * Describle(描述)：解析订单各种账户收入的金额，判断订单使用的方案
