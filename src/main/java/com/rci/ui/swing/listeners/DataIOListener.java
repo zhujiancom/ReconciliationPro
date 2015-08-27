@@ -23,6 +23,8 @@ import javax.swing.filechooser.FileFilter;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.exceptions.ExceptionConstant.SERVICE;
+import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
@@ -128,7 +130,7 @@ public class DataIOListener implements ActionListener {
 		int result = chooser.showSaveDialog(null);
 		switch (result) {
 		case JFileChooser.APPROVE_OPTION:
-			System.out.println(chooser.getSelectedFile().getAbsolutePath() + "-->这是绝对路径");// 绝对路径
+//			System.out.println(chooser.getSelectedFile().getAbsolutePath() + "-->这是绝对路径");// 绝对路径
 			new Thread(new Runnable() {
 				
 				@Override
@@ -145,6 +147,9 @@ public class DataIOListener implements ActionListener {
 						sheet1.setClazz(OrderDTO.class);
 						sheet1.setHasHeader(true);
 						List<OrderDTO> orders = fetchService.fetchOrders(exportDate, DateUtil.addDays(exportDate, 1));
+						if(CollectionUtils.isEmpty(orders)){
+							ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "没有数据，备份文件失败");
+						}
 						sheet1.setDataset(orders);
 						
 						ExcelSheet sheet2 = new ExcelSheet("菜品销售列表");
@@ -163,6 +168,8 @@ public class DataIOListener implements ActionListener {
 						e.printStackTrace();
 					} catch (ParseException e) {
 						e.printStackTrace();
+					} catch (ServiceException se){
+						JOptionPane.showMessageDialog(null, se.getMessage());
 					}
 				}
 			}).start();

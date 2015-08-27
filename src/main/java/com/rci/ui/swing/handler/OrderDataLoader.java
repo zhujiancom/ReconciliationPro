@@ -43,7 +43,7 @@ public class OrderDataLoader implements Runnable {
 	@Override
 	public void run() {
 		//1.加载 order 数据
-		loaderService = (IDataLoaderService) SpringUtils.getBean("DataLoaderService");
+		loaderService = (IDataLoaderService) SpringUtils.getBean("DBDataLoaderService");
 		loaderService.load(queryDate);
 		IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
 		String time = DateUtil.date2Str(queryDate, "yyyyMMdd");
