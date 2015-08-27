@@ -21,6 +21,7 @@ import java.util.Map.Entry;
 import javax.annotation.Resource;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -76,6 +77,9 @@ public class ExcelExImportService implements IExImportService {
 			Collection dataset = customSheet.getDataset();
 			// 设置表格默认列宽度为30个字节
 			sheet.setDefaultColumnWidth(30);
+			//默认样式
+			HSSFCellStyle defaultContentStyle = customSheet.getDefaultContentCellStyle(workbook);
+			HSSFCellStyle defaultTitleStyle = customSheet.getDefaultTitleCellStyle(workbook);
 			int rowIndex = 0;
 			//设置标题行
 			if(isHeader){
@@ -93,7 +97,7 @@ public class ExcelExImportService implements IExImportService {
 						int index = excelColumn.index();
 						HSSFCell cell = headerRow.createCell(index);
 						if(customSheet.getTitleStyle() == null){
-							cell.setCellStyle(customSheet.getDefaultTitleCellStyle(workbook));
+							cell.setCellStyle(defaultTitleStyle);
 						}else{
 							cell.setCellStyle(customSheet.getTitleStyle());
 						}
@@ -118,7 +122,7 @@ public class ExcelExImportService implements IExImportService {
 					int index = excelColumn.index();
 					HSSFCell dataCell = dataRow.createCell(index);
 					if(customSheet.getContentStyle() == null){
-						dataCell.setCellStyle(customSheet.getDefaultContentCellStyle(workbook));
+						dataCell.setCellStyle(defaultContentStyle);
 					}else{
 						dataCell.setCellStyle(customSheet.getContentStyle());
 					}
