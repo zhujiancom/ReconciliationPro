@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.util.CollectionUtils;
 
 import com.rci.enums.BusinessEnums.AccountCode;
@@ -61,10 +63,12 @@ public class OrderDataLoader implements Runnable {
 					contentPane.getTextArea().append("【"+ov.getPayNo()+"】"+ov.getWarningInfo()+"\n");
 				}
 			}
+			//2. 根据订单数据统计今日收入明细
+			loadSumData(queryDate);
+			conclusionPane.refreshUI();
+		}else{
+			JOptionPane.showMessageDialog(null, "没有记录");
 		}
-		//2. 根据订单数据统计今日收入明细
-		loadSumData(queryDate);
-		conclusionPane.refreshUI();
 	}
 	
 	/**

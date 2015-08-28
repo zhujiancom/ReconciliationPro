@@ -3,14 +3,11 @@ package com.rci.ui.swing.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,31 +15,29 @@ import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.Timer;
 import javax.swing.filechooser.FileFilter;
 
 import org.springframework.util.CollectionUtils;
 
 import com.rci.enums.BusinessEnums.AccountCode;
-import com.rci.exceptions.ExceptionConstant.SERVICE;
-import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
-import com.rci.metadata.dto.OrderDTO;
-import com.rci.metadata.dto.OrderItemDTO;
-import com.rci.metadata.service.IDataFetchService;
 import com.rci.service.IDataLoaderService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
-import com.rci.service.utils.IExImportService;
-import com.rci.service.utils.excel.ExcelExImportService;
-import com.rci.service.utils.excel.ExcelSheet;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
+import com.rci.ui.swing.handler.ExcelDataImport;
 import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
 import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
+import com.rci.ui.swing.views.PopWindow;
+import com.rci.ui.swing.views.builder.ProgressWinBuilder;
+import com.rci.ui.swing.views.builder.WindowBuilderFactory;
 import com.rci.ui.swing.vos.OrderItemVO;
 import com.rci.ui.swing.vos.OrderVO;
 
@@ -52,7 +47,7 @@ public class DataIOListener implements ActionListener {
 	
 	private int action;
 	
-	private IDataFetchService fetchService;
+//	private IDataFetchService fetchService;
 	
 	private ContentPanel contentPane;
 	
@@ -62,7 +57,7 @@ public class DataIOListener implements ActionListener {
 	
 	public DataIOListener(int action){
 		this.action = action;
-		fetchService = (IDataFetchService) SpringUtils.getBean("DataFetchService");
+//		fetchService = (IDataFetchService) SpringUtils.getBean("DataFetchService");
 	}
 	
 	@Override
@@ -130,49 +125,24 @@ public class DataIOListener implements ActionListener {
 		int result = chooser.showSaveDialog(null);
 		switch (result) {
 		case JFileChooser.APPROVE_OPTION:
-//			System.out.println(chooser.getSelectedFile().getAbsolutePath() + "-->这是绝对路径");// 绝对路径
-			new Thread(new Runnable() {
+			ProgressWinBuilder progressBarBuilder = WindowBuilderFactory.createProgressWinBuilder();
+			PopWindow progressBarWin = progressBarBuilder.retrieveWindow();
+			final JProgressBar bar = progressBarBuilder.getBar();
+			final ExcelDataImport target = new ExcelDataImport(chooser,progressBarWin);
+			new Thread(target).start();
+			
+			bar.setMinimum(0);
+			bar.setMaximum(target.getAmount());
+			Timer timer = new Timer(300,new ActionListener() {
 				
 				@Override
-				public void run() {
-					IExImportService excelService = (IExImportService) SpringUtils.getBean("ExcelExImportService");
-					try {
-						String fileName = chooser.getSelectedFile().getName();
-						List<ExcelSheet> sheets = new ArrayList<ExcelSheet>();
-						String dateStr = fileName.substring(0,fileName.indexOf("."));
-						Date exportDate = DateUtil.parseDate(dateStr, "yyyyMMdd");
-						BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(chooser.getSelectedFile().getAbsolutePath())));
-						
-						ExcelSheet sheet1 = new ExcelSheet("订单列表");
-						sheet1.setClazz(OrderDTO.class);
-						sheet1.setHasHeader(true);
-						List<OrderDTO> orders = fetchService.fetchOrders(exportDate, DateUtil.addDays(exportDate, 1));
-						if(CollectionUtils.isEmpty(orders)){
-							ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "没有数据，备份文件失败");
-						}
-						sheet1.setDataset(orders);
-						
-						ExcelSheet sheet2 = new ExcelSheet("菜品销售列表");
-						sheet2.setClazz(OrderItemDTO.class);
-						sheet2.setHasHeader(true);
-						List<OrderItemDTO> orderItems = fetchService.fetchOrderItems(exportDate, DateUtil.addDays(exportDate, 1));
-						sheet2.setDataset(orderItems);
-						
-						sheets.add(sheet1);
-						sheets.add(sheet2);
-						ExcelExImportService excelExportService =  (ExcelExImportService) excelService;
-						excelExportService.setCustomSheets(sheets);
-						excelService.exportTo(bos);
-						JOptionPane.showMessageDialog(null, "导出成功");
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (ParseException e) {
-						e.printStackTrace();
-					} catch (ServiceException se){
-						JOptionPane.showMessageDialog(null, se.getMessage());
-					}
+				public void actionPerformed(ActionEvent e) {
+					bar.setValue(target.getCurrent());
+					
 				}
-			}).start();
+			});
+			timer.start();
+			
 			break;
 		case JFileChooser.CANCEL_OPTION:
 			System.out.println("取消");
@@ -243,7 +213,6 @@ public class DataIOListener implements ActionListener {
 						BufferedInputStream bin = new BufferedInputStream(new FileInputStream(new File(chooser.getSelectedFile().getAbsolutePath())));
 						IDataLoaderService loaderService = (IDataLoaderService) SpringUtils.getBean("ExcelDataLoaderService");
 						loaderService.load(bin, date);
-						JOptionPane.showMessageDialog(null, "导入成功");
 						IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
 						List<OrderVO> ordervos = orderService.accquireOrderVOsByDay(day);
 						OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
@@ -263,12 +232,15 @@ public class DataIOListener implements ActionListener {
 						//2. 根据订单数据统计今日收入明细
 						loadSumData(date);
 						conclusionPane.refreshUI();
+						JOptionPane.showMessageDialog(null, "导入成功");
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 					} catch (ParseException e) {
 						e.printStackTrace();
 					} catch(ServiceException se){
 						JOptionPane.showMessageDialog(null, se.getMessage());
+					} catch(Exception e){
+						JOptionPane.showMessageDialog(null, e.getMessage());
 					}
 				}
 			}).start();
@@ -336,5 +308,4 @@ public class DataIOListener implements ActionListener {
 	public void setConclusionPane(ConculsionPanel conclusionPane) {
 		this.conclusionPane = conclusionPane;
 	}
-
 }

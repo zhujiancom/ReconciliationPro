@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JProgressBar;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
@@ -37,6 +38,7 @@ public class MainFrame extends JFrame {
 	private ConculsionPanel conclusionPane = new ConculsionPanel(); // 统计信息面板
 	private QueryFormPanel queryPanel = new QueryFormPanel(); // 查询面板
 	ContentPanel contentPane; // 订单数据内容展示面板
+	JProgressBar bar;
 
 	public MainFrame() {
 		initComponent();
@@ -170,7 +172,8 @@ public class MainFrame extends JFrame {
 		});
 
 		// 数据导出
-		dataExport.addActionListener(new DataIOListener(DataIOListener.EXPORT));
+		DataIOListener dataExportListener = new DataIOListener(DataIOListener.EXPORT);
+		dataExport.addActionListener(dataExportListener);
 		
 		//数据导入
 		DataIOListener dataImportListener = new DataIOListener(DataIOListener.IMPORT);

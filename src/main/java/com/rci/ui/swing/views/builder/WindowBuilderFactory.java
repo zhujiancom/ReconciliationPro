@@ -72,4 +72,8 @@ public class WindowBuilderFactory {
 	public static StockManagementWinBuilder createStockManagementWinBuilder(){
 		return new StockManagementWinBuilder();
 	}
+	
+	public static ProgressWinBuilder createProgressWinBuilder(){
+		return new ProgressWinBuilder();
+	}
 }
