@@ -219,6 +219,9 @@ public class ExcelExImportService implements IExImportService {
 						Date date = DateUtil.parseTime(cell.getStringCellValue());
 						value = new Timestamp(date.getTime()) ;
 					}else{
+						if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+							value = cell.getNumericCellValue();
+						}
 						value = cell.getStringCellValue();
 					}
 					wMethod.invoke(orderDTO, new Object[]{value});
