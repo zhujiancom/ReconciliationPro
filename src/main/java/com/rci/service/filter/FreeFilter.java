@@ -48,6 +48,9 @@ public class FreeFilter extends AbstractFilter {
 		if(onlineFree){
 			return;
 		}
+		if(otherAmount != null || order.getPaymodeMapping().containsKey(PaymodeCode.TDD)){
+			return;
+		}
 		String schemeName = order.getSchemeName();
 		if(normalAmount.compareTo(BigDecimal.ZERO) > 0){
 			if(StringUtils.hasText(schemeName)){
