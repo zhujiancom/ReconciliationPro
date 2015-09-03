@@ -48,7 +48,6 @@ public class FreeFilter extends AbstractFilter {
 		if(onlineFree){
 			return;
 		}
-		
 		String schemeName = order.getSchemeName();
 		if(normalAmount.compareTo(BigDecimal.ZERO) > 0){
 			if(StringUtils.hasText(schemeName)){

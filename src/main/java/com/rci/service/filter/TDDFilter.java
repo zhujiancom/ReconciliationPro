@@ -33,21 +33,6 @@ public class TDDFilter extends AbstractFilter {
 	public void generateScheme(Order order,FilterChain chain){
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.TDD);
 		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
-//		BigDecimal totalAmount = BigDecimal.ZERO;
-//		BigDecimal tddAmount = BigDecimal.ZERO; //淘点点支付金额
-//		BigDecimal originAmount = order.getOriginPrice(); //订单总金额
-//		List<OrderItem> items = order.getItems();
-//		for(OrderItem item:items){
-//			String dishNo=item.getDishNo();
-//			isNodiscount(dishNo);
-//			BigDecimal singlePrice = item.getPrice();
-//			BigDecimal count = item.getCount();
-//			BigDecimal countback = item.getCountback();
-//			BigDecimal ratepercent = item.getDiscountRate();
-//			BigDecimal rate = DigitUtil.precentDown(ratepercent);
-//			BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate).setScale(0, BigDecimal.ROUND_CEILING);
-//			totalAmount = totalAmount.add(price);
-//		}
 		validation(order); // 验证订单
 		try {
 			Map<String,BigDecimal> freeMap = chain.getFreeOnlineMap();
