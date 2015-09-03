@@ -4,6 +4,8 @@
 package com.rci.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,6 +38,7 @@ import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IStockService;
 import com.rci.service.filter.CalculateFilter;
 import com.rci.service.filter.FilterChain;
+import com.rci.service.filter.FreeFilter;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 
 /**
@@ -107,6 +110,16 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 	@Override
 	public void parseOrder(Order order) {
 		FilterChain chain = new FilterChain();
+		Collections.sort(filters, new Comparator<CalculateFilter>() {
+
+			@Override
+			public int compare(CalculateFilter f1, CalculateFilter f2) {
+				if(f1 instanceof FreeFilter || f2 instanceof FreeFilter){
+					return 0;
+				}
+				return -1;
+			}
+		});
 		chain.addFilters(filters);
 		chain.doFilter(order, chain);
 	}

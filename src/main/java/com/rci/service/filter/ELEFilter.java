@@ -3,7 +3,6 @@ package com.rci.service.filter;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
-import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
@@ -21,7 +19,6 @@ import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DateUtil;
-import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
 
 @Component
@@ -38,7 +35,7 @@ public class ELEFilter extends AbstractFilter {
 	public void generateScheme(Order order, FilterChain chain) {
 			BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ELE);
 			BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
-			BigDecimal actualAmount = BigDecimal.ZERO;
+			BigDecimal originAmount = order.getOriginPrice();
 			
 			String schemeName = order.getSchemeName();
 			if(StringUtils.hasText(schemeName)){
@@ -46,21 +43,8 @@ public class ELEFilter extends AbstractFilter {
 			}else{
 				schemeName = "饿了么在线支付"+onlineAmount+"元";
 			}
-			
-			List<OrderItem> items = order.getItems();
-			for(OrderItem item:items){
-				String dishNo=item.getDishNo();
-				isNodiscount(dishNo);
-				BigDecimal singlePrice = item.getPrice();
-				BigDecimal count = item.getCount();
-				BigDecimal countback = item.getCountback();
-				BigDecimal ratepercent = item.getDiscountRate();
-				BigDecimal rate = DigitUtil.precentDown(ratepercent);
-				BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate).setScale(0, BigDecimal.ROUND_CEILING);
-				actualAmount = actualAmount.add(price);
-			}
 			if(freeAmount != null){
-				actualAmount = actualAmount.subtract(freeAmount);
+				originAmount = originAmount.subtract(freeAmount);
 				String day = order.getDay();
 				try{
 					Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
@@ -68,7 +52,7 @@ public class ELEFilter extends AbstractFilter {
 					if(scheme != null){
 						freeAmount = freeAmount.subtract(scheme.getSpread());
 						schemeName = schemeName+","+scheme.getName();
-						Map<String,BigDecimal> freeMap = chain.getFreeMap();
+						Map<String,BigDecimal> freeMap = chain.getFreeOnlineMap();
 						if(freeMap.get(order.getPayNo()) == null){
 							freeMap.put(order.getPayNo(), freeAmount);
 						}
@@ -84,12 +68,7 @@ public class ELEFilter extends AbstractFilter {
 					e.printStackTrace();
 				}
 			}
-			if(actualAmount.compareTo(onlineAmount) != 0){
-				order.setUnusual(YOrN.Y);
-				logger.warn("--- 【"+order.getPayNo()+"】[饿了么在线支付异常] ---， 在线支付金额："+onlineAmount+" , 实际支付金额： "+actualAmount);
-				String warningInfo = "[饿了么在线支付异常]--- 在线支付金额："+onlineAmount+" , 应支付金额： "+actualAmount;
-				order.setWarningInfo(warningInfo);
-			}
+			
 			order.setSchemeName(schemeName);
 			//保存饿了么在线支付金额
 			preserveOAR(onlineAmount,AccountCode.ELE,order);
@@ -99,6 +78,21 @@ public class ELEFilter extends AbstractFilter {
 	@Override
 	protected Map<SchemeType, Integer> getSuitMap() {
 		return null;
+	}
+
+	/* 
+	 * @see com.rci.service.filter.AbstractFilter#validation(com.rci.bean.entity.Order)
+	 */
+	@Override
+	protected void validation(Order order) {
+		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ELE);
+		BigDecimal originAmount = order.getOriginPrice();
+		if(originAmount.compareTo(onlineAmount) != 0){
+			order.setUnusual(YOrN.Y);
+			logger.warn("--- 【"+order.getPayNo()+"】[饿了么在线支付异常] ---， 在线支付金额："+onlineAmount+" , 实际支付金额： "+originAmount);
+			String warningInfo = "[饿了么在线支付异常]--- 在线支付金额："+onlineAmount+" , 应支付金额： "+originAmount;
+			order.setWarningInfo(warningInfo);
+		}		
 	}
 
 }

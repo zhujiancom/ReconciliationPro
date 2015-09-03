@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Stock;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishService;
@@ -77,9 +76,9 @@ public class MetadataServiceImpl implements IMetadataService {
 		return null;
 	}
 
-	@Override
-	public Dish getDishByNo(String dishNo) {
-		return dishService.findDishByNo(dishNo);
-	}
+//	@Override
+//	public Dish getDishByNo(String dishNo) {
+//		return dishService.findDishByNo(dishNo);
+//	}
 
 }

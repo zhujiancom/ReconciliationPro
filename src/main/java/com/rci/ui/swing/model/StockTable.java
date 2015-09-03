@@ -25,7 +25,7 @@ import com.rci.service.IStockService;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.SpringUtils;
-import com.rci.ui.swing.renderers.AbstractLineRedMarkRenderer;
+import com.rci.ui.swing.renderers.AbstractLineColorMarkRenderer;
 import com.rci.ui.swing.vos.StockVO;
 
 public class StockTable extends BaseTable {
@@ -313,7 +313,7 @@ public class StockTable extends BaseTable {
 	 * Create Time: 2015年7月27日 下午2:53:02
 	 *
 	 */
-	private class StockTableRedMarkRenderer extends AbstractLineRedMarkRenderer<StockTableModel>{
+	private class StockTableRedMarkRenderer extends AbstractLineColorMarkRenderer<StockTableModel>{
 
 		/**
 		 * 
@@ -321,7 +321,7 @@ public class StockTable extends BaseTable {
 		private static final long serialVersionUID = -7471535707441144408L;
 
 		@Override
-		public boolean markRed(StockTableModel tm, int rowIndex) {
+		public boolean markColor(StockTableModel tm, int rowIndex) {
 			StockVO stock = tm.getStockAt(rowIndex);
 			if(stock.getBalanceAmount().compareTo(BigDecimal.TEN) <= 0){
 				return true;

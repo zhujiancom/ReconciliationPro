@@ -22,6 +22,7 @@ import com.rci.tools.StringUtils;
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class FreeFilter extends AbstractFilter {
+	private String[] freeOnlinePaymodes = new String[]{"11","12","96"};
 
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
@@ -30,28 +31,36 @@ public class FreeFilter extends AbstractFilter {
 
 	@Override
 	protected void generateScheme(Order order,FilterChain chain) {
+		boolean onlineFree = false;
 		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
 		BigDecimal normalAmount = freeAmount;
-		Map<String,BigDecimal> freeMap = chain.getFreeMap();
-		BigDecimal otherAmount = freeMap.get(order.getPayNo());
-		if(otherAmount != null || order.getPaymodeMapping().containsKey(PaymodeCode.ELE)){
+		Map<String,BigDecimal> freeMap = chain.getFreeOnlineMap();
+		BigDecimal freeOnlineAmount = freeMap.get(order.getPayNo());
+		if(freeOnlineAmount != null){
+			for(String payno:freeOnlinePaymodes){
+				PaymodeCode paymode = PaymodeCode.paymodeCode(payno);
+				if(order.getPaymodeMapping().containsKey(paymode)){
+					onlineFree = true;
+					break;
+				}
+			}
+		}
+		if(onlineFree){
 			return;
 		}
-		if(otherAmount != null || order.getPaymodeMapping().containsKey(PaymodeCode.MTWM)){
-			return;
-		}
+		
 		String schemeName = order.getSchemeName();
 		if(normalAmount.compareTo(BigDecimal.ZERO) > 0){
 			if(StringUtils.hasText(schemeName)){
-				schemeName = schemeName+",免单"+normalAmount+"元";
+				schemeName = schemeName+",堂食免单"+normalAmount+"元";
 			}else{
-				schemeName = "免单"+normalAmount+"元";
+				schemeName = "堂食免单"+normalAmount+"元";
 			}
 		}
 		if(normalAmount.compareTo(BigDecimal.ZERO) < 0){
-			logger.error("----【"+order.getPayNo()+"】[免单金额异常] --- , 免单金额超出了原价");
+			logger.error("----【"+order.getPayNo()+"】[堂食免单金额异常] --- , 免单金额超出了原价");
 			order.setUnusual(YOrN.Y);
-			String warningInfo = "[免单金额异常]--- 免单金额超出了原价";
+			String warningInfo = "[堂食免单金额异常]--- 免单金额超出了原价";
 			order.setWarningInfo(warningInfo);
 		}
 		order.setSchemeName(schemeName);
@@ -61,6 +70,13 @@ public class FreeFilter extends AbstractFilter {
 	@Override
 	protected Map<SchemeType, Integer> getSuitMap() {
 		return null;
+	}
+
+	/* 
+	 * @see com.rci.service.filter.AbstractFilter#validation(com.rci.bean.entity.Order)
+	 */
+	@Override
+	protected void validation(Order order) {
 	}
 
 }

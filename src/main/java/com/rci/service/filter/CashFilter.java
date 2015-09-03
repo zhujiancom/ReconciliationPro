@@ -85,11 +85,21 @@ public class CashFilter extends AbstractFilter {
 				logger.error("----【"+order.getPayNo()+"】[收银机支付异常] ---, 实际金额不应该大于原价");
 				String warningInfo = "[收银机支付异常]--- 收银机实际入账金额："+cashAmount+" 不应大于原价："+originAmount;
 				order.setWarningInfo(warningInfo);
+				preserveOAR(cashAmount, AccountCode.CASH_MACHINE, order);
 			}
 	}
 
 	@Override
 	protected Map<SchemeType, Integer> getSuitMap() {
 		return null;
+	}
+
+	/* 
+	 * @see com.rci.service.filter.AbstractFilter#validation(com.rci.bean.entity.Order)
+	 */
+	@Override
+	protected void validation(Order order) {
+		// TODO Auto-generated method stub
+		
 	}
 }

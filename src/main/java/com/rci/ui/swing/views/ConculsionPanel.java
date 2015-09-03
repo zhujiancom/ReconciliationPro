@@ -155,7 +155,7 @@ public class ConculsionPanel extends JPanel {
 		elePanel.add(eleRemark);
 		
 		/* 淘点点统计  */
-		JLabel tdd = new JLabel("淘点点入账总额：");
+		JLabel tdd = new JLabel("支付宝入账总额：");
 		tddValue = new JLabel();
 		tddValue.setForeground(Color.RED);
 		JPanel tddPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -274,7 +274,7 @@ public class ConculsionPanel extends JPanel {
 		getEleValue().setText(getTotalAmount(AccountCode.ELE).toString());
 		getEleFreeValue().setText(getTotalAmount(AccountCode.FREE_ELE).toString());
 		getEleSdRemark().setText(getELESDAllowanceAmount(queryDate));
-		getTddValue().setText(getTotalAmount(AccountCode.TDD).toString());
+		getTddValue().setText(getTotalAmount(AccountCode.ALIPAY).toString());
 		getMtSuperValue().setText(getTotalAmount(AccountCode.MT_SUPER).toString());
 		getFreeValue().setText(getTotalAmount(AccountCode.FREE).toString());
 		getTotalValue().setText(getTotalDayAmount(queryDate).toString());

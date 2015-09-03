@@ -2,7 +2,6 @@ package com.rci.service.core;
 
 import java.util.List;
 
-import com.rci.bean.entity.Dish;
 import com.rci.ui.swing.vos.StockVO;
 
 
@@ -61,7 +60,7 @@ public interface IMetadataService {
 	 * @param dishNo
 	 * @return
 	 */
-	Dish getDishByNo(String dishNo);
+//	Dish getDishByNo(String dishNo);
 	
 	List<StockVO> displayStocks();
 }

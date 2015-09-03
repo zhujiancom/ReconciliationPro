@@ -56,9 +56,9 @@ import com.rci.ui.swing.vos.StockVO;
 public class StockManagementWinBuilder implements PopWindowBuilder {
 	private JPanel contentPane;
 	
-	private JList lList;
+	private JList<DishVO> lList;
 	
-	private JList rList;
+	private JList<DishVO> rList;
 	
 	private Map<Integer,DishVO> lmap;
 	
@@ -205,7 +205,6 @@ public class StockManagementWinBuilder implements PopWindowBuilder {
 					}
 					DishListModel dishModel = (DishListModel) list.getModel();
 					DishVO dish = (DishVO) dishModel.getDishAt(index);
-					System.out.println(index+"-"+dish.getDishNo()+"-"+dish.getDishName());
 					lmap = new HashMap<Integer,DishVO>();
 					lmap.put(index, dish);
 				}

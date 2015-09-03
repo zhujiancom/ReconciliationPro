@@ -6,6 +6,7 @@ import javax.swing.AbstractListModel;
 
 import com.rci.ui.swing.vos.DishVO;
 
+@SuppressWarnings("rawtypes")
 public class DishListModel extends AbstractListModel {
 	/**
 	 * 

@@ -1,22 +1,23 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Order;
-import com.rci.bean.entity.OrderItem;
+import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
-import com.rci.tools.DigitUtil;
+import com.rci.tools.DateUtil;
 import com.rci.tools.StringUtils;
 
 @Component
@@ -29,53 +30,108 @@ public class TDDFilter extends AbstractFilter {
 	}
 
 	@Override
-	public void generateScheme(Order order,FilterChain chain) {
+	public void generateScheme(Order order,FilterChain chain){
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.TDD);
-		BigDecimal totalAmount = BigDecimal.ZERO; //订单总金额
-		BigDecimal tddAmount = BigDecimal.ZERO; //淘点点支付金额
-		
-		String schemeName = order.getSchemeName();
-		if(StringUtils.hasText(schemeName)){
-			schemeName = schemeName+",支付宝（淘点点）支付"+onlineAmount+"元";	
-		}else{
-			schemeName = "淘点点在线支付"+onlineAmount+"元";
-		}
-		
-		List<OrderItem> items = order.getItems();
-		for(OrderItem item:items){
-			String dishNo=item.getDishNo();
-			isNodiscount(dishNo);
-			BigDecimal singlePrice = item.getPrice();
-			BigDecimal count = item.getCount();
-			BigDecimal countback = item.getCountback();
-			BigDecimal ratepercent = item.getDiscountRate();
-			BigDecimal rate = DigitUtil.precentDown(ratepercent);
-			BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate).setScale(0, BigDecimal.ROUND_CEILING);
-			totalAmount = totalAmount.add(price);
-		}
-		BigDecimal otherAmount = BigDecimal.ZERO;
-		for(Iterator<Entry<PaymodeCode,BigDecimal>> it = order.getPaymodeMapping().entrySet().iterator();it.hasNext();){
-			Entry<PaymodeCode,BigDecimal> entry = it.next();
-			PaymodeCode paymode = entry.getKey();
-			BigDecimal amount = entry.getValue();
-			if(!PaymodeCode.TDD.equals(paymode)){
-				otherAmount = otherAmount.add(amount);
+		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
+//		BigDecimal totalAmount = BigDecimal.ZERO;
+//		BigDecimal tddAmount = BigDecimal.ZERO; //淘点点支付金额
+//		BigDecimal originAmount = order.getOriginPrice(); //订单总金额
+//		List<OrderItem> items = order.getItems();
+//		for(OrderItem item:items){
+//			String dishNo=item.getDishNo();
+//			isNodiscount(dishNo);
+//			BigDecimal singlePrice = item.getPrice();
+//			BigDecimal count = item.getCount();
+//			BigDecimal countback = item.getCountback();
+//			BigDecimal ratepercent = item.getDiscountRate();
+//			BigDecimal rate = DigitUtil.precentDown(ratepercent);
+//			BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate).setScale(0, BigDecimal.ROUND_CEILING);
+//			totalAmount = totalAmount.add(price);
+//		}
+		validation(order); // 验证订单
+		try {
+			Map<String,BigDecimal> freeMap = chain.getFreeOnlineMap();
+			String day = order.getDay();
+			Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
+			/* 查找淘点点符合条件的活动 */
+			List<Scheme> schemes = schemeService.getSchemes(Vendor.TDD,orderDate);
+			BigDecimal postTotalAmount = BigDecimal.ZERO;
+			if(CollectionUtils.isEmpty(schemes)){
+				String schemeName = order.getSchemeName();
+				if(StringUtils.hasText(schemeName)){
+					schemeName = schemeName+",淘点点在线支付"+onlineAmount+"元";	
+				}else{
+					schemeName = "淘点点在线支付"+onlineAmount+"元";
+				}
+				order.setSchemeName(schemeName);
+				//保存淘点点在线优惠金额
+				if(freeAmount != null){
+					if(freeMap.get(order.getPayNo()) == null){
+						freeMap.put(order.getPayNo(), freeAmount);
+					}
+					preserveOAR(freeAmount,AccountCode.FREE_ONLINE,order);
+				}
+				//保存淘点点在线支付金额
+				preserveOAR(onlineAmount,AccountCode.ALIPAY,order);
+			}else{
+				for(Scheme scheme:schemes){
+					if(onlineAmount.compareTo(scheme.getFloorAmount())>=0 && onlineAmount.compareTo(scheme.getCeilAmount()) < 0 ){
+						//满减活动
+						if(freeAmount != null){
+							freeAmount = freeAmount.add(scheme.getSpread());
+						}else{
+							freeAmount = scheme.getSpread();
+						}
+						postTotalAmount = onlineAmount.subtract(scheme.getSpread());
+						String schemeName = order.getSchemeName();
+						if(StringUtils.hasText(schemeName)){
+							schemeName = schemeName+",淘点点在线支付"+postTotalAmount+"元 , "+scheme.getName();
+						}else{
+							schemeName = "淘点点在线支付"+postTotalAmount+"元 , "+scheme.getName();
+						}
+						if(freeMap.get(order.getPayNo()) == null){
+							freeMap.put(order.getPayNo(), freeAmount);
+						}
+						order.setSchemeName(schemeName);
+						//保存淘点点免单金额
+						preserveOAR(freeAmount,AccountCode.FREE_ONLINE,order);
+						//保存淘点点在线支付金额
+						preserveOAR(postTotalAmount,AccountCode.ALIPAY,order);
+						break;
+					}else{
+						continue;
+					}
+				}
 			}
+		} catch(Exception e){
+			e.printStackTrace();
 		}
-		tddAmount = totalAmount.subtract(otherAmount);
-		if(tddAmount.compareTo(onlineAmount) != 0){
-			order.setUnusual(YOrN.Y);
-			logger.warn("--- 【"+order.getPayNo()+"】[淘点点支付异常] ---， 在线支付金额："+onlineAmount+" , 实际支付金额： "+tddAmount);
-			String warningInfo = "[淘点点支付异常]---  在线支付金额："+onlineAmount+" , 实际支付金额： "+tddAmount;
-			order.setWarningInfo(warningInfo);
-		}
-		order.setSchemeName(schemeName);
-		//保存淘点点在线支付金额
-		preserveOAR(tddAmount,AccountCode.TDD,order);
 	}
-
+	
 	@Override
 	protected Map<SchemeType, Integer> getSuitMap() {
 		return null;
+	}
+
+	/* 
+	 * @see com.rci.service.filter.AbstractFilter#validation(com.rci.bean.entity.Order)
+	 */
+	@Override
+	protected void validation(Order order) {
+		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.TDD);
+		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
+		BigDecimal originAmount = order.getOriginPrice(); //订单总金额
+		BigDecimal payAmount = BigDecimal.ZERO;
+		if(freeAmount == null){
+			payAmount = originAmount;
+		}else{
+			payAmount = originAmount.subtract(freeAmount);
+		}
+		if(!payAmount.equals(onlineAmount)){
+			order.setUnusual(YOrN.Y);
+			logger.warn("--- 【"+order.getPayNo()+"】[淘点点支付异常] ---， 在线支付金额："+onlineAmount+" , 实际支付金额： "+payAmount);
+			String warningInfo = "[淘点点支付异常]---  在线支付金额："+onlineAmount+" , 实际支付金额： "+payAmount;
+			order.setWarningInfo(warningInfo);
+		}
 	}
 }

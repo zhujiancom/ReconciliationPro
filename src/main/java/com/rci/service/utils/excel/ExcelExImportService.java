@@ -209,20 +209,25 @@ public class ExcelExImportService implements IExImportService {
 					HSSFCell cell = row.getCell(index);
 					Object value = new Object();
 					Method wMethod = pdr.getWriteMethod();
-					if(wMethod.getParameterTypes()[0] == BigDecimal.class){
-						if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+					if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+						if(wMethod.getParameterTypes()[0] == BigDecimal.class){
 							value = new BigDecimal(cell.getNumericCellValue());
+						}else if(wMethod.getParameterTypes()[0] == Timestamp.class){
+							Date date = DateUtil.parseTime(String.valueOf(cell.getNumericCellValue()));
+							value = new Timestamp(date.getTime()) ;
 						}else{
-							value = new BigDecimal(cell.getStringCellValue());
+							BigDecimal b = new BigDecimal(cell.getNumericCellValue());
+							value = b.toString();
 						}
-					}else if(wMethod.getParameterTypes()[0] == Timestamp.class){
-						Date date = DateUtil.parseTime(cell.getStringCellValue());
-						value = new Timestamp(date.getTime()) ;
 					}else{
-						if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
-							value = cell.getNumericCellValue();
+						if(wMethod.getParameterTypes()[0] == BigDecimal.class){
+							value = new BigDecimal(cell.getStringCellValue());
+						}else if(wMethod.getParameterTypes()[0] == Timestamp.class){
+							Date date = DateUtil.parseTime(cell.getStringCellValue());
+							value = new Timestamp(date.getTime()) ;
+						}else{
+							value = cell.getStringCellValue();
 						}
-						value = cell.getStringCellValue();
 					}
 					wMethod.invoke(orderDTO, new Object[]{value});
 				}

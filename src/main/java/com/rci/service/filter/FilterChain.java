@@ -13,7 +13,7 @@ public class FilterChain implements CalculateFilter {
 	LinkedList<CalculateFilter> filters = new LinkedList<CalculateFilter>();
 	int pos = 0;
 	BigDecimal balance = BigDecimal.ZERO;
-	private Map<String,BigDecimal> freeMap = new HashMap<String,BigDecimal>();
+	private Map<String,BigDecimal> freeOnlineMap = new HashMap<String,BigDecimal>();
 	
 	
 	public void addFilter(CalculateFilter filter){
@@ -54,17 +54,18 @@ public class FilterChain implements CalculateFilter {
 	}
 
 	/**
-	 * @return the freeMap
+	 * @return the freeOnlineMap
 	 */
-	public Map<String, BigDecimal> getFreeMap() {
-		return freeMap;
+	public Map<String, BigDecimal> getFreeOnlineMap() {
+		return freeOnlineMap;
 	}
 
 	/**
-	 * @param freeMap the freeMap to set
+	 * @param freeOnlineMap the freeOnlineMap to set
 	 */
-	public void setFreeMap(Map<String, BigDecimal> freeMap) {
-		this.freeMap = freeMap;
+	public void setFreeOnlineMap(Map<String, BigDecimal> freeOnlineMap) {
+		this.freeOnlineMap = freeOnlineMap;
 	}
+
 
 }

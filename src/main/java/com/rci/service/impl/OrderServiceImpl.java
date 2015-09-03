@@ -55,6 +55,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 		dc.add(Restrictions.eq("day", day)).addOrder(
 				org.hibernate.criterion.Order.asc("checkoutTime"));
 		List<Order> orders = baseDAO.queryListByCriteria(dc);
+//		for(Order order:orders){//解决lazy问题，强制加载关联属性
+//			Hibernate.initialize(order.getItems());
+//		}
 		return orders;
 	}
 
@@ -71,49 +74,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 					BigDecimal amount = accountRef.getRealAmount();
 					totalAmount = totalAmount.add(amount);
 					AccountCode accountNo = accountRef.getAccNo();
-//					if (BusinessConstant.CASHMACHINE_ACC.equals(accountNo)) {
-//						vo.setCashmachineAmount(amount);
-//					}
-//					if (BusinessConstant.POS_ACC.equals(accountNo)) {
-//						vo.setPosAmount(amount);
-//					}
-//					if (BusinessConstant.MT_ACC.equals(accountNo)) {
-//						vo.setMtAmount(amount);
-//					}
-//					if (BusinessConstant.DPTG_ACC.equals(accountNo)) {
-//						vo.setDptgAmount(amount);
-//					}
-//					if (BusinessConstant.DPSH_ACC.equals(accountNo)) {
-//						vo.setDpshAmount(amount);
-//					}
-//					if (BusinessConstant.ELE_ACC.equals(accountNo)) {
-//						vo.setEleAmount(amount);
-//					}
-//					if (BusinessConstant.TDD_ACC.equals(accountNo)) {
-//						vo.setTddAmount(amount);
-//					}
-//					if (BusinessConstant.MTWM_ACC.equals(accountNo)) {
-//						vo.setMtwmAmount(amount);
-//					}
-//					if (BusinessConstant.FREE_ELE_ACC.equals(accountNo)) {
-//						vo.setEleFreeAmount(amount);
-//					}
-//					if (BusinessConstant.FREE_MTWM_ACC.equals(accountNo)) {
-//						vo.setMtwmFreeAmount(amount);
-//					}
-//					if (BusinessConstant.MT_SUPER_ACC.equals(accountNo)){
-//						vo.setMtSuperAmount(amount);
-//					}
-//					if (BusinessConstant.FREE_MT_SUPER_ACC.equals(accountNo)){
-//						vo.setMtSuperFreeAmount(amount);
-//					}
-//					if (BusinessConstant.FREE_ACC.equals(accountNo)) {
-//						vo.setFreeAmount(amount);
-//						totalAmount = totalAmount.subtract(amount);
-//					}
-//					if (BusinessConstant.FREE_ONLINE_ACC.equals(accountNo)){
-//						totalAmount = totalAmount.subtract(amount);
-//					}
 					switch(accountNo){
 					case CASH_MACHINE:vo.setCashmachineAmount(amount);break;
 					case POS:vo.setPosAmount(amount);break;
@@ -122,7 +82,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 					case DPSH:vo.setDpshAmount(amount);break;
 					case ELE:vo.setEleAmount(amount);break;
 					case FREE_ELE:vo.setEleFreeAmount(amount);break;
-					case TDD:vo.setTddAmount(amount);break;
+					case ALIPAY:vo.setAliPayAmount(amount);break;
 //					case MTWM:vo.setMtwmAmount(amount);
 //					case FREE_MTWM:vo.setMtwmFreeAmount(amount);
 					case MT_SUPER:vo.setMtSuperAmount(amount);break;
@@ -131,6 +91,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 						totalAmount = totalAmount.subtract(amount);
 						break;
 					case FREE_ONLINE:
+						vo.setOnlineFreeAmount(amount);
 						totalAmount = totalAmount.subtract(amount);break;
 					default:
 							break;

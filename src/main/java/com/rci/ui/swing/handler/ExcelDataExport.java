@@ -27,7 +27,7 @@ import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.views.PopWindow;
 
-public class ExcelDataImport implements Runnable {
+public class ExcelDataExport implements Runnable {
 	private int amount;
 	
 	private int current;
@@ -36,7 +36,7 @@ public class ExcelDataImport implements Runnable {
 	
 	private PopWindow progressBarWin;
 	
-	public ExcelDataImport(JFileChooser chooser,PopWindow progressBarWin){
+	public ExcelDataExport(JFileChooser chooser,PopWindow progressBarWin){
 		this.chooser = chooser;
 		this.progressBarWin = progressBarWin;
 		amount = 100;

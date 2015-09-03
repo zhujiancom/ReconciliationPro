@@ -66,7 +66,7 @@ public class MTWMFilter extends AbstractFilter {
 		}
 		BigDecimal actualAmount = totalAmount;
 		if(freeAmount != null){
-			Map<String,BigDecimal> freeMap = chain.getFreeMap();
+			Map<String,BigDecimal> freeMap = chain.getFreeOnlineMap();
 			actualAmount = totalAmount.subtract(freeAmount);
 			String day = order.getDay();
 			try {
@@ -120,6 +120,15 @@ public class MTWMFilter extends AbstractFilter {
 	@Override
 	protected Map<SchemeType, Integer> getSuitMap() {
 		return null;
+	}
+
+	/* 
+	 * @see com.rci.service.filter.AbstractFilter#validation(com.rci.bean.entity.Order)
+	 */
+	@Override
+	protected void validation(Order order) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

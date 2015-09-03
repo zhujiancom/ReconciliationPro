@@ -159,7 +159,7 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 		sum.setMtSuperAmount(sum.getMtSuperAmount().add(item.getMtSuperAmount()));
 		sum.setOnlineFreeAmount(sum.getOnlineFreeAmount().add(item.getOnlineFreeAmount()));
 		sum.setPosAmount(sum.getPosAmount().add(item.getPosAmount()));
-		sum.setTddAmount(sum.getTddAmount().add(item.getTddAmount()));
+		sum.setAliPayAmount(sum.getAliPayAmount().add(item.getAliPayAmount()));
 		sum.setTsFreeAmount(sum.getTsFreeAmount().add(item.getTsFreeAmount()));
 		sum.setTotalAmount(sum.getTotalAmount().add(item.getTotalAmount()));
 		return sum;
@@ -182,7 +182,7 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 				case DPSH:vo.setDpshAmount(amount);break;
 				case ELE:vo.setEleAmount(amount);break;
 				case FREE_ELE:vo.setElebtAmount(amount);break;
-				case TDD:vo.setTddAmount(amount);break;
+				case ALIPAY:vo.setAliPayAmount(amount);break;
 				case MT_SUPER:vo.setMtSuperAmount(amount);break;
 				case FREE:
 					vo.setTsFreeAmount(amount);

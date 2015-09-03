@@ -30,7 +30,7 @@ import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
-import com.rci.ui.swing.handler.ExcelDataImport;
+import com.rci.ui.swing.handler.ExcelDataExport;
 import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
 import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
@@ -128,7 +128,7 @@ public class DataIOListener implements ActionListener {
 			ProgressWinBuilder progressBarBuilder = WindowBuilderFactory.createProgressWinBuilder();
 			PopWindow progressBarWin = progressBarBuilder.retrieveWindow();
 			final JProgressBar bar = progressBarBuilder.getBar();
-			final ExcelDataImport target = new ExcelDataImport(chooser,progressBarWin);
+			final ExcelDataExport target = new ExcelDataExport(chooser,progressBarWin);
 			new Thread(target).start();
 			
 			bar.setMinimum(0);
@@ -240,6 +240,7 @@ public class DataIOListener implements ActionListener {
 					} catch(ServiceException se){
 						JOptionPane.showMessageDialog(null, se.getMessage());
 					} catch(Exception e){
+						e.printStackTrace();
 						JOptionPane.showMessageDialog(null, e.getMessage());
 					}
 				}

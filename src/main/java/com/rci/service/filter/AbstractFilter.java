@@ -314,4 +314,6 @@ public abstract class AbstractFilter implements CalculateFilter {
 	}
 	}
 	
+	protected abstract void validation(Order order);
+	
 }

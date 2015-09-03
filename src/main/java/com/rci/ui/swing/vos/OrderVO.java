@@ -51,8 +51,8 @@ public class OrderVO {
 	
 	private BigDecimal dpshAmount;
 
-	/* 淘点点在线支付金额  */
-	private BigDecimal tddAmount;
+	/* 淘点点在线支付金额支付宝入账  */
+	private BigDecimal aliPayAmount;
 
 	/* 饿了么在线支付金额 */
 	private BigDecimal eleAmount;
@@ -267,19 +267,19 @@ public class OrderVO {
 		this.dpshAmount = dpshAmount;
 	}
 
+
 	/**
-	 * @return the tddAmount
+	 * @return the aliPayAmount
 	 */
-	public BigDecimal getTddAmount() {
-		return tddAmount;
+	public BigDecimal getAliPayAmount() {
+		return aliPayAmount;
 	}
 
 	/**
-	 * @param tddAmount
-	 *            the tddAmount to set
+	 * @param aliPayAmount the aliPayAmount to set
 	 */
-	public void setTddAmount(BigDecimal tddAmount) {
-		this.tddAmount = tddAmount;
+	public void setAliPayAmount(BigDecimal aliPayAmount) {
+		this.aliPayAmount = aliPayAmount;
 	}
 
 	/**

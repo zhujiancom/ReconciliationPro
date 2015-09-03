@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -15,15 +13,12 @@ import com.rci.bean.entity.OrderItem;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
-import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class DPSHFilter extends AbstractFilter {
-	private static final Log logger = LogFactory.getLog(DPSHFilter.class);
-	
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
 		return paymodeMapping.containsKey(PaymodeCode.DPSH);
@@ -62,15 +57,9 @@ public class DPSHFilter extends AbstractFilter {
 		if(!nodiscountAmount.equals(BigDecimal.ZERO) && order.getNodiscountAmount() == null){
 			order.setNodiscountAmount(nodiscountAmount);
 		}
-		/* 最大可在线支付金额 */
+		/* 最大可在线支付金额 ，参与打折金额*/
 		BigDecimal payAmount = totalAmount.subtract(nodiscountAmount);
-		if(payAmount.compareTo(onlineAmount) < 0){
-			order.setUnusual(YOrN.Y);
-			logger.warn("--- 【"+order.getPayNo()+"】[大众闪惠支付异常] ---， 在线支付金额："+onlineAmount+" , 实际最大在线支付金额： "+payAmount+" ,不可在线支付金额："+nodiscountAmount);
-			String warningInfo = "[大众闪惠支付异常]--- 在线支付金额："+onlineAmount+",实际最大在线支付金额： "+payAmount+",不可在线支付金额："+nodiscountAmount;
-			order.setWarningInfo(warningInfo);
-		}
-		BigDecimal freeAmount = onlineAmount.divideToIntegralValue(new BigDecimal("100")).multiply(new BigDecimal("12"));
+		BigDecimal freeAmount = payAmount.divideToIntegralValue(new BigDecimal("100")).multiply(new BigDecimal("12"));
 		BigDecimal actualAmount = onlineAmount.subtract(freeAmount);
 		
 		order.setSchemeName(schemeName);
@@ -83,6 +72,19 @@ public class DPSHFilter extends AbstractFilter {
 	protected Map<SchemeType, Integer> getSuitMap() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/* 
+	 * @see com.rci.service.filter.AbstractFilter#validation(com.rci.bean.entity.Order)
+	 */
+	@Override
+	protected void validation(Order order) {
+//		if(payAmount.compareTo(onlineAmount) < 0){
+//		order.setUnusual(YOrN.Y);
+//		logger.warn("--- 【"+order.getPayNo()+"】[大众闪惠支付异常] ---， 在线支付金额："+onlineAmount+" , 实际最大在线支付金额： "+payAmount+" ,不可在线支付金额："+nodiscountAmount);
+//		String warningInfo = "[大众闪惠支付异常]--- 在线支付金额："+onlineAmount+",实际最大在线支付金额： "+payAmount+",不可在线支付金额："+nodiscountAmount;
+//		order.setWarningInfo(warningInfo);
+//	}		
 	}
 
 }

@@ -36,10 +36,21 @@
 		<bean class="com.rci.service.filter.ELEFilter"></bean>
 		<bean class="com.rci.service.filter.TDDFilter"></bean>
 		<bean class="com.rci.service.filter.MTWMFilter"></bean>
-		<bean class="com.rci.service.filter.FreeFilter"></bean>
+		<bean class="com.rci.service.filter.FreeFilter" ></bean>
 		<bean class="com.rci.service.filter.MTSuperFilter"></bean>
 		<bean class="com.rci.service.filter.DPSHFilter"></bean>
+		<bean class="com.rci.service.filter.AliPayFilter"></bean>
 	</util:list>
+	
+<!-- 	<util:list id="freeOnlinePaymodes"> -->
+<!-- 		<value>11</value> -->
+<!-- 		<value>12</value> -->
+<!-- 		<value>96</value> -->
+<!-- 	</util:list> -->
+	
+<!-- 	<bean id="freeFilter" class="com.rci.service.filter.FreeFilter"> -->
+<!-- 		<property name="freeOnlinePaymodes" ref="freeOnlinePaymodes"></property> -->
+<!-- 	</bean> -->
 	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>
 	

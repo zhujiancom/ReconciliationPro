@@ -152,5 +152,14 @@ public class DPTGFilter extends AbstractFilter {
 	protected Map<SchemeType, Integer> getSuitMap() {
 		return suitMap;
 	}
+
+	/* 
+	 * @see com.rci.service.filter.AbstractFilter#validation(com.rci.bean.entity.Order)
+	 */
+	@Override
+	protected void validation(Order order) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

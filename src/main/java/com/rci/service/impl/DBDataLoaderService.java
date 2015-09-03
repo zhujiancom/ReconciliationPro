@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.DataFetchMark;
 import com.rci.bean.entity.Order;
@@ -48,7 +49,9 @@ public class DBDataLoaderService extends BaseDataLoaderService {
 		if(mark == null){ 
 			//1. 如果今天还没有加载过数据，则加载
 			orders = transformService.transformOrderInfo(date);
-			markService.markOrder(day);
+			if(!CollectionUtils.isEmpty(orders)){
+				markService.markOrder(day);
+			}
 		}else{
 			//2. 如果加载过数据，则判断当前时间是否在保存点之后，如果在并且在当天24点之前，则做增量查询
 			Date savepoint = mark.getSavepoint();

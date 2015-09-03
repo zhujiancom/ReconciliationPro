@@ -22,7 +22,7 @@ public class TurnoverVO {
 	/* 饿了么刷单补贴 */
 	private BigDecimal elesdAmount;
 	
-	private BigDecimal tddAmount;
+	private BigDecimal aliPayAmount;
 	
 	private BigDecimal posAmount;
 	
@@ -102,12 +102,19 @@ public class TurnoverVO {
 		this.elebtAmount = elebtAmount;
 	}
 
-	public BigDecimal getTddAmount() {
-		return tddAmount == null ? BigDecimal.ZERO:tddAmount;
+
+	/**
+	 * @return the aliPayAmount
+	 */
+	public BigDecimal getAliPayAmount() {
+		return aliPayAmount == null ? BigDecimal.ZERO:aliPayAmount;
 	}
 
-	public void setTddAmount(BigDecimal tddAmount) {
-		this.tddAmount = tddAmount;
+	/**
+	 * @param aliPayAmount the aliPayAmount to set
+	 */
+	public void setAliPayAmount(BigDecimal aliPayAmount) {
+		this.aliPayAmount = aliPayAmount;
 	}
 
 	public BigDecimal getPosAmount() {

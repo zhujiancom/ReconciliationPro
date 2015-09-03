@@ -1,5 +1,6 @@
 package com.rci.ui.swing.model;
 
+import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
-import com.rci.ui.swing.renderers.AbstractLineRedMarkRenderer;
+import com.rci.ui.swing.renderers.AbstractLineColorMarkRenderer;
 import com.rci.ui.swing.vos.TurnoverVO;
 
 public class TurnoverTable extends JTable {
@@ -44,7 +45,7 @@ public class TurnoverTable extends JTable {
 		cm.getColumn(8).setMinWidth(125);
 		cm.getColumn(9).setHeaderValue("美团超券");
 		cm.getColumn(9).setMinWidth(105);
-		cm.getColumn(10).setHeaderValue("淘点点");
+		cm.getColumn(10).setHeaderValue("支付宝");
 		cm.getColumn(10).setMinWidth(105);
 		cm.getColumn(11).setHeaderValue("店内优惠");
 		cm.getColumn(11).setMinWidth(105);
@@ -55,14 +56,15 @@ public class TurnoverTable extends JTable {
 	}
 	
 	public void makeStatisticRowFace(){
-		TurnoverTableStatisticRedMarkRenderer redmarkRenderer = new TurnoverTableStatisticRedMarkRenderer();
+		TurnoverTableStatisticColorMarkRenderer redmarkRenderer = new TurnoverTableStatisticColorMarkRenderer();
+		redmarkRenderer.setColor(Color.blue);
 		TableColumnModel cm = this.getColumnModel();
 		for(int i=0;i<this.getColumnCount();i++){
 			cm.getColumn(i).setCellRenderer(redmarkRenderer);
 		}
 	}
 	
-	private class TurnoverTableStatisticRedMarkRenderer extends AbstractLineRedMarkRenderer<TurnoverTableModel>{
+	private class TurnoverTableStatisticColorMarkRenderer extends AbstractLineColorMarkRenderer<TurnoverTableModel>{
 
 		/**
 		 * 
@@ -70,12 +72,14 @@ public class TurnoverTable extends JTable {
 		private static final long serialVersionUID = 4436771966347867353L;
 
 		@Override
-		public boolean markRed(TurnoverTableModel tm, int rowIndex) {
+		public boolean markColor(TurnoverTableModel tm, int rowIndex) {
 			if(rowIndex == tm.getRowCount()-1){
 				return true;
 			}
 			return false;
 		}
+		
+		
 	}
 
 	public static class TurnoverTableModel extends AbstractTableModel{
@@ -126,7 +130,7 @@ public class TurnoverTable extends JTable {
 				case 9:
 					return turnover.getMtSuperAmount();
 				case 10:
-					return turnover.getTddAmount();
+					return turnover.getAliPayAmount();
 				case 11:
 					return turnover.getTsFreeAmount();
 				case 12:
@@ -157,7 +161,7 @@ public class TurnoverTable extends JTable {
 				case 9:
 					return "<html><font color='red'>"+turnover.getMtSuperAmount()+"</font></html>";
 				case 10:
-					return "<html><font color='red'>"+turnover.getTddAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getAliPayAmount()+"</font></html>";
 				case 11:
 					return "<html><font color='green'>"+turnover.getTsFreeAmount()+"</font></html>";
 				case 12:

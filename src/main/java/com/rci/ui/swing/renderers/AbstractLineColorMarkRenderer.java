@@ -8,20 +8,26 @@ import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public abstract class AbstractLineRedMarkRenderer<T extends AbstractTableModel> extends DefaultTableCellRenderer {
+public abstract class AbstractLineColorMarkRenderer<T extends AbstractTableModel> extends DefaultTableCellRenderer {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3415358644047523322L;
+	
+	private Color color;
 	
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		@SuppressWarnings("unchecked")
 		T tm = (T) table.getModel();
-		boolean markRedFlag = markRed(tm,row); 
+		boolean markRedFlag = markColor(tm,row); 
 		if(markRedFlag){
-			setBackground(Color.RED);
+			if(color == null){
+				setBackground(Color.RED);
+			}else{
+				setBackground(color);
+			}
 			setForeground(Color.WHITE);
 		}else{
 			setBackground(Color.WHITE);
@@ -38,5 +44,19 @@ public abstract class AbstractLineRedMarkRenderer<T extends AbstractTableModel> 
 				row, column);
 	}
 
-	public abstract boolean markRed(T tm,int rowIndex);
+	public abstract boolean markColor(T tm,int rowIndex);
+
+	/**
+	 * @return the color
+	 */
+	public Color getColor() {
+		return color;
+	}
+
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(Color color) {
+		this.color = color;
+	}
 }

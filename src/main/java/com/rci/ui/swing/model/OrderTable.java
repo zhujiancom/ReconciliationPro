@@ -7,14 +7,13 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JTable;
-import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DateUtil;
-import com.rci.ui.swing.renderers.AbstractLineRedMarkRenderer;
+import com.rci.ui.swing.renderers.AbstractLineColorMarkRenderer;
 import com.rci.ui.swing.vos.OrderVO;
 
 public class OrderTable extends JTable {
@@ -84,7 +83,7 @@ public class OrderTable extends JTable {
 		cm.getColumn(13).setHeaderValue("饿了么补贴");
 		cm.getColumn(13).setMinWidth(105);
 		cm.getColumn(13).setCellRenderer(redmarkRenderer);
-		cm.getColumn(14).setHeaderValue("淘点点");
+		cm.getColumn(14).setHeaderValue("支付宝");
 		cm.getColumn(14).setMinWidth(75);
 		cm.getColumn(14).setCellRenderer(redmarkRenderer);
 //		cm.getColumn(16).setHeaderValue("美团外卖");
@@ -124,7 +123,7 @@ public class OrderTable extends JTable {
 	 * Create Time: 2015年7月27日 下午2:46:45
 	 *
 	 */
-	private class OrderTableRedMarkRenderer extends AbstractLineRedMarkRenderer<OrderTableModel>{
+	private class OrderTableRedMarkRenderer extends AbstractLineColorMarkRenderer<OrderTableModel>{
 
 		/**
 		 * 
@@ -132,7 +131,7 @@ public class OrderTable extends JTable {
 		private static final long serialVersionUID = 4436771966347867353L;
 
 		@Override
-		public boolean markRed(OrderTableModel tm, int rowIndex) {
+		public boolean markColor(OrderTableModel tm, int rowIndex) {
 			OrderVO order = tm.getOrderAt(rowIndex);
 			if(YOrN.Y.equals(order.getUnusual())){
 				return true;
@@ -156,17 +155,15 @@ public class OrderTable extends JTable {
 			OrderVO order = tm.getOrderAt(row);
 			boolean zeroFlag = order.getTotalAmount().compareTo(BigDecimal.ZERO) == 0?true:false;
 			if(zeroFlag){
+				if(isSelected){
+					table.setSelectionBackground(Color.ORANGE);
+					table.setSelectionForeground(Color.WHITE);
+				}
 				setBackground(Color.ORANGE);
 				setForeground(Color.WHITE);
 			}else{
 				setBackground(Color.WHITE);
-			}
-			if(zeroFlag && isSelected){
-				table.setSelectionBackground(Color.ORANGE);
-				table.setSelectionForeground(Color.WHITE);
-			}else{
-				table.setSelectionBackground(UIManager.getColor("Table.selectionBackground"));
-				table.setSelectionForeground(UIManager.getColor("Table.selectionForeground"));
+				setForeground(Color.BLACK);
 			}
 			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
 					row, column);
@@ -238,7 +235,7 @@ public class OrderTable extends JTable {
 			case 13:
 				return order.getEleFreeAmount();
 			case 14:
-				return order.getTddAmount();
+				return order.getAliPayAmount();
 //			case 16:
 //				return order.getMtwmAmount();
 //			case 17:
