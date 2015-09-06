@@ -122,7 +122,7 @@ public final class BusinessEnums {
 		CASH_MACHINE("00"),ELE("11"),MTWM("12"),
 		TDD("96"),DPTG("98"),LS(""),DPSH("13"),
 		MT("99"),FREE("YY"),MTSUPER("87"),POS("03"),
-		UNKNOW(""),ZFB("100");
+		UNKNOW(""),ZFB("86");
 		
 		private String paymodeno;
 		private PaymodeCode(String paymodeno){
