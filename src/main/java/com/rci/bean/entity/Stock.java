@@ -65,6 +65,11 @@ public class Stock extends BaseEntity {
 	/* 单位 */
 	private String unit;
 	
+	/* 每份对应个数 */
+	private BigDecimal amount;
+	
+	private BigDecimal mod;
+	
 	public Stock(){}
 	
 	public Stock(String dishNo){
@@ -171,6 +176,24 @@ public class Stock extends BaseEntity {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+
+	@Transient
+	public BigDecimal getAmount() {
+		return amount == null ? BigDecimal.ONE:amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+	@Column(name="mod_amount")
+	public BigDecimal getMod() {
+		return mod;
+	}
+
+	public void setMod(BigDecimal mod) {
+		this.mod = mod;
 	}
 
 	@Override

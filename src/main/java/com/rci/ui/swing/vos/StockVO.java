@@ -24,6 +24,9 @@ public class StockVO {
 	
 	/* 单位 */
 	private String unit;
+	
+	/* 取模基数  */
+	private BigDecimal mod;
 
 	public Long getSid() {
 		return sid;
@@ -87,5 +90,13 @@ public class StockVO {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+
+	public BigDecimal getMod() {
+		return mod;
+	}
+
+	public void setMod(BigDecimal mod) {
+		this.mod = mod;
 	}
 }

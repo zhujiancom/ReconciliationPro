@@ -1,6 +1,7 @@
 package com.rci.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.hibernate.transform.ResultTransformer;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Stock;
@@ -103,6 +105,9 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
 			return;
 		}
 		Stock stock = getStockBySno(sno);
+		if(stock.getMod() != null){
+			amount = amount.multiply(stock.getMod());
+		}
 		BigDecimal gross = stock.getGross().add(amount);
 		stock.setGross(gross);
 		BigDecimal balanceAmount = stock.getBalanceAmount().add(amount);
@@ -173,6 +178,39 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
 		//更新stocks
 		((IStockService)AopContext.currentProxy()).rwUpdate(stocks);
 		oplogService.clearStockLogByDay(day);
+	}
+
+	@Override
+	public List<String> getStockDishNumbers() {
+		List<String> dishNos = new ArrayList<String>();
+		List<Stock> stocks = getAll();
+		if(!CollectionUtils.isEmpty(stocks)){
+			for(Stock stock:stocks){
+				dishNos.add(stock.getDishNo());
+			}
+		}
+		return dishNos;
+	}
+
+	@Override
+	public List<Stock> getStocksByDish(String dishNo) {
+		List<Stock> stocks = new ArrayList<Stock>();
+		DetachedCriteria dc = DetachedCriteria.forClass(Stock.class);
+		dc.add(Restrictions.eq("dishNo", dishNo));
+		List<Stock> stocksDB = baseDAO.queryListByCriteria(dc);
+		if(!CollectionUtils.isEmpty(stocksDB)){
+			for(Stock stock:stocksDB){
+				if(stock.getPsid() != 0){
+					BigDecimal amount = stock.getConsumeAmount();
+					stock = get(stock.getPsid());
+					stock.setAmount(amount);
+					stocks.add(stock);
+				}else{
+					stocks.add(stock);
+				}
+			}
+		}
+		return stocks;
 	}
 	
 	

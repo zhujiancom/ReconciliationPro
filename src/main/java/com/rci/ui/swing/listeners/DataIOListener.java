@@ -248,8 +248,10 @@ public class DataIOListener implements ActionListener {
 			break;
 		case JFileChooser.CANCEL_OPTION:
 			System.out.println("取消");
+			break;
 		case JFileChooser.ERROR_OPTION:
 			System.out.println("Error");
+			break;
 		}
 	}
 	

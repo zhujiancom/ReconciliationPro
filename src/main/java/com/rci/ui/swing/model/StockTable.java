@@ -266,10 +266,19 @@ public class StockTable extends BaseTable {
 			case 1:
 				return stock.getDishName();
 			case 2:
+				if(stock.getMod() != null){
+					return "<html><font color='blue'>"+stock.getGross().divideToIntegralValue(stock.getMod())+"</font></html>";
+				}
 				return "<html><font color='blue'>"+stock.getGross()+"</font></html>";
 			case 3:
+				if(stock.getMod() != null){
+					return stock.getConsumeAmount().divideToIntegralValue(stock.getMod());
+				}
 				return stock.getConsumeAmount();
 			case 4:
+				if(stock.getMod() != null){
+					return stock.getBalanceAmount().divideToIntegralValue(stock.getMod());
+				}
 				return stock.getBalanceAmount();
 			case 5:
 				return stock.getUnit();

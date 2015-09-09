@@ -1,6 +1,7 @@
 package com.rci.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.rci.bean.entity.Stock;
 import com.rci.bean.entity.StockOpLog;
@@ -36,6 +37,8 @@ public interface IStockService extends IBaseService<Stock, Long> {
 	 * @return
 	 */
 	Stock getStockByDishNo(String dishNo);
+	
+	List<Stock> getStocksByDish(String dishNo);
 	
 	public StockVO getStock(String dishNo);
 	
@@ -111,5 +114,19 @@ public interface IStockService extends IBaseService<Stock, Long> {
 	 * @param day
 	 */
 	void clearStockByDay(String day);
+	
+	/**
+	 * 
+	 * Describle(描述)：获取所有被库存管理的菜品编号
+	 *
+	 * 方法名称：getStockDishNumbers
+	 *
+	 * 所在类名：IStockService
+	 *
+	 * Create Time:2015年9月9日 上午11:19:04
+	 *  
+	 * @return
+	 */
+	List<String> getStockDishNumbers();
 	
 }
