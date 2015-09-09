@@ -366,6 +366,11 @@ public class Order extends BaseEntity {
 	 * @param amount
 	 */
 	public void addPayMode(String paymodeNo,BigDecimal amount){
+		PaymodeCode paycode = PaymodeCode.paymodeCode(paymodeNo);
+		if(paymodeMapping.get(paycode) != null){
+			BigDecimal preAmount = paymodeMapping.get(paycode);
+			amount = preAmount.add(amount);
+		}
 		paymodeMapping.put(PaymodeCode.paymodeCode(paymodeNo), amount);
 		if(!StringUtils.hasLength(paymodes)){
 			paymodes = paymodeNo;

@@ -1,6 +1,6 @@
 /*
-SQLyog Ultimate - MySQL GUI v8.2 
-MySQL - 5.6.20 
+SQLyog Ultimate v11.11 (64 bit)
+MySQL - 5.6.17 
 *********************************************************************
 */
 /*!40101 SET NAMES utf8 */;
@@ -51,5 +51,6 @@ insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `
 insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('44',NULL,'饿了么满25减11','11','8.00','11.00','3.00',NULL,'RMB','0','ACTIVE','2015-08-08','2015-08-08','ELE','25.00',NULL);
 insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('45',NULL,'饿了么新用户优惠15（不叠加）','11','15.00','15.00','0.00',NULL,'RMB','0','ACTIVE','2015-08-21','2015-09-20','ELE','15.00',NULL);
 insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('46',NULL,'饿了么满25减7','11','4.00','7.00','3.00',NULL,'RMB','0','ACTIVE','2015-08-28','2015-09-20','ELE','25.00',NULL);
-insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('47',NULL,'淘点点满25减8','96','4.96','8.00','3.04',NULL,'RMB','0','ACTIVE','2015-08-31','2015-09-06','TDD','25.00','1000.00');
-insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('48',NULL,'淘点点满15减4','96','1.00','4.00','3.00',NULL,'RMB','0','ACTIVE','2015-08-31','2015-09-06','TDD','15.00','25.00');
+insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('47',NULL,'淘点点满15减4','96','1.00','4.00','3.00',NULL,'RMB','0','ACTIVE','2015-08-31','2015-09-06','TDD','15.00','25.00');
+insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('48',NULL,'淘点点满25减8','96','4.96','8.00','3.04',NULL,'RMB','0','ACTIVE','2015-08-31','2015-09-06','TDD','25.00','1000.00');
+insert into `bus_tb_scheme` (`sid`, `commission`, `scheme_name`, `paymode_no`, `post_price`, `price`, `spread`, `s_type`, `unitCode`, `version`, `activity_status`, `start_date`, `end_date`, `vendor`, `floor_amount`, `ceil_amount`) values('49',NULL,'淘点点满10减3','96','1.02','3.00','1.98',NULL,'RMB','0','ACTIVE','2015-09-07','2015-09-13','TDD','10.00','1000.00');

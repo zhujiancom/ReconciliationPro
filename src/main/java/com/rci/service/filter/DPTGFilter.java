@@ -108,7 +108,7 @@ public class DPTGFilter extends AbstractFilter {
 			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
 		}
 		//设置订单中不可打折金额
-		if(!nodiscountAmount.equals(BigDecimal.ZERO) && order.getNodiscountAmount() == null){
+		if(nodiscountAmount.intValue() != 0 && order.getNodiscountAmount() == null){
 			order.setNodiscountAmount(nodiscountAmount);
 		}
 		// 分析客户使用了哪些代金券
