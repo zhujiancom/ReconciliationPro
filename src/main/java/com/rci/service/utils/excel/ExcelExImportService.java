@@ -171,6 +171,7 @@ public class ExcelExImportService implements IExImportService {
 		} catch (IOException ioe) {
 			ExceptionManage.throwServiceException(SERVICE.EXCEL_OPERATION, ioe);
 		} catch (Exception e) {
+			e.printStackTrace();
 			ExceptionManage.throwServiceException(SERVICE.EXCEL_OPERATION, e);
 		} 
 	}
@@ -236,15 +237,18 @@ public class ExcelExImportService implements IExImportService {
 		}
 		Map<String,Order> container = mergerOrder(orderDTOs);
 		//2. 迭代order,获取对应的item信息
+		Map<String,List<OrderItemDTO>> itemsMapping = readOrderItemInfo(workbook.getSheetAt(1));
 		for(Iterator<Entry<String,Order>> it = container.entrySet().iterator();it.hasNext();){
 			Entry<String,Order> entry = it.next();
 			String key = entry.getKey();
 			Order value = entry.getValue();
 			value.setDay(DateUtil.date2Str(value.getCheckoutTime(), "yyyyMMdd"));
-			Map<String,List<OrderItemDTO>> itemsMapping = readOrderItemInfo(workbook.getSheetAt(1));
 			//设置关联的order Item
 			List<OrderItem> items = new LinkedList<OrderItem>();
 			List<OrderItemDTO> itemDTOs = itemsMapping.get(key);
+			if(CollectionUtils.isEmpty(itemDTOs)){
+				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "orderNo:"+key+" 没有菜品详细信息数据.");
+			}
 			for(OrderItemDTO itemDTO:itemDTOs){
 				OrderItem item = beanMapper.map(itemDTO, OrderItem.class);
 				item.setOrder(value);
