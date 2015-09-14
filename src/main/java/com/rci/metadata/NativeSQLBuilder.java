@@ -22,7 +22,7 @@ public class NativeSQLBuilder {
 												+ "where cmaster.dt_operdate between ? and ?";
 	/* 查询order 信息*/
 	public static final String QUERY_ORDER="select rtrim(tab.ch_billno) 'billno',rtrim(tab.ch_payno) 'payno',detail.ch_paymodeno 'paymode', \n"
-			+"cmaster.num_cost 'originamount',tab.dt_service_begin 'opendesktime',rtrim(tab.ch_tableno) 'tableno', \n"
+			+"cmaster.num_cost 'originamount',tab.dt_operdate 'opendesktime',rtrim(tab.ch_tableno) 'tableno', \n"
 			+ "cmaster.dt_operdate 'checkouttime',detail.num_realamount 'realamount' \n"
 			+ "from dbo.v_u_table tab \n"
 			+ "join dbo.v_u_checkout_master cmaster \n"

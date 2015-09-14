@@ -191,7 +191,7 @@ public class ExcelExImportService implements IExImportService {
 	 * @throws IllegalAccessException 
 	 * @throws IllegalArgumentException 
 	 */
-	private List<Order> readOrderInfo(HSSFSheet sheet) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+	private List<Order> readOrderInfo(HSSFSheet sheet) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		List<Order> orders = new ArrayList<Order>();
 		int rowNum = sheet.getLastRowNum();
 		List<OrderDTO> orderDTOs = new ArrayList<OrderDTO>();
@@ -199,41 +199,47 @@ public class ExcelExImportService implements IExImportService {
 			HSSFRow row = sheet.getRow(j);
 			OrderDTO orderDTO = new OrderDTO();
 			PropertyDescriptor[] pdrs = BeanUtils.getPropertyDescriptors(OrderDTO.class);
-			for (PropertyDescriptor pdr : pdrs) {
-				if(pdr.getPropertyType() == Class.class){
-					continue;
-				}
-				Method rMethod = pdr.getReadMethod();
-				ExcelColumn excelColumn = rMethod.getAnnotation(ExcelColumn.class);
-				if (excelColumn != null) {
-					int index = excelColumn.index();
-					HSSFCell cell = row.getCell(index);
-					Object value = new Object();
-					Method wMethod = pdr.getWriteMethod();
-					if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
-						if(wMethod.getParameterTypes()[0] == BigDecimal.class){
-							value = new BigDecimal(cell.getNumericCellValue());
-						}else if(wMethod.getParameterTypes()[0] == Timestamp.class){
-							Date date = DateUtil.parseTime(String.valueOf(cell.getNumericCellValue()));
-							value = new Timestamp(date.getTime()) ;
-						}else{
-							BigDecimal b = new BigDecimal(cell.getNumericCellValue());
-							value = b.toString();
-						}
-					}else{
-						if(wMethod.getParameterTypes()[0] == BigDecimal.class){
-							value = new BigDecimal(cell.getStringCellValue());
-						}else if(wMethod.getParameterTypes()[0] == Timestamp.class){
-							Date date = DateUtil.parseTime(cell.getStringCellValue());
-							value = new Timestamp(date.getTime()) ;
-						}else{
-							value = cell.getStringCellValue();
-						}
+			int columnIndex = 0;
+			try{
+				for (PropertyDescriptor pdr : pdrs) {
+					if(pdr.getPropertyType() == Class.class){
+						continue;
 					}
-					wMethod.invoke(orderDTO, new Object[]{value});
+					Method rMethod = pdr.getReadMethod();
+					ExcelColumn excelColumn = rMethod.getAnnotation(ExcelColumn.class);
+					if (excelColumn != null) {
+						int index = excelColumn.index();
+						columnIndex = index;
+						HSSFCell cell = row.getCell(index);
+						Object value = new Object();
+						Method wMethod = pdr.getWriteMethod();
+						if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+							if(wMethod.getParameterTypes()[0] == BigDecimal.class){
+								value = new BigDecimal(cell.getNumericCellValue());
+							}else if(wMethod.getParameterTypes()[0] == Timestamp.class){
+								Date date = DateUtil.parseTime(String.valueOf(cell.getNumericCellValue()));
+								value = new Timestamp(date.getTime()) ;
+							}else{
+								BigDecimal b = new BigDecimal(cell.getNumericCellValue());
+								value = b.toString();
+							}
+						}else{
+							if(wMethod.getParameterTypes()[0] == BigDecimal.class){
+								value = new BigDecimal(cell.getStringCellValue());
+							}else if(wMethod.getParameterTypes()[0] == Timestamp.class){
+								Date date = DateUtil.parseTime(cell.getStringCellValue());
+								value = new Timestamp(date.getTime()) ;
+							}else{
+								value = cell.getStringCellValue();
+							}
+						}
+						wMethod.invoke(orderDTO, new Object[]{value});
+					}
 				}
+				orderDTOs.add(orderDTO);
+			}catch(Exception e){
+				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "sheet:"+sheet.getSheetName()+"rowIndex = "+j+",columnIndex="+columnIndex, e);
 			}
-			orderDTOs.add(orderDTO);
 		}
 		Map<String,Order> container = mergerOrder(orderDTOs);
 		//2. 迭代order,获取对应的item信息
