@@ -35,7 +35,7 @@ public class ELEFilter extends AbstractFilter {
 	public void generateScheme(Order order, FilterChain chain) {
 			BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ELE);
 			BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
-			BigDecimal originAmount = order.getOriginPrice();
+//			BigDecimal originAmount = order.getOriginPrice();
 			
 			String schemeName = order.getSchemeName();
 			if(StringUtils.hasText(schemeName)){
@@ -44,20 +44,20 @@ public class ELEFilter extends AbstractFilter {
 				schemeName = "饿了么在线支付"+onlineAmount+"元";
 			}
 			if(freeAmount != null){
-				originAmount = originAmount.subtract(freeAmount);
+//				originAmount = originAmount.subtract(freeAmount);
 				String day = order.getDay();
 				try{
 					Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
 					Scheme scheme = schemeService.getScheme(Vendor.ELE, freeAmount, orderDate);
 					if(scheme != null){
-						freeAmount = freeAmount.subtract(scheme.getSpread());
+//						freeAmount = freeAmount.subtract(scheme.getSpread());
 						schemeName = schemeName+","+scheme.getName();
 						Map<String,BigDecimal> freeMap = chain.getFreeOnlineMap();
 						if(freeMap.get(order.getPayNo()) == null){
 							freeMap.put(order.getPayNo(), freeAmount);
 						}
 						//保存饿了么补贴金额
-						preserveOAR(freeAmount,AccountCode.FREE_ELE,order);
+						preserveOAR(scheme.getPostPrice(),AccountCode.FREE_ELE,order);
 						preserveOAR(scheme.getSpread(),AccountCode.FREE_ONLINE,order);
 					}else{
 						logger.warn(order.getPayNo()+"---[饿了么 活动补贴] 没有找到匹配的Scheme -----");
