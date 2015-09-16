@@ -77,7 +77,13 @@ public class MTSuperFilter extends AbstractFilter {
 		BigDecimal balance = payAmount.subtract(chitAmount.multiply(count));
 		BigDecimal onlineFreeAmount = DigitUtil.mutiplyDown(chitAmount.subtract(singleActualAmount),count);
 		/* 入账金额  */
-		BigDecimal postAmount = totalChitAmount.add(balance).add(nodiscountAmount);
+		BigDecimal cashPayAmount = order.getPaymodeMapping().get(PaymodeCode.CASH_MACHINE);
+		BigDecimal postAmount = BigDecimal.ZERO;
+		if(cashPayAmount != null && cashPayAmount.compareTo(BigDecimal.ZERO) != 0){
+			postAmount = totalChitAmount.add(balance);
+		}else{
+			postAmount = totalChitAmount.add(balance).add(nodiscountAmount);
+		}
 		preserveOAR(postAmount,AccountCode.MT_SUPER,order);
 		preserveOAR(onlineFreeAmount,AccountCode.FREE_ONLINE,order);
 	}
