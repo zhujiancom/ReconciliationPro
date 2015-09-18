@@ -33,6 +33,8 @@ public class MetadataServiceImpl implements IMetadataService {
 	private IDataTransformService transformService;
 	@Resource(name="StockService")
 	private IStockService stockService;
+//	@Resource(name = "fetchScheduler")
+//	private Scheduler scheduler;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -76,9 +78,16 @@ public class MetadataServiceImpl implements IMetadataService {
 		return null;
 	}
 
-//	@Override
-//	public Dish getDishByNo(String dishNo) {
-//		return dishService.findDishByNo(dishNo);
-//	}
+	@Override
+	public String getTimerStatus() {
+//		try {
+//			if(scheduler.isStarted() && !scheduler.isInStandbyMode()){
+//				return "open";
+//			}
+//		} catch (SchedulerException e) {
+//			e.printStackTrace();
+//		}
+		return "closed";
+	}
 
 }

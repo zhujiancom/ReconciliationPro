@@ -63,4 +63,6 @@ public interface IMetadataService {
 //	Dish getDishByNo(String dishNo);
 	
 	List<StockVO> displayStocks();
+	
+	String getTimerStatus();
 }

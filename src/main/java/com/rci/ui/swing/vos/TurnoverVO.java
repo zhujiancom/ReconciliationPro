@@ -22,6 +22,10 @@ public class TurnoverVO {
 	/* 饿了么刷单补贴 */
 	private BigDecimal elesdAmount;
 	
+	private BigDecimal mtwmAmount;
+	
+	private BigDecimal mtwmbtAmount;
+	
 	private BigDecimal aliPayAmount;
 	
 	private BigDecimal posAmount;
@@ -102,6 +106,22 @@ public class TurnoverVO {
 		this.elebtAmount = elebtAmount;
 	}
 
+
+	public BigDecimal getMtwmAmount() {
+		return mtwmAmount == null ? BigDecimal.ZERO:mtwmAmount;
+	}
+
+	public void setMtwmAmount(BigDecimal mtwmAmount) {
+		this.mtwmAmount = mtwmAmount;
+	}
+
+	public BigDecimal getMtwmbtAmount() {
+		return mtwmbtAmount == null ? BigDecimal.ZERO:mtwmbtAmount;
+	}
+
+	public void setMtwmbtAmount(BigDecimal mtwmbtAmount) {
+		this.mtwmbtAmount = mtwmbtAmount;
+	}
 
 	/**
 	 * @return the aliPayAmount

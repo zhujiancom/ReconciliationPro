@@ -37,22 +37,26 @@ public class TurnoverTable extends JTable {
 		cm.getColumn(4).setMinWidth(105);
 		cm.getColumn(5).setHeaderValue("饿了么刷单补贴");
 		cm.getColumn(5).setMinWidth(215);
-		cm.getColumn(6).setHeaderValue("点评团购券");
-		cm.getColumn(6).setMinWidth(125);
-		cm.getColumn(7).setHeaderValue("点评闪惠");
+		cm.getColumn(6).setHeaderValue("美团外卖");
+		cm.getColumn(6).setMinWidth(105);
+		cm.getColumn(7).setHeaderValue("美团外卖补贴");
 		cm.getColumn(7).setMinWidth(105);
-		cm.getColumn(8).setHeaderValue("美团团购券");
+		cm.getColumn(8).setHeaderValue("点评团购券");
 		cm.getColumn(8).setMinWidth(125);
-		cm.getColumn(9).setHeaderValue("美团超券");
+		cm.getColumn(9).setHeaderValue("点评闪惠");
 		cm.getColumn(9).setMinWidth(105);
-		cm.getColumn(10).setHeaderValue("支付宝");
-		cm.getColumn(10).setMinWidth(105);
-		cm.getColumn(11).setHeaderValue("店内优惠");
+		cm.getColumn(10).setHeaderValue("美团团购券");
+		cm.getColumn(10).setMinWidth(125);
+		cm.getColumn(11).setHeaderValue("美团超券");
 		cm.getColumn(11).setMinWidth(105);
-		cm.getColumn(12).setHeaderValue("在线优惠");
+		cm.getColumn(12).setHeaderValue("支付宝");
 		cm.getColumn(12).setMinWidth(105);
-		cm.getColumn(13).setHeaderValue("当日总收入");
-		cm.getColumn(13).setMinWidth(225);
+		cm.getColumn(13).setHeaderValue("店内优惠");
+		cm.getColumn(13).setMinWidth(105);
+		cm.getColumn(14).setHeaderValue("在线优惠");
+		cm.getColumn(14).setMinWidth(105);
+		cm.getColumn(15).setHeaderValue("当日总收入");
+		cm.getColumn(15).setMinWidth(225);
 	}
 	
 	public void makeStatisticRowFace(){
@@ -122,20 +126,24 @@ public class TurnoverTable extends JTable {
 				case 5:
 					return turnover.getElesdAmount();
 				case 6:
-					return turnover.getDptgAmount();
+					return turnover.getMtwmAmount();
 				case 7:
-					return turnover.getDpshAmount();
+					return turnover.getMtwmbtAmount();
 				case 8:
-					return turnover.getMtAmount();
+					return turnover.getDptgAmount();
 				case 9:
-					return turnover.getMtSuperAmount();
+					return turnover.getDpshAmount();
 				case 10:
-					return turnover.getAliPayAmount();
+					return turnover.getMtAmount();
 				case 11:
-					return turnover.getTsFreeAmount();
+					return turnover.getMtSuperAmount();
 				case 12:
-					return turnover.getOnlineFreeAmount();
+					return turnover.getAliPayAmount();
 				case 13:
+					return turnover.getTsFreeAmount();
+				case 14:
+					return turnover.getOnlineFreeAmount();
+				case 15:
 					return turnover.getTotalAmount();
 				}
 			}else{
@@ -153,20 +161,24 @@ public class TurnoverTable extends JTable {
 				case 5:
 					return "<html><font color='red'>"+turnover.getElesdAmount()+"</font></html>";
 				case 6:
-					return "<html><font color='red'>"+turnover.getDptgAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getMtwmAmount()+"</font></html>";
 				case 7:
-					return "<html><font color='red'>"+turnover.getDpshAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getMtwmbtAmount()+"</font></html>";
 				case 8:
-					return "<html><font color='red'>"+turnover.getMtAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getDptgAmount()+"</font></html>";
 				case 9:
-					return "<html><font color='red'>"+turnover.getMtSuperAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getDpshAmount()+"</font></html>";
 				case 10:
-					return "<html><font color='red'>"+turnover.getAliPayAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getMtAmount()+"</font></html>";
 				case 11:
-					return "<html><font color='green'>"+turnover.getTsFreeAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getMtSuperAmount()+"</font></html>";
 				case 12:
-					return "<html><font color='green'>"+turnover.getOnlineFreeAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getAliPayAmount()+"</font></html>";
 				case 13:
+					return "<html><font color='green'>"+turnover.getTsFreeAmount()+"</font></html>";
+				case 14:
+					return "<html><font color='green'>"+turnover.getOnlineFreeAmount()+"</font></html>";
+				case 15:
 					return turnover.getTotalAmount();
 				}
 			}

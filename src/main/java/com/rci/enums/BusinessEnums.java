@@ -119,7 +119,7 @@ public final class BusinessEnums {
 	}
 	
 	public static enum PaymodeCode{
-		CASH_MACHINE("00"),ELE("11"),MTWM("12"),
+		CASH_MACHINE("00"),ELE("11"),MTWM("14"),WMCR("12"),
 		TDD("96"),DPTG("98"),LS(""),DPSH("13"),
 		MT("99"),FREE("YY"),MTSUPER("87"),POS("03"),
 		UNKNOW(""),ZFB("86");

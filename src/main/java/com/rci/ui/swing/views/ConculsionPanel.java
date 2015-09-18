@@ -169,7 +169,7 @@ public class ConculsionPanel extends JPanel {
 		mtwmPanel.add(mtwm);
 		mtwmPanel.add(mtwmValue);
 		
-		JLabel mtwmFreeLabel = new JLabel("美团外卖补贴总额：");
+		JLabel mtwmFreeLabel = new JLabel("美团外卖补贴金额：");
 		mtwmFreeValue = new JLabel();
 		mtwmFreeValue.setForeground(Color.RED);
 		JPanel mtwmFreePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -227,11 +227,11 @@ public class ConculsionPanel extends JPanel {
 		fifthGroup.add(shPanel);
 		fifthGroup.add(Box.createHorizontalStrut(25));
 		fifthGroup.add(mtSuperPanel);
-		sixthGroup.add(tddPanel);
-		sixthGroup.add(freePanel);
-//		sevenGroup.add(expRatePanel);
-//		sevenGroup.add(Box.createHorizontalStrut(90));
-		sevenGroup.add(totalPanel);
+		sixthGroup.add(mtwmPanel);
+		sixthGroup.add(mtwmFreePanel);
+		sevenGroup.add(tddPanel);
+		sevenGroup.add(freePanel);
+		eightGroup.add(totalPanel);
 		
 		this.add(firstGroup);
 		this.add(secondGroup);
@@ -240,6 +240,7 @@ public class ConculsionPanel extends JPanel {
 		this.add(fifthGroup);
 		this.add(sixthGroup);
 		this.add(sevenGroup);
+		this.add(eightGroup);
 	}
 	
 	public void clearData(){
@@ -251,8 +252,8 @@ public class ConculsionPanel extends JPanel {
 		eleFreeValue.setText("");
 		eleValue.setText("");
 		tddValue.setText("");
-//		mtwmValue.setText("");
-//		mtwmFreeValue.setText("");
+		mtwmValue.setText("");
+		mtwmFreeValue.setText("");
 		mtSuperValue.setText("");
 //		mtSuperFreeValue.setText("");
 		freeValue.setText("");
@@ -276,6 +277,8 @@ public class ConculsionPanel extends JPanel {
 		getEleSdRemark().setText(getELESDAllowanceAmount(queryDate));
 		getTddValue().setText(getTotalAmount(AccountCode.ALIPAY).toString());
 		getMtSuperValue().setText(getTotalAmount(AccountCode.MT_SUPER).toString());
+		getMtwmValue().setText(getTotalAmount(AccountCode.MTWM).toString());
+		getMtwmFreeValue().setText(getTotalAmount(AccountCode.FREE_MTWM).toString());
 		getFreeValue().setText(getTotalAmount(AccountCode.FREE).toString());
 		getTotalValue().setText(getTotalDayAmount(queryDate).toString());
 		getTgRemark().setText(getTicketStatistic(queryDate,Vendor.DZDP));

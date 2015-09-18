@@ -83,8 +83,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 					case ELE:vo.setEleAmount(amount);break;
 					case FREE_ELE:vo.setEleFreeAmount(amount);break;
 					case ALIPAY:vo.setAliPayAmount(amount);break;
-//					case MTWM:vo.setMtwmAmount(amount);
-//					case FREE_MTWM:vo.setMtwmFreeAmount(amount);
+					case MTWM:vo.setMtwmAmount(amount);break;
+					case FREE_MTWM:vo.setMtwmFreeAmount(amount);break;
 					case MT_SUPER:vo.setMtSuperAmount(amount);break;
 					case FREE:
 						vo.setFreeAmount(amount);

@@ -24,7 +24,7 @@ public class OrderTable extends JTable {
 	private static final long serialVersionUID = 4935140318205918006L;
 	
 	public OrderTable(){
-		super(new OrderTableModel(20));
+		super(new OrderTableModel(22));
 		setHeaderLabel();
 		this.setRowHeight(20);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -86,26 +86,27 @@ public class OrderTable extends JTable {
 		cm.getColumn(14).setHeaderValue("支付宝");
 		cm.getColumn(14).setMinWidth(75);
 		cm.getColumn(14).setCellRenderer(redmarkRenderer);
-//		cm.getColumn(16).setHeaderValue("美团外卖");
-//		cm.getColumn(16).setPreferredWidth(75);
-//		cm.getColumn(16).setCellRenderer(redmarkRenderer);
-//		cm.getColumn(17).setHeaderValue("美团外卖补贴");
-//		cm.getColumn(17).setPreferredWidth(105);
 		cm.getColumn(15).setHeaderValue("美团超级代金券");
 		cm.getColumn(15).setMinWidth(105);
 		cm.getColumn(15).setCellRenderer(redmarkRenderer);
-		cm.getColumn(16).setHeaderValue("POS机");
-		cm.getColumn(16).setMinWidth(75);
+		cm.getColumn(16).setHeaderValue("美团外卖");
+		cm.getColumn(16).setPreferredWidth(75);
 		cm.getColumn(16).setCellRenderer(redmarkRenderer);
-		cm.getColumn(17).setHeaderValue("堂食免单");
-		cm.getColumn(17).setMinWidth(115);
+		cm.getColumn(17).setHeaderValue("美团外卖补贴");
+		cm.getColumn(17).setPreferredWidth(105);
 		cm.getColumn(17).setCellRenderer(redmarkRenderer);
-		cm.getColumn(18).setHeaderValue("在线免单");
-		cm.getColumn(18).setMinWidth(115);
+		cm.getColumn(18).setHeaderValue("POS机");
+		cm.getColumn(18).setMinWidth(75);
 		cm.getColumn(18).setCellRenderer(redmarkRenderer);
-		cm.getColumn(19).setHeaderValue("入账总金额");
-		cm.getColumn(19).setMinWidth(75);
-		cm.getColumn(19).setCellRenderer(zeromarkRenderer);
+		cm.getColumn(19).setHeaderValue("堂食免单");
+		cm.getColumn(19).setMinWidth(115);
+		cm.getColumn(19).setCellRenderer(redmarkRenderer);
+		cm.getColumn(20).setHeaderValue("在线免单");
+		cm.getColumn(20).setMinWidth(115);
+		cm.getColumn(20).setCellRenderer(redmarkRenderer);
+		cm.getColumn(21).setHeaderValue("入账总金额");
+		cm.getColumn(21).setMinWidth(75);
+		cm.getColumn(21).setCellRenderer(zeromarkRenderer);
 	}
 	
 	/**
@@ -236,19 +237,19 @@ public class OrderTable extends JTable {
 				return order.getEleFreeAmount();
 			case 14:
 				return order.getAliPayAmount();
-//			case 16:
-//				return order.getMtwmAmount();
-//			case 17:
-//				return order.getMtwmFreeAmount();
 			case 15:
 				return order.getMtSuperAmount();
 			case 16:
-				return order.getPosAmount();
+				return order.getMtwmAmount();
 			case 17:
-				return order.getFreeAmount();
+				return order.getMtwmFreeAmount();
 			case 18:
-				return order.getOnlineFreeAmount();
+				return order.getPosAmount();
 			case 19:
+				return order.getFreeAmount();
+			case 20:
+				return order.getOnlineFreeAmount();
+			case 21:
 				return order.getTotalAmount();
 			default:
 				break;
