@@ -64,6 +64,9 @@ public class MTWMFilter extends AbstractFilter {
 						if(originAmount.compareTo(scheme.getFloorAmount())>=0 && originAmount.compareTo(scheme.getCeilAmount()) < 0 ){
 							//满减活动
 							BigDecimal price = scheme.getPrice();
+							if(freeAmount.divideToIntegralValue(price).compareTo(BigDecimal.ONE) > 0){
+								continue;
+							}
 							BigDecimal redundant = freeAmount.remainder(price); //红包支付金额
 							BigDecimal allowanceAmount = redundant.add(scheme.getPostPrice());
 							if(freeMap.get(order.getPayNo()) == null){
@@ -75,7 +78,7 @@ public class MTWMFilter extends AbstractFilter {
 							//在线优惠金额
 							preserveOAR(scheme.getSpread(),AccountCode.FREE_ONLINE,order);
 							break;
-						}else if(freeAmount.equals(scheme.getFloorAmount()) && freeAmount.equals(scheme.getCeilAmount())){
+						}else if(freeAmount.compareTo(scheme.getFloorAmount()) == 0 && freeAmount.compareTo(scheme.getCeilAmount()) == 0){
 							//新用户下单
 							BigDecimal allowanceAmount = scheme.getPostPrice();
 							if(freeMap.get(order.getPayNo()) == null){
