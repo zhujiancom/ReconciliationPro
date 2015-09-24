@@ -41,6 +41,7 @@
 		<bean class="com.rci.service.filter.DPSHFilter"></bean>
 		<bean class="com.rci.service.filter.AliPayFilter"></bean>
 		<bean class="com.rci.service.filter.WMCRFilter"></bean>
+		<bean class="com.rci.service.filter.SQBFilter"></bean>
 	</util:list>
 	
 <!-- 	<util:list id="freeOnlinePaymodes"> -->

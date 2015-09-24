@@ -24,7 +24,7 @@ public class OrderTable extends JTable {
 	private static final long serialVersionUID = 4935140318205918006L;
 	
 	public OrderTable(){
-		super(new OrderTableModel(24));
+		super(new OrderTableModel(25));
 		setHeaderLabel();
 		this.setRowHeight(20);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -104,15 +104,18 @@ public class OrderTable extends JTable {
 		cm.getColumn(20).setHeaderValue("外卖超人补贴");
 		cm.getColumn(20).setMinWidth(115);
 		cm.getColumn(20).setCellRenderer(redmarkRenderer);
-		cm.getColumn(21).setHeaderValue("堂食免单");
+		cm.getColumn(21).setHeaderValue("收钱吧");
 		cm.getColumn(21).setMinWidth(75);
 		cm.getColumn(21).setCellRenderer(redmarkRenderer);
-		cm.getColumn(22).setHeaderValue("在线免单");
+		cm.getColumn(22).setHeaderValue("堂食免单");
 		cm.getColumn(22).setMinWidth(75);
 		cm.getColumn(22).setCellRenderer(redmarkRenderer);
-		cm.getColumn(23).setHeaderValue("入账总金额");
-		cm.getColumn(23).setMinWidth(115);
-		cm.getColumn(23).setCellRenderer(zeromarkRenderer);
+		cm.getColumn(23).setHeaderValue("在线免单");
+		cm.getColumn(23).setMinWidth(75);
+		cm.getColumn(23).setCellRenderer(redmarkRenderer);
+		cm.getColumn(24).setHeaderValue("入账总金额");
+		cm.getColumn(24).setMinWidth(115);
+		cm.getColumn(24).setCellRenderer(zeromarkRenderer);
 	}
 	
 	/**
@@ -256,10 +259,12 @@ public class OrderTable extends JTable {
 			case 20:
 				return order.getWmcrbtAmount();
 			case 21:
-				return order.getFreeAmount();
+				return order.getSqbAmount();
 			case 22:
-				return order.getOnlineFreeAmount();
+				return order.getFreeAmount();
 			case 23:
+				return order.getOnlineFreeAmount();
+			case 24:
 				return order.getTotalAmount();
 			default:
 				break;
