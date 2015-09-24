@@ -35,6 +35,11 @@ public class TurnoverVO {
 	/* 美团外卖在线优惠，餐厅补贴 */
 	private BigDecimal mtwmOnlineFreeAmount;
 	
+	/* 外卖超人 */
+	private BigDecimal wmcrAmount;
+	
+	private BigDecimal wmcrbtAmount;
+	
 	private BigDecimal aliPayAmount;
 	
 	private BigDecimal posAmount;
@@ -206,6 +211,22 @@ public class TurnoverVO {
 
 	public void setMtwmOnlineFreeAmount(BigDecimal mtwmOnlineFreeAmount) {
 		this.mtwmOnlineFreeAmount = mtwmOnlineFreeAmount;
+	}
+
+	public BigDecimal getWmcrAmount() {
+		return wmcrAmount == null ? BigDecimal.ZERO:wmcrAmount;
+	}
+
+	public void setWmcrAmount(BigDecimal wmcrAmount) {
+		this.wmcrAmount = wmcrAmount;
+	}
+
+	public BigDecimal getWmcrbtAmount() {
+		return wmcrbtAmount == null ? BigDecimal.ZERO:wmcrbtAmount;
+	}
+
+	public void setWmcrbtAmount(BigDecimal wmcrbtAmount) {
+		this.wmcrbtAmount = wmcrbtAmount;
 	}
 
 }

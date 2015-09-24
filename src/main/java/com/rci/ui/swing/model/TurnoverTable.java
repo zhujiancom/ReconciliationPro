@@ -41,26 +41,30 @@ public class TurnoverTable extends JTable {
 		cm.getColumn(6).setMinWidth(105);
 		cm.getColumn(7).setHeaderValue("美团外卖补贴");
 		cm.getColumn(7).setMinWidth(105);
-		cm.getColumn(8).setHeaderValue("点评团购券");
-		cm.getColumn(8).setMinWidth(125);
-		cm.getColumn(9).setHeaderValue("点评闪惠");
+		cm.getColumn(8).setHeaderValue("外卖超人");
+		cm.getColumn(8).setMinWidth(105);
+		cm.getColumn(9).setHeaderValue("外卖超人补贴");
 		cm.getColumn(9).setMinWidth(105);
-		cm.getColumn(10).setHeaderValue("美团团购券");
+		cm.getColumn(10).setHeaderValue("点评团购券");
 		cm.getColumn(10).setMinWidth(125);
-		cm.getColumn(11).setHeaderValue("美团超券");
+		cm.getColumn(11).setHeaderValue("点评闪惠");
 		cm.getColumn(11).setMinWidth(105);
-		cm.getColumn(12).setHeaderValue("支付宝");
-		cm.getColumn(12).setMinWidth(105);
-		cm.getColumn(13).setHeaderValue("店内优惠");
+		cm.getColumn(12).setHeaderValue("美团团购券");
+		cm.getColumn(12).setMinWidth(125);
+		cm.getColumn(13).setHeaderValue("美团超券");
 		cm.getColumn(13).setMinWidth(105);
-		cm.getColumn(14).setHeaderValue("在线优惠总额");
-		cm.getColumn(14).setMinWidth(115);
-		cm.getColumn(15).setHeaderValue("饿了么在线优惠");
-		cm.getColumn(15).setMinWidth(125);
-		cm.getColumn(16).setHeaderValue("美团外卖在线优惠");
-		cm.getColumn(16).setMinWidth(125);
-		cm.getColumn(17).setHeaderValue("当日总收入");
-		cm.getColumn(17).setMinWidth(205);
+		cm.getColumn(14).setHeaderValue("支付宝");
+		cm.getColumn(14).setMinWidth(105);
+		cm.getColumn(15).setHeaderValue("店内优惠");
+		cm.getColumn(15).setMinWidth(105);
+		cm.getColumn(16).setHeaderValue("在线优惠总额");
+		cm.getColumn(16).setMinWidth(115);
+		cm.getColumn(17).setHeaderValue("饿了么在线优惠");
+		cm.getColumn(17).setMinWidth(125);
+		cm.getColumn(18).setHeaderValue("美团外卖在线优惠");
+		cm.getColumn(18).setMinWidth(125);
+		cm.getColumn(19).setHeaderValue("当日总收入");
+		cm.getColumn(19).setMinWidth(205);
 	}
 	
 	public void makeStatisticRowFace(){
@@ -173,24 +177,28 @@ public class TurnoverTable extends JTable {
 				case 7:
 					return "<html><font color='red'>"+turnover.getMtwmbtAmount()+"</font></html>";
 				case 8:
-					return "<html><font color='red'>"+turnover.getDptgAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getWmcrAmount()+"</font></html>";
 				case 9:
-					return "<html><font color='red'>"+turnover.getDpshAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getWmcrbtAmount()+"</font></html>";
 				case 10:
-					return "<html><font color='red'>"+turnover.getMtAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getDptgAmount()+"</font></html>";
 				case 11:
-					return "<html><font color='red'>"+turnover.getMtSuperAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getDpshAmount()+"</font></html>";
 				case 12:
-					return "<html><font color='red'>"+turnover.getAliPayAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getMtAmount()+"</font></html>";
 				case 13:
-					return "<html><font color='green'>"+turnover.getTsFreeAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getMtSuperAmount()+"</font></html>";
 				case 14:
-					return "<html><font color='green'>"+turnover.getOnlineFreeAmount()+"</font></html>";
+					return "<html><font color='red'>"+turnover.getAliPayAmount()+"</font></html>";
 				case 15:
-					return "<html><font color='green'>"+turnover.getEleOnlineFreeAmount()+"</font></html>";
+					return "<html><font color='green'>"+turnover.getTsFreeAmount()+"</font></html>";
 				case 16:
-					return "<html><font color='green'>"+turnover.getMtwmOnlineFreeAmount()+"</font></html>";
+					return "<html><font color='green'>"+turnover.getOnlineFreeAmount()+"</font></html>";
 				case 17:
+					return "<html><font color='green'>"+turnover.getEleOnlineFreeAmount()+"</font></html>";
+				case 18:
+					return "<html><font color='green'>"+turnover.getMtwmOnlineFreeAmount()+"</font></html>";
+				case 19:
 					return turnover.getTotalAmount();
 				}
 			}
