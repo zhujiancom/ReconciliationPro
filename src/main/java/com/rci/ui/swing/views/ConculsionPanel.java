@@ -50,6 +50,9 @@ public class ConculsionPanel extends JPanel {
 	private JLabel mtSuperFreeValue;
 	private JLabel freeValue;
 	private JLabel totalValue;
+	private JLabel wmcrValue;
+	private JLabel wmcrbtValue;
+	
 //	private JLabel expRateValue; //外送率
 	private Map<AccountCode,BigDecimal> sumMap;
 	private Date queryDate;  //统计日期
@@ -91,6 +94,8 @@ public class ConculsionPanel extends JPanel {
 		sevenGroup.setLayout(new BoxLayout(sevenGroup, BoxLayout.X_AXIS));
 		JPanel eightGroup = new JPanel();
 		eightGroup.setLayout(new BoxLayout(eightGroup, BoxLayout.X_AXIS));
+		JPanel nineGroup = new JPanel();
+		nineGroup.setLayout(new BoxLayout(nineGroup, BoxLayout.X_AXIS));
 		/* 现金统计  */
 		JLabel cash = new JLabel("收银机现金入账总额：");
 		cashValue = new JLabel();
@@ -196,6 +201,23 @@ public class ConculsionPanel extends JPanel {
 		JPanel lsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		lsPanel.add(lsLabel);
 		lsPanel.add(lsValue);
+		
+		/* 外卖超人 */
+		JLabel wmcrLabel = new JLabel("外卖超人入账总额：");
+		wmcrValue = new JLabel();
+		wmcrValue.setForeground(Color.RED);
+		JPanel wmcrPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		wmcrPanel.add(wmcrLabel);
+		wmcrPanel.add(wmcrValue);
+		
+		/* 外卖超人补贴 */
+		JLabel wmcrbtLabel = new JLabel("外卖超人补贴总额：");
+		wmcrbtValue = new JLabel();
+		wmcrbtValue.setForeground(Color.RED);
+		JPanel wmcrbtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		wmcrbtPanel.add(wmcrbtLabel);
+		wmcrbtPanel.add(wmcrbtValue);
+		
 		/* 总免单金额统计  */
 		JLabel freeLabel = new JLabel("总免单金额：");
 		freeValue = new JLabel();
@@ -229,9 +251,11 @@ public class ConculsionPanel extends JPanel {
 		fifthGroup.add(mtSuperPanel);
 		sixthGroup.add(mtwmPanel);
 		sixthGroup.add(mtwmFreePanel);
-		sevenGroup.add(tddPanel);
-		sevenGroup.add(freePanel);
-		eightGroup.add(totalPanel);
+		sevenGroup.add(wmcrPanel);
+		sevenGroup.add(wmcrbtPanel);
+		eightGroup.add(tddPanel);
+		eightGroup.add(freePanel);
+		nineGroup.add(totalPanel);
 		
 		this.add(firstGroup);
 		this.add(secondGroup);
@@ -241,6 +265,7 @@ public class ConculsionPanel extends JPanel {
 		this.add(sixthGroup);
 		this.add(sevenGroup);
 		this.add(eightGroup);
+		this.add(nineGroup);
 	}
 	
 	public void clearData(){
@@ -264,6 +289,8 @@ public class ConculsionPanel extends JPanel {
 		eleRemark.setText("");
 		eleSdRemark.setText("");
 //		expRateValue.setText("");
+		wmcrValue.setText("");
+		wmcrbtValue.setText("");
 	}
 	
 	public void refreshUI() {
@@ -284,6 +311,8 @@ public class ConculsionPanel extends JPanel {
 		getTgRemark().setText(getTicketStatistic(queryDate,Vendor.DZDP));
 		getMtRemark().setText(getTicketStatistic(queryDate,Vendor.MT));
 		getEleRemark().setText(getValidCount(queryDate, Vendor.ELE));
+		getWmcrValue().setText(getTotalAmount(AccountCode.WMCR).toString());
+		getWmcrbtValue().setText(getTotalAmount(AccountCode.FREE_WMCR).toString());
 	}
 	
 	/**
@@ -520,6 +549,22 @@ public class ConculsionPanel extends JPanel {
 
 	public void setQueryDate(Date queryDate) {
 		this.queryDate = queryDate;
+	}
+
+	public JLabel getWmcrValue() {
+		return wmcrValue;
+	}
+
+	public void setWmcrValue(JLabel wmcrValue) {
+		this.wmcrValue = wmcrValue;
+	}
+
+	public JLabel getWmcrbtValue() {
+		return wmcrbtValue;
+	}
+
+	public void setWmcrbtValue(JLabel wmcrbtValue) {
+		this.wmcrbtValue = wmcrbtValue;
 	}
 
 }

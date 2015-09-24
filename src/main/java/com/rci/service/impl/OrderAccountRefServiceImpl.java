@@ -3,6 +3,7 @@ package com.rci.service.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
@@ -13,8 +14,10 @@ import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.base.BaseServiceImpl;
+import com.rci.tools.DateUtil;
 
 @Service("OrderAccountRefService")
 public class OrderAccountRefServiceImpl extends
@@ -66,6 +69,18 @@ public class OrderAccountRefServiceImpl extends
 			}
 		}) ;
 		return baseDAO.queryListByCriteria(dc);
+	}
+	
+	@Override
+	public BigDecimal querySumAmount(AccountCode account,Date postTime,OrderFramework framework) {
+		String nativeSql = "select sum(oar.real_amount) 'amount' from bus_tb_order_account_ref oar \n"
+				+ "left join bus_tb_order o on oar.order_no=o.order_no \n"
+				+ "where oar.post_time='"+DateUtil.date2Str(postTime)+"' \n"
+				+ "and oar.accno='"+account.name()+"' \n"
+				+ "and o.framework='"+framework.name()+"'";
+		Map<String,Object> resultMap = baseDAO.queryListBySQL(nativeSql).get(0);
+		BigDecimal amount = (BigDecimal) resultMap.get("amount");
+		return amount;
 	}
 	
 	public static class AccountSumResult{

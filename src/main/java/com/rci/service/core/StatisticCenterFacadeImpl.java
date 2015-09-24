@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.entity.EleSDStatistic;
 import com.rci.bean.entity.TicketStatistic;
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IOrderAccountRefService;
@@ -155,8 +156,10 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 		sum.setEleAmount(sum.getEleAmount().add(item.getEleAmount()));
 		sum.setElebtAmount(sum.getElebtAmount().add(item.getElebtAmount()));
 		sum.setElesdAmount(sum.getElesdAmount().add(item.getElesdAmount()));
+		sum.setEleOnlineFreeAmount(sum.getEleOnlineFreeAmount().add(item.getEleOnlineFreeAmount()));
 		sum.setMtwmAmount(sum.getMtwmAmount().add(item.getMtwmAmount()));
 		sum.setMtwmbtAmount(sum.getMtwmbtAmount().add(item.getMtwmbtAmount()));
+		sum.setMtwmOnlineFreeAmount(sum.getMtwmOnlineFreeAmount().add(item.getMtwmOnlineFreeAmount()));
 		sum.setMtAmount(sum.getMtAmount().add(item.getMtAmount()));
 		sum.setMtSuperAmount(sum.getMtSuperAmount().add(item.getMtSuperAmount()));
 		sum.setOnlineFreeAmount(sum.getOnlineFreeAmount().add(item.getOnlineFreeAmount()));
@@ -200,11 +203,26 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 						break;
 				}
 			}
+			/**
+			 * 获取饿了么刷单补贴金额
+			 */
 			BigDecimal elesdAmount = getSDAllowanceAmount(position);
 			if(elesdAmount != null){
 				vo.setElesdAmount(elesdAmount);
 				totalAmount = totalAmount.add(elesdAmount);
 			}
+			/**
+			 * 获取饿了么餐厅补贴金额
+			 */
+			BigDecimal eleOnlineFreeAmount = oarService.querySumAmount(AccountCode.FREE_ONLINE, position, OrderFramework.ELE);
+			vo.setEleOnlineFreeAmount(eleOnlineFreeAmount);
+			
+			/**
+			 * 获取美团外卖补贴金额
+			 */
+			BigDecimal mtwmOnlineFreeAmount = oarService.querySumAmount(AccountCode.FREE_ONLINE, position, OrderFramework.MTWM);
+			vo.setMtwmOnlineFreeAmount(mtwmOnlineFreeAmount);
+			
 			vo.setTotalAmount(totalAmount);
 			return vo;
 		}

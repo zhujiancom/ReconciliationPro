@@ -255,7 +255,7 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 		}
 		return Collections.emptyList();
 	}
-
+	
 	/**
 	 * @Function
 	 * @param dc
@@ -327,4 +327,5 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 		Long count = (Long) criteria.uniqueResult();
 		return count;
 	}
+
 }

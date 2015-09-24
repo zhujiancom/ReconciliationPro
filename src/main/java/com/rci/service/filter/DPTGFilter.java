@@ -16,6 +16,7 @@ import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -41,6 +42,7 @@ public class DPTGFilter extends AbstractFilter {
 
 	@Override
 	public void generateScheme(Order order,FilterChain chain) {
+		order.setFramework(OrderFramework.TS);
 		suitMap = new HashMap<SchemeType,Integer>();
 		/* 标记该订单中是否有套餐 */
 		boolean suitFlag = false;

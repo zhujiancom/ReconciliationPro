@@ -69,7 +69,7 @@ public class TurnoverWinBuilder implements PopWindowBuilder {
 
 	@Override
 	public void createContentPane() {
-		table = new TurnoverTable(16);
+		table = new TurnoverTable(18);
 		((TurnoverTable)table).makeStatisticRowFace();
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		contentPane = new JScrollPane(table);

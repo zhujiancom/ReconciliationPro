@@ -86,7 +86,7 @@ public final class BusinessEnums {
 	}
 	
 	public static enum Vendor{
-		ELE,DZDP,MTWM,MT,LS,TDD
+		ELE,DZDP,MTWM,MT,LS,TDD,WMCR
 	}
 	
 	public static enum StockOpType{
@@ -115,7 +115,7 @@ public final class BusinessEnums {
 	public static enum AccountCode{
 		MT,MTWM,MT_SUPER,FREE_MT_SUPER,DPTG,DPSH,
 		ELE,ALIPAY,FREE,FREE_ONLINE,FREE_MTWM,FREE_ELE,
-		CASH_MACHINE,POS,LS;
+		CASH_MACHINE,POS,LS,WMCR,FREE_WMCR;
 	}
 	
 	public static enum PaymodeCode{
@@ -142,5 +142,24 @@ public final class BusinessEnums {
 			}
 			return UNKNOW;
 		}
+	}
+
+	/**
+	 * 
+	 * remark (备注): 订单平台 - 饿了么，美团外卖，堂食，淘点点，外卖超人，到家,拉手网
+	 *
+	 * @author zj
+	 *	
+	 * 项目名称：ReconciliationPro
+	 *
+	 * 类名称：OrderFramework
+	 *
+	 * 包名称：com.rci.enums
+	 *
+	 * Create Time: 2015年9月24日 上午10:04:37
+	 *
+	 */
+	public static enum OrderFramework{
+		ELE,MTWM,TS,TDD,WMCR,DJ,LS
 	}
 }

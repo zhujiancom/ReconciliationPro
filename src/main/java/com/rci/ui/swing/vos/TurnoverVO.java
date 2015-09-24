@@ -15,16 +15,25 @@ public class TurnoverVO {
 	
 	private BigDecimal dpshAmount;
 	
+	/* 饿了么在线支付金额 */
 	private BigDecimal eleAmount;
 	
+	/* 饿了么补贴 */
 	private BigDecimal elebtAmount;
 	
 	/* 饿了么刷单补贴 */
 	private BigDecimal elesdAmount;
 	
+	/* 饿了么在线优惠 ， 餐厅补贴*/
+	private BigDecimal eleOnlineFreeAmount;
+	
 	private BigDecimal mtwmAmount;
 	
+	/* 美团补贴 */
 	private BigDecimal mtwmbtAmount;
+	
+	/* 美团外卖在线优惠，餐厅补贴 */
+	private BigDecimal mtwmOnlineFreeAmount;
 	
 	private BigDecimal aliPayAmount;
 	
@@ -33,7 +42,7 @@ public class TurnoverVO {
 	/* 堂食优惠  */
 	private BigDecimal tsFreeAmount;
 	
-	/* 在线订单优惠 */
+	/* 团购,pos机，淘点点订单在线优惠 */
 	private BigDecimal onlineFreeAmount;
 	
 	private BigDecimal totalAmount;
@@ -181,6 +190,22 @@ public class TurnoverVO {
 
 	public void setElesdAmount(BigDecimal elesdAmount) {
 		this.elesdAmount = elesdAmount;
+	}
+
+	public BigDecimal getEleOnlineFreeAmount() {
+		return eleOnlineFreeAmount == null?BigDecimal.ZERO:eleOnlineFreeAmount;
+	}
+
+	public void setEleOnlineFreeAmount(BigDecimal eleOnlineFreeAmount) {
+		this.eleOnlineFreeAmount = eleOnlineFreeAmount;
+	}
+
+	public BigDecimal getMtwmOnlineFreeAmount() {
+		return mtwmOnlineFreeAmount == null ? BigDecimal.ZERO:mtwmOnlineFreeAmount;
+	}
+
+	public void setMtwmOnlineFreeAmount(BigDecimal mtwmOnlineFreeAmount) {
+		this.mtwmOnlineFreeAmount = mtwmOnlineFreeAmount;
 	}
 
 }

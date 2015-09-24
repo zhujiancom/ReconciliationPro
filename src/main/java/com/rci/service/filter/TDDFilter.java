@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -31,6 +32,7 @@ public class TDDFilter extends AbstractFilter {
 
 	@Override
 	public void generateScheme(Order order,FilterChain chain){
+		order.setFramework(OrderFramework.TDD);
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.TDD);
 		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
 		validation(order); // 验证订单

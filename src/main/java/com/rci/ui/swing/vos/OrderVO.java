@@ -82,6 +82,10 @@ public class OrderVO {
 	
 	private BigDecimal posAmount;
 	
+	private BigDecimal wmcrAmount;
+	
+	private BigDecimal wmcrbtAmount;
+	
 	private YOrN unusual;
 
 	private BigDecimal nodiscountAmount;
@@ -432,6 +436,22 @@ public class OrderVO {
 
 	public void setOnlineFreeAmount(BigDecimal onlineFreeAmount) {
 		this.onlineFreeAmount = onlineFreeAmount;
+	}
+
+	public BigDecimal getWmcrAmount() {
+		return wmcrAmount;
+	}
+
+	public void setWmcrAmount(BigDecimal wmcrAmount) {
+		this.wmcrAmount = wmcrAmount;
+	}
+
+	public BigDecimal getWmcrbtAmount() {
+		return wmcrbtAmount;
+	}
+
+	public void setWmcrbtAmount(BigDecimal wmcrbtAmount) {
+		this.wmcrbtAmount = wmcrbtAmount;
 	}
 
 }

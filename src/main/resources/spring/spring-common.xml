@@ -40,6 +40,7 @@
 		<bean class="com.rci.service.filter.MTSuperFilter"></bean>
 		<bean class="com.rci.service.filter.DPSHFilter"></bean>
 		<bean class="com.rci.service.filter.AliPayFilter"></bean>
+		<bean class="com.rci.service.filter.WMCRFilter"></bean>
 	</util:list>
 	
 <!-- 	<util:list id="freeOnlinePaymodes"> -->

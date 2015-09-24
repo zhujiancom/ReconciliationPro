@@ -22,7 +22,7 @@ import com.rci.tools.StringUtils;
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class FreeFilter extends AbstractFilter {
-	private String[] freeOnlinePaymodes = new String[]{"11","14","96"};
+	private String[] freeOnlinePaymodes = new String[]{"11","12","14","96"};
 
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {

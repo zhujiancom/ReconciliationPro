@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.tools.DigitUtil;
@@ -49,6 +50,7 @@ public class POSFilter extends AbstractFilter {
 	 */
 	@Override
 	protected void generateScheme(Order order, FilterChain chain) {
+		order.setFramework(OrderFramework.TS);
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.POS);
 		String schemeName = order.getSchemeName();
 		if(StringUtils.hasText(schemeName)){

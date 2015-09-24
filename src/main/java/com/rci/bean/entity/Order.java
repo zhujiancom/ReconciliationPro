@@ -24,6 +24,7 @@ import javax.persistence.Transient;
 
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.base.BaseEntity;
+import com.rci.enums.BusinessEnums;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums;
@@ -88,6 +89,9 @@ public class Order extends BaseEntity {
 	
 	/* 订单错误原因信息*/
 	private String warningInfo;
+	
+	/* 订单平台 */
+	private BusinessEnums.OrderFramework framework;
 	
 	/**
 	 * @return the oid
@@ -386,5 +390,15 @@ public class Order extends BaseEntity {
 
 	public void setWarningInfo(String warningInfo) {
 		this.warningInfo = warningInfo;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="framework")
+	public BusinessEnums.OrderFramework getFramework() {
+		return framework;
+	}
+
+	public void setFramework(BusinessEnums.OrderFramework framework) {
+		this.framework = framework;
 	}
 }

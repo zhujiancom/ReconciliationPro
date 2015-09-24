@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.tools.StringUtils;
@@ -44,6 +45,8 @@ public class AliPayFilter extends AbstractFilter{
 
 	@Override
 	protected void generateScheme(Order order, FilterChain chain) {
+		/* 只有堂食或外带等到店消费的形式才能用支付宝  */
+		order.setFramework(OrderFramework.TS);
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ZFB);
 		
 		String schemeName = order.getSchemeName();

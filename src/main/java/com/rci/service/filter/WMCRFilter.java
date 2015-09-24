@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
@@ -5,8 +8,6 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,52 +19,64 @@ import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
-import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DateUtil;
 import com.rci.tools.StringUtils;
 
+/**
+ * remark (备注):
+ *
+ * @author zj
+ *	
+ * 项目名称：ReconciliationPro
+ *
+ * 类名称：AliPayFilter
+ *
+ * 包名称：com.rci.service.filter
+ *
+ * Create Time: 2015年9月3日 下午4:39:27
+ *
+ */
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class ELEFilter extends AbstractFilter {
-	private static final Log logger = LogFactory.getLog(ELEFilter.class);
+public class WMCRFilter extends AbstractFilter{
 
+	/* 
+	 * @see com.rci.service.filter.CalculateFilter#support(java.util.Map)
+	 */
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(PaymodeCode.ELE);
+		return paymodeMapping.containsKey(PaymodeCode.WMCR);
 	}
 
 	@Override
-	public void generateScheme(Order order, FilterChain chain) {
-		order.setFramework(OrderFramework.ELE);
-		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ELE);
+	protected void generateScheme(Order order, FilterChain chain) {
+		order.setFramework(OrderFramework.WMCR);
+		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.WMCR);
 		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
-//			BigDecimal originAmount = order.getOriginPrice();
 		
 		String schemeName = order.getSchemeName();
 		if(StringUtils.hasText(schemeName)){
-			schemeName = schemeName+","+"饿了么在线支付"+onlineAmount+"元";
+			schemeName = schemeName+","+"外卖超人在线支付"+onlineAmount+"元";
 		}else{
-			schemeName = "饿了么在线支付"+onlineAmount+"元";
+			schemeName = "外卖超人在线支付"+onlineAmount+"元";
 		}
 		if(freeAmount != null){
-//				originAmount = originAmount.subtract(freeAmount);
 			String day = order.getDay();
 			try{
 				Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
-				Scheme scheme = schemeService.getScheme(Vendor.ELE, freeAmount, orderDate);
+				Scheme scheme = schemeService.getScheme(Vendor.WMCR, freeAmount, orderDate);
 				if(scheme != null){
-//						freeAmount = freeAmount.subtract(scheme.getSpread());
 					schemeName = schemeName+","+scheme.getName();
 					Map<String,BigDecimal> freeMap = chain.getFreeOnlineMap();
 					if(freeMap.get(order.getPayNo()) == null){
 						freeMap.put(order.getPayNo(), freeAmount);
 					}
-					//保存饿了么补贴金额
-					preserveOAR(scheme.getPostPrice(),AccountCode.FREE_ELE,order);
+					//保存外卖超人补贴金额
+					preserveOAR(scheme.getPostPrice(),AccountCode.FREE_WMCR,order);
 					preserveOAR(scheme.getSpread(),AccountCode.FREE_ONLINE,order);
 				}else{
-					logger.warn(order.getPayNo()+"---[饿了么 活动补贴] 没有找到匹配的Scheme -----");
-					String warningInfo = "[饿了么 活动补贴]--- 没有找到匹配的Scheme";
+					logger.warn(order.getPayNo()+"---[外卖超人 活动补贴] 没有找到匹配的Scheme -----");
+					String warningInfo = "[外卖超人活动补贴]--- 没有找到匹配的Scheme";
 					order.setWarningInfo(warningInfo);
 				}
 			}catch(ParseException e){
@@ -72,13 +85,16 @@ public class ELEFilter extends AbstractFilter {
 		}
 		
 		order.setSchemeName(schemeName);
-		//保存饿了么在线支付金额
-		preserveOAR(onlineAmount,AccountCode.ELE,order);
+		//保存外卖超人在线支付金额
+		preserveOAR(onlineAmount,AccountCode.WMCR,order);
 	}
 
-
+	/* 
+	 * @see com.rci.service.filter.AbstractFilter#getSuitMap()
+	 */
 	@Override
 	protected Map<SchemeType, Integer> getSuitMap() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -87,14 +103,6 @@ public class ELEFilter extends AbstractFilter {
 	 */
 	@Override
 	protected void validation(Order order) {
-		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ELE);
-		BigDecimal originAmount = order.getOriginPrice();
-		if(originAmount.compareTo(onlineAmount) != 0){
-			order.setUnusual(YOrN.Y);
-			logger.warn("--- 【"+order.getPayNo()+"】[饿了么在线支付异常] ---， 在线支付金额："+onlineAmount+" , 实际支付金额： "+originAmount);
-			String warningInfo = "[饿了么在线支付异常]--- 在线支付金额："+onlineAmount+" , 应支付金额： "+originAmount;
-			order.setWarningInfo(warningInfo);
-		}		
 	}
 
 }

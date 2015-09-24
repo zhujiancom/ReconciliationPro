@@ -36,7 +36,7 @@ public class TurnoverTable extends JTable {
 		cm.getColumn(4).setHeaderValue("饿了么补贴");
 		cm.getColumn(4).setMinWidth(105);
 		cm.getColumn(5).setHeaderValue("饿了么刷单补贴");
-		cm.getColumn(5).setMinWidth(215);
+		cm.getColumn(5).setMinWidth(115);
 		cm.getColumn(6).setHeaderValue("美团外卖");
 		cm.getColumn(6).setMinWidth(105);
 		cm.getColumn(7).setHeaderValue("美团外卖补贴");
@@ -53,10 +53,14 @@ public class TurnoverTable extends JTable {
 		cm.getColumn(12).setMinWidth(105);
 		cm.getColumn(13).setHeaderValue("店内优惠");
 		cm.getColumn(13).setMinWidth(105);
-		cm.getColumn(14).setHeaderValue("在线优惠");
-		cm.getColumn(14).setMinWidth(105);
-		cm.getColumn(15).setHeaderValue("当日总收入");
-		cm.getColumn(15).setMinWidth(225);
+		cm.getColumn(14).setHeaderValue("在线优惠总额");
+		cm.getColumn(14).setMinWidth(115);
+		cm.getColumn(15).setHeaderValue("饿了么在线优惠");
+		cm.getColumn(15).setMinWidth(125);
+		cm.getColumn(16).setHeaderValue("美团外卖在线优惠");
+		cm.getColumn(16).setMinWidth(125);
+		cm.getColumn(17).setHeaderValue("当日总收入");
+		cm.getColumn(17).setMinWidth(205);
 	}
 	
 	public void makeStatisticRowFace(){
@@ -144,6 +148,10 @@ public class TurnoverTable extends JTable {
 				case 14:
 					return turnover.getOnlineFreeAmount();
 				case 15:
+					return turnover.getEleOnlineFreeAmount();
+				case 16:
+					return turnover.getMtwmOnlineFreeAmount();
+				case 17:
 					return turnover.getTotalAmount();
 				}
 			}else{
@@ -179,6 +187,10 @@ public class TurnoverTable extends JTable {
 				case 14:
 					return "<html><font color='green'>"+turnover.getOnlineFreeAmount()+"</font></html>";
 				case 15:
+					return "<html><font color='green'>"+turnover.getEleOnlineFreeAmount()+"</font></html>";
+				case 16:
+					return "<html><font color='green'>"+turnover.getMtwmOnlineFreeAmount()+"</font></html>";
+				case 17:
 					return turnover.getTotalAmount();
 				}
 			}

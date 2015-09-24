@@ -24,7 +24,7 @@ public class OrderTable extends JTable {
 	private static final long serialVersionUID = 4935140318205918006L;
 	
 	public OrderTable(){
-		super(new OrderTableModel(22));
+		super(new OrderTableModel(24));
 		setHeaderLabel();
 		this.setRowHeight(20);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -98,15 +98,21 @@ public class OrderTable extends JTable {
 		cm.getColumn(18).setHeaderValue("POS机");
 		cm.getColumn(18).setMinWidth(75);
 		cm.getColumn(18).setCellRenderer(redmarkRenderer);
-		cm.getColumn(19).setHeaderValue("堂食免单");
-		cm.getColumn(19).setMinWidth(115);
+		cm.getColumn(19).setHeaderValue("外卖超人");
+		cm.getColumn(19).setMinWidth(75);
 		cm.getColumn(19).setCellRenderer(redmarkRenderer);
-		cm.getColumn(20).setHeaderValue("在线免单");
+		cm.getColumn(20).setHeaderValue("外卖超人补贴");
 		cm.getColumn(20).setMinWidth(115);
 		cm.getColumn(20).setCellRenderer(redmarkRenderer);
-		cm.getColumn(21).setHeaderValue("入账总金额");
+		cm.getColumn(21).setHeaderValue("堂食免单");
 		cm.getColumn(21).setMinWidth(75);
-		cm.getColumn(21).setCellRenderer(zeromarkRenderer);
+		cm.getColumn(21).setCellRenderer(redmarkRenderer);
+		cm.getColumn(22).setHeaderValue("在线免单");
+		cm.getColumn(22).setMinWidth(75);
+		cm.getColumn(22).setCellRenderer(redmarkRenderer);
+		cm.getColumn(23).setHeaderValue("入账总金额");
+		cm.getColumn(23).setMinWidth(115);
+		cm.getColumn(23).setCellRenderer(zeromarkRenderer);
 	}
 	
 	/**
@@ -245,11 +251,15 @@ public class OrderTable extends JTable {
 				return order.getMtwmFreeAmount();
 			case 18:
 				return order.getPosAmount();
-			case 19:
-				return order.getFreeAmount();
+			case 19: 
+				return order.getWmcrAmount();
 			case 20:
-				return order.getOnlineFreeAmount();
+				return order.getWmcrbtAmount();
 			case 21:
+				return order.getFreeAmount();
+			case 22:
+				return order.getOnlineFreeAmount();
+			case 23:
 				return order.getTotalAmount();
 			default:
 				break;
