@@ -138,24 +138,28 @@ public class TurnoverTable extends JTable {
 				case 7:
 					return turnover.getMtwmbtAmount();
 				case 8:
-					return turnover.getDptgAmount();
+					return turnover.getWmcrAmount();
 				case 9:
-					return turnover.getDpshAmount();
+					return turnover.getWmcrbtAmount();
 				case 10:
-					return turnover.getMtAmount();
+					return turnover.getDptgAmount();
 				case 11:
-					return turnover.getMtSuperAmount();
+					return turnover.getDpshAmount();
 				case 12:
-					return turnover.getAliPayAmount();
+					return turnover.getMtAmount();
 				case 13:
-					return turnover.getTsFreeAmount();
+					return turnover.getMtSuperAmount();
 				case 14:
-					return turnover.getOnlineFreeAmount();
+					return turnover.getAliPayAmount();
 				case 15:
-					return turnover.getEleOnlineFreeAmount();
+					return turnover.getTsFreeAmount();
 				case 16:
-					return turnover.getMtwmOnlineFreeAmount();
+					return turnover.getOnlineFreeAmount();
 				case 17:
+					return turnover.getEleOnlineFreeAmount();
+				case 18:
+					return turnover.getMtwmOnlineFreeAmount();
+				case 19:
 					return turnover.getTotalAmount();
 				}
 			}else{

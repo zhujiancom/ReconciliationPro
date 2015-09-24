@@ -53,7 +53,6 @@ public class ConculsionPanel extends JPanel {
 	private JLabel totalValue;
 	private JLabel wmcrValue;
 	private JLabel wmcrbtValue;
-	private JLabel sqbValue;
 	
 //	private JLabel expRateValue; //外送率
 	private Map<AccountCode,BigDecimal> sumMap;
@@ -223,14 +222,6 @@ public class ConculsionPanel extends JPanel {
 		wmcrbtPanel.add(wmcrbtLabel);
 		wmcrbtPanel.add(wmcrbtValue);
 		
-		/* 收钱吧支付 */
-		JLabel sqbLabel = new JLabel("收钱吧总额：");
-		sqbValue = new JLabel();
-		sqbValue.setForeground(Color.RED);
-		JPanel sqbPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		sqbPanel.add(sqbLabel);
-		sqbPanel.add(sqbValue);
-		
 		/* 总免单金额统计  */
 		JLabel freeLabel = new JLabel("总免单金额：");
 		freeValue = new JLabel();
@@ -269,8 +260,6 @@ public class ConculsionPanel extends JPanel {
 		sevenGroup.add(wmcrbtPanel);
 		eightGroup.add(tddPanel);
 		eightGroup.add(freePanel);
-		nineGroup.add(sqbPanel);
-		nineGroup.add(Box.createHorizontalStrut(45));
 		nineGroup.add(totalPanel);
 		
 		this.add(firstGroup);
@@ -308,7 +297,6 @@ public class ConculsionPanel extends JPanel {
 //		expRateValue.setText("");
 		wmcrValue.setText("");
 		wmcrbtValue.setText("");
-		sqbValue.setText("");
 	}
 	
 	public void refreshUI() {
@@ -332,7 +320,6 @@ public class ConculsionPanel extends JPanel {
 		getMtwmRemark().setText(getValidCount(queryDate,Vendor.MTWM));
 		getWmcrValue().setText(getTotalAmount(AccountCode.WMCR).toString());
 		getWmcrbtValue().setText(getTotalAmount(AccountCode.FREE_WMCR).toString());
-		getSqbValue().setText(getTotalAmount(AccountCode.SQB).toString());
 	}
 	
 	/**
@@ -585,14 +572,6 @@ public class ConculsionPanel extends JPanel {
 
 	public void setWmcrbtValue(JLabel wmcrbtValue) {
 		this.wmcrbtValue = wmcrbtValue;
-	}
-
-	public JLabel getSqbValue() {
-		return sqbValue;
-	}
-
-	public void setSqbValue(JLabel sqbValue) {
-		this.sqbValue = sqbValue;
 	}
 
 	public DisplayLabel<String, Long> getMtwmRemark() {

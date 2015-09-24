@@ -86,8 +86,6 @@ public class OrderVO {
 	
 	private BigDecimal wmcrbtAmount;
 	
-	private BigDecimal sqbAmount;
-	
 	private YOrN unusual;
 
 	private BigDecimal nodiscountAmount;
@@ -454,14 +452,6 @@ public class OrderVO {
 
 	public void setWmcrbtAmount(BigDecimal wmcrbtAmount) {
 		this.wmcrbtAmount = wmcrbtAmount;
-	}
-
-	public BigDecimal getSqbAmount() {
-		return sqbAmount;
-	}
-
-	public void setSqbAmount(BigDecimal sqbAmount) {
-		this.sqbAmount = sqbAmount;
 	}
 
 }

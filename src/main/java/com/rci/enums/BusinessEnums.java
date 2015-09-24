@@ -115,11 +115,11 @@ public final class BusinessEnums {
 	public static enum AccountCode{
 		MT,MTWM,MT_SUPER,FREE_MT_SUPER,DPTG,DPSH,
 		ELE,ALIPAY,FREE,FREE_ONLINE,FREE_MTWM,FREE_ELE,
-		CASH_MACHINE,POS,LS,WMCR,FREE_WMCR,SQB;
+		CASH_MACHINE,POS,LS,WMCR,FREE_WMCR;
 	}
 	
 	public static enum PaymodeCode{
-		CASH_MACHINE("00"),ELE("11"),MTWM("14"),WMCR("12"),SQB("15"),
+		CASH_MACHINE("00"),ELE("11"),MTWM("14"),WMCR("12"),
 		TDD("96"),DPTG("98"),LS(""),DPSH("13"),
 		MT("99"),FREE("YY"),MTSUPER("87"),POS("03"),
 		UNKNOW(""),ZFB("86");

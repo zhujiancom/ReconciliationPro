@@ -88,7 +88,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 					case MT_SUPER:vo.setMtSuperAmount(amount);break;
 					case WMCR:vo.setWmcrAmount(amount);break;
 					case FREE_WMCR:vo.setWmcrbtAmount(amount);break;
-					case SQB:vo.setSqbAmount(amount);break;
 					case FREE:
 						vo.setFreeAmount(amount);
 						totalAmount = totalAmount.subtract(amount);
