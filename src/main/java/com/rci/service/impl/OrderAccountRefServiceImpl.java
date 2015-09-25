@@ -73,11 +73,11 @@ public class OrderAccountRefServiceImpl extends
 	
 	@Override
 	public BigDecimal querySumAmount(AccountCode account,Date postTime,OrderFramework framework) {
+		String queryDate = DateUtil.date2Str(postTime, "yyyyMMdd");
 		String nativeSql = "select sum(oar.real_amount) 'amount' from bus_tb_order_account_ref oar \n"
-				+ "left join bus_tb_order o on oar.order_no=o.order_no \n"
-				+ "where oar.post_time='"+DateUtil.date2Str(postTime)+"' \n"
-				+ "and oar.accno='"+account.name()+"' \n"
-				+ "and o.framework='"+framework.name()+"'";
+				+ "where oar.order_no in ( \n"
+				+ "		select o.order_no from bus_tb_order o where o.day='"+queryDate+"' and o.framework='"+framework.name()+"' \n"
+				+ ") and oar.accno='"+account.name()+"'";
 		Map<String,Object> resultMap = baseDAO.queryListBySQL(nativeSql).get(0);
 		BigDecimal amount = (BigDecimal) resultMap.get("amount");
 		return amount;
