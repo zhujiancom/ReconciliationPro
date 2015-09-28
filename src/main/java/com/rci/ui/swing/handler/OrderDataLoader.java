@@ -1,16 +1,19 @@
 package com.rci.ui.swing.handler;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
 import org.springframework.util.CollectionUtils;
 
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.service.IDataLoaderService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
@@ -28,6 +31,8 @@ import com.rci.ui.swing.vos.OrderVO;
 public class OrderDataLoader implements Runnable {
 	private Date queryDate;
 	
+	private Set<PaymodeCode> paymodes;
+	
 	private ContentPanel contentPane;
 	
 	private ConculsionPanel conclusionPane;
@@ -38,8 +43,9 @@ public class OrderDataLoader implements Runnable {
 	
 	private Map<AccountCode,BigDecimal> sumMap;
 	
-	public OrderDataLoader(Date queryDate){
+	public OrderDataLoader(Date queryDate,Set<PaymodeCode> paymodes){
 		this.queryDate = queryDate;
+		this.paymodes = paymodes;
 	}
 	
 	@Override
@@ -50,15 +56,31 @@ public class OrderDataLoader implements Runnable {
 		IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
 		String time = DateUtil.date2Str(queryDate, "yyyyMMdd");
 		List<OrderVO> ordervos = orderService.accquireOrderVOsByDay(time);
+		
+		List<OrderVO> displayOrders = new ArrayList<OrderVO>();
+		for(OrderVO ordervo:ordervos){
+			String[] paymodecodes = ordervo.getPaymodecodes();
+			if(CollectionUtils.isEmpty(paymodes)){
+				displayOrders.add(ordervo);
+			}else{
+				for(String paymodecode:paymodecodes){
+					if(paymodes.contains(PaymodeCode.paymodeCode(paymodecode))){
+						displayOrders.add(ordervo);
+						break;
+					}
+				}
+			}
+		}
+		
 		OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
-		otm.setOrders(ordervos);
+		otm.setOrders(displayOrders);
 		otm.fireTableDataChanged();
-		if(!CollectionUtils.isEmpty(ordervos)){
+		if(!CollectionUtils.isEmpty(displayOrders)){
 			OrderVO order = otm.getOrderAt(0);
 			contentPane.getMainTable().setRowSelectionAllowed(true);
 			contentPane.getMainTable().setRowSelectionInterval(0, 0);
 			loadItemData(order.getPayNo());
-			for(OrderVO ov:ordervos){
+			for(OrderVO ov:displayOrders){
 				if(StringUtils.hasText(ov.getWarningInfo())){
 					contentPane.getTextArea().append("【"+ov.getPayNo()+"】"+ov.getWarningInfo()+"\n");
 				}

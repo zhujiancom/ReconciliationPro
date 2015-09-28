@@ -6,12 +6,14 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.rci.bean.entity.EleSDStatistic;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
@@ -32,6 +34,7 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 	private ConculsionPanel conclusionPane;
 	private String time;
 	private QueryFormPanel queryPanel;
+	private Set<PaymodeCode> paymodes;
 	
 	public QueryListener(ContentPanel contentPane){
 		this.contentPane = contentPane;
@@ -40,6 +43,7 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		time = queryPanel.getTimeInput().getText();
+		paymodes = queryPanel.getPaymodes();
 		try{
 			loadOrderData(time);
 			saveEleSDInfo();
@@ -137,7 +141,7 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 		if(queryDate.after(currentDate)){
 			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "查询时间不能晚于当前时间");
 		}
-		OrderDataLoader dataLoader = new OrderDataLoader(queryDate);
+		OrderDataLoader dataLoader = new OrderDataLoader(queryDate,paymodes);
 		dataLoader.setContentPane(contentPane);
 		dataLoader.setConclusionPane(conclusionPane);
 		new Thread(dataLoader).start();

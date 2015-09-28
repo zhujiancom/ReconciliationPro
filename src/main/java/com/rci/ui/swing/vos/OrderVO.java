@@ -39,6 +39,8 @@ public class OrderVO {
 	private String isTempScheme;
 
 	private Date checkoutTime;
+	
+	private String[] paymodecodes;
 
 	/* 收银机支付金额*/
 	private BigDecimal cashmachineAmount;
@@ -452,6 +454,14 @@ public class OrderVO {
 
 	public void setWmcrbtAmount(BigDecimal wmcrbtAmount) {
 		this.wmcrbtAmount = wmcrbtAmount;
+	}
+
+	public String[] getPaymodecodes() {
+		return paymodecodes;
+	}
+
+	public void setPaymodecodes(String[] paymodecodes) {
+		this.paymodecodes = paymodecodes;
 	}
 
 }

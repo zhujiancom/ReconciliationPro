@@ -29,6 +29,7 @@ import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.base.BaseServiceImpl;
 import com.rci.tools.DateUtil;
+import com.rci.tools.StringUtils;
 import com.rci.ui.swing.vos.OrderItemVO;
 import com.rci.ui.swing.vos.OrderVO;
 
@@ -60,7 +61,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 //		}
 		return orders;
 	}
-
+	
 	@Override
 	public List<OrderVO> accquireOrderVOsByDay(String day) {
 		List<OrderVO> vos = new LinkedList<OrderVO>();
@@ -102,12 +103,13 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 				}
 				vo.setSchemeName(order.getSchemeName());
 				vo.setTotalAmount(totalAmount);
+				vo.setPaymodecodes(StringUtils.split(order.getPaymodes(),','));
 				vos.add(vo);
 			}
 		}
 		return vos;
 	}
-
+	
 	@Override
 	public List<OrderItemVO> queryOrderItemVOsByPayno(String payno) {
 		DetachedCriteria dc = DetachedCriteria.forClass(Order.class);
