@@ -4,14 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,6 +22,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.ui.swing.model.SchemeTable;
 import com.rci.ui.swing.views.PopWindow;
 
@@ -85,7 +89,7 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		
 		addBtn.addActionListener(new ActionListener() {
 			private JTextField nameInput = new JTextField(30);
-			private JTextField vendorInput = new JTextField(30);
+			private JComboBox<Vendor> vendorInput = new JComboBox<Vendor>(new Vendor[]{Vendor.ELE,Vendor.DZDP});
 			private JTextField priceInput = new JTextField(30);
 			private JTextField postPriceInput = new JTextField(30);
 			private JTextField spreadInput = new JTextField(30);
@@ -96,8 +100,8 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 			private JLabel name = new JLabel("活动名称");
 			private JLabel vendor = new JLabel("活动平台");
 			private JLabel price = new JLabel("优惠金额");
-			private JLabel postPrice = new JLabel("平台补贴金额");
-			private JLabel spread = new JLabel("餐厅补贴金额");
+			private JLabel postPrice = new JLabel("平台补贴");
+			private JLabel spread = new JLabel("餐厅补贴");
 			private JLabel start = new JLabel("开始时间");
 			private JLabel end = new JLabel("结束时间");
 			private JLabel floor = new JLabel("最低消费金额");
@@ -107,34 +111,56 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PopWindow addForm = new PopWindow(500,500);
+				PopWindow addForm = new PopWindow(350,500);
 				JPanel containerPanel = addForm.getContainerPanel();
-				JPanel mainPane = new JPanel(new GridLayout(0, 2));
-				mainPane.setPreferredSize(new Dimension(300,200));
+				JPanel mainPane = new JPanel();
+				mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
 				JScrollPane sPane = new JScrollPane(mainPane);
 				buildMainPanel(mainPane);
 				containerPanel.add(sPane,BorderLayout.CENTER);
 			}
 			
 			public void buildMainPanel(JPanel mainPane){
-				mainPane.add(name);
-				mainPane.add(nameInput);
-				mainPane.add(vendor);
-				mainPane.add(vendorInput);
-				mainPane.add(price);
-				mainPane.add(priceInput);
-				mainPane.add(postPrice);
-				mainPane.add(postPriceInput);
-				mainPane.add(spread);
-				mainPane.add(spreadInput);
-				mainPane.add(start);
-				mainPane.add(startInput);
-				mainPane.add(end);
-				mainPane.add(endInput);
-				mainPane.add(floor);
-				mainPane.add(floorInput);
-				mainPane.add(ceil);
-				mainPane.add(ceilInput);
+				JPanel firstPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+				firstPane.add(name);
+				firstPane.add(nameInput);
+				mainPane.add(firstPane);
+				JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
+				secondPane.add(vendor);
+				secondPane.add(vendorInput);
+				mainPane.add(secondPane);
+				JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+				thirdPane.add(price);
+				thirdPane.add(priceInput);
+				mainPane.add(thirdPane);
+				JPanel forthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+				forthPane.add(postPrice);
+				forthPane.add(postPriceInput);
+				mainPane.add(forthPane);
+				JPanel fifthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+				fifthPane.add(spread);
+				fifthPane.add(spreadInput);
+				mainPane.add(fifthPane);
+				JPanel sixthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+				sixthPane.add(start);
+				sixthPane.add(startInput);
+				mainPane.add(sixthPane);
+				JPanel seventhPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+				seventhPane.add(end);
+				seventhPane.add(endInput);
+				mainPane.add(seventhPane);
+				JPanel eightthPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
+				eightthPane.add(floor);
+				eightthPane.add(floorInput);
+				mainPane.add(eightthPane);
+				JPanel ninthPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
+				ninthPane.add(ceil);
+				ninthPane.add(ceilInput);
+				mainPane.add(ninthPane);
+				confirmBtn.setUI(new BasicButtonUI());
+				confirmBtn.setContentAreaFilled(false);
+				confirmBtn.setMargin(new Insets(0,0,0,0));
+				confirmBtn.setPreferredSize(new Dimension(64,64));
 				mainPane.add(confirmBtn);
 			}
 		});
