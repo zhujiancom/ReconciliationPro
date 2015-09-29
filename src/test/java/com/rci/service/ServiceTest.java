@@ -119,8 +119,8 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testDozer(){
 		Scheme s = new Scheme();
-		s.setUnitCode("PC");
-		SchemeVO vo = beanMapper.map(s, SchemeVO.class);
+//		s.setUnitCode("PC");
+//		SchemeVO vo = beanMapper.map(s, SchemeVO.class);
 	}
 	
 	@Test

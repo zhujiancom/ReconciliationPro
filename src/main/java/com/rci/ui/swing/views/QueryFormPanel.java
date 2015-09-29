@@ -186,7 +186,6 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		Object source = e.getItemSelectable();
-		System.out.println(source + "---- "+e.getStateChange());
 		if(source == allCheck && e.getStateChange() == ItemEvent.SELECTED){
 			allCheck.setSelected(true);
 			cashCheck.setSelected(false);

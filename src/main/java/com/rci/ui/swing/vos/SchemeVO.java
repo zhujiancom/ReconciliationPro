@@ -3,30 +3,41 @@ package com.rci.ui.swing.vos;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.BusinessEnums.Vendor;
 
 public class SchemeVO {
 	private String name;
 	
-	private String paymode;
+	/* 活动平台 */
+	private Vendor vendor;
 	
+	private String dishplayVendor;
+	
+	/* 平台补贴 */
 	private BigDecimal postPrice;
 	
+	/* 优惠金额 */
 	private BigDecimal price;
 	
+	/* 餐厅补贴 */
 	private BigDecimal spread;
 	
 	private SchemeType type;
 	
+	/* 开始时间 */
 	private Date startDate;
-	
+	/* 结束时间 */
 	private Date endDate;
 	
-	/* 方案状态  */
-	private ActivityStatus status;
+	/* 活动状态  */
+	private String status;
 	
-	private String vendor;
+	/* 最高消费额度 */
+	private BigDecimal ceilAmount;
+	
+	/* 最低消费额度 */
+	private BigDecimal floorAmount;
 
 	public String getName() {
 		return name;
@@ -36,12 +47,20 @@ public class SchemeVO {
 		this.name = name;
 	}
 
-	public String getPaymode() {
-		return paymode;
+	public Vendor getVendor() {
+		return vendor;
 	}
 
-	public void setPaymode(String paymode) {
-		this.paymode = paymode;
+	public void setVendor(Vendor vendor) {
+		this.vendor = vendor;
+	}
+
+	public String getDishplayVendor() {
+		return dishplayVendor;
+	}
+
+	public void setDishplayVendor(String dishplayVendor) {
+		this.dishplayVendor = dishplayVendor;
 	}
 
 	public BigDecimal getPostPrice() {
@@ -92,19 +111,27 @@ public class SchemeVO {
 		this.endDate = endDate;
 	}
 
-	public ActivityStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(ActivityStatus status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	public String getVendor() {
-		return vendor;
+	public BigDecimal getCeilAmount() {
+		return ceilAmount;
 	}
 
-	public void setVendor(String vendor) {
-		this.vendor = vendor;
+	public void setCeilAmount(BigDecimal ceilAmount) {
+		this.ceilAmount = ceilAmount;
+	}
+
+	public BigDecimal getFloorAmount() {
+		return floorAmount;
+	}
+
+	public void setFloorAmount(BigDecimal floorAmount) {
+		this.floorAmount = floorAmount;
 	}
 }

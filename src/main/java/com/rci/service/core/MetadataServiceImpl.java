@@ -10,13 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.Stock;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishService;
 import com.rci.service.IDishTypeService;
 import com.rci.service.IPayModeService;
+import com.rci.service.ISchemeService;
 import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
+import com.rci.tools.EnumUtils;
+import com.rci.ui.swing.vos.SchemeVO;
 import com.rci.ui.swing.vos.StockVO;
 
 @Service("MetadataService")
@@ -33,6 +37,8 @@ public class MetadataServiceImpl implements IMetadataService {
 	private IDataTransformService transformService;
 	@Resource(name="StockService")
 	private IStockService stockService;
+	@Resource(name="SchemeService")
+	private ISchemeService schemeService;
 //	@Resource(name = "fetchScheduler")
 //	private Scheduler scheduler;
 	
@@ -88,6 +94,21 @@ public class MetadataServiceImpl implements IMetadataService {
 //			e.printStackTrace();
 //		}
 		return "closed";
+	}
+
+	@Override
+	public List<SchemeVO> dishplaySchemes() {
+		List<SchemeVO> schemeVOs = new ArrayList<SchemeVO>();
+		List<Scheme> schemes = schemeService.getAll();
+		if(!CollectionUtils.isEmpty(schemes)){
+			for(Scheme scheme:schemes){
+				SchemeVO schemeVO = beanMapper.map(scheme, SchemeVO.class);
+				schemeVO.setDishplayVendor(EnumUtils.getEnumMessage(scheme.getVendor()));
+				schemeVO.setStatus(EnumUtils.getEnumMessage(scheme.getActivityStatus()));
+				schemeVOs.add(schemeVO);
+			}
+		}
+		return schemeVOs;
 	}
 
 }

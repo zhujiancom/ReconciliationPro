@@ -112,6 +112,7 @@ public class MainFrame extends JFrame {
 		JMenuItem viewStock = new JMenuItem("库存查看");
 		JMenuItem setStock = new JMenuItem("库存进货");
 		JMenuItem stockManagement = new JMenuItem("库存管理");
+		JMenuItem schemeMangement = new JMenuItem("活动设置");
 		system.add(sysInit);
 		system.add(baseReset);
 		operation.add(dataExport);
@@ -119,6 +120,7 @@ public class MainFrame extends JFrame {
 		view.add(viewStock);
 		setting.add(setStock);
 		setting.add(stockManagement);
+		setting.add(schemeMangement);
 
 		JMenuItem expressRate = new JMenuItem("外送率统计"); // 展示当月外送率统计信息表
 		JMenuItem earning = new JMenuItem("营业额统计");
@@ -167,6 +169,17 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				PopWindowBuilder winBuilder = WindowBuilderFactory
 						.createStockManagementWinBuilder();
+				winBuilder.retrieveWindow();
+			}
+		});
+		
+		// 活动设置
+		schemeMangement.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PopWindowBuilder winBuilder = WindowBuilderFactory
+						.createSchemeManagementWinBuilder();
 				winBuilder.retrieveWindow();
 			}
 		});

@@ -76,4 +76,8 @@ public class WindowBuilderFactory {
 	public static ProgressWinBuilder createProgressWinBuilder(){
 		return new ProgressWinBuilder();
 	}
+	
+	public static SchemeManagementWinBuilder createSchemeManagementWinBuilder(){
+		return new SchemeManagementWinBuilder();
+	}
 }

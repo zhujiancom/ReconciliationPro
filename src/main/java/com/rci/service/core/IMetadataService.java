@@ -2,6 +2,7 @@ package com.rci.service.core;
 
 import java.util.List;
 
+import com.rci.ui.swing.vos.SchemeVO;
 import com.rci.ui.swing.vos.StockVO;
 
 
@@ -65,4 +66,18 @@ public interface IMetadataService {
 	List<StockVO> displayStocks();
 	
 	String getTimerStatus();
+	
+	/**
+	 * 
+	 * Describle(描述)：列车所有的活动
+	 *
+	 * 方法名称：dishplaySchemes
+	 *
+	 * 所在类名：IMetadataService
+	 *
+	 * Create Time:2015年9月29日 下午2:13:27
+	 *  
+	 * @return
+	 */
+	List<SchemeVO> dishplaySchemes();
 }

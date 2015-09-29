@@ -15,6 +15,7 @@ public class PopWindow extends JFrame {
 	private static final long serialVersionUID = 9214246678265914986L;
 	private final static int WIN_WIDTH = 800;
 	private final static int WIN_HEIGHT = 600;
+	private JPanel containerPanel;
 	
 	public PopWindow(){
 		this(WIN_WIDTH,WIN_HEIGHT);
@@ -26,7 +27,7 @@ public class PopWindow extends JFrame {
 	}
 	
 	public PopWindow(int width,int height){
-		JPanel containerPanel = new JPanel(new BorderLayout(0, 10));
+		containerPanel = new JPanel(new BorderLayout(0, 10));
 		containerPanel.setName("base panel");
 		this.setContentPane(containerPanel);
 		this.setPreferredSize(new Dimension(width,height));
@@ -43,5 +44,13 @@ public class PopWindow extends JFrame {
 	
 	public void close(){
 		this.dispose();
+	}
+
+	public JPanel getContainerPanel() {
+		return containerPanel;
+	}
+
+	public void setContainerPanel(JPanel containerPanel) {
+		this.containerPanel = containerPanel;
 	}
 }
