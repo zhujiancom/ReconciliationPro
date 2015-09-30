@@ -3,12 +3,16 @@ package com.rci.ui.swing.views.builder;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.math.BigDecimal;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -16,15 +20,23 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import com.rci.bean.LabelValueBean;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.service.core.IMetadataService;
+import com.rci.tools.DateUtil;
+import com.rci.tools.EnumUtils;
+import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.model.SchemeTable;
+import com.rci.ui.swing.model.VendorComboBoxModel;
 import com.rci.ui.swing.views.PopWindow;
+import com.rci.ui.swing.vos.SchemeVO;
 
 public class SchemeManagementWinBuilder implements PopWindowBuilder {
 	private JPanel contentPane;
@@ -56,27 +68,37 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		operaPane.setBackground(Color.WHITE);
 		operaPane.setBounds(50, 30, 700, 35);
 		contentPane.add(operaPane);
-		JButton addBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/addBtn_1.png"));
+		JButton addBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/addBtn_0.png"));
 		addBtn.setUI(new BasicButtonUI());
 		addBtn.setContentAreaFilled(false);
 		addBtn.setMargin(new Insets(0,0,0,0));
 		addBtn.setBounds(4, 4, 24, 24);
+		addBtn.setPressedIcon(new ImageIcon("./src/main/resources/skin/gray/images/24x24/addBtn_1.png"));
 		
-		JButton delBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/delBtn_1.png"));
+		JButton delBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/delBtn_0.png"));
 		delBtn.setUI(new BasicButtonUI());
 		delBtn.setContentAreaFilled(false);
 		delBtn.setMargin(new Insets(0,0,0,0));
 		delBtn.setBounds(40, 4, 24, 24);
+		delBtn.setPressedIcon(new ImageIcon("./src/main/resources/skin/gray/images/24x24/delBtn_1.png"));
 		
-		JButton editBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/editBtn_1.png"));
+		JButton editBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/editBtn_0.png"));
 		editBtn.setUI(new BasicButtonUI());
 		editBtn.setContentAreaFilled(false);
 		editBtn.setMargin(new Insets(0,0,0,0));
 		editBtn.setBounds(80, 4, 24, 24);
 		
+		JButton refreshBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/refreshBtn_0.png"));
+		refreshBtn.setUI(new BasicButtonUI());
+		refreshBtn.setContentAreaFilled(false);
+		refreshBtn.setMargin(new Insets(0,0,0,0));
+		refreshBtn.setBounds(120, 4, 24, 24);
+		refreshBtn.setPressedIcon(new ImageIcon("./src/main/resources/skin/gray/images/24x24/refreshBtn_1.png"));
+		
 		operaPane.add(addBtn);
 		operaPane.add(delBtn);
 		operaPane.add(editBtn);
+		operaPane.add(refreshBtn);
 		
 		scrollPane = new JScrollPane();
 		table = new SchemeTable(10);
@@ -89,7 +111,7 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		
 		addBtn.addActionListener(new ActionListener() {
 			private JTextField nameInput = new JTextField(30);
-			private JComboBox<Vendor> vendorInput = new JComboBox<Vendor>(new Vendor[]{Vendor.ELE,Vendor.DZDP});
+			private JComboBox<LabelValueBean<String>> vendorInput;
 			private JTextField priceInput = new JTextField(30);
 			private JTextField postPriceInput = new JTextField(30);
 			private JTextField spreadInput = new JTextField(30);
@@ -111,13 +133,87 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PopWindow addForm = new PopWindow(350,500);
+				final PopWindow addForm = new PopWindow(350,500);
 				JPanel containerPanel = addForm.getContainerPanel();
 				JPanel mainPane = new JPanel();
 				mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
 				JScrollPane sPane = new JScrollPane(mainPane);
 				buildMainPanel(mainPane);
 				containerPanel.add(sPane,BorderLayout.CENTER);
+				confirmBtn.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						confirmBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+						
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						try{
+							LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
+							SchemeVO newScheme = new SchemeVO();
+							String vendor = item.getValue();
+							newScheme.setVendor(Vendor.valueOf(vendor));
+							newScheme.setName(nameInput.getText());
+							newScheme.setPrice(new BigDecimal(priceInput.getText().trim()));
+							newScheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
+							newScheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
+							newScheme.setStartDate(DateUtil.parseDate(startInput.getText().trim(), "yyyyMMdd"));
+							newScheme.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
+							newScheme.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
+							newScheme.setCeilAmount(new BigDecimal(ceilInput.getText().trim()));
+							IMetadataService metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
+							metaService.createScheme(newScheme);
+							JOptionPane.showMessageDialog(null, "活动创建成功！");
+							addForm.close();
+						}catch (Exception ex){
+							ex.printStackTrace();
+						}
+					}
+				});
+//				confirmBtn.addActionListener(new ActionListener() {
+//					
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						try{
+//							LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
+//							SchemeVO newScheme = new SchemeVO();
+//							String vendor = item.getValue();
+//							newScheme.setVendor(Vendor.valueOf(vendor));
+//							newScheme.setName(nameInput.getText());
+//							newScheme.setPrice(new BigDecimal(priceInput.getText().trim()));
+//							newScheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
+//							newScheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
+//							newScheme.setStartDate(DateUtil.parseDate(startInput.getText().trim(), "yyyyMMdd"));
+//							newScheme.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
+//							newScheme.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
+//							newScheme.setCeilAmount(new BigDecimal(ceilInput.getText().trim()));
+//							IMetadataService metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
+//							metaService.createScheme(newScheme);
+//						}catch (Exception ex){
+//							ex.printStackTrace();
+//						}
+//					}
+//				});
 			}
 			
 			public void buildMainPanel(JPanel mainPane){
@@ -127,6 +223,9 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 				mainPane.add(firstPane);
 				JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
 				secondPane.add(vendor);
+				List<LabelValueBean<String>> itemList = EnumUtils.getEnumLabelValueBeanList(Vendor.class, false);
+				VendorComboBoxModel vcm = new VendorComboBoxModel(itemList);
+				vendorInput = new JComboBox<LabelValueBean<String>>(vcm);
 				secondPane.add(vendorInput);
 				mainPane.add(secondPane);
 				JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));

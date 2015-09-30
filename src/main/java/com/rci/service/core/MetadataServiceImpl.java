@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.Stock;
+import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishService;
 import com.rci.service.IDishTypeService;
@@ -109,6 +110,13 @@ public class MetadataServiceImpl implements IMetadataService {
 			}
 		}
 		return schemeVOs;
+	}
+
+	@Override
+	public void createScheme(SchemeVO schemevo) {
+		Scheme scheme = beanMapper.map(schemevo, Scheme.class);
+		scheme.setActivityStatus(ActivityStatus.ACTIVE);
+		schemeService.rwCreate(scheme);
 	}
 
 }

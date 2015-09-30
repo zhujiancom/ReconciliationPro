@@ -80,4 +80,6 @@ public interface IMetadataService {
 	 * @return
 	 */
 	List<SchemeVO> dishplaySchemes();
+	
+	void createScheme(SchemeVO schemevo);
 }
