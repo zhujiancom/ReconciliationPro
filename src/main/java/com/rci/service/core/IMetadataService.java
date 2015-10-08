@@ -2,6 +2,7 @@ package com.rci.service.core;
 
 import java.util.List;
 
+import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.ui.swing.vos.SchemeVO;
 import com.rci.ui.swing.vos.StockVO;
 
@@ -79,7 +80,7 @@ public interface IMetadataService {
 	 *  
 	 * @return
 	 */
-	List<SchemeVO> dishplaySchemes();
+	List<SchemeVO> dishplaySchemes(SchemeQueryDTO queryDTO);
 	
 	void createScheme(SchemeVO schemevo);
 }

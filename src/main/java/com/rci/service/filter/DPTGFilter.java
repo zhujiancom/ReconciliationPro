@@ -126,7 +126,7 @@ public class DPTGFilter extends AbstractFilter {
 			String warningInfo = "[大众团购支付异常]--- 实际支付金额："+chitAmount+", 可打折金额："+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额";
 			order.setWarningInfo(warningInfo);
 		}
-		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, PaymodeCode.DPTG,suitFlag);
+		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, Vendor.DZDP,suitFlag);
 		if(!CollectionUtils.isEmpty(schemes)){
 			createTicketStatistic(order.getDay(), Vendor.DZDP, schemes);
 			String schemeName = order.getSchemeName();

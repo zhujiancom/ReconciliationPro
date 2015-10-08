@@ -22,7 +22,6 @@ import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.TicketStatistic;
 import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.AccountCode;
-import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
@@ -124,7 +123,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 * @param suitFlag
 	 * @return
 	 */
-	protected Map<SchemeType,SchemeWrapper> createSchemes(BigDecimal amount, PaymodeCode paymode,boolean suitFlag) {
+	protected Map<SchemeType,SchemeWrapper> createSchemes(BigDecimal amount, Vendor vendor,boolean suitFlag) {
 		Map<SchemeType,SchemeWrapper> schemes = new HashMap<SchemeType,SchemeWrapper>();
 		BigDecimal suitAmount = BigDecimal.ZERO;
 		// 1.如果有套餐
@@ -133,7 +132,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 				Entry<SchemeType, Integer> entry = it.next();
 				SchemeType type = entry.getKey();
 				Integer count = entry.getValue();
-				Scheme scheme = schemeService.getScheme(type, paymode.getPaymodeno());
+				Scheme scheme = schemeService.getScheme(type,vendor);
 				BigDecimal suitPrice = scheme.getPrice();
 				suitAmount = suitAmount.add(suitPrice.multiply(new BigDecimal(count)));
 				SchemeWrapper schemewrapper = new SchemeWrapper(scheme,count);
@@ -141,11 +140,11 @@ public abstract class AbstractFilter implements CalculateFilter {
 			}
 		}
 		BigDecimal leftAmount = amount.subtract(suitAmount);
-		loopSchemes(leftAmount.intValue(),schemes,paymode.getPaymodeno());
+		loopSchemes(leftAmount.intValue(),schemes,vendor);
 		return schemes;
 	}
 	
-	private void loopSchemes(Integer amount, Map<SchemeType,SchemeWrapper> schemes,String paymodeno) {
+	private void loopSchemes(Integer amount, Map<SchemeType,SchemeWrapper> schemes,Vendor vendor) {
 		if(amount <= 0){
 			return;
 		}
@@ -156,7 +155,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 				schemewrapper = schemes.get(SchemeType.CHIT_100);
 				schemewrapper.increasement();
 			}else{
-				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,paymodeno);
+				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,vendor);
 				schemewrapper = new SchemeWrapper(scheme,1);
 				schemes.put(SchemeType.CHIT_100, schemewrapper);
 			}
@@ -168,7 +167,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 				schemewrapper = schemes.get(SchemeType.CHIT_100);
 				schemewrapper.increasement();
 			}else{
-				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,paymodeno);
+				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,vendor);
 				schemewrapper = new SchemeWrapper(scheme,1);
 				schemes.put(SchemeType.CHIT_100, schemewrapper);
 			}
@@ -180,13 +179,13 @@ public abstract class AbstractFilter implements CalculateFilter {
 				schemewrapper = schemes.get(SchemeType.CHIT_50);
 				schemewrapper.increasement();
 			}else{
-				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_50,paymodeno);
+				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_50,vendor);
 				schemewrapper = new SchemeWrapper(scheme,1);
 				schemes.put(SchemeType.CHIT_50, schemewrapper);
 			}
 			amount = amount - 50;
 		}
-		loopSchemes(amount,schemes,paymodeno);
+		loopSchemes(amount,schemes,vendor);
 	}
 	
 	protected abstract Map<SchemeType, Integer> getSuitMap();

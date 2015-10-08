@@ -61,6 +61,9 @@ public class DPSHFilter extends AbstractFilter {
 		}
 		/* 最大可在线支付金额 ，参与打折金额*/
 		BigDecimal payAmount = totalAmount.subtract(nodiscountAmount);
+		if(onlineAmount.compareTo(payAmount) <= 0){
+			payAmount = onlineAmount;
+		}
 		BigDecimal freeAmount = payAmount.divideToIntegralValue(new BigDecimal("100")).multiply(new BigDecimal("12"));
 		BigDecimal actualAmount = onlineAmount.subtract(freeAmount);
 		

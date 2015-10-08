@@ -9,6 +9,8 @@ import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
@@ -18,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -33,8 +36,10 @@ import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.EnumUtils;
 import com.rci.tools.SpringUtils;
+import com.rci.ui.swing.listeners.VendorCheckListener;
 import com.rci.ui.swing.model.SchemeTable;
 import com.rci.ui.swing.model.VendorComboBoxModel;
+import com.rci.ui.swing.model.VendorJCheckBox;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.vos.SchemeVO;
 
@@ -99,6 +104,22 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		operaPane.add(delBtn);
 		operaPane.add(editBtn);
 		operaPane.add(refreshBtn);
+		
+		VendorCheckListener checkListener = new VendorCheckListener(table);
+		JCheckBox allCheck = new VendorJCheckBox(null,"全部");
+		allCheck.setSelected(true);
+		allCheck.addItemListener(checkListener);
+		allCheck.setBounds(160, 4, 24, 24);
+		JCheckBox eleCheck = new VendorJCheckBox(Vendor.ELE,"饿了么");
+		eleCheck.addItemListener(checkListener);
+		eleCheck.setBounds(200, 4, 24, 24);
+		JCheckBox mtwmCheck = new VendorJCheckBox(Vendor.MTWM,"美团外卖");
+		mtwmCheck.addItemListener(checkListener);
+		mtwmCheck.setBounds(240, 4, 24, 24);
+		
+		operaPane.add(allCheck);
+		operaPane.add(eleCheck);
+		operaPane.add(mtwmCheck);
 		
 		scrollPane = new JScrollPane();
 		table = new SchemeTable(10);
@@ -169,6 +190,7 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						try{
+							@SuppressWarnings("unchecked")
 							LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
 							SchemeVO newScheme = new SchemeVO();
 							String vendor = item.getValue();
@@ -190,30 +212,6 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 						}
 					}
 				});
-//				confirmBtn.addActionListener(new ActionListener() {
-//					
-//					@Override
-//					public void actionPerformed(ActionEvent e) {
-//						try{
-//							LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
-//							SchemeVO newScheme = new SchemeVO();
-//							String vendor = item.getValue();
-//							newScheme.setVendor(Vendor.valueOf(vendor));
-//							newScheme.setName(nameInput.getText());
-//							newScheme.setPrice(new BigDecimal(priceInput.getText().trim()));
-//							newScheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
-//							newScheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
-//							newScheme.setStartDate(DateUtil.parseDate(startInput.getText().trim(), "yyyyMMdd"));
-//							newScheme.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
-//							newScheme.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
-//							newScheme.setCeilAmount(new BigDecimal(ceilInput.getText().trim()));
-//							IMetadataService metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
-//							metaService.createScheme(newScheme);
-//						}catch (Exception ex){
-//							ex.printStackTrace();
-//						}
-//					}
-//				});
 			}
 			
 			public void buildMainPanel(JPanel mainPane){

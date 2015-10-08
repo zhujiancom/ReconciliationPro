@@ -119,7 +119,7 @@ public class MTFilter extends AbstractFilter {
 			String warningInfo = "[美团支付异常]--- 实际支付金额："+chitAmount+" ,可打折金额： "+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额";
 			order.setWarningInfo(warningInfo);
 		}
-		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, PaymodeCode.MT,suitFlag);
+		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, Vendor.MT,suitFlag);
 		if(!CollectionUtils.isEmpty(schemes)){
 			createTicketStatistic(order.getDay(), Vendor.MT, schemes);
 			String schemeName = order.getSchemeName();

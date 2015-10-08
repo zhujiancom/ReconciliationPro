@@ -12,9 +12,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
@@ -56,7 +58,12 @@ public class MTWMFilter extends AbstractFilter {
 			try {
 				Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
 				/* 查找美团外卖符合条件的活动 */
-				List<Scheme> schemes = schemeService.getSchemes(Vendor.MTWM,orderDate);
+				SchemeQueryDTO queryDTO = new SchemeQueryDTO();
+				queryDTO.setStatus(ActivityStatus.ACTIVE);
+				queryDTO.setEndDate(orderDate);
+				queryDTO.setStartDate(orderDate);
+				queryDTO.setVendor(Vendor.MTWM);
+				List<Scheme> schemes = schemeService.getSchemes(queryDTO);
 				if(CollectionUtils.isEmpty(schemes)){
 					logger.warn(order.getPayNo()+"---[美团外卖 ] 没有找到匹配的Scheme -----");
 					String warningInfo = "[美团外卖活动 ] 没有找到匹配的Scheme";
@@ -66,10 +73,11 @@ public class MTWMFilter extends AbstractFilter {
 						if(originAmount.compareTo(scheme.getFloorAmount())>=0 && originAmount.compareTo(scheme.getCeilAmount()) < 0 ){
 							//满减活动
 							BigDecimal price = scheme.getPrice();
-							if(freeAmount.divideToIntegralValue(price).compareTo(BigDecimal.ONE) > 0){
-								continue;
-							}
-							BigDecimal redundant = freeAmount.remainder(price); //红包支付金额
+//							if(freeAmount.divideToIntegralValue(price).compareTo(BigDecimal.ONE) > 0){
+//								continue;
+//							}
+//							BigDecimal redundant = freeAmount.remainder(price); //红包支付金额
+							BigDecimal redundant = freeAmount.subtract(price); //红包支付金额
 							BigDecimal allowanceAmount = redundant.add(scheme.getPostPrice());
 							if(freeMap.get(order.getPayNo()) == null){
 								freeMap.put(order.getPayNo(), allowanceAmount);
@@ -118,5 +126,5 @@ public class MTWMFilter extends AbstractFilter {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 }

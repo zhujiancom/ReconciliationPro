@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.Stock;
 import com.rci.enums.BusinessEnums.ActivityStatus;
@@ -98,9 +99,9 @@ public class MetadataServiceImpl implements IMetadataService {
 	}
 
 	@Override
-	public List<SchemeVO> dishplaySchemes() {
+	public List<SchemeVO> dishplaySchemes(SchemeQueryDTO queryDTO) {
 		List<SchemeVO> schemeVOs = new ArrayList<SchemeVO>();
-		List<Scheme> schemes = schemeService.getAll();
+		List<Scheme> schemes = schemeService.getSchemes(queryDTO);
 		if(!CollectionUtils.isEmpty(schemes)){
 			for(Scheme scheme:schemes){
 				SchemeVO schemeVO = beanMapper.map(scheme, SchemeVO.class);

@@ -10,9 +10,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
@@ -41,7 +43,12 @@ public class TDDFilter extends AbstractFilter {
 			String day = order.getDay();
 			Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
 			/* 查找淘点点符合条件的活动 */
-			List<Scheme> schemes = schemeService.getSchemes(Vendor.TDD,orderDate);
+			SchemeQueryDTO queryDTO = new SchemeQueryDTO();
+			queryDTO.setStatus(ActivityStatus.ACTIVE);
+			queryDTO.setEndDate(orderDate);
+			queryDTO.setStartDate(orderDate);
+			queryDTO.setVendor(Vendor.TDD);
+			List<Scheme> schemes = schemeService.getSchemes(queryDTO);
 			BigDecimal postTotalAmount = BigDecimal.ZERO;
 			if(CollectionUtils.isEmpty(schemes)){
 				String schemeName = order.getSchemeName();

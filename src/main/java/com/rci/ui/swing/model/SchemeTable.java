@@ -7,6 +7,8 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
+import com.rci.bean.dto.SchemeQueryDTO;
+import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
@@ -62,7 +64,9 @@ public class SchemeTable extends BaseTable {
 	@Override
 	protected void setModel(int columnNum) {
 		IMetadataService metaservice = (IMetadataService) SpringUtils.getBean("MetadataService");
-		List<SchemeVO> schemes = metaservice.dishplaySchemes();
+		SchemeQueryDTO queryDTO = new SchemeQueryDTO();
+		queryDTO.setStatus(ActivityStatus.ACTIVE);
+		List<SchemeVO> schemes = metaservice.dishplaySchemes(queryDTO);
 		SchemeTabelModel dm = new SchemeTabelModel(columnNum);
 		dm.setItems(schemes);
 		super.setModel(dm);

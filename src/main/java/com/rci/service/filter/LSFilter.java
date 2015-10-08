@@ -125,7 +125,7 @@ public class LSFilter extends AbstractFilter {
 			logger.warn("---【损失单】【"+order.getPayNo()+"】[拉手网支付异常]---， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额");
 		}
 //		schemes.putAll(createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag));
-		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, PaymodeCode.LS,suitFlag);
+		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount,Vendor.LS,suitFlag);
 		if(!CollectionUtils.isEmpty(schemes)){
 			createTicketStatistic(order.getDay(), Vendor.LS, schemes);
 			String schemeName = order.getSchemeName();

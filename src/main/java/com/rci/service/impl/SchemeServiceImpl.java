@@ -4,23 +4,24 @@
 package com.rci.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.dozer.Mapper;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Scheme;
+import com.rci.dao.impl.SafeRestrictions;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.ISchemeService;
 import com.rci.service.base.BaseServiceImpl;
-import com.rci.ui.swing.vos.SchemeVO;
 
 /**
  * @author zj
@@ -42,45 +43,14 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 	@Autowired
 	private Mapper beanMapper;
 	
-	@Override
-	public Scheme getScheme(SchemeType type, String paymodeno) {
-		DetachedCriteria sdc = DetachedCriteria.forClass(Scheme.class);
-		sdc.add(Restrictions.eq("type", type)).add(Restrictions.eq("paymodeno", paymodeno));
-		Scheme scheme = baseDAO.queryUniqueByCriteria(sdc);
-		return scheme;
-	}
-
-	/* 
-	 * @see com.rci.service.ISchemeService#getSchemes(java.lang.String)
-	 */
-	@Override
-	public List<Scheme> getSchemes(String paymodeno) {
-		DetachedCriteria sdc = DetachedCriteria.forClass(Scheme.class);
-		sdc.add(Restrictions.eq("paymodeno", paymodeno));
-		return baseDAO.queryListByCriteria(sdc);
-	}
-
-	@Override
-	public List<SchemeVO> getSchemeVOs(Vendor vendor) {
-		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
-		dc.add(Restrictions.eq("vendor", vendor));
-		List<Scheme> schemes = baseDAO.queryListByCriteria(dc);
-		List<SchemeVO> vos = new ArrayList<SchemeVO>();
-		for(Scheme scheme:schemes){
-			SchemeVO vo = beanMapper.map(scheme, SchemeVO.class);
-			vos.add(vo);
-		}
-		return vos;
-	}
-
-	@Override
-	public List<Scheme> getSchemes(Vendor vendor, BigDecimal freePrice, Date date) {
-		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
-		dc.add(Restrictions.eq("vendor", vendor)).add(Restrictions.ge("price", freePrice))
-		.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
-		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
-		return baseDAO.queryListByCriteria(dc);
-	}
+//	@Override
+//	public List<Scheme> getSchemes(Vendor vendor, BigDecimal freePrice, Date date) {
+//		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
+//		dc.add(Restrictions.eq("vendor", vendor)).add(Restrictions.ge("price", freePrice))
+//		.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
+//		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
+//		return baseDAO.queryListByCriteria(dc);
+//	}
 
 	@Override
 	public Scheme getScheme(Vendor vendor, BigDecimal freePrice, Date date) {
@@ -91,12 +61,73 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 		return baseDAO.queryUniqueByCriteria(dc);
 	}
 
+//	@Override
+//	public List<Scheme> getSchemes(Vendor vendor,Date date) {
+//		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
+//		dc.add(Restrictions.eq("vendor", vendor))
+//		.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
+//		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
+//		return baseDAO.queryListByCriteria(dc);
+//	}
+
+	/* 
+	 * @see com.rci.service.ISchemeService#getScheme(com.rci.enums.BusinessEnums.SchemeType, com.rci.enums.BusinessEnums.Vendor)
+	 */
 	@Override
-	public List<Scheme> getSchemes(Vendor vendor,Date date) {
+	public Scheme getScheme(SchemeType type, Vendor vendor) {
+		DetachedCriteria sdc = DetachedCriteria.forClass(Scheme.class);
+		sdc.add(Restrictions.eq("type", type)).add(Restrictions.eq("vendor", vendor));
+		Scheme scheme = baseDAO.queryUniqueByCriteria(sdc);
+		return scheme;
+	}
+
+	/* 
+	 * @see com.rci.service.ISchemeService#getActiveSchemes()
+	 */
+//	@Override
+//	public List<Scheme> getActiveSchemes() {
+//		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
+//		dc.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE));
+//		return baseDAO.queryListByCriteria(dc);
+//	}
+
+	/* 
+	 * @see com.rci.service.ISchemeService#checkStatus(java.util.Date)
+	 */
+	@Override
+	public void checkStatus(Date deadLine) {
+		List<Scheme> schemes = getAll();
+		for(Scheme scheme:schemes){
+			if(scheme.getEndDate().before(deadLine)){
+				scheme.setActivityStatus(ActivityStatus.INACTIVE);
+				((ISchemeService)AopContext.currentProxy()).rwUpdate(scheme);
+			}
+		}
+	}
+
+	/* 
+	 * @see com.rci.service.ISchemeService#getSchemes(com.rci.bean.dto.SchemeQueryDTO)
+	 */
+	@Override
+	public List<Scheme> getSchemes(SchemeQueryDTO queryDTO) {
+//		SafeDetachedCriteria dc = SafeDetachedCriteria.forClass(Scheme.class);
+//		dc.add(SafeRestrictions.eq("vendor", queryDTO.getVendor()))
+//		.add(SafeRestrictions.eq("activityStatus", queryDTO.getStatus()))
+//		.add(SafeRestrictions.ands(SafeRestrictions.great("endDate", queryDTO.getEndDate()),SafeRestrictions.less("startDate", queryDTO.getStartDate())))
+//		.add(SafeRestrictions.great("price", queryDTO.getPrice()));
 		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
-		dc.add(Restrictions.eq("vendor", vendor))
-		.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
-		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
+		if(queryDTO.getVendor() != null){
+			dc.add(Restrictions.eq("vendor", queryDTO.getVendor()));
+		}
+		if(queryDTO.getStatus() != null){
+			dc.add(SafeRestrictions.eq("activityStatus", queryDTO.getStatus()));
+		}
+		if(queryDTO.getEndDate() != null && queryDTO.getStartDate() != null){
+			dc.add(Restrictions.and(Restrictions.ge("endDate", queryDTO.getEndDate()),Restrictions.le("startDate", queryDTO.getStartDate())));
+		}
+		if(queryDTO.getPrice() != null){
+			dc.add(Restrictions.eqOrIsNull("price", queryDTO.getPrice()));
+		}
 		return baseDAO.queryListByCriteria(dc);
 	}
 
