@@ -3,12 +3,8 @@
  */
 package com.rci.dao.impl;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.internal.CriteriaImpl;
 
 /**
  * remark (备注):
@@ -42,6 +38,6 @@ public class SafeDetachedCriteria extends DetachedCriteria{
 		if(criterion == null){
 			return this;
 		}
-		return (SafeDetachedCriteria) add(criterion);
+		return (SafeDetachedCriteria) super.add(criterion);
 	}
 }

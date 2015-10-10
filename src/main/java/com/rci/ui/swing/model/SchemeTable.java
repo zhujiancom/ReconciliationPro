@@ -62,7 +62,7 @@ public class SchemeTable extends BaseTable {
 	}
 
 	@Override
-	protected void setModel(int columnNum) {
+	protected void setModel() {
 		IMetadataService metaservice = (IMetadataService) SpringUtils.getBean("MetadataService");
 		SchemeQueryDTO queryDTO = new SchemeQueryDTO();
 		queryDTO.setStatus(ActivityStatus.ACTIVE);
@@ -70,6 +70,16 @@ public class SchemeTable extends BaseTable {
 		SchemeTabelModel dm = new SchemeTabelModel(columnNum);
 		dm.setItems(schemes);
 		super.setModel(dm);
+	}
+	
+	public void refresh(){
+		SchemeTabelModel dm = (SchemeTabelModel) this.getModel();
+		IMetadataService metaservice = (IMetadataService) SpringUtils.getBean("MetadataService");
+		SchemeQueryDTO queryDTO = new SchemeQueryDTO();
+		queryDTO.setStatus(ActivityStatus.ACTIVE);
+		List<SchemeVO> schemes = metaservice.dishplaySchemes(queryDTO);
+		dm.setItems(schemes);
+		dm.fireTableDataChanged();
 	}
 	
 	public static class SchemeTabelModel extends AbstractTableModel{
@@ -137,6 +147,15 @@ public class SchemeTable extends BaseTable {
 
 		public void setColumnNum(int columnNum) {
 			this.columnNum = columnNum;
+		}
+		
+		public void removeRow(int row) {
+			items.remove(row);
+	        fireTableRowsDeleted(row, row);
+	    }
+		
+		public SchemeVO getScheme(int rowIndex){
+			return items.get(rowIndex);
 		}
 		
 	}

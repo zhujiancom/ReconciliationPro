@@ -36,14 +36,14 @@ public class StockTable extends BaseTable {
 	private String action;
 	
 	public StockTable(int columnNum,String action){
-		super();
+		super.columnNum = columnNum;
 		this.action = action;
-		setModel(columnNum);
+		setModel();
 		setHeaderLabel();
 	}
 	
 	@Override
-	public void setModel(int columnNum){
+	public void setModel(){
 		IMetadataService metadataService = (IMetadataService)SpringUtils.getBean("MetadataService");
 		List<StockVO> stocks = metadataService.displayStocks();
 		StockTableModel stockModel = new StockTableModel(columnNum,stocks);

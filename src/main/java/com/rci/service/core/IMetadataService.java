@@ -83,4 +83,5 @@ public interface IMetadataService {
 	List<SchemeVO> dishplaySchemes(SchemeQueryDTO queryDTO);
 	
 	void createScheme(SchemeVO schemevo);
+	void updateScheme(SchemeVO schemevo);
 }

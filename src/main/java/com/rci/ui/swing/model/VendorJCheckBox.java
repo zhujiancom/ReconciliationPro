@@ -3,9 +3,13 @@
  */
 package com.rci.ui.swing.model;
 
+import java.awt.Color;
+import java.awt.event.ItemListener;
+
 import javax.swing.JCheckBox;
 
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.ui.swing.listeners.VendorCheckListener;
 
 /**
  * remark (备注):
@@ -26,11 +30,14 @@ public class VendorJCheckBox extends JCheckBox {
 	 * 
 	 */
 	private static final long serialVersionUID = -4784196219806541629L;
+	private int index;
 	private Vendor vendor;
 	
-	public VendorJCheckBox(Vendor vendor,String paramString){
+	public VendorJCheckBox(int index,Vendor vendor,String paramString){
 		super(paramString);
+		this.index = index;
 		this.vendor = vendor;
+		this.setBackground(Color.WHITE);
 	}
 
 	/**
@@ -45,6 +52,20 @@ public class VendorJCheckBox extends JCheckBox {
 	 */
 	public void setVendor(Vendor vendor) {
 		this.vendor = vendor;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	@Override
+	public void addItemListener(ItemListener l) {
+		super.addItemListener(l);
+		((VendorCheckListener)l).addCheckBox(this);
 	}
 
 }

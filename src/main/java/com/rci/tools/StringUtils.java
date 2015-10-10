@@ -228,8 +228,11 @@ public class StringUtils {
 	 * @param str
 	 * @return
 	 */
-	public static String trimToEmpty(final String str){
-		return org.apache.commons.lang3.StringUtils.trimToEmpty(str);
+	public static String trimToEmpty(final Object obj){
+		if(obj == null){
+			return "";
+		}
+		return org.apache.commons.lang3.StringUtils.trimToEmpty(obj.toString());
 	}
 	/**
 	 * 

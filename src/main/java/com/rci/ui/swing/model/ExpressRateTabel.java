@@ -3,6 +3,7 @@ package com.rci.ui.swing.model;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -18,12 +19,13 @@ public class ExpressRateTabel extends BaseTable {
 	 */
 	private static final long serialVersionUID = -3852832227931696863L;
 	
+	
 	public ExpressRateTabel(int columnNum){
 		super(columnNum);
 	}
 	
 	@Override
-	protected void setModel(int columnNum) {
+	protected void setModel() {
 		StatisticCenterFacade scf = (StatisticCenterFacade) SpringUtils.getBean("StatisticCenterFacade");
 		List<ExpressRateVO> rates = scf.getExpressRateList();
 		ExpressRateTabelModel dm = new ExpressRateTabelModel(columnNum);

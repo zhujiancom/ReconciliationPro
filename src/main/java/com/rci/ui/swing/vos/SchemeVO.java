@@ -7,6 +7,8 @@ import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 
 public class SchemeVO {
+	private Long sid;
+	
 	private String name;
 	
 	/* 活动平台 */
@@ -38,6 +40,14 @@ public class SchemeVO {
 	
 	/* 最低消费额度 */
 	private BigDecimal floorAmount;
+
+	public Long getSid() {
+		return sid;
+	}
+
+	public void setSid(Long sid) {
+		this.sid = sid;
+	}
 
 	public String getName() {
 		return name;

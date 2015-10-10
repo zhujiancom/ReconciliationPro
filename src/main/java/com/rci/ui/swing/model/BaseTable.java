@@ -8,6 +8,8 @@ public abstract class BaseTable extends JTable {
 	 * 
 	 */
 	private static final long serialVersionUID = -7637179254128694436L;
+	
+	protected int columnNum;
 
 	public BaseTable(){
 		this.setRowHeight(30);
@@ -15,7 +17,8 @@ public abstract class BaseTable extends JTable {
 	
 	public BaseTable(int columnNum){
 		this();
-		setModel(columnNum);
+		this.columnNum = columnNum;
+		setModel();
 		setHeaderLabel();
 	}
 	
@@ -38,7 +41,7 @@ public abstract class BaseTable extends JTable {
 	 * Create Time:2015年7月31日 下午1:17:27
 	 *
 	 */
-	protected abstract void setModel(int columnNum);
+	protected abstract void setModel();
 	
 	/**
 	 * 

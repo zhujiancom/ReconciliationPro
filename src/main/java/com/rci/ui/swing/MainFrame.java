@@ -21,12 +21,10 @@ import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.listeners.ActionHandler;
 import com.rci.ui.swing.listeners.CleanListener;
 import com.rci.ui.swing.listeners.DataIOListener;
-import com.rci.ui.swing.listeners.ExpressRateListener;
 import com.rci.ui.swing.listeners.QueryListener;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
 import com.rci.ui.swing.views.QueryFormPanel;
-import com.rci.ui.swing.views.builder.PopWindowBuilder;
 import com.rci.ui.swing.views.builder.WindowBuilderFactory;
 
 public class MainFrame extends JFrame {
@@ -135,9 +133,7 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PopWindowBuilder winBuilder = WindowBuilderFactory
-						.createViewStockWinBuilder();
-				winBuilder.retrieveWindow();
+				WindowBuilderFactory.createViewStockWindow();
 			}
 		});
 		// 库存进货时间
@@ -145,21 +141,23 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PopWindowBuilder winBuilder = WindowBuilderFactory
-						.createReStockWinBuilder();
-				winBuilder.retrieveWindow();
+				WindowBuilderFactory.createReStockWindow();
 			}
 		});
 		// 外送率统计事件
-		expressRate.addActionListener(new ExpressRateListener());
+		expressRate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				WindowBuilderFactory.createExpressReateWindow();				
+			}
+		});
 		// 营业额统计事件
 		earning.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PopWindowBuilder winBuilder = WindowBuilderFactory
-						.createTurnoverWinBuilder();
-				winBuilder.retrieveWindow();
+				WindowBuilderFactory.createTurnoverWindow();
 			}
 		});
 		// 库存管理事件
@@ -167,9 +165,7 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PopWindowBuilder winBuilder = WindowBuilderFactory
-						.createStockManagementWinBuilder();
-				winBuilder.retrieveWindow();
+				WindowBuilderFactory.createStockManagementWindow();
 			}
 		});
 		
@@ -178,9 +174,7 @@ public class MainFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PopWindowBuilder winBuilder = WindowBuilderFactory
-						.createSchemeManagementWinBuilder();
-				winBuilder.retrieveWindow();
+				WindowBuilderFactory.createSchemeManagementWindow();
 			}
 		});
 

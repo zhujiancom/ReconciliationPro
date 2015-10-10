@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Scheme;
+import com.rci.dao.impl.SafeDetachedCriteria;
 import com.rci.dao.impl.SafeRestrictions;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
@@ -42,15 +43,6 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 		ISchemeService {
 	@Autowired
 	private Mapper beanMapper;
-	
-//	@Override
-//	public List<Scheme> getSchemes(Vendor vendor, BigDecimal freePrice, Date date) {
-//		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
-//		dc.add(Restrictions.eq("vendor", vendor)).add(Restrictions.ge("price", freePrice))
-//		.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
-//		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
-//		return baseDAO.queryListByCriteria(dc);
-//	}
 
 	@Override
 	public Scheme getScheme(Vendor vendor, BigDecimal freePrice, Date date) {
@@ -60,15 +52,6 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
 		return baseDAO.queryUniqueByCriteria(dc);
 	}
-
-//	@Override
-//	public List<Scheme> getSchemes(Vendor vendor,Date date) {
-//		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
-//		dc.add(Restrictions.eq("vendor", vendor))
-//		.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
-//		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
-//		return baseDAO.queryListByCriteria(dc);
-//	}
 
 	/* 
 	 * @see com.rci.service.ISchemeService#getScheme(com.rci.enums.BusinessEnums.SchemeType, com.rci.enums.BusinessEnums.Vendor)
@@ -80,16 +63,6 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 		Scheme scheme = baseDAO.queryUniqueByCriteria(sdc);
 		return scheme;
 	}
-
-	/* 
-	 * @see com.rci.service.ISchemeService#getActiveSchemes()
-	 */
-//	@Override
-//	public List<Scheme> getActiveSchemes() {
-//		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
-//		dc.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE));
-//		return baseDAO.queryListByCriteria(dc);
-//	}
 
 	/* 
 	 * @see com.rci.service.ISchemeService#checkStatus(java.util.Date)
@@ -110,25 +83,12 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 	 */
 	@Override
 	public List<Scheme> getSchemes(SchemeQueryDTO queryDTO) {
-//		SafeDetachedCriteria dc = SafeDetachedCriteria.forClass(Scheme.class);
-//		dc.add(SafeRestrictions.eq("vendor", queryDTO.getVendor()))
-//		.add(SafeRestrictions.eq("activityStatus", queryDTO.getStatus()))
-//		.add(SafeRestrictions.ands(SafeRestrictions.great("endDate", queryDTO.getEndDate()),SafeRestrictions.less("startDate", queryDTO.getStartDate())))
-//		.add(SafeRestrictions.great("price", queryDTO.getPrice()));
-		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
-		if(queryDTO.getVendor() != null){
-			dc.add(Restrictions.eq("vendor", queryDTO.getVendor()));
-		}
-		if(queryDTO.getStatus() != null){
-			dc.add(SafeRestrictions.eq("activityStatus", queryDTO.getStatus()));
-		}
-		if(queryDTO.getEndDate() != null && queryDTO.getStartDate() != null){
-			dc.add(Restrictions.and(Restrictions.ge("endDate", queryDTO.getEndDate()),Restrictions.le("startDate", queryDTO.getStartDate())));
-		}
-		if(queryDTO.getPrice() != null){
-			dc.add(Restrictions.eqOrIsNull("price", queryDTO.getPrice()));
-		}
-		return baseDAO.queryListByCriteria(dc);
+		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(Scheme.class);
+		sdc.add(SafeRestrictions.eq("vendor", queryDTO.getVendor()))
+		.add(SafeRestrictions.eq("activityStatus", queryDTO.getStatus()))
+		.add(SafeRestrictions.ands(SafeRestrictions.great("endDate", queryDTO.getEndDate()),SafeRestrictions.less("startDate", queryDTO.getStartDate())))
+		.add(SafeRestrictions.great("price", queryDTO.getPrice()));
+		return baseDAO.queryListByCriteria(sdc);
 	}
 
 }

@@ -119,5 +119,19 @@ public class MetadataServiceImpl implements IMetadataService {
 		scheme.setActivityStatus(ActivityStatus.ACTIVE);
 		schemeService.rwCreate(scheme);
 	}
+	
+	@Override
+	public void updateScheme(SchemeVO schemevo){
+		Scheme scheme = schemeService.get(schemevo.getSid());
+		scheme.setStartDate(schemevo.getStartDate());
+		scheme.setEndDate(schemevo.getEndDate());
+		scheme.setPrice(schemevo.getPrice());
+		scheme.setPostPrice(schemevo.getPostPrice());
+		scheme.setSpread(schemevo.getSpread());
+		scheme.setFloorAmount(schemevo.getFloorAmount());
+		scheme.setCeilAmount(schemevo.getCeilAmount());
+		scheme.setVendor(schemevo.getVendor());
+		schemeService.rwUpdate(scheme);
+	}
 
 }

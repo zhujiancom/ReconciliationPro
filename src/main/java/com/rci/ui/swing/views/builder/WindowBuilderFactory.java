@@ -3,8 +3,8 @@ package com.rci.ui.swing.views.builder;
 import com.rci.contants.BusinessConstant;
 
 public class WindowBuilderFactory {
-	public static ExpressRateWinBuilder createExpressReateWinBuilder(){
-		return new ExpressRateWinBuilder();
+	public static void createExpressReateWindow(){
+		new ExpressRateWinBuilder().retrieveWindow();
 	}
 	
 	/**
@@ -19,8 +19,8 @@ public class WindowBuilderFactory {
 	 *  
 	 * @return
 	 */
-	public static StockWinBuilder createViewStockWinBuilder(){
-		return new StockWinBuilder(BusinessConstant.VIEW_ACTION);
+	public static void createViewStockWindow(){
+		new StockWinBuilder(BusinessConstant.VIEW_ACTION).retrieveWindow();
 	}
 	
 	/**
@@ -35,8 +35,8 @@ public class WindowBuilderFactory {
 	 *  
 	 * @return
 	 */
-	public static StockWinBuilder createReStockWinBuilder(){
-		return new StockWinBuilder(BusinessConstant.RESTOCK_ACTION);
+	public static void createReStockWindow(){
+		new StockWinBuilder(BusinessConstant.RESTOCK_ACTION).retrieveWindow();
 	}
 	
 	/**
@@ -52,8 +52,8 @@ public class WindowBuilderFactory {
 	 *  
 	 * @return
 	 */
-	public static TurnoverWinBuilder createTurnoverWinBuilder(){
-		return new TurnoverWinBuilder();
+	public static void createTurnoverWindow(){
+		new TurnoverWinBuilder().retrieveWindow();
 	}
 	
 	/**
@@ -69,15 +69,19 @@ public class WindowBuilderFactory {
 	 *  
 	 * @return
 	 */
-	public static StockManagementWinBuilder createStockManagementWinBuilder(){
-		return new StockManagementWinBuilder();
+	public static void createStockManagementWindow(){
+		new StockManagementWinBuilder().retrieveWindow();
 	}
 	
 	public static ProgressWinBuilder createProgressWinBuilder(){
 		return new ProgressWinBuilder();
 	}
 	
-	public static SchemeManagementWinBuilder createSchemeManagementWinBuilder(){
-		return new SchemeManagementWinBuilder();
+	public static void createSchemeManagementWindow(){
+		new SchemeManagementWinBuilder().retrieveWindow();
+	}
+	
+	public static void createSchemeAddFormWindow(){
+		new SchemeCreateWinBuilder().retrieveWindow();
 	}
 }

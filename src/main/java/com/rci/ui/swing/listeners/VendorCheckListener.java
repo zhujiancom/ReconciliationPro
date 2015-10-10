@@ -5,6 +5,7 @@ package com.rci.ui.swing.listeners;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -34,6 +35,7 @@ import com.rci.ui.swing.vos.SchemeVO;
 public class VendorCheckListener implements ItemListener {
 	private JTable table;
 	private IMetadataService metaservice;
+	private List<VendorJCheckBox> items = new ArrayList<VendorJCheckBox>();
 	
 	public VendorCheckListener(JTable table){
 		this.table = table;
@@ -46,16 +48,23 @@ public class VendorCheckListener implements ItemListener {
 	public void itemStateChanged(ItemEvent e) {
 		VendorJCheckBox source = (VendorJCheckBox) e.getItemSelectable();
 		if(e.getStateChange() == ItemEvent.SELECTED){
+			for(int i=0;i<items.size();i++){
+				if(i != source.getIndex()){
+					items.get(i).setSelected(false);
+				}
+			}
 			SchemeQueryDTO queryDTO = new SchemeQueryDTO();
 			queryDTO.setStatus(ActivityStatus.ACTIVE);
-//			if(source.getVendor() == null){
-//			}
 			queryDTO.setVendor(source.getVendor());
 			List<SchemeVO> schemes = metaservice.dishplaySchemes(queryDTO);
 			SchemeTabelModel dm = (SchemeTabelModel) table.getModel();
 			dm.setItems(schemes);
 			dm.fireTableDataChanged();
 		}
+	}
+	
+	public void addCheckBox(VendorJCheckBox checkBox){
+		items.add(checkBox);
 	}
 
 }
