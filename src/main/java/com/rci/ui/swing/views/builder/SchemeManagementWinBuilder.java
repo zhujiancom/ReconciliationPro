@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -57,32 +58,39 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		operaPane.setBackground(Color.WHITE);
 		operaPane.setBounds(50, 30, 700, 35);
 		contentPane.add(operaPane);
-		JButton addBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/addBtn_0.png"));
+		URL addBtnUrl1 = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/addBtn_0.png");
+		JButton addBtn = new JButton(new ImageIcon(addBtnUrl1));
 		addBtn.setUI(new BasicButtonUI());
 		addBtn.setContentAreaFilled(false);
 		addBtn.setMargin(new Insets(0,0,0,0));
 		addBtn.setBounds(4, 4, 24, 24);
-		addBtn.setPressedIcon(new ImageIcon("./src/main/resources/skin/gray/images/24x24/addBtn_1.png"));
+		URL addBtnUrl2 = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/addBtn_1.png");
+		addBtn.setPressedIcon(new ImageIcon(addBtnUrl2));
 		
-		JButton delBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/delBtn_0.png"));
+		URL delBtnUrl1 = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/delBtn_0.png");
+		JButton delBtn = new JButton(new ImageIcon(delBtnUrl1));
 		delBtn.setUI(new BasicButtonUI());
 		delBtn.setContentAreaFilled(false);
 		delBtn.setMargin(new Insets(0,0,0,0));
 		delBtn.setBounds(40, 4, 24, 24);
-		delBtn.setPressedIcon(new ImageIcon("./src/main/resources/skin/gray/images/24x24/delBtn_1.png"));
+		URL delBtnUrl2 = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/delBtn_1.png");
+		delBtn.setPressedIcon(new ImageIcon(delBtnUrl2));
 		
-		JButton editBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/editBtn_0.png"));
+		URL editBtnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/editBtn_0.png");
+		JButton editBtn = new JButton(new ImageIcon(editBtnUrl));
 		editBtn.setUI(new BasicButtonUI());
 		editBtn.setContentAreaFilled(false);
 		editBtn.setMargin(new Insets(0,0,0,0));
 		editBtn.setBounds(80, 4, 24, 24);
 		
-		JButton refreshBtn = new JButton(new ImageIcon("./src/main/resources/skin/gray/images/24x24/refreshBtn_0.png"));
+		URL refreshUrl1 = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/refreshBtn_0.png");
+		JButton refreshBtn = new JButton(new ImageIcon(refreshUrl1));
 		refreshBtn.setUI(new BasicButtonUI());
 		refreshBtn.setContentAreaFilled(false);
 		refreshBtn.setMargin(new Insets(0,0,0,0));
 		refreshBtn.setBounds(120, 4, 24, 24);
-		refreshBtn.setPressedIcon(new ImageIcon("./src/main/resources/skin/gray/images/24x24/refreshBtn_1.png"));
+		URL refreshUrl2 = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/refreshBtn_1.png");
+		refreshBtn.setPressedIcon(new ImageIcon(refreshUrl2));
 		
 		operaPane.add(addBtn);
 		operaPane.add(delBtn);

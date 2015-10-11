@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -57,12 +58,14 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,MouseListener {
 	private JLabel end = new JLabel("结束时间");
 	private JLabel floor = new JLabel("最低消费金额");
 	private JLabel ceil = new JLabel("最高消费金额");
-	private JButton confirmBtn = new JButton(new ImageIcon("./src/main/resources/skin/submitBtn.png"));
+	private JButton confirmBtn;
 	
 	@Override
 	public PopWindow retrieveWindow() {
 		addForm = new PopWindow(350,500);
 		JPanel containerPanel = addForm.getContainerPanel();
+		URL confirmBtnUrl = this.getClass().getClassLoader().getResource("skin/submitBtn.png");
+		confirmBtn = new JButton(new ImageIcon(confirmBtnUrl));
 		createContentPane();
 		containerPanel.add(sPane,BorderLayout.CENTER);
 		confirmBtn.addMouseListener(this);
