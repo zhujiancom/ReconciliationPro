@@ -167,15 +167,19 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 				throw new ServiceException("结束时间必填");
 			}
 			data.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
-			data.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
-			data.setCeilAmount(new BigDecimal(ceilInput.getText().trim()));
+			if(StringUtils.hasText(floorInput.getText())){
+				data.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
+			}
+			if(StringUtils.hasText(ceilInput.getText())){
+				data.setCeilAmount(new BigDecimal(StringUtils.trim(ceilInput.getText())));
+			}
 			IMetadataService metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
 			metaService.updateScheme(data);
 			JOptionPane.showMessageDialog(null, "活动修改成功！");
 			modifyForm.close();
 		}catch (Exception ex){
 			logger.error(ex);
-			JOptionPane.showMessageDialog(null, ex.getMessage());
+			JOptionPane.showMessageDialog(null, "请填写必填项");
 		}
 	}
 

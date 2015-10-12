@@ -11,6 +11,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
+import org.springframework.util.CollectionUtils;
+
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.renderers.AbstractLineColorMarkRenderer;
@@ -140,6 +142,9 @@ public class OrderTable extends JTable {
 		@Override
 		public boolean markColor(OrderTableModel tm, int rowIndex) {
 			OrderVO order = tm.getOrderAt(rowIndex);
+			if(order == null){
+				return false;
+			}
 			if(YOrN.Y.equals(order.getUnusual())){
 				return true;
 			}
@@ -204,11 +209,17 @@ public class OrderTable extends JTable {
 		}
 		
 		public OrderVO getOrderAt(int rowIndex){
+			if(CollectionUtils.isEmpty(orders)){
+				return null;
+			}
 			return orders.get(rowIndex);
 		}
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
+			if(CollectionUtils.isEmpty(orders)){
+				return null;
+			}
 			OrderVO order = orders.get(rowIndex);
 			switch (columnIndex) {
 			case 0:

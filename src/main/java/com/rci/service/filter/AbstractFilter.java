@@ -265,6 +265,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 		oar.setOrderNo(order.getOrderNo());
 		oar.setPostTime(order.getCheckoutTime());
 		oar.setRealAmount(postAmount);
+		oar.setFramework(order.getFramework());
 		//保存关联数据
 		oarService.rwCreate(oar);
 		orderService.rwUpdate(order);

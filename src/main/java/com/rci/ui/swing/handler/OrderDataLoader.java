@@ -73,9 +73,11 @@ public class OrderDataLoader implements Runnable {
 		}
 		
 		OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
-		otm.setOrders(displayOrders);
-		otm.fireTableDataChanged();
+		OrderItemTableModel ottm = (OrderItemTableModel) contentPane.getItemTable().getModel();
 		if(!CollectionUtils.isEmpty(displayOrders)){
+			otm.setOrders(displayOrders);
+			otm.fireTableDataChanged();
+			
 			OrderVO order = otm.getOrderAt(0);
 			contentPane.getMainTable().setRowSelectionAllowed(true);
 			contentPane.getMainTable().setRowSelectionInterval(0, 0);
@@ -89,6 +91,8 @@ public class OrderDataLoader implements Runnable {
 			loadSumData(queryDate);
 			conclusionPane.refreshUI();
 		}else{
+			otm.setRowCount(0);
+			ottm.setRowCount(0);
 			JOptionPane.showMessageDialog(null, "没有记录");
 		}
 	}

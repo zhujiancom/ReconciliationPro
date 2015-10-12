@@ -3,7 +3,6 @@ package com.rci.service.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
@@ -17,7 +16,6 @@ import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.base.BaseServiceImpl;
-import com.rci.tools.DateUtil;
 
 @Service("OrderAccountRefService")
 public class OrderAccountRefServiceImpl extends
@@ -73,13 +71,17 @@ public class OrderAccountRefServiceImpl extends
 	
 	@Override
 	public BigDecimal querySumAmount(AccountCode account,Date postTime,OrderFramework framework) {
-		String queryDate = DateUtil.date2Str(postTime, "yyyyMMdd");
-		String nativeSql = "select sum(oar.real_amount) 'amount' from bus_tb_order_account_ref oar \n"
-				+ "where oar.order_no in ( \n"
-				+ "		select o.order_no from bus_tb_order o where o.day='"+queryDate+"' and o.framework='"+framework.name()+"' \n"
-				+ ") and oar.accno='"+account.name()+"'";
-		Map<String,Object> resultMap = baseDAO.queryListBySQL(nativeSql).get(0);
-		BigDecimal amount = (BigDecimal) resultMap.get("amount");
+//		String queryDate = DateUtil.date2Str(postTime, "yyyyMMdd");
+//		String nativeSql = "select sum(oar.real_amount) 'amount' from bus_tb_order_account_ref oar \n"
+//				+ "where oar.order_no in ( \n"
+//				+ "		select o.order_no from bus_tb_order o where o.day='"+queryDate+"' and o.framework='"+framework.name()+"' \n"
+//				+ ") and oar.accno='"+account.name()+"'";
+//		Map<String,Object> resultMap = baseDAO.queryListBySQL(nativeSql).get(0);
+//		BigDecimal amount = (BigDecimal) resultMap.get("amount");
+		DetachedCriteria dc = DetachedCriteria.forClass(OrderAccountRef.class);
+		dc.setProjection(Projections.projectionList().add(Projections.sum("realAmount"))).
+			add(Restrictions.eq("postTime", postTime)).add(Restrictions.eq("framework", framework)).add(Restrictions.eq("accNo", account));
+		BigDecimal amount = baseDAO.queryUniqueByCriteria(dc);
 		return amount;
 	}
 	

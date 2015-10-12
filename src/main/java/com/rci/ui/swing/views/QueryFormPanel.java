@@ -43,6 +43,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private JCheckBox cashCheck;
 	private JCheckBox posCheck;
 	private JCheckBox tddCheck;
+	private JCheckBox alipayCheck;
 	private Set<PaymodeCode> paymodes = new HashSet<PaymodeCode>();
 
 	public QueryFormPanel() {
@@ -120,6 +121,9 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		tddCheck = new JCheckBox("淘点点");
 		tddCheck.addItemListener(this);
 		
+		alipayCheck = new JCheckBox("支付宝");
+		alipayCheck.addItemListener(this);
+		
 		posCheck = new JCheckBox("银联支付");
 		posCheck.addItemListener(this);
 		
@@ -131,6 +135,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		checkPane.add(mttgCheck);
 		checkPane.add(mtwmCheck);
 		checkPane.add(tddCheck);
+		checkPane.add(alipayCheck);
 		checkPane.add(posCheck);
 		return checkPane;
 	}
@@ -260,6 +265,14 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 				paymodes.add(PaymodeCode.TDD);	
 			}else{
 				paymodes.remove(PaymodeCode.TDD);
+			}
+		}
+		if(source == alipayCheck){
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				allCheck.setSelected(false);
+				paymodes.add(PaymodeCode.ZFB);	
+			}else{
+				paymodes.remove(PaymodeCode.ZFB);
 			}
 		}
 	}

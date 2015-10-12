@@ -307,9 +307,9 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public T queryUniqueByCriteria(DetachedCriteria dc) {
+	public <E> E queryUniqueByCriteria(DetachedCriteria dc) {
 		CriteriaImpl criteria = (CriteriaImpl) dc.getExecutableCriteria(getCurrentSession());
-		T result = (T) criteria.uniqueResult();
+		E result = (E) criteria.uniqueResult();
 		return result;
 	}
 	

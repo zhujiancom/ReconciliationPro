@@ -155,15 +155,20 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,MouseListener {
 				throw new ServiceException("结束时间必填");
 			}
 			newScheme.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
-			newScheme.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
-			newScheme.setCeilAmount(new BigDecimal(ceilInput.getText().trim()));
+			if(StringUtils.hasText(floorInput.getText())){
+				newScheme.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
+			}
+			if(StringUtils.hasText(ceilInput.getText())){
+				newScheme.setCeilAmount(new BigDecimal(ceilInput.getText().trim()));
+			}
 			IMetadataService metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
 			metaService.createScheme(newScheme);
 			JOptionPane.showMessageDialog(null, "活动创建成功！");
 			addForm.close();
 		}catch (Exception ex){
-			logger.error(ex);
-			JOptionPane.showMessageDialog(null, ex.getMessage());
+//			logger.error(ex);
+//			JOptionPane.showMessageDialog(null, ex.getMessage());
+			ex.printStackTrace();
 		}
 	}
 
