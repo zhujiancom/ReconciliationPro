@@ -3,6 +3,8 @@
  */
 package com.rci.ui.swing.listeners;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
+import com.rci.ui.swing.model.SchemeStatusRadioButton;
 import com.rci.ui.swing.model.SchemeTable.SchemeTabelModel;
 import com.rci.ui.swing.model.VendorJCheckBox;
 import com.rci.ui.swing.vos.SchemeVO;
@@ -32,10 +35,12 @@ import com.rci.ui.swing.vos.SchemeVO;
  * Create Time: 2015年10月4日 下午4:31:07
  *
  */
-public class VendorCheckListener implements ItemListener {
+public class VendorCheckListener implements ItemListener,ActionListener {
 	private JTable table;
 	private IMetadataService metaservice;
 	private List<VendorJCheckBox> items = new ArrayList<VendorJCheckBox>();
+	private VendorJCheckBox vendor;
+	private SchemeStatusRadioButton status;
 	
 	public VendorCheckListener(JTable table){
 		this.table = table;
@@ -46,25 +51,38 @@ public class VendorCheckListener implements ItemListener {
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		VendorJCheckBox source = (VendorJCheckBox) e.getItemSelectable();
+		vendor = (VendorJCheckBox) e.getItemSelectable();
 		if(e.getStateChange() == ItemEvent.SELECTED){
-			for(int i=0;i<items.size();i++){
-				if(i != source.getIndex()){
-					items.get(i).setSelected(false);
-				}
-			}
 			SchemeQueryDTO queryDTO = new SchemeQueryDTO();
-			queryDTO.setStatus(ActivityStatus.ACTIVE);
-			queryDTO.setVendor(source.getVendor());
-			List<SchemeVO> schemes = metaservice.dishplaySchemes(queryDTO);
-			SchemeTabelModel dm = (SchemeTabelModel) table.getModel();
-			dm.setItems(schemes);
-			dm.fireTableDataChanged();
+			if(status == null){
+				queryDTO.setStatus(ActivityStatus.ACTIVE);
+			}else{
+				queryDTO.setStatus(status.getStatus());
+			}
+			queryDTO.setVendor(vendor.getVendor());
+			updateTableData(queryDTO);
 		}
 	}
 	
 	public void addCheckBox(VendorJCheckBox checkBox){
 		items.add(checkBox);
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		status = (SchemeStatusRadioButton) e.getSource();
+		SchemeQueryDTO queryDTO = new SchemeQueryDTO();
+		queryDTO.setStatus(status.getStatus());
+		if(vendor != null){
+			queryDTO.setVendor(vendor.getVendor());
+		}
+		updateTableData(queryDTO);
+	}
+	
+	private void updateTableData(SchemeQueryDTO queryDTO){
+		List<SchemeVO> schemes = metaservice.dishplaySchemes(queryDTO);
+		SchemeTabelModel dm = (SchemeTabelModel) table.getModel();
+		dm.setItems(schemes);
+		dm.fireTableDataChanged();
 	}
 
 }

@@ -134,4 +134,18 @@ public class MetadataServiceImpl implements IMetadataService {
 		schemeService.rwUpdate(scheme);
 	}
 
+	@Override
+	public void activeScheme(Long sid) {
+		Scheme scheme = schemeService.get(sid);
+		scheme.setActivityStatus(ActivityStatus.ACTIVE);
+		schemeService.rwUpdate(scheme);
+	}
+
+	@Override
+	public void inactiveScheme(Long sid) {
+		Scheme scheme = schemeService.get(sid);
+		scheme.setActivityStatus(ActivityStatus.INACTIVE);
+		schemeService.rwUpdate(scheme);
+	}
+
 }

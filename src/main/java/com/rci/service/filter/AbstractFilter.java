@@ -214,9 +214,9 @@ public abstract class AbstractFilter implements CalculateFilter {
 		}else{
 			singlePrice = scheme.getPostPrice();
 		}
-		if(scheme.getSpread() != null){
-			singlePrice = singlePrice.add(scheme.getSpread());
-		}
+//		if(scheme.getSpread() != null){
+//			singlePrice = singlePrice.add(scheme.getSpread());
+//		}
 		postAmount = DigitUtil.mutiplyDown(singlePrice,new BigDecimal(count));
 		return postAmount;
 	}

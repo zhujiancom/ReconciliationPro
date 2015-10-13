@@ -4,9 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -25,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.service.spi.ServiceException;
 
 import com.rci.bean.LabelValueBean;
+import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
@@ -58,11 +62,15 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 	private JLabel end = new JLabel("结束时间");
 	private JLabel floor = new JLabel("最低消费金额");
 	private JLabel ceil = new JLabel("最高消费金额");
-	private JButton confirmBtn = new JButton(new ImageIcon("./src/main/resources/skin/submitBtn.png"));
+	private JButton confirmBtn;
+	private JButton activeBtn;
+	private JButton inactiveBtn;
+	IMetadataService metaService;
 	
 	public SchemeModifyWinBuilder(SchemeVO data) {
 		super();
 		this.data = data;
+		metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
 	}
 
 	@Override
@@ -72,6 +80,24 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 		createContentPane();
 		containerPanel.add(sPane,BorderLayout.CENTER);
 		confirmBtn.addMouseListener(this);
+		activeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				metaService.activeScheme(data.getSid());
+				JOptionPane.showMessageDialog(null, "活动已启用！");
+				modifyForm.close();
+			}
+		});
+		inactiveBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				metaService.inactiveScheme(data.getSid());
+				JOptionPane.showMessageDialog(null, "活动已禁用！");
+				modifyForm.close();
+			}
+		});
 		return modifyForm;
 	}
 
@@ -135,11 +161,27 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 		ceilInput = new JTextField(StringUtils.trimToEmpty(data.getCeilAmount()),30);
 		ninthPane.add(ceilInput);
 		mainPane.add(ninthPane);
+		JPanel tenthPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		URL confirmBtnUrl = this.getClass().getClassLoader().getResource("skin/submitBtn.png");
+		confirmBtn = new JButton(new ImageIcon(confirmBtnUrl));
 		confirmBtn.setUI(new BasicButtonUI());
 		confirmBtn.setContentAreaFilled(false);
 		confirmBtn.setMargin(new Insets(0,0,0,0));
 		confirmBtn.setPreferredSize(new Dimension(64,64));
-		mainPane.add(confirmBtn);
+		activeBtn = new JButton("启用");
+		inactiveBtn = new JButton("停用");
+		if(ActivityStatus.ACTIVE.equals(data.getActivityStatus())){
+			activeBtn.setEnabled(false);
+			inactiveBtn.setEnabled(true);
+		}
+		if(ActivityStatus.INACTIVE.equals(data.getActivityStatus())){
+			activeBtn.setEnabled(true);
+			inactiveBtn.setEnabled(false);
+		}
+		tenthPane.add(confirmBtn);
+		tenthPane.add(activeBtn);
+		tenthPane.add(inactiveBtn);
+		mainPane.add(tenthPane);
 	}
 
 	@Override
@@ -173,7 +215,6 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 			if(StringUtils.hasText(ceilInput.getText())){
 				data.setCeilAmount(new BigDecimal(StringUtils.trim(ceilInput.getText())));
 			}
-			IMetadataService metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
 			metaService.updateScheme(data);
 			JOptionPane.showMessageDialog(null, "活动修改成功！");
 			modifyForm.close();

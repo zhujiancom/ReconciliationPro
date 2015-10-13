@@ -3,6 +3,7 @@ package com.rci.ui.swing.vos;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 
@@ -10,6 +11,8 @@ public class SchemeVO {
 	private Long sid;
 	
 	private String name;
+	
+	private ActivityStatus activityStatus;
 	
 	/* 活动平台 */
 	private Vendor vendor;
@@ -143,5 +146,13 @@ public class SchemeVO {
 
 	public void setFloorAmount(BigDecimal floorAmount) {
 		this.floorAmount = floorAmount;
+	}
+
+	public ActivityStatus getActivityStatus() {
+		return activityStatus;
+	}
+
+	public void setActivityStatus(ActivityStatus activityStatus) {
+		this.activityStatus = activityStatus;
 	}
 }

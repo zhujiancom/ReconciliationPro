@@ -43,16 +43,6 @@
 		<bean class="com.rci.service.filter.WMCRFilter"></bean>
 	</util:list>
 	
-<!-- 	<util:list id="freeOnlinePaymodes"> -->
-<!-- 		<value>11</value> -->
-<!-- 		<value>12</value> -->
-<!-- 		<value>96</value> -->
-<!-- 	</util:list> -->
-	
-<!-- 	<bean id="freeFilter" class="com.rci.service.filter.FreeFilter"> -->
-<!-- 		<property name="freeOnlinePaymodes" ref="freeOnlinePaymodes"></property> -->
-<!-- 	</bean> -->
-	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>
 	
 	<task:scheduler id="dataFetchScheduler" pool-size="10"/>

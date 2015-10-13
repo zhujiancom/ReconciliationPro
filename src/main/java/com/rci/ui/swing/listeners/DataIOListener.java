@@ -17,6 +17,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.springframework.util.CollectionUtils;
@@ -41,7 +43,7 @@ import com.rci.ui.swing.views.builder.WindowBuilderFactory;
 import com.rci.ui.swing.vos.OrderItemVO;
 import com.rci.ui.swing.vos.OrderVO;
 
-public class DataIOListener implements ActionListener {
+public class DataIOListener implements ActionListener,ListSelectionListener {
 	public static final int EXPORT = 0;
 	public static final int IMPORT = 1;
 	
@@ -170,6 +172,7 @@ public class DataIOListener implements ActionListener {
 		chooser.setMultiSelectionEnabled(false);
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.setDialogTitle("原始数据文件导入");
+		contentPane.getMainTable().getSelectionModel().addListSelectionListener(this);
 		chooser.addChoosableFileFilter(new FileFilter() {
 
 			@Override
@@ -310,5 +313,17 @@ public class DataIOListener implements ActionListener {
 	 */
 	public void setConclusionPane(ConculsionPanel conclusionPane) {
 		this.conclusionPane = conclusionPane;
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent event) {
+		if(event.getSource() == contentPane.getMainTable().getSelectionModel()
+				&& contentPane.getMainTable().getRowSelectionAllowed()){
+			int row = contentPane.getMainTable().getSelectedRow();
+			if(row != -1){
+				String payno = (String) contentPane.getMainTable().getValueAt(row, 2);
+				loadItemData(payno);
+			}
+		}
 	}
 }

@@ -9,19 +9,23 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.ISchemeService;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.listeners.VendorCheckListener;
+import com.rci.ui.swing.model.SchemeStatusRadioButton;
 import com.rci.ui.swing.model.SchemeTable;
 import com.rci.ui.swing.model.SchemeTable.SchemeTabelModel;
 import com.rci.ui.swing.model.VendorJCheckBox;
@@ -111,10 +115,39 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		JCheckBox mtwmCheck = new VendorJCheckBox(2,Vendor.MTWM,"美团外卖");
 		mtwmCheck.addItemListener(checkListener);
 		mtwmCheck.setBounds(320, 4, 80, 24);
+		JCheckBox dptgCheck = new VendorJCheckBox(3,Vendor.DZDP,"大众点评");
+		dptgCheck.addItemListener(checkListener);
+		dptgCheck.setBounds(400, 4, 80, 24);
+		JCheckBox wmcrCheck = new VendorJCheckBox(4,Vendor.WMCR,"外卖超人");
+		wmcrCheck.addItemListener(checkListener);
+		wmcrCheck.setBounds(480, 4, 80, 24);
+		
+		ButtonGroup checkGroup = new ButtonGroup();
+		checkGroup.add(allCheck);
+		checkGroup.add(eleCheck);
+		checkGroup.add(mtwmCheck);
+		checkGroup.add(dptgCheck);
+		checkGroup.add(wmcrCheck);
 		
 		operaPane.add(allCheck);
 		operaPane.add(eleCheck);
 		operaPane.add(mtwmCheck);
+		operaPane.add(dptgCheck);
+		operaPane.add(wmcrCheck);
+		
+		SchemeStatusRadioButton active = new SchemeStatusRadioButton(ActivityStatus.ACTIVE,"进行中",true);
+		active.setBounds(560, 4, 75, 24);
+		active.setBackground(Color.WHITE);
+		active.addActionListener(checkListener);
+		SchemeStatusRadioButton inactive = new SchemeStatusRadioButton(ActivityStatus.INACTIVE,"已结束");
+		inactive.setBounds(635, 4, 75, 24);
+		inactive.setBackground(Color.WHITE);
+		inactive.addActionListener(checkListener);
+		ButtonGroup btnGroup = new ButtonGroup();
+		btnGroup.add(active);
+		btnGroup.add(inactive);
+		operaPane.add(active);
+		operaPane.add(inactive);
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

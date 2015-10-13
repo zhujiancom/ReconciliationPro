@@ -84,4 +84,6 @@ public interface IMetadataService {
 	
 	void createScheme(SchemeVO schemevo);
 	void updateScheme(SchemeVO schemevo);
+	void activeScheme(Long sid);
+	void inactiveScheme(Long sid);
 }
