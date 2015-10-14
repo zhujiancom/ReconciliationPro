@@ -64,7 +64,7 @@ public class DPSHFilter extends AbstractFilter {
 		if(onlineAmount.compareTo(payAmount) <= 0){
 			payAmount = onlineAmount;
 		}
-		BigDecimal freeAmount = payAmount.divideToIntegralValue(new BigDecimal("100")).multiply(new BigDecimal("12"));
+		BigDecimal freeAmount = payAmount.divideToIntegralValue(new BigDecimal("100")).multiply(new BigDecimal("10"));
 		BigDecimal actualAmount = onlineAmount.subtract(freeAmount);
 		
 		order.setSchemeName(schemeName);

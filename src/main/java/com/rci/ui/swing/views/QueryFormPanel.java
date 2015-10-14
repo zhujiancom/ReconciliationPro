@@ -201,6 +201,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 			mtwmCheck.setSelected(false);
 			posCheck.setSelected(false);
 			tddCheck.setSelected(false);
+			alipayCheck.setSelected(false);
 			paymodes.clear();
 		}
 		if(source == cashCheck){
