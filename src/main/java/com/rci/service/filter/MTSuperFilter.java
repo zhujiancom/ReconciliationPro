@@ -31,6 +31,7 @@ public class MTSuperFilter extends AbstractFilter {
 	protected void generateScheme(Order order, FilterChain chain) {
 		order.setFramework(OrderFramework.TS);
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.MTSUPER);
+		BigDecimal originAmount = order.getOriginPrice();
 		/* 最大可在线支付金额,参与优惠金额 */
 		BigDecimal payAmount = BigDecimal.ZERO;
 		BigDecimal nodiscountAmount = BigDecimal.ZERO;
@@ -58,7 +59,7 @@ public class MTSuperFilter extends AbstractFilter {
 			payAmount = payAmount.add(price);
 		}
 		
-		if(onlineAmount.compareTo(payAmount) > 0){
+		if(originAmount.compareTo(payAmount.add(nodiscountAmount)) != 0){
 			order.setUnusual(YOrN.Y);
 			logger.warn("---【"+order.getPayNo()+"】[美团超级代金券支付异常]---，  在线支付金额："+onlineAmount+" , 实际最大在线支付金额：  "+payAmount+"， 不可在线支付金额："+nodiscountAmount);
 			String warningInfo = "[美团超级代金券支付异常]---   在线支付金额："+onlineAmount+" , 实际最大在线支付金额：  "+payAmount+"， 不可在线支付金额："+nodiscountAmount;
@@ -71,18 +72,42 @@ public class MTSuperFilter extends AbstractFilter {
 			order.setNodiscountAmount(nodiscountAmount);
 		}
 		
+//		BigDecimal calculateAmount = BigDecimal.ZERO;
+		if(onlineAmount.compareTo(originAmount) == 0){
+//			calculateAmount = originAmount.subtract(nodiscountAmount);
+			BigDecimal[] result = calculatePostAmount(originAmount.subtract(nodiscountAmount));
+			preserveOAR(result[0].add(nodiscountAmount),AccountCode.MT_SUPER,order);
+			preserveOAR(result[1],AccountCode.FREE_ONLINE,order);
+		}else{
+			BigDecimal[] result = calculatePostAmount(onlineAmount);
+			preserveOAR(result[0],AccountCode.MT_SUPER,order);
+			preserveOAR(result[1],AccountCode.FREE_ONLINE,order);
+		}
 		//保存美团超级代金券在线支付金额
 //		preserveOAR(BigDecimal.TEN,BusinessConstant.FREE_MT_SUPER_ACC,order);
+//		BigDecimal chitAmount = new BigDecimal("50");
+//		BigDecimal count = calculateAmount.divideToIntegralValue(chitAmount);
+//		BigDecimal singleActualAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(chitAmount, new BigDecimal("0.90")),new BigDecimal("0.99"));
+//		BigDecimal totalChitAmount = DigitUtil.mutiplyDown(singleActualAmount, count);
+//		BigDecimal balance = calculateAmount.subtract(chitAmount.multiply(count));
+//		BigDecimal onlineFreeAmount = DigitUtil.mutiplyDown(chitAmount.subtract(singleActualAmount),count);
+//		/* 入账金额  */
+//		BigDecimal postAmount =totalChitAmount.add(balance);
+//		preserveOAR(postAmount,AccountCode.MT_SUPER,order);
+//		preserveOAR(onlineFreeAmount,AccountCode.FREE_ONLINE,order);
+	}
+	
+	private BigDecimal[] calculatePostAmount(BigDecimal payAmount){
 		BigDecimal chitAmount = new BigDecimal("50");
-		BigDecimal count = onlineAmount.divideToIntegralValue(chitAmount);
-		BigDecimal singleActualAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(chitAmount, new BigDecimal("0.88")),new BigDecimal("0.99"));
+		BigDecimal count = payAmount.divideToIntegralValue(chitAmount);
+		BigDecimal singleActualAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(chitAmount, new BigDecimal("0.90")),new BigDecimal("0.99"));
 		BigDecimal totalChitAmount = DigitUtil.mutiplyDown(singleActualAmount, count);
-		BigDecimal balance = onlineAmount.subtract(chitAmount.multiply(count));
+		BigDecimal balance = payAmount.subtract(chitAmount.multiply(count));
 		BigDecimal onlineFreeAmount = DigitUtil.mutiplyDown(chitAmount.subtract(singleActualAmount),count);
 		/* 入账金额  */
 		BigDecimal postAmount =totalChitAmount.add(balance);
-		preserveOAR(postAmount,AccountCode.MT_SUPER,order);
-		preserveOAR(onlineFreeAmount,AccountCode.FREE_ONLINE,order);
+		
+		return new BigDecimal[]{postAmount,onlineFreeAmount};
 	}
 
 	@Override
