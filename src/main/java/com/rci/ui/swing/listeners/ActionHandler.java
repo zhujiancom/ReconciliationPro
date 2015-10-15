@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.rci.service.ISchemeService;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
 
@@ -36,11 +35,9 @@ public class ActionHandler extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = -4393899033664657099L;
-	private ISchemeService schemeSverice;
 	private IMetadataService metadataService;
 	
 	public ActionHandler(){
-		schemeSverice = (ISchemeService) SpringUtils.getBean("SchemeService");
 		metadataService = (IMetadataService)SpringUtils.getBean("MetadataService");
 	}
 //

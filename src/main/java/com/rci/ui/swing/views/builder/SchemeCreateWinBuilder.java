@@ -21,8 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.service.spi.ServiceException;
 
 import com.rci.bean.LabelValueBean;
@@ -37,7 +35,6 @@ import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.vos.SchemeVO;
 
 public class SchemeCreateWinBuilder implements PopWindowBuilder,MouseListener {
-	private Log logger = LogFactory.getLog(SchemeCreateWinBuilder.class);
 	private PopWindow addForm;
 	private JScrollPane sPane;
 	private JTextField nameInput = new JTextField(30);

@@ -7,7 +7,10 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
+import org.springframework.util.CollectionUtils;
+
 import com.rci.tools.DateUtil;
+import com.rci.ui.swing.renderers.AbstractLineColorMarkRenderer;
 import com.rci.ui.swing.vos.OrderItemVO;
 
 public class OrderItemTable extends JTable {
@@ -25,12 +28,14 @@ public class OrderItemTable extends JTable {
 	
 	public void setHeaderLabel(){
 		TableColumnModel cm = this.getColumnModel();
+		BackDishRenderer backDishRenderer = new BackDishRenderer();
 		cm.getColumn(0).setHeaderValue("菜品名称");
 		cm.getColumn(0).setPreferredWidth(105);
 		cm.getColumn(1).setHeaderValue("数量");
 		cm.getColumn(1).setPreferredWidth(105);
 		cm.getColumn(2).setHeaderValue("退菜数量");
 		cm.getColumn(2).setPreferredWidth(75);
+		cm.getColumn(2).setCellRenderer(backDishRenderer);
 		cm.getColumn(3).setHeaderValue("原价");
 		cm.getColumn(3).setPreferredWidth(75);
 		cm.getColumn(4).setHeaderValue("实收金额");
@@ -105,6 +110,30 @@ public class OrderItemTable extends JTable {
 
 		public void setItems(List<OrderItemVO> items) {
 			this.items = items;
+		}
+		
+		public OrderItemVO getOrderItemAt(int rowIndex){
+			if(CollectionUtils.isEmpty(items)){
+				return null;
+			}
+			return items.get(rowIndex);
+		}
+	}
+
+	private class BackDishRenderer extends AbstractLineColorMarkRenderer<OrderItemTableModel>{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 3004289115913083755L;
+
+		@Override
+		public boolean markColor(OrderItemTableModel tm, int rowIndex) {
+			OrderItemVO item = tm.getOrderItemAt(rowIndex);
+			if(item.getCountback() != 0){
+				return true;
+			}
+			return false;
 		}
 	}
 }
