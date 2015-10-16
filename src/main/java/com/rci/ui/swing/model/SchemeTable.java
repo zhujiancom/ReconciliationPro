@@ -9,6 +9,7 @@ import javax.swing.table.TableColumnModel;
 
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.enums.BusinessEnums.ActivityStatus;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
@@ -72,11 +73,12 @@ public class SchemeTable extends BaseTable {
 		super.setModel(dm);
 	}
 	
-	public void refresh(){
+	public void refresh(Vendor vendor){
 		SchemeTabelModel dm = (SchemeTabelModel) this.getModel();
 		IMetadataService metaservice = (IMetadataService) SpringUtils.getBean("MetadataService");
 		SchemeQueryDTO queryDTO = new SchemeQueryDTO();
 		queryDTO.setStatus(ActivityStatus.ACTIVE);
+		queryDTO.setVendor(vendor);
 		List<SchemeVO> schemes = metaservice.dishplaySchemes(queryDTO);
 		dm.setItems(schemes);
 		dm.fireTableDataChanged();

@@ -71,7 +71,7 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 	public void checkStatus(Date deadLine) {
 		List<Scheme> schemes = getAll();
 		for(Scheme scheme:schemes){
-			if(scheme.getEndDate().before(deadLine)){
+			if(scheme.getEndDate().before(deadLine) && ActivityStatus.ACTIVE.equals(scheme.getActivityStatus())){
 				scheme.setActivityStatus(ActivityStatus.INACTIVE);
 				((ISchemeService)AopContext.currentProxy()).rwUpdate(scheme);
 			}

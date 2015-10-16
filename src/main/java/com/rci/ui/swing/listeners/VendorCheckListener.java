@@ -84,5 +84,14 @@ public class VendorCheckListener implements ItemListener,ActionListener {
 		dm.setItems(schemes);
 		dm.fireTableDataChanged();
 	}
+	public VendorJCheckBox getVendor() {
+		if(vendor == null){
+			return new VendorJCheckBox(0,null,"全部");
+		}
+		return vendor;
+	}
+	public void setVendor(VendorJCheckBox vendor) {
+		this.vendor = vendor;
+	}
 
 }

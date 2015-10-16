@@ -6,6 +6,8 @@ import java.awt.Container;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 
 import javax.swing.BorderFactory;
@@ -103,7 +105,7 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		table = new SchemeTable(10);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		VendorCheckListener checkListener = new VendorCheckListener(table);
+		final VendorCheckListener checkListener = new VendorCheckListener(table);
 		JCheckBox allCheck = new VendorJCheckBox(0,null,"全部");
 		allCheck.setSelected(true);
 		allCheck.addItemListener(checkListener);
@@ -170,7 +172,8 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((SchemeTable)table).refresh();
+				VendorJCheckBox checkedVendor = checkListener.getVendor();
+				((SchemeTable)table).refresh(checkedVendor.getVendor());
 			}
 		});
 		
@@ -198,6 +201,44 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 				SchemeVO scheme = model.getScheme(selectIndex);
 				PopWindowBuilder winBuilder = new SchemeModifyWinBuilder(scheme);
 				winBuilder.retrieveWindow();
+			}
+		});
+		
+		table.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2){
+					int selectIndex = table.getSelectedRow();
+					SchemeTabelModel model = (SchemeTabelModel) table.getModel();
+					SchemeVO scheme = model.getScheme(selectIndex);
+					PopWindowBuilder winBuilder = new SchemeModifyWinBuilder(scheme);
+					winBuilder.retrieveWindow();
+				}
 			}
 		});
 	}

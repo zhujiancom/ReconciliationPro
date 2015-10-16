@@ -68,7 +68,7 @@
 <!-- 	</bean> -->
 <!-- 	<bean id="monitorTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> -->
 <!-- 		<property name="jobDetail" ref="statusMonitorJob"/> -->
-<!-- 		<property name="cronExpression" value="0 0 1 * * ?"/> -->
+<!-- 		<property name="cronExpression" value="0 0/10 9 * * ?"/>在每天早上9点开始每10分钟触发一次直到10点 -->
 <!-- 	</bean> -->
 	<!-- 将触发器注入任务工程 -->
 <!-- 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> -->

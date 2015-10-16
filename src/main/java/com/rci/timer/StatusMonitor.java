@@ -5,6 +5,8 @@ package com.rci.timer;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
 import com.rci.service.ISchemeService;
@@ -26,11 +28,14 @@ import com.rci.tools.DateUtil;
  */
 @Component("statusMonitor")
 public class StatusMonitor {
+	private static final Log logger = LogFactory.getLog(StatusMonitor.class);
 	
 	@Resource(name="SchemeService")
 	private ISchemeService schemeService;
 	
 	public void monitorScheme(){
+		logger.debug("------- start check scheme status -------");
 		schemeService.checkStatus(DateUtil.getCurrentDate());
+		logger.debug("------- end check scheme status -------");
 	}
 }
