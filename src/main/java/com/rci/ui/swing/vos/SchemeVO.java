@@ -43,6 +43,10 @@ public class SchemeVO {
 	
 	/* 最低消费额度 */
 	private BigDecimal floorAmount;
+	
+	private Date createTime;
+
+	private Date modifyTime;
 
 	public Long getSid() {
 		return sid;
@@ -154,5 +158,21 @@ public class SchemeVO {
 
 	public void setActivityStatus(ActivityStatus activityStatus) {
 		this.activityStatus = activityStatus;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
 	}
 }

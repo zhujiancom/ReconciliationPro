@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -12,8 +13,10 @@ import javax.annotation.Resource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.SchemeWrapper;
+import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Order;
@@ -22,9 +25,12 @@ import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.TicketStatistic;
 import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
+import com.rci.exceptions.ExceptionManage;
+import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IAccountService;
 import com.rci.service.IDishService;
@@ -123,7 +129,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 * @param suitFlag
 	 * @return
 	 */
-	protected Map<SchemeType,SchemeWrapper> createSchemes(BigDecimal amount, Vendor vendor,boolean suitFlag) {
+	protected Map<SchemeType,SchemeWrapper> createSchemes(BigDecimal amount, Vendor vendor,boolean suitFlag,Date queryDate) {
 		Map<SchemeType,SchemeWrapper> schemes = new HashMap<SchemeType,SchemeWrapper>();
 		BigDecimal suitAmount = BigDecimal.ZERO;
 		// 1.如果有套餐
@@ -132,7 +138,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 				Entry<SchemeType, Integer> entry = it.next();
 				SchemeType type = entry.getKey();
 				Integer count = entry.getValue();
-				Scheme scheme = schemeService.getScheme(type,vendor);
+				Scheme scheme = schemeService.getScheme(type,vendor,queryDate);
 				BigDecimal suitPrice = scheme.getPrice();
 				suitAmount = suitAmount.add(suitPrice.multiply(new BigDecimal(count)));
 				SchemeWrapper schemewrapper = new SchemeWrapper(scheme,count);
@@ -140,11 +146,11 @@ public abstract class AbstractFilter implements CalculateFilter {
 			}
 		}
 		BigDecimal leftAmount = amount.subtract(suitAmount);
-		loopSchemes(leftAmount.intValue(),schemes,vendor);
+		loopSchemes(leftAmount.intValue(),schemes,vendor,queryDate);
 		return schemes;
 	}
 	
-	private void loopSchemes(Integer amount, Map<SchemeType,SchemeWrapper> schemes,Vendor vendor) {
+	private void loopSchemes(Integer amount, Map<SchemeType,SchemeWrapper> schemes,Vendor vendor,Date queryDate) {
 		if(amount <= 0){
 			return;
 		}
@@ -155,7 +161,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 				schemewrapper = schemes.get(SchemeType.CHIT_100);
 				schemewrapper.increasement();
 			}else{
-				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,vendor);
+				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,vendor,queryDate);
 				schemewrapper = new SchemeWrapper(scheme,1);
 				schemes.put(SchemeType.CHIT_100, schemewrapper);
 			}
@@ -167,7 +173,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 				schemewrapper = schemes.get(SchemeType.CHIT_100);
 				schemewrapper.increasement();
 			}else{
-				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,vendor);
+				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,vendor,queryDate);
 				schemewrapper = new SchemeWrapper(scheme,1);
 				schemes.put(SchemeType.CHIT_100, schemewrapper);
 			}
@@ -179,13 +185,13 @@ public abstract class AbstractFilter implements CalculateFilter {
 				schemewrapper = schemes.get(SchemeType.CHIT_50);
 				schemewrapper.increasement();
 			}else{
-				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_50,vendor);
+				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_50,vendor,queryDate);
 				schemewrapper = new SchemeWrapper(scheme,1);
 				schemes.put(SchemeType.CHIT_50, schemewrapper);
 			}
 			amount = amount - 50;
 		}
-		loopSchemes(amount,schemes,vendor);
+		loopSchemes(amount,schemes,vendor,queryDate);
 	}
 	
 	protected abstract Map<SchemeType, Integer> getSuitMap();
@@ -315,5 +321,40 @@ public abstract class AbstractFilter implements CalculateFilter {
 	}
 	
 	protected abstract void validation(Order order);
+	
+	protected BigDecimal[] calculatePostAmount(BigDecimal payAmount,String day,Vendor vendor){
+		try{
+			SchemeQueryDTO queryDTO = new SchemeQueryDTO();
+			queryDTO.setVendor(vendor);
+			Date queryDate = DateUtil.parseDate(day, "yyyyMMdd");
+			queryDTO.setStartDate(queryDate);
+			queryDTO.setEndDate(queryDate);
+			queryDTO.setStatus(ActivityStatus.ACTIVE);
+			List<Scheme> schemes = schemeService.getSchemes(queryDTO);
+			if(!CollectionUtils.isEmpty(schemes) && schemes.size() > 1){
+				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "活动重复");
+				for(Scheme scheme:schemes){
+					logger.error("----重复活动名称："+scheme);
+				}
+			}
+			if(CollectionUtils.isEmpty(schemes)){
+				logger.warn("----没有匹配到活动----");
+				return new BigDecimal[]{payAmount,BigDecimal.ZERO};
+			}
+			Scheme scheme = schemes.get(0);
+			BigDecimal chitAmount = scheme.getPrice();
+			BigDecimal count = payAmount.divideToIntegralValue(chitAmount);
+			BigDecimal singleActualAmount = scheme.getPostPrice();
+			BigDecimal totalChitAmount = DigitUtil.mutiplyDown(singleActualAmount, count);
+			BigDecimal balance = payAmount.subtract(chitAmount.multiply(count));
+			BigDecimal onlineFreeAmount = DigitUtil.mutiplyDown(chitAmount.subtract(singleActualAmount),count);
+			/* 入账金额  */
+			BigDecimal postAmount =totalChitAmount.add(balance);
+			return new BigDecimal[]{postAmount,onlineFreeAmount};
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return new BigDecimal[]{payAmount,BigDecimal.ZERO};
+	}
 	
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.dozer.Mapper;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +58,9 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 	 * @see com.rci.service.ISchemeService#getScheme(com.rci.enums.BusinessEnums.SchemeType, com.rci.enums.BusinessEnums.Vendor)
 	 */
 	@Override
-	public Scheme getScheme(SchemeType type, Vendor vendor) {
+	public Scheme getScheme(SchemeType type, Vendor vendor,Date date) {
 		DetachedCriteria sdc = DetachedCriteria.forClass(Scheme.class);
-		sdc.add(Restrictions.eq("type", type)).add(Restrictions.eq("vendor", vendor));
+		sdc.add(Restrictions.eq("type", type)).add(Restrictions.eq("vendor", vendor)).add(Restrictions.and(Restrictions.ge("endDate", date), Restrictions.le("startDate", date)));
 		Scheme scheme = baseDAO.queryUniqueByCriteria(sdc);
 		return scheme;
 	}
@@ -88,6 +89,7 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 		.add(SafeRestrictions.eq("activityStatus", queryDTO.getStatus()))
 		.add(SafeRestrictions.ands(SafeRestrictions.great("endDate", queryDTO.getEndDate()),SafeRestrictions.less("startDate", queryDTO.getStartDate())))
 		.add(SafeRestrictions.great("price", queryDTO.getPrice()));
+		sdc.addOrder(Order.asc("vendor"));
 		return baseDAO.queryListByCriteria(sdc);
 	}
 

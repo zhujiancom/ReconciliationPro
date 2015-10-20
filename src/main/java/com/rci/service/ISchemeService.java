@@ -15,7 +15,7 @@ public interface ISchemeService extends IBaseService<Scheme, Long>{
 	
 //	public List<Scheme> getSchemes(String paymodeno);
 	
-	public Scheme getScheme(SchemeType type,Vendor vendor);
+	public Scheme getScheme(SchemeType type,Vendor vendor,Date date);
 	
 //	public List<Scheme> getSchemes(Vendor vendor,BigDecimal freePrice,Date date);
 //	public List<Scheme> getSchemes(Vendor vendor,Date date);

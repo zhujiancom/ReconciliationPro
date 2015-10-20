@@ -62,6 +62,8 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 	private JLabel end = new JLabel("结束时间");
 	private JLabel floor = new JLabel("最低消费金额");
 	private JLabel ceil = new JLabel("最高消费金额");
+	private JLabel createTime = new JLabel("创建时间");
+	private JLabel modifyTime = new JLabel("修改时间");
 	private JButton confirmBtn;
 	private JButton activeBtn;
 	private JButton inactiveBtn;
@@ -161,6 +163,14 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 		ceilInput = new JTextField(StringUtils.trimToEmpty(data.getCeilAmount()),30);
 		ninthPane.add(ceilInput);
 		mainPane.add(ninthPane);
+		JPanel elevenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+		elevenPane.add(createTime);
+		elevenPane.add(new JLabel(DateUtil.time2Str(data.getCreateTime())));
+		mainPane.add(elevenPane);
+		JPanel twelvePane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+		twelvePane.add(modifyTime);
+		twelvePane.add(new JLabel(DateUtil.time2Str(data.getModifyTime())));
+		mainPane.add(twelvePane);
 		JPanel tenthPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		URL confirmBtnUrl = this.getClass().getClassLoader().getResource("skin/submitBtn.png");
 		confirmBtn = new JButton(new ImageIcon(confirmBtnUrl));

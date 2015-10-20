@@ -24,6 +24,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import org.hibernate.service.spi.ServiceException;
 
 import com.rci.bean.LabelValueBean;
+import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
@@ -138,10 +139,26 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,MouseListener {
 			@SuppressWarnings("unchecked")
 			LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
 			SchemeVO newScheme = new SchemeVO();
-			String vendor = item.getValue();
-			newScheme.setVendor(Vendor.valueOf(vendor));
+			Vendor vendor = Vendor.valueOf(item.getValue());
+			newScheme.setVendor(vendor);
 			newScheme.setName(nameInput.getText());
-			newScheme.setPrice(new BigDecimal(priceInput.getText().trim()));
+			BigDecimal price = new BigDecimal(priceInput.getText().trim());
+			if(price.compareTo(new BigDecimal("50")) == 0){
+				newScheme.setType(SchemeType.CHIT_50);
+			}
+			if(price.compareTo(new BigDecimal("100")) == 0){
+				newScheme.setType(SchemeType.CHIT_100);
+			}
+			if(price.compareTo(new BigDecimal("98")) == 0){
+				newScheme.setType(SchemeType.SUIT_98);
+			}
+			if(price.compareTo(new BigDecimal("68")) == 0){
+				newScheme.setType(SchemeType.SUIT_68);
+			}
+			if(price.compareTo(new BigDecimal("32")) == 0){
+				newScheme.setType(SchemeType.SUIT_32);
+			}
+			newScheme.setPrice(price);
 			newScheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
 			newScheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
 			if(!StringUtils.hasText(startInput.getText())){

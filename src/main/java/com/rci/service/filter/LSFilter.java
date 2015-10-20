@@ -1,6 +1,7 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +22,7 @@ import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
+import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
 
@@ -124,25 +126,29 @@ public class LSFilter extends AbstractFilter {
 			order.setUnusual(YOrN.Y);
 			logger.warn("---【损失单】【"+order.getPayNo()+"】[拉手网支付异常]---， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额");
 		}
-//		schemes.putAll(createSchemes(chitAmount, BusinessConstant.PAYMODE_DPTG,suitFlag));
-		Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount,Vendor.LS,suitFlag);
-		if(!CollectionUtils.isEmpty(schemes)){
-			createTicketStatistic(order.getDay(), Vendor.LS, schemes);
-			String schemeName = order.getSchemeName();
-			BigDecimal postAmount = BigDecimal.ZERO;
-			for(Iterator<Entry<SchemeType,SchemeWrapper>> it=schemes.entrySet().iterator();it.hasNext();){
-				Entry<SchemeType,SchemeWrapper> entry = it.next();
-				SchemeWrapper wrapper = entry.getValue();
-				if(StringUtils.hasText(schemeName)){
-					schemeName = schemeName+","+wrapper.getName();
-				}else{
-					schemeName = wrapper.getName();
+		try{
+			Date queryDate = DateUtil.parseDate(order.getDay(), "yyyyMMdd");
+			Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount,Vendor.LS,suitFlag,queryDate);
+			if(!CollectionUtils.isEmpty(schemes)){
+				createTicketStatistic(order.getDay(), Vendor.LS, schemes);
+				String schemeName = order.getSchemeName();
+				BigDecimal postAmount = BigDecimal.ZERO;
+				for(Iterator<Entry<SchemeType,SchemeWrapper>> it=schemes.entrySet().iterator();it.hasNext();){
+					Entry<SchemeType,SchemeWrapper> entry = it.next();
+					SchemeWrapper wrapper = entry.getValue();
+					if(StringUtils.hasText(schemeName)){
+						schemeName = schemeName+","+wrapper.getName();
+					}else{
+						schemeName = wrapper.getName();
+					}
+					postAmount = postAmount.add(calculateTG(wrapper.getScheme(), wrapper.getCount()));
 				}
-				postAmount = postAmount.add(calculateTG(wrapper.getScheme(), wrapper.getCount()));
+				order.setSchemeName(schemeName);
+				//保存账户关联信息
+				preserveOAR(postAmount,AccountCode.LS,order);
 			}
-			order.setSchemeName(schemeName);
-			//保存账户关联信息
-			preserveOAR(postAmount,AccountCode.LS,order);
+		}catch(Exception e){
+			
 		}
 	}
 

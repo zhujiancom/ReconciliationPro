@@ -16,14 +16,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import com.rci.bean.entity.base.BaseEntity;
+import com.rci.bean.entity.base.AccessoryEntity;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.tools.DateUtil;
 
 @Entity
 @Table(name = "bus_tb_scheme")
-public class Scheme extends BaseEntity {
+public class Scheme extends AccessoryEntity {
 	/**
 	 * 
 	 */
@@ -230,6 +231,11 @@ public class Scheme extends BaseEntity {
 	@Transient
 	public Serializable getId() {
 		return sid;
+	}
+
+	@Override
+	public String toString() {
+		return this.name+" - "+DateUtil.date2Str(this.startDate);
 	}
 
 }

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,7 @@ import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
@@ -21,6 +24,7 @@ import com.rci.tools.StringUtils;
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class MTSuperFilter extends AbstractFilter {
+	private static final Log logger = LogFactory.getLog(MTSuperFilter.class);
 
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
@@ -41,6 +45,7 @@ public class MTSuperFilter extends AbstractFilter {
 		}else{
 			schemeName = "美团超级代金券在线支付"+onlineAmount+"元";
 		}
+		order.setSchemeName(schemeName);
 		
 		List<OrderItem> items = order.getItems();
 		for(OrderItem item:items){
@@ -66,20 +71,17 @@ public class MTSuperFilter extends AbstractFilter {
 			order.setWarningInfo(warningInfo);
 		}
 		
-		order.setSchemeName(schemeName);
 		//设置订单中不可打折金额
 		if(!nodiscountAmount.equals(BigDecimal.ZERO) && order.getNodiscountAmount() == null){
 			order.setNodiscountAmount(nodiscountAmount);
 		}
 		
-//		BigDecimal calculateAmount = BigDecimal.ZERO;
 		if(onlineAmount.compareTo(originAmount) == 0){
-//			calculateAmount = originAmount.subtract(nodiscountAmount);
-			BigDecimal[] result = calculatePostAmount(originAmount.subtract(nodiscountAmount));
+			BigDecimal[] result = calculatePostAmount(originAmount.subtract(nodiscountAmount),order.getDay(),Vendor.MTSUPER);
 			preserveOAR(result[0].add(nodiscountAmount),AccountCode.MT_SUPER,order);
 			preserveOAR(result[1],AccountCode.FREE_ONLINE,order);
 		}else{
-			BigDecimal[] result = calculatePostAmount(onlineAmount);
+			BigDecimal[] result = calculatePostAmount(onlineAmount,order.getDay(),Vendor.MTSUPER);
 			preserveOAR(result[0],AccountCode.MT_SUPER,order);
 			preserveOAR(result[1],AccountCode.FREE_ONLINE,order);
 		}
@@ -96,32 +98,57 @@ public class MTSuperFilter extends AbstractFilter {
 //		preserveOAR(postAmount,AccountCode.MT_SUPER,order);
 //		preserveOAR(onlineFreeAmount,AccountCode.FREE_ONLINE,order);
 	}
-	
-	private BigDecimal[] calculatePostAmount(BigDecimal payAmount){
-		BigDecimal chitAmount = new BigDecimal("50");
-		BigDecimal count = payAmount.divideToIntegralValue(chitAmount);
-		BigDecimal singleActualAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(chitAmount, new BigDecimal("0.90")),new BigDecimal("0.99"));
-		BigDecimal totalChitAmount = DigitUtil.mutiplyDown(singleActualAmount, count);
-		BigDecimal balance = payAmount.subtract(chitAmount.multiply(count));
-		BigDecimal onlineFreeAmount = DigitUtil.mutiplyDown(chitAmount.subtract(singleActualAmount),count);
-		/* 入账金额  */
-		BigDecimal postAmount =totalChitAmount.add(balance);
-		
-		return new BigDecimal[]{postAmount,onlineFreeAmount};
-	}
+//	
+//	private BigDecimal[] calculatePostAmount(BigDecimal payAmount,String day){
+//		try{
+//			SchemeQueryDTO queryDTO = new SchemeQueryDTO();
+//			queryDTO.setVendor(Vendor.MTSUPER);
+//			Date queryDate = DateUtil.parseDate(day, "yyyyMMdd");
+//			queryDTO.setStartDate(queryDate);
+//			queryDTO.setEndDate(queryDate);
+//			queryDTO.setStatus(ActivityStatus.ACTIVE);
+//			List<Scheme> schemes = schemeService.getSchemes(queryDTO);
+//			if(!CollectionUtils.isEmpty(schemes) && schemes.size() > 1){
+//				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "活动重复");
+//				for(Scheme scheme:schemes){
+//					logger.error("----重复活动名称："+scheme);
+//				}
+//			}
+//			if(CollectionUtils.isEmpty(schemes)){
+//				logger.warn("----没有匹配到活动----");
+//				return new BigDecimal[]{BigDecimal.ZERO,BigDecimal.ZERO};
+//			}
+//			Scheme scheme = schemes.get(0);
+//			BigDecimal chitAmount = scheme.getPrice();
+//			BigDecimal count = payAmount.divideToIntegralValue(chitAmount);
+//			BigDecimal singleActualAmount = scheme.getPostPrice();
+//			BigDecimal totalChitAmount = DigitUtil.mutiplyDown(singleActualAmount, count);
+//			BigDecimal balance = payAmount.subtract(chitAmount.multiply(count));
+//			BigDecimal onlineFreeAmount = DigitUtil.mutiplyDown(chitAmount.subtract(singleActualAmount),count);
+//			/* 入账金额  */
+//			BigDecimal postAmount =totalChitAmount.add(balance);
+//			return new BigDecimal[]{postAmount,onlineFreeAmount};
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
+//		return new BigDecimal[]{BigDecimal.ZERO,BigDecimal.ZERO};
+////		BigDecimal chitAmount = new BigDecimal("50");
+////		BigDecimal count = payAmount.divideToIntegralValue(chitAmount);
+////		BigDecimal singleActualAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(chitAmount, new BigDecimal("0.90")),new BigDecimal("0.99"));
+////		BigDecimal totalChitAmount = DigitUtil.mutiplyDown(singleActualAmount, count);
+////		BigDecimal balance = payAmount.subtract(chitAmount.multiply(count));
+////		BigDecimal onlineFreeAmount = DigitUtil.mutiplyDown(chitAmount.subtract(singleActualAmount),count);
+////		/* 入账金额  */
+////		BigDecimal postAmount =totalChitAmount.add(balance);
+////		
+////		return new BigDecimal[]{postAmount,onlineFreeAmount};
+//	}
 
 	@Override
 	protected Map<SchemeType, Integer> getSuitMap() {
 		return null;
 	}
 	
-	public static void main(String[] args){
-		BigDecimal a = new BigDecimal(98);
-		BigDecimal b = new BigDecimal(50);
-		System.out.println(a.divide(b,BigDecimal.ROUND_CEILING));
-		System.out.println(a.divide(b).intValue());
-	}
-
 	/* 
 	 * @see com.rci.service.filter.AbstractFilter#validation(com.rci.bean.entity.Order)
 	 */
