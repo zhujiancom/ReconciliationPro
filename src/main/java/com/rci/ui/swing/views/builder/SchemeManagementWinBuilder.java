@@ -3,6 +3,7 @@ package com.rci.ui.swing.views.builder;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,16 +35,21 @@ import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.vos.SchemeVO;
 
 public class SchemeManagementWinBuilder implements PopWindowBuilder {
-	private JPanel contentPane;
+	private JPanel operaPane;
 	private JScrollPane scrollPane;
 	private JTable table;
 	
 	@Override
 	public PopWindow retrieveWindow() {
-		PopWindow schemeManagementWindow = new PopWindow("在线平台活动设置");
+//		PopWindow schemeManagementWindow = new PopWindow("在线平台活动设置");
+		PopWindow schemeManagementWindow = new PopWindow(900,600,"在线平台活动设置");
 		createContentPane();
 		Container containerPanel = schemeManagementWindow.getContentPane();
-		containerPanel.add(contentPane,BorderLayout.CENTER);
+		BorderLayout layout = (BorderLayout) containerPanel.getLayout();
+		layout.setHgap(0);
+		layout.setVgap(0);
+		containerPanel.add(operaPane,BorderLayout.NORTH);
+		containerPanel.add(scrollPane,BorderLayout.CENTER);
 		return schemeManagementWindow;
 	}
 
@@ -54,15 +60,12 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 
 	@Override
 	public void createContentPane() {
-		// outside box
-		contentPane = new JPanel(null);
-		//操作栏
-		JPanel operaPane = new JPanel();
-		operaPane.setLayout(null);
+		operaPane = new JPanel();
+		operaPane.setLayout(new FlowLayout(FlowLayout.LEFT));
 		operaPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		operaPane.setBackground(Color.WHITE);
-		operaPane.setBounds(50, 30, 700, 35);
-		contentPane.add(operaPane);
+//		operaPane.setBounds(50, 30, 700, 35);
+//		contentPane.add(operaPane);
 		URL addBtnUrl1 = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/addBtn_0.png");
 		JButton addBtn = new JButton(new ImageIcon(addBtnUrl1));
 		addBtn.setUI(new BasicButtonUI());
@@ -122,6 +125,15 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		JCheckBox wmcrCheck = new VendorJCheckBox(4,Vendor.WMCR,"外卖超人");
 		wmcrCheck.addItemListener(checkListener);
 		wmcrCheck.setBounds(480, 4, 80, 24);
+		JCheckBox mtCheck = new VendorJCheckBox(4,Vendor.MT,"美团");
+		mtCheck.addItemListener(checkListener);
+		mtCheck.setBounds(560, 4, 80, 24);
+		JCheckBox shCheck = new VendorJCheckBox(4,Vendor.SH,"闪惠");
+		shCheck.addItemListener(checkListener);
+		shCheck.setBounds(640, 4, 80, 24);
+		JCheckBox mtsuperCheck = new VendorJCheckBox(4,Vendor.SH,"美团超券");
+		mtsuperCheck.addItemListener(checkListener);
+		mtsuperCheck.setBounds(720, 4, 80, 24);
 		
 		ButtonGroup checkGroup = new ButtonGroup();
 		checkGroup.add(allCheck);
@@ -129,19 +141,25 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		checkGroup.add(mtwmCheck);
 		checkGroup.add(dptgCheck);
 		checkGroup.add(wmcrCheck);
+		checkGroup.add(mtCheck);
+		checkGroup.add(shCheck);
+		checkGroup.add(mtsuperCheck);
 		
 		operaPane.add(allCheck);
 		operaPane.add(eleCheck);
 		operaPane.add(mtwmCheck);
 		operaPane.add(dptgCheck);
 		operaPane.add(wmcrCheck);
+		operaPane.add(mtCheck);
+		operaPane.add(shCheck);
+		operaPane.add(mtsuperCheck);
 		
 		SchemeStatusRadioButton active = new SchemeStatusRadioButton(ActivityStatus.ACTIVE,"进行中",true);
-		active.setBounds(560, 4, 75, 24);
+		active.setBounds(800, 4, 75, 24);
 		active.setBackground(Color.WHITE);
 		active.addActionListener(checkListener);
 		SchemeStatusRadioButton inactive = new SchemeStatusRadioButton(ActivityStatus.INACTIVE,"已结束");
-		inactive.setBounds(635, 4, 75, 24);
+		inactive.setBounds(875, 4, 75, 24);
 		inactive.setBackground(Color.WHITE);
 		inactive.addActionListener(checkListener);
 		ButtonGroup btnGroup = new ButtonGroup();
@@ -154,9 +172,8 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setViewportView(table);
-		scrollPane.setBounds(50, 65, 700, 400);
+//		scrollPane.setBounds(50, 65, 700, 400);
 		
-		contentPane.add(scrollPane);
 		
 		//添加
 		addBtn.addActionListener(new ActionListener() {

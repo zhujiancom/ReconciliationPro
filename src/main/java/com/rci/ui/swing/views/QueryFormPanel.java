@@ -76,12 +76,12 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		timeInput = new JTextField(10);
 		queryBtn = new JButton("查询");
 		cleanBtn = new JButton("清空");
-		queryPane.add(eleOnlinePayLabel);
-		queryPane.add(eleOnlinePayAmount);
-		queryPane.add(eleOrderCountLabel);
-		queryPane.add(eleOrderCount);
-		queryPane.add(elePerAllowanceLabel);
-		queryPane.add(elePerAllowanceAmount);
+//		queryPane.add(eleOnlinePayLabel);
+//		queryPane.add(eleOnlinePayAmount);
+//		queryPane.add(eleOrderCountLabel);
+//		queryPane.add(eleOrderCount);
+//		queryPane.add(elePerAllowanceLabel);
+//		queryPane.add(elePerAllowanceAmount);
 
 		queryPane.add(rciTime);
 		queryPane.add(timeInput);

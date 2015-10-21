@@ -42,6 +42,11 @@ public class PopWindow extends JFrame {
 		this.setVisible(true);
 	}
 	
+	public PopWindow(int width,int height,String title){
+		this(width,height);
+		this.setTitle(title);
+	}
+	
 	public void close(){
 		this.dispose();
 	}

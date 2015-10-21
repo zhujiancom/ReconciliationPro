@@ -62,13 +62,15 @@
 <!-- 	</bean> -->
 
 	<!-- 将job注入到定时触发器 -->
+	<!-- 在每天早上10点开始到23:59分结束每10分钟触发一次 -->
 <!-- 	<bean id="fetchTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> -->
 <!-- 		<property name="jobDetail" ref="fetchDataJobs"/> -->
 <!-- 		<property name="cronExpression" value="0 0/10 10-23 * * ?"/> -->
 <!-- 	</bean> -->
+	<!-- 在每天早上9点开始每10分钟触发一次直到10点 -->
 <!-- 	<bean id="monitorTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> -->
 <!-- 		<property name="jobDetail" ref="statusMonitorJob"/> -->
-<!-- 		<property name="cronExpression" value="0 0/10 9 * * ?"/>在每天早上9点开始每10分钟触发一次直到10点 -->
+<!-- 		<property name="cronExpression" value="0 0/10 9 * * ?"/> -->
 <!-- 	</bean> -->
 	<!-- 将触发器注入任务工程 -->
 <!-- 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> -->
