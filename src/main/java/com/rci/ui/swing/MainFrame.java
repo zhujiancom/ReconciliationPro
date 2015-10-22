@@ -22,6 +22,7 @@ import com.rci.ui.swing.listeners.ActionHandler;
 import com.rci.ui.swing.listeners.CleanListener;
 import com.rci.ui.swing.listeners.DataIOListener;
 import com.rci.ui.swing.listeners.QueryListener;
+import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
 import com.rci.ui.swing.views.QueryFormPanel;
@@ -103,14 +104,14 @@ public class MainFrame extends JFrame {
 		menubar.add(view);
 		menubar.add(setting);
 		menubar.add(statistic);
-		JMenuItem sysInit = new JMenuItem("系统初始化");
-		JMenuItem baseReset = new JMenuItem("基础数据重置");
-		JMenuItem dataExport = new JMenuItem("数据导出");
-		JMenuItem dataImport = new JMenuItem("数据导入");
-		JMenuItem viewStock = new JMenuItem("库存查看");
-		JMenuItem setStock = new JMenuItem("库存进货");
-		JMenuItem stockManagement = new JMenuItem("库存管理");
-		JMenuItem schemeMangement = new JMenuItem("活动设置");
+		JMenuItem sysInit = ButtonFactory.createMenuItem("系统初始化");
+		JMenuItem baseReset = ButtonFactory.createMenuItem("数据导出", "skin/gray/images/16x16/basereset.png");
+		JMenuItem dataExport = ButtonFactory.createMenuItem("数据导出", "skin/gray/images/16x16/export_0.png");
+		JMenuItem dataImport = ButtonFactory.createMenuItem("数据导入", "skin/gray/images/16x16/import_0.png");
+		JMenuItem viewStock = ButtonFactory.createMenuItem("库存查看", "skin/gray/images/16x16/stock.png");
+		JMenuItem setStock = ButtonFactory.createMenuItem("库存进货", "skin/gray/images/16x16/restock.png");
+		JMenuItem stockManagement = ButtonFactory.createMenuItem("库存管理", "skin/gray/images/16x16/stockmanage.png");
+		JMenuItem schemeMangement = ButtonFactory.createMenuItem("在线活动管理", "skin/gray/images/16x16/activity.png");
 		system.add(sysInit);
 		system.add(baseReset);
 		operation.add(dataExport);
@@ -120,8 +121,8 @@ public class MainFrame extends JFrame {
 		setting.add(stockManagement);
 		setting.add(schemeMangement);
 
-		JMenuItem expressRate = new JMenuItem("外送率统计"); // 展示当月外送率统计信息表
-		JMenuItem earning = new JMenuItem("营业额统计");
+		JMenuItem expressRate = ButtonFactory.createMenuItem("外送率统计", "skin/gray/images/16x16/takeout.png");
+		JMenuItem earning = ButtonFactory.createMenuItem("营业额统计", "skin/gray/images/16x16/statistic.png");
 		statistic.add(expressRate);
 		statistic.add(earning);
 

@@ -1,27 +1,21 @@
 package com.rci.ui.swing.views.builder;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.List;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.plaf.basic.BasicButtonUI;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,19 +24,23 @@ import org.hibernate.service.spi.ServiceException;
 import com.rci.bean.LabelValueBean;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.exceptions.ExceptionManage;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.EnumUtils;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
+import com.rci.ui.swing.listeners.VendorCheckListener;
+import com.rci.ui.swing.model.ButtonFactory;
+import com.rci.ui.swing.model.SchemeTable.SchemeTabelModel;
 import com.rci.ui.swing.model.VendorComboBoxModel;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.vos.SchemeVO;
 
-public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
+public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 	private Log logger = LogFactory.getLog(SchemeModifyWinBuilder.class);
 	private PopWindow modifyForm;
-	private SchemeVO data;
+	private SchemeVO scheme;
 	private JScrollPane sPane;
 	private JTextField nameInput;
 	private JComboBox<LabelValueBean<String>> vendorInput;
@@ -68,10 +66,15 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 	private JButton activeBtn;
 	private JButton inactiveBtn;
 	IMetadataService metaService;
+	private VendorCheckListener checkListener;
 	
-	public SchemeModifyWinBuilder(SchemeVO data) {
-		super();
-		this.data = data;
+//	public SchemeModifyWinBuilder(SchemeVO data,JTable table) {
+//		super();
+//		metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
+//	}
+	
+	public SchemeModifyWinBuilder(VendorCheckListener checkListener) {
+		this.checkListener = checkListener;
 		metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
 	}
 
@@ -79,27 +82,13 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 	public PopWindow retrieveWindow() {
 		modifyForm = new PopWindow(350,500);
 		JPanel containerPanel = modifyForm.getContainerPanel();
+		JTable table = checkListener.getTable();
+		int selectIndex = table.getSelectedRow();
+		SchemeTabelModel model = (SchemeTabelModel) table.getModel();
+		scheme = model.getScheme(selectIndex);
+		/* 创建窗口主体 */
 		createContentPane();
 		containerPanel.add(sPane,BorderLayout.CENTER);
-		confirmBtn.addMouseListener(this);
-		activeBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				metaService.activeScheme(data.getSid());
-				JOptionPane.showMessageDialog(null, "活动已启用！");
-				modifyForm.close();
-			}
-		});
-		inactiveBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				metaService.inactiveScheme(data.getSid());
-				JOptionPane.showMessageDialog(null, "活动已禁用！");
-				modifyForm.close();
-			}
-		});
 		return modifyForm;
 	}
 
@@ -108,7 +97,7 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 		// TODO Auto-generated method stub
 
 	}
-
+	
 	@Override
 	public void createContentPane() {
 		JPanel mainPane = new JPanel();
@@ -116,7 +105,7 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 		sPane = new JScrollPane(mainPane);
 		JPanel firstPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		firstPane.add(name);
-		nameInput = new JTextField(data.getName(),30);
+		nameInput = new JTextField(scheme.getName(),30);
 		firstPane.add(nameInput);
 		mainPane.add(firstPane);
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
@@ -124,70 +113,86 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 		List<LabelValueBean<String>> itemList = EnumUtils.getEnumLabelValueBeanList(Vendor.class, false);
 		VendorComboBoxModel vcm = new VendorComboBoxModel(itemList);
 		vendorInput = new JComboBox<LabelValueBean<String>>(vcm);
-		LabelValueBean<String> labelvalue = new LabelValueBean<String>(data.getDishplayVendor(),data.getVendor().name());
+		LabelValueBean<String> labelvalue = new LabelValueBean<String>(scheme.getDishplayVendor(),scheme.getVendor().name());
 		vendorInput.setSelectedItem(labelvalue);
 		secondPane.add(vendorInput);
 		mainPane.add(secondPane);
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		thirdPane.add(price);
-		priceInput = new JTextField(StringUtils.trimToEmpty(data.getPrice()),30);
+		priceInput = new JTextField(StringUtils.trimToEmpty(scheme.getPrice()),30);
 		thirdPane.add(priceInput);
 		mainPane.add(thirdPane);
 		JPanel forthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		forthPane.add(postPrice);
-		postPriceInput = new JTextField(StringUtils.trimToEmpty(data.getPostPrice()),30);
+		postPriceInput = new JTextField(StringUtils.trimToEmpty(scheme.getPostPrice()),30);
 		forthPane.add(postPriceInput);
 		mainPane.add(forthPane);
 		JPanel fifthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		fifthPane.add(spread);
-		spreadInput = new JTextField(StringUtils.trimToEmpty(data.getSpread()),30);
+		spreadInput = new JTextField(StringUtils.trimToEmpty(scheme.getSpread()),30);
 		fifthPane.add(spreadInput);
 		mainPane.add(fifthPane);
 		JPanel sixthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		sixthPane.add(start);
-		startInput = new JTextField(DateUtil.date2Str(data.getStartDate(), "yyyyMMdd"),30);
+		startInput = new JTextField(DateUtil.date2Str(scheme.getStartDate(), "yyyyMMdd"),30);
 		sixthPane.add(startInput);
 		mainPane.add(sixthPane);
 		JPanel seventhPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		seventhPane.add(end);
-		endInput = new JTextField(DateUtil.date2Str(data.getEndDate(), "yyyyMMdd"),30);
+		endInput = new JTextField(DateUtil.date2Str(scheme.getEndDate(), "yyyyMMdd"),30);
 		seventhPane.add(endInput);
 		mainPane.add(seventhPane);
 		JPanel eightthPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		eightthPane.add(floor);
-		floorInput = new JTextField(StringUtils.trimToEmpty(data.getFloorAmount()),30);
+		floorInput = new JTextField(StringUtils.trimToEmpty(scheme.getFloorAmount()),30);
 		eightthPane.add(floorInput);
 		mainPane.add(eightthPane);
 		JPanel ninthPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		ninthPane.add(ceil);
-		ceilInput = new JTextField(StringUtils.trimToEmpty(data.getCeilAmount()),30);
+		ceilInput = new JTextField(StringUtils.trimToEmpty(scheme.getCeilAmount()),30);
 		ninthPane.add(ceilInput);
 		mainPane.add(ninthPane);
 		JPanel elevenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		elevenPane.add(createTime);
-		elevenPane.add(new JLabel(DateUtil.time2Str(data.getCreateTime())));
+		elevenPane.add(new JLabel(DateUtil.time2Str(scheme.getCreateTime())));
 		mainPane.add(elevenPane);
 		JPanel twelvePane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		twelvePane.add(modifyTime);
-		twelvePane.add(new JLabel(DateUtil.time2Str(data.getModifyTime())));
+		twelvePane.add(new JLabel(DateUtil.time2Str(scheme.getModifyTime())));
 		mainPane.add(twelvePane);
 		JPanel tenthPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		URL confirmBtnUrl = this.getClass().getClassLoader().getResource("skin/submitBtn.png");
-		confirmBtn = new JButton(new ImageIcon(confirmBtnUrl));
-		confirmBtn.setUI(new BasicButtonUI());
-		confirmBtn.setContentAreaFilled(false);
-		confirmBtn.setMargin(new Insets(0,0,0,0));
-		confirmBtn.setPreferredSize(new Dimension(64,64));
+		confirmBtn = ButtonFactory.createImageButton("skin/gray/images/64x64/saveBtn_0.png", null);
+		confirmBtn.addActionListener(this);
 		activeBtn = new JButton("启用");
 		inactiveBtn = new JButton("停用");
-		if(ActivityStatus.ACTIVE.equals(data.getActivityStatus())){
+		if(ActivityStatus.ACTIVE.equals(scheme.getActivityStatus())){
 			activeBtn.setEnabled(false);
 			inactiveBtn.setEnabled(true);
 		}
-		if(ActivityStatus.INACTIVE.equals(data.getActivityStatus())){
+		if(ActivityStatus.INACTIVE.equals(scheme.getActivityStatus())){
 			activeBtn.setEnabled(true);
 			inactiveBtn.setEnabled(false);
 		}
+		activeBtn.addActionListener(new ActionListener() {
+					
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				metaService.activeScheme(scheme.getSid());
+				JOptionPane.showMessageDialog(null, "活动已启用！");
+				checkListener.refreshTableData();
+				modifyForm.close();
+			}
+		});
+		inactiveBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				metaService.inactiveScheme(scheme.getSid());
+				JOptionPane.showMessageDialog(null, "活动已禁用！");
+				checkListener.refreshTableData();
+				modifyForm.close();
+			}
+		});
 		tenthPane.add(confirmBtn);
 		tenthPane.add(activeBtn);
 		tenthPane.add(inactiveBtn);
@@ -201,61 +206,55 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,MouseListener {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		try{
+			validation();
 			@SuppressWarnings("unchecked")
 			LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
 			String vendor = item.getValue();
-			data.setVendor(Vendor.valueOf(vendor));
-			data.setName(nameInput.getText());
-			data.setPrice(new BigDecimal(priceInput.getText().trim()));
-			data.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
-			data.setSpread(new BigDecimal(spreadInput.getText().trim()));
-			if(!StringUtils.hasText(startInput.getText())){
-				throw new ServiceException("开始时间必填");
-			}
-			data.setStartDate(DateUtil.parseDate(startInput.getText().trim(), "yyyyMMdd"));
-			if(!StringUtils.hasText(endInput.getText())){
-				throw new ServiceException("结束时间必填");
-			}
-			data.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
+			scheme.setVendor(Vendor.valueOf(vendor));
+			scheme.setName(nameInput.getText());
+			scheme.setPrice(new BigDecimal(priceInput.getText().trim()));
+			scheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
+			scheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
+			scheme.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
 			if(StringUtils.hasText(floorInput.getText())){
-				data.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
+				scheme.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
 			}
 			if(StringUtils.hasText(ceilInput.getText())){
-				data.setCeilAmount(new BigDecimal(StringUtils.trim(ceilInput.getText())));
+				scheme.setCeilAmount(new BigDecimal(StringUtils.trim(ceilInput.getText())));
 			}
-			metaService.updateScheme(data);
+			metaService.updateScheme(scheme);
 			JOptionPane.showMessageDialog(null, "活动修改成功！");
+			checkListener.refreshTableData();
 			modifyForm.close();
+		}catch(ServiceException se){
+			JOptionPane.showMessageDialog(null, new JLabel("<html><h4 color='red'>"+se.getMessage()+"</h3></html>"));
 		}catch (Exception ex){
 			logger.error(ex);
 			JOptionPane.showMessageDialog(null, "请填写必填项");
 		}
 	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+	
+	public void validation() throws ServiceException{
+		if(vendorInput.getSelectedItem() == null){
+			ExceptionManage.throwServiceException("请选择活动平台!");
+		}
+		if(!StringUtils.hasText(priceInput.getText())){
+			throw new ServiceException("优惠金额必填!");
+		}
+		if(!StringUtils.hasText(postPriceInput.getText())){
+			throw new ServiceException("平台补贴金额必填!");
+		}
+		if(!StringUtils.hasText(spreadInput.getText())){
+			throw new ServiceException("餐厅补贴金额必填!");
+		}
+		if(!StringUtils.hasText(startInput.getText())){
+			throw new ServiceException("开始时间必填!");
+		}
+		if(!StringUtils.hasText(endInput.getText())){
+			throw new ServiceException("结束时间必填!");
+		}
 	}
 
 }

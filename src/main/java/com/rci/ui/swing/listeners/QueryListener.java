@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -49,7 +50,7 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 			saveEleSDInfo();
 			contentPane.getMainTable().getSelectionModel().addListSelectionListener(this);
 		}catch(ServiceException se){
-			JOptionPane.showMessageDialog(null, se.getMessage());
+			JOptionPane.showMessageDialog(null, new JLabel("<html><font color='red'>"+se.getMessage()+"</font></html>"));
 		}catch (ParseException pe) {
 			JOptionPane.showMessageDialog(null, pe.getMessage());
 		}

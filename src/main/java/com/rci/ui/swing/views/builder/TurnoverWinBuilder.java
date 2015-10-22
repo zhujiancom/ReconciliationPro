@@ -26,6 +26,7 @@ import com.rci.service.core.StatisticCenterFacade;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
+import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.TurnoverTable;
 import com.rci.ui.swing.model.TurnoverTable.TurnoverTableModel;
 import com.rci.ui.swing.views.PopWindow;
@@ -56,7 +57,7 @@ public class TurnoverWinBuilder implements PopWindowBuilder {
 		sdateInput = new JTextField(20);
 		JLabel edateLabel = new JLabel("结束时间");
 		edateInput = new JTextField(20);
-		JButton queryBtn = new JButton("查询");
+		JButton queryBtn = ButtonFactory.createImageButton("查询", "skin/gray/images/24x24/search.png", null);
 		ActionListener listener = new TurnoverQueryListener();
 		queryBtn.registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		queryBtn.addActionListener(listener);

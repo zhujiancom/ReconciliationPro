@@ -73,6 +73,7 @@ public class SchemeTable extends BaseTable {
 		super.setModel(dm);
 	}
 	
+	@Deprecated
 	public void refresh(Vendor vendor){
 		SchemeTabelModel dm = (SchemeTabelModel) this.getModel();
 		IMetadataService metaservice = (IMetadataService) SpringUtils.getBean("MetadataService");
@@ -83,6 +84,15 @@ public class SchemeTable extends BaseTable {
 		dm.setItems(schemes);
 		dm.fireTableDataChanged();
 	}
+	
+	public void refresh(SchemeQueryDTO queryDTO){
+		SchemeTabelModel dm = (SchemeTabelModel) this.getModel();
+		IMetadataService metaservice = (IMetadataService) SpringUtils.getBean("MetadataService");
+		List<SchemeVO> schemes = metaservice.dishplaySchemes(queryDTO);
+		dm.setItems(schemes);
+		dm.fireTableDataChanged();
+	}
+	
 	
 	public static class SchemeTabelModel extends AbstractTableModel{
 		/**

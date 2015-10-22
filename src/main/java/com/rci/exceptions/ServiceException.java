@@ -18,6 +18,10 @@ public class ServiceException extends NestedRuntimeException{
 	 * 
 	 */
 	private static final long serialVersionUID = -3648506930465797089L;
+	
+	public ServiceException(String msg){
+		super(msg);
+	}
 
 	/**
 	 * @param msg
@@ -39,7 +43,10 @@ public class ServiceException extends NestedRuntimeException{
 
 	@Override
 	public String getMessage(){
-		return "["+service+"]>>>"+super.getMessage();
+		if(service != null){
+			return "["+service+"]>>>"+super.getMessage();
+		}
+		return super.getMessage();
 	}
 
 }

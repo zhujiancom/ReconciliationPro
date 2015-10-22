@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.rci.enums.BusinessEnums.PaymodeCode;
+import com.rci.ui.swing.model.ButtonFactory;
 
 public class QueryFormPanel extends JPanel implements ItemListener{
 
@@ -65,17 +66,17 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		this.setLayout(new GridLayout(0, 1));
 		JPanel queryPane = new JPanel();
 		// 饿了么刷单金额设置
-		JLabel eleOnlinePayLabel = new JLabel("饿了么刷单在线支付总金额");
-		eleOnlinePayAmount = new JTextField(5);
-		JLabel eleOrderCountLabel = new JLabel("饿了么刷单数量");
-		eleOrderCount = new JTextField(5);
-		JLabel elePerAllowanceLabel = new JLabel("每单优惠金额");
-		elePerAllowanceAmount = new JTextField(5);
+//		JLabel eleOnlinePayLabel = new JLabel("饿了么刷单在线支付总金额");
+//		eleOnlinePayAmount = new JTextField(5);
+//		JLabel eleOrderCountLabel = new JLabel("饿了么刷单数量");
+//		eleOrderCount = new JTextField(5);
+//		JLabel elePerAllowanceLabel = new JLabel("每单优惠金额");
+//		elePerAllowanceAmount = new JTextField(5);
 
 		JLabel rciTime = new JLabel("日期");
 		timeInput = new JTextField(10);
-		queryBtn = new JButton("查询");
-		cleanBtn = new JButton("清空");
+		queryBtn = ButtonFactory.createImageButton("查询","skin/gray/images/24x24/search.png", null);
+		cleanBtn = ButtonFactory.createImageButton("清空","skin/gray/images/24x24/empty_trash.png", null);
 //		queryPane.add(eleOnlinePayLabel);
 //		queryPane.add(eleOnlinePayAmount);
 //		queryPane.add(eleOrderCountLabel);

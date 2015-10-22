@@ -3,6 +3,7 @@ package com.rci.ui.swing.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import com.rci.exceptions.ServiceException;
@@ -41,7 +42,7 @@ public class CleanListener implements ActionListener {
 			conclusionPane.clearData();
 			JOptionPane.showMessageDialog(null, "日期："+time+" 数据清除成功！");
 		}catch(ServiceException se){
-			JOptionPane.showMessageDialog(null, se.getMessage());	
+			JOptionPane.showMessageDialog(null, new JLabel("<html><font color='red'>"+se.getMessage()+"</font></html>"));	
 		}
 	}
 

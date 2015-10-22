@@ -1,17 +1,13 @@
 package com.rci.ui.swing.views.builder;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.List;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -19,23 +15,24 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.plaf.basic.BasicButtonUI;
-
-import org.hibernate.service.spi.ServiceException;
 
 import com.rci.bean.LabelValueBean;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.exceptions.ExceptionManage;
+import com.rci.exceptions.ServiceException;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.EnumUtils;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
+import com.rci.ui.swing.listeners.VendorCheckListener;
+import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.VendorComboBoxModel;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.vos.SchemeVO;
 
-public class SchemeCreateWinBuilder implements PopWindowBuilder,MouseListener {
+public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener {
 	private PopWindow addForm;
 	private JScrollPane sPane;
 	private JTextField nameInput = new JTextField(30);
@@ -57,22 +54,26 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,MouseListener {
 	private JLabel floor = new JLabel("最低消费金额");
 	private JLabel ceil = new JLabel("最高消费金额");
 	private JButton confirmBtn;
+	private VendorCheckListener checkListener;
+	
+	public SchemeCreateWinBuilder(){}
+	
+	public SchemeCreateWinBuilder(VendorCheckListener checkListener){
+		this.checkListener=checkListener;
+	}
+	
 	
 	@Override
 	public PopWindow retrieveWindow() {
 		addForm = new PopWindow(350,500);
 		JPanel containerPanel = addForm.getContainerPanel();
-		URL confirmBtnUrl = this.getClass().getClassLoader().getResource("skin/submitBtn.png");
-		confirmBtn = new JButton(new ImageIcon(confirmBtnUrl));
 		createContentPane();
 		containerPanel.add(sPane,BorderLayout.CENTER);
-		confirmBtn.addMouseListener(this);
 		return addForm;
 	}
 
 	@Override
 	public void createQueryPane() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -120,11 +121,11 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,MouseListener {
 		ninthPane.add(ceil);
 		ninthPane.add(ceilInput);
 		mainPane.add(ninthPane);
-		confirmBtn.setUI(new BasicButtonUI());
-		confirmBtn.setContentAreaFilled(false);
-		confirmBtn.setMargin(new Insets(0,0,0,0));
-		confirmBtn.setPreferredSize(new Dimension(64,64));
-		mainPane.add(confirmBtn);
+		JPanel tenthPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		confirmBtn = ButtonFactory.createImageButton("保存","skin/gray/images/64x64/saveBtn_0.png", null);
+		confirmBtn.addActionListener(this);
+		tenthPane.add(confirmBtn);
+		mainPane.add(tenthPane);
 	}
 
 	@Override
@@ -134,8 +135,9 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,MouseListener {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		try{
+			validation();
 			@SuppressWarnings("unchecked")
 			LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
 			SchemeVO newScheme = new SchemeVO();
@@ -161,13 +163,7 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,MouseListener {
 			newScheme.setPrice(price);
 			newScheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
 			newScheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
-			if(!StringUtils.hasText(startInput.getText())){
-				throw new ServiceException("开始时间必填");
-			}
 			newScheme.setStartDate(DateUtil.parseDate(startInput.getText().trim(), "yyyyMMdd"));
-			if(!StringUtils.hasText(endInput.getText())){
-				throw new ServiceException("结束时间必填");
-			}
 			newScheme.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
 			if(StringUtils.hasText(floorInput.getText())){
 				newScheme.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
@@ -178,36 +174,34 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,MouseListener {
 			IMetadataService metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
 			metaService.createScheme(newScheme);
 			JOptionPane.showMessageDialog(null, "活动创建成功！");
+			checkListener.refreshTableData();
 			addForm.close();
+		}catch(ServiceException se){
+			JOptionPane.showMessageDialog(null, new JLabel("<html><h4 color='red'>"+se.getMessage()+"</h3></html>"));
 		}catch (Exception ex){
-//			logger.error(ex);
-//			JOptionPane.showMessageDialog(null, ex.getMessage());
 			ex.printStackTrace();
 		}
 	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+	
+	public void validation() throws ServiceException{
+		if(vendorInput.getSelectedItem() == null){
+			ExceptionManage.throwServiceException("请选择活动平台!");
+		}
+		if(!StringUtils.hasText(priceInput.getText())){
+			throw new ServiceException("优惠金额必填!");
+		}
+		if(!StringUtils.hasText(postPriceInput.getText())){
+			throw new ServiceException("平台补贴金额必填!");
+		}
+		if(!StringUtils.hasText(spreadInput.getText())){
+			throw new ServiceException("餐厅补贴金额必填!");
+		}
+		if(!StringUtils.hasText(startInput.getText())){
+			throw new ServiceException("开始时间必填!");
+		}
+		if(!StringUtils.hasText(endInput.getText())){
+			throw new ServiceException("结束时间必填!");
+		}
 	}
 
 }

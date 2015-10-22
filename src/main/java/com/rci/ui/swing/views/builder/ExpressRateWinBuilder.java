@@ -22,6 +22,7 @@ import com.rci.service.core.StatisticCenterFacade;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
+import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.ExpressRateTabel;
 import com.rci.ui.swing.model.ExpressRateTabel.ExpressRateTabelModel;
 import com.rci.ui.swing.views.PopWindow;
@@ -50,7 +51,7 @@ public class ExpressRateWinBuilder implements PopWindowBuilder {
 		final JTextField sdateInput = new JTextField(20);
 		JLabel edateLabel = new JLabel("结束时间");
 		final JTextField edateInput = new JTextField(20);
-		JButton queryBtn = new JButton("查询");
+		JButton queryBtn = ButtonFactory.createImageButton("查询", "skin/gray/images/24x24/search.png", null);
 		queryBtn.addActionListener(new ActionListener() {
 			
 			@Override
