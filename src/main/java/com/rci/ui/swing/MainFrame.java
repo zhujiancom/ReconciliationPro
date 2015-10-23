@@ -105,9 +105,9 @@ public class MainFrame extends JFrame {
 		menubar.add(setting);
 		menubar.add(statistic);
 		JMenuItem sysInit = ButtonFactory.createMenuItem("系统初始化");
-		JMenuItem baseReset = ButtonFactory.createMenuItem("数据导出", "skin/gray/images/16x16/basereset.png");
-		JMenuItem dataExport = ButtonFactory.createMenuItem("数据导出", "skin/gray/images/16x16/export_0.png");
-		JMenuItem dataImport = ButtonFactory.createMenuItem("数据导入", "skin/gray/images/16x16/import_0.png");
+		JMenuItem baseReset = ButtonFactory.createMenuItem("基础数据重置", "skin/gray/images/16x16/basereset.png");
+		JMenuItem dataExport = ButtonFactory.createMenuItem("订单数据导出", "skin/gray/images/16x16/export_0.png");
+		JMenuItem dataImport = ButtonFactory.createMenuItem("订单数据导入", "skin/gray/images/16x16/import_0.png");
 		JMenuItem viewStock = ButtonFactory.createMenuItem("库存查看", "skin/gray/images/16x16/stock.png");
 		JMenuItem setStock = ButtonFactory.createMenuItem("库存进货", "skin/gray/images/16x16/restock.png");
 		JMenuItem stockManagement = ButtonFactory.createMenuItem("库存管理", "skin/gray/images/16x16/stockmanage.png");
