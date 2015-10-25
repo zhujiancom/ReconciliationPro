@@ -34,8 +34,8 @@ public class StatusMonitor {
 	private ISchemeService schemeService;
 	
 	public void monitorScheme(){
-		logger.debug("------- start check scheme status -------");
+		logger.warn("------- start check scheme status -------");
 		schemeService.checkStatus(DateUtil.getCurrentDate());
-		logger.debug("------- end check scheme status -------");
+		logger.warn("------- end check scheme status -------");
 	}
 }

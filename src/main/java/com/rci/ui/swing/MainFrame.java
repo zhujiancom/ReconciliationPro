@@ -39,7 +39,7 @@ public class MainFrame extends JFrame {
 	ContentPanel contentPane; // 订单数据内容展示面板
 	JProgressBar bar;
 
-	public MainFrame() {
+	public MainFrame() throws Exception{
 		initComponent();
 		QueryListener listener = new QueryListener(contentPane);
 		listener.setConclusionPane(conclusionPane);

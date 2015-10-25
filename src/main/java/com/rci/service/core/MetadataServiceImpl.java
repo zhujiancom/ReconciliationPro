@@ -123,6 +123,7 @@ public class MetadataServiceImpl implements IMetadataService {
 	@Override
 	public void updateScheme(SchemeVO schemevo){
 		Scheme scheme = schemeService.get(schemevo.getSid());
+		scheme.setName(schemevo.getName());
 		scheme.setStartDate(schemevo.getStartDate());
 		scheme.setEndDate(schemevo.getEndDate());
 		scheme.setPrice(schemevo.getPrice());

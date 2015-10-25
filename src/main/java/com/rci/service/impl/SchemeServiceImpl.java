@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dozer.Mapper;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -42,6 +44,7 @@ import com.rci.service.base.BaseServiceImpl;
 @Service("SchemeService")
 public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 		ISchemeService {
+	private static final Log logger = LogFactory.getLog(SchemeServiceImpl.class);
 	@Autowired
 	private Mapper beanMapper;
 
@@ -51,6 +54,7 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 		dc.add(Restrictions.eq("vendor", vendor)).add(Restrictions.eq("price", freePrice))
 		.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
 		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
+		logger.debug("vendor="+vendor+", freePrice="+freePrice+", date="+date);
 		return baseDAO.queryUniqueByCriteria(dc);
 	}
 

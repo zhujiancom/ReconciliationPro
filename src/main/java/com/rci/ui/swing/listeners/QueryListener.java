@@ -13,6 +13,9 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.rci.bean.entity.EleSDStatistic;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
@@ -31,6 +34,7 @@ import com.rci.ui.swing.views.QueryFormPanel;
 import com.rci.ui.swing.vos.OrderItemVO;
 
 public class QueryListener implements ActionListener,ListSelectionListener{
+	private static final Log logger = LogFactory.getLog(QueryListener.class);
 	private ContentPanel contentPane;
 	private ConculsionPanel conclusionPane;
 	private String time;
@@ -47,12 +51,14 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 		paymodes = queryPanel.getPaymodes();
 		try{
 			loadOrderData(time);
-			saveEleSDInfo();
+//			saveEleSDInfo();
 			contentPane.getMainTable().getSelectionModel().addListSelectionListener(this);
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, new JLabel("<html><font color='red'>"+se.getMessage()+"</font></html>"));
 		}catch (ParseException pe) {
 			JOptionPane.showMessageDialog(null, pe.getMessage());
+		}catch(Exception ex){
+			logger.error(ex);
 		}
 	}
 	
