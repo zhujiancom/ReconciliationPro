@@ -23,9 +23,24 @@ public class MainEntry {
 			URL sysIconUrl = MainEntry.class.getClassLoader().getResource("skin/gray/images/24x24/logo.png");
 			Image frameIcon = Toolkit.getDefaultToolkit().createImage(sysIconUrl);
 			frame.setIconImage(frameIcon);
-			frame.setSize(1200, 800);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.setSize(1200, 800);
 			frame.setLocationRelativeTo(null); // 相对居中, 在frame设置size之后
+			/* 全屏设置1 */
+//			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+//	                .getDefaultScreenDevice();
+			frame.setUndecorated(true);
+//			gd.setFullScreenWindow(frame);
+			
+			/* 全屏设置 2*/
+//			Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+//			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//			frame.setBounds(0, 0, dimension.width, dimension.height);
+			
+			/* 指定窗口尺寸 */
+			
+			
+//			frame.setUndecorated(true);
 			frame.setVisible(true);
 		}catch(Exception ex){
 			logger.error(ex);

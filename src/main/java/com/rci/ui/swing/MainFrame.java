@@ -1,16 +1,25 @@
 package com.rci.ui.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
@@ -21,6 +30,7 @@ import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.listeners.ActionHandler;
 import com.rci.ui.swing.listeners.CleanListener;
 import com.rci.ui.swing.listeners.DataIOListener;
+import com.rci.ui.swing.listeners.FrameListener;
 import com.rci.ui.swing.listeners.QueryListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.ConculsionPanel;
@@ -38,6 +48,7 @@ public class MainFrame extends JFrame {
 	private QueryFormPanel queryPanel = new QueryFormPanel(); // 查询面板
 	ContentPanel contentPane; // 订单数据内容展示面板
 	JProgressBar bar;
+	private final FrameListener dragListener;
 
 	public MainFrame() throws Exception{
 		initComponent();
@@ -53,7 +64,9 @@ public class MainFrame extends JFrame {
 		clistener.setConclusionPane(conclusionPane);
 		clistener.setQueryPanel(queryPanel);
 		queryPanel.getCleanBtn().addActionListener(clistener);
-
+		
+		dragListener = new FrameListener(this); 
+		
 		try {
 			UIManager
 					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -93,17 +106,37 @@ public class MainFrame extends JFrame {
 	 */
 	private JMenuBar buildMenuBar() {
 		JMenuBar menubar = new JMenuBar();
+		menubar.setBackground(Color.BLACK);
+		
+		JButton logoBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/logo.png", null);
 		JMenu system = new JMenu("系统");
+		system.setForeground(Color.WHITE);
 		JMenu operation = new JMenu("操作");
+		operation.setForeground(Color.WHITE);
 		JMenu view = new JMenu("查看");
+		view.setForeground(Color.WHITE);
 		JMenu setting = new JMenu("设置");
+		setting.setForeground(Color.WHITE);
 		JMenu statistic = new JMenu("统计");
-
+		statistic.setForeground(Color.WHITE);
+		final JFrame frame = this;
+		menubar.add(logoBtn);
+		menubar.add(Box.createHorizontalStrut(10));
 		menubar.add(system);
 		menubar.add(operation);
 		menubar.add(view);
 		menubar.add(setting);
 		menubar.add(statistic);
+		
+		JPanel rightP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		rightP.setBackground(Color.BLACK);
+		final JButton normalBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/exit-to-full-screen-white.png",null);
+		menubar.add(normalBtn);
+		JButton closeBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/close.png",null);
+		rightP.add(normalBtn);
+		rightP.add(closeBtn);
+		menubar.add(rightP);
+		
 		JMenuItem sysInit = ButtonFactory.createMenuItem("系统初始化");
 		JMenuItem baseReset = ButtonFactory.createMenuItem("基础数据重置", "skin/gray/images/16x16/basereset.png");
 		JMenuItem dataExport = ButtonFactory.createMenuItem("订单数据导出", "skin/gray/images/16x16/export_0.png");
@@ -188,6 +221,36 @@ public class MainFrame extends JFrame {
 		dataImportListener.setConclusionPane(conclusionPane);
 		dataImportListener.setContentPane(contentPane);
 		dataImport.addActionListener(dataImportListener);
+		
+		//系统退出
+		closeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		//窗口最大化最小化
+		normalBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+				if(device.getFullScreenWindow() == null){
+					device.setFullScreenWindow(frame);
+					frame.removeMouseListener(dragListener);
+					frame.removeMouseMotionListener(dragListener);
+					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/exit-to-full-screen-white.png");
+					normalBtn.setIcon(new ImageIcon(btnUrl));
+				}else{
+					device.setFullScreenWindow(null);
+					frame.addMouseListener(dragListener);
+					frame.addMouseMotionListener(dragListener);
+					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/full-screen-white.png");
+					normalBtn.setIcon(new ImageIcon(btnUrl));
+				}
+			}
+		});
 		return menubar;
 	}
 }

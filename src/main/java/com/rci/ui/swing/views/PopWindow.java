@@ -2,8 +2,11 @@ package com.rci.ui.swing.views;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -30,6 +33,7 @@ public class PopWindow extends JFrame {
 		containerPanel = new JPanel(new BorderLayout(0, 10));
 		containerPanel.setName("base panel");
 		this.setContentPane(containerPanel);
+//		this.setSize(width, height);
 		this.setPreferredSize(new Dimension(width,height));
 		this.addWindowListener(new WindowAdapter() {
 			@Override
@@ -37,6 +41,9 @@ public class PopWindow extends JFrame {
 				super.windowClosed(e);
 			}
 		});
+		URL sysIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/logo.png");
+		Image frameIcon = Toolkit.getDefaultToolkit().createImage(sysIconUrl);
+		this.setIconImage(frameIcon);
 		this.pack();
 		this.setLocationRelativeTo(null); // 相对居中, 在frame设置size之后
 		this.setVisible(true);

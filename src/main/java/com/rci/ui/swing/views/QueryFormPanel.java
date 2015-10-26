@@ -41,6 +41,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private JCheckBox dptgCheck;
 	private JCheckBox dpshCheck;
 	private JCheckBox mttgCheck;
+	private JCheckBox mtsuperCheck;
 	private JCheckBox cashCheck;
 	private JCheckBox posCheck;
 	private JCheckBox tddCheck;
@@ -116,6 +117,9 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		mttgCheck = new JCheckBox("美团团购");
 		mttgCheck.addItemListener(this);
 		
+		mtsuperCheck = new JCheckBox("美团超券");
+		mtsuperCheck.addItemListener(this);
+		
 		mtwmCheck = new JCheckBox("美团外卖");
 		mtwmCheck.addItemListener(this);
 		
@@ -134,6 +138,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		checkPane.add(dptgCheck);
 		checkPane.add(dpshCheck);
 		checkPane.add(mttgCheck);
+		checkPane.add(mtsuperCheck);
 		checkPane.add(mtwmCheck);
 		checkPane.add(tddCheck);
 		checkPane.add(alipayCheck);
@@ -199,6 +204,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 			dpshCheck.setSelected(false);
 			dptgCheck.setSelected(false);
 			mttgCheck.setSelected(false);
+			mtsuperCheck.setSelected(false);
 			mtwmCheck.setSelected(false);
 			posCheck.setSelected(false);
 			tddCheck.setSelected(false);
@@ -243,6 +249,14 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 				paymodes.add(PaymodeCode.MT);	
 			}else{
 				paymodes.remove(PaymodeCode.MT);
+			}
+		}
+		if(source == mtsuperCheck){
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				allCheck.setSelected(false);
+				paymodes.add(PaymodeCode.MTSUPER);	
+			}else{
+				paymodes.remove(PaymodeCode.MTSUPER);
 			}
 		}
 		if(source == mtwmCheck){

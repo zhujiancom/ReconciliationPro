@@ -59,8 +59,8 @@ public class VendorCheckListener implements ItemListener,ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		status = (SchemeStatusRadioButton) e.getSource();
 		SchemeQueryDTO queryDTO = new SchemeQueryDTO();
-		queryDTO.setStatus(status.getStatus());
-		queryDTO.setVendor(vendor.getVendor());
+		queryDTO.setStatus(getStatus().getStatus());
+		queryDTO.setVendor(getVendor().getVendor());
 		refreshTableData();
 	}
 	
