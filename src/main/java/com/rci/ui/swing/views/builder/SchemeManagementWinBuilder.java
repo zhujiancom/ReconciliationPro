@@ -86,15 +86,19 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 	/* 创建表格操作按钮  */
 	private void createOperationBtn(final VendorCheckListener checkListener){
 		addBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/addBtn_0.png", "skin/gray/images/24x24/addBtn_1.png");
+		addBtn.setToolTipText("新增");
 		addBtn.setBounds(4, 4, 24, 24);
 		
 		delBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/delBtn_0.png", "skin/gray/images/24x24/delBtn_1.png");
+		delBtn.setToolTipText("删除");
 		delBtn.setBounds(40, 4, 24, 24);
 		
 		editBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/editBtn_0.png", null);
+		editBtn.setToolTipText("更新");
 		editBtn.setBounds(80, 4, 24, 24);
 		
 		refreshBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/refreshBtn_0.png", "skin/gray/images/24x24/refreshBtn_1.png");
+		refreshBtn.setToolTipText("刷新");
 		refreshBtn.setBounds(120, 4, 24, 24);
 		
 		operaPane.add(addBtn);

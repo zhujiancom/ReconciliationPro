@@ -131,8 +131,10 @@ public class MainFrame extends JFrame {
 		JPanel rightP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		rightP.setBackground(Color.BLACK);
 		final JButton normalBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/exit-to-full-screen-white.png",null);
+		normalBtn.setToolTipText("最大化");
 		menubar.add(normalBtn);
 		JButton closeBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/close.png",null);
+		closeBtn.setToolTipText("关闭");
 		rightP.add(normalBtn);
 		rightP.add(closeBtn);
 		menubar.add(rightP);
@@ -242,12 +244,14 @@ public class MainFrame extends JFrame {
 					frame.removeMouseMotionListener(dragListener);
 					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/exit-to-full-screen-white.png");
 					normalBtn.setIcon(new ImageIcon(btnUrl));
+					normalBtn.setToolTipText("向下还原");
 				}else{
 					device.setFullScreenWindow(null);
 					frame.addMouseListener(dragListener);
 					frame.addMouseMotionListener(dragListener);
 					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/full-screen-white.png");
 					normalBtn.setIcon(new ImageIcon(btnUrl));
+					normalBtn.setToolTipText("最大化");
 				}
 			}
 		});
