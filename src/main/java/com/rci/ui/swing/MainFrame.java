@@ -66,6 +66,8 @@ public class MainFrame extends JFrame {
 		queryPanel.getCleanBtn().addActionListener(clistener);
 		
 		dragListener = new FrameListener(this); 
+		this.addMouseListener(dragListener);
+		this.addMouseMotionListener(dragListener);
 		
 		try {
 			UIManager

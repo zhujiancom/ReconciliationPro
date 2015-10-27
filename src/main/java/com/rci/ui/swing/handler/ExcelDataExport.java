@@ -23,6 +23,8 @@ import com.rci.metadata.service.IDataFetchService;
 import com.rci.service.utils.IExImportService;
 import com.rci.service.utils.excel.ExcelExImportService;
 import com.rci.service.utils.excel.ExcelSheet;
+import com.rci.service.utils.excel.ExcelSheetImpl;
+import com.rci.service.utils.excel.IExcelSheet;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.views.PopWindow;
@@ -94,6 +96,52 @@ public class ExcelDataExport implements Runnable {
 		}
 	}
 
+//	@Override
+//	public void run() {
+//		IExImportService orderExcelService = (IExImportService) SpringUtils.getBean("OrderExcelService");
+//		IDataFetchService fetchService = (IDataFetchService) SpringUtils.getBean("DataFetchService");
+//		try {
+//			String fileName = chooser.getSelectedFile().getName();
+//			List<IExcelSheet> sheets = new ArrayList<IExcelSheet>();
+//			String dateStr = fileName.substring(0,fileName.indexOf("."));
+//			Date exportDate = DateUtil.parseDate(dateStr, "yyyyMMdd");
+//			ExcelSheetImpl<OrderDTO> sheet1 = new ExcelSheetImpl<OrderDTO>("订单列表");
+//			List<OrderDTO> orders = fetchService.fetchOrders(exportDate, DateUtil.addDays(exportDate, 1));
+//			if(CollectionUtils.isEmpty(orders)){
+//				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "没有数据，备份文件失败");
+//			}
+//			sheet1.setDataset(orders);
+//			
+//			ExcelSheetImpl<OrderItemDTO> sheet2 = new ExcelSheetImpl<OrderItemDTO>("菜品销售列表");
+//			List<OrderItemDTO> orderItems = fetchService.fetchOrderItems(exportDate, DateUtil.addDays(exportDate, 1));
+//			sheet2.setDataset(orderItems);
+//			
+//			sheets.add(sheet1);
+//			sheets.add(sheet2);
+//			orderExcelService.setCustomSheet(sheets);
+//			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(chooser.getSelectedFile().getAbsolutePath())));
+//			orderExcelService.exportTo(bos);
+//			while(current < amount){
+//				try{
+//					Thread.sleep(50);
+//				}catch(InterruptedException ie){
+//					
+//				}
+//				current++;
+//			}
+//			progressBarWin.close();
+//			JOptionPane.showMessageDialog(null, "导出成功");
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		} catch (ServiceException se){
+//			JOptionPane.showMessageDialog(null, se.getMessage());
+//		} catch(Exception e){
+//			JOptionPane.showMessageDialog(null, e.getMessage());
+//		}
+//	}
+	
 	public int getAmount() {
 		return amount;
 	}

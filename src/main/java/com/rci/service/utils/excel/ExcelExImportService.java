@@ -388,4 +388,18 @@ public class ExcelExImportService implements IExImportService {
 		this.orders = orders;
 	}
 
+	@Override
+	public <E> Collection<E> getDataSet() throws ServiceException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setCustomSheet(List<IExcelSheet> customSheets)
+			throws ServiceException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

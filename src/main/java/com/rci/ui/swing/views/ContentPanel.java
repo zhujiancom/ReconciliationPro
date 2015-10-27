@@ -36,7 +36,7 @@ public class ContentPanel extends JSplitPane {
 	}
 	
 	public void buildPane(){
-		this.setDividerLocation(800);
+		this.setDividerLocation(500);
 		this.setDividerSize(5);
 		JScrollPane mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

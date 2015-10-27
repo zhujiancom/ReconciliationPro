@@ -40,6 +40,7 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 	private JButton editBtn;
 	private JButton refreshBtn;
 	private JButton delBtn;
+	private JButton exportBtn;
 	
 	@Override
 	public PopWindow retrieveWindow() {
@@ -100,11 +101,16 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		refreshBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/refreshBtn_0.png", "skin/gray/images/24x24/refreshBtn_1.png");
 		refreshBtn.setToolTipText("刷新");
 		refreshBtn.setBounds(120, 4, 24, 24);
+
+		exportBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/export_1.png", "skin/gray/images/24x24/export_2.png");
+		exportBtn.setToolTipText("导出");
+		exportBtn.setBounds(120, 4, 24, 24);
 		
 		operaPane.add(addBtn);
 		operaPane.add(delBtn);
 		operaPane.add(editBtn);
 		operaPane.add(refreshBtn);
+		operaPane.add(exportBtn);
 		
 		//添加
 		addBtn.addActionListener(new ActionListener() {
@@ -136,6 +142,10 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 					JOptionPane.showMessageDialog(null, "请选择一条要删除的数据！");
 					return;
 				}
+				int operateCode = JOptionPane.showConfirmDialog(null, "<html><font color='red'>确定要删除此活动吗？</font></html>");
+				if(operateCode == JOptionPane.CANCEL_OPTION || operateCode == JOptionPane.NO_OPTION){
+					return;
+				}
 				SchemeTabelModel model = (SchemeTabelModel) table.getModel();
 				SchemeVO scheme = model.getScheme(selectIndex);
 				ISchemeService schemeService = (ISchemeService) SpringUtils.getBean("SchemeService");
@@ -156,6 +166,15 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 				}
 				PopWindowBuilder winBuilder = new SchemeModifyWinBuilder(checkListener);
 				winBuilder.retrieveWindow();
+			}
+		});
+		
+		//活动数据导出
+		exportBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		
