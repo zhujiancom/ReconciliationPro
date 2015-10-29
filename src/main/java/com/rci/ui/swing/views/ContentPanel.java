@@ -1,7 +1,6 @@
 package com.rci.ui.swing.views;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -40,6 +39,7 @@ public class ContentPanel extends JSplitPane {
 	public void buildPane(){
 		this.setDividerSize(5);
 		this.setDividerLocation(0.6);
+		this.setResizeWeight(0.6);
 		JScrollPane mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mainTable = new OrderTable();
