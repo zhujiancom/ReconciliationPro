@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.rci.bean.dto.SchemeDTO;
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.SchemeType;
@@ -29,5 +30,7 @@ public interface ISchemeService extends IBaseService<Scheme, Long>{
 //	public List<SchemeVO> getSchemeVOs(Vendor vendor);
 	
 	List<Scheme> getSchemes(SchemeQueryDTO queryDTO);
+	
+	List<SchemeDTO> getAllSchemes();
 	
 }

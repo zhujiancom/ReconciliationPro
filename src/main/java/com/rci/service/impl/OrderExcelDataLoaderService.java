@@ -19,7 +19,6 @@ import com.rci.exceptions.ServiceException;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderService;
 import com.rci.service.utils.IExImportService;
-import com.rci.service.utils.excel.ExcelExImportService;
 import com.rci.tools.DateUtil;
 
 /**
@@ -36,9 +35,9 @@ import com.rci.tools.DateUtil;
  * Create Time: 2015年8月26日 下午8:37:51
  *
  */
-@Service("ExcelDataLoaderService")
-public class ExcelDataLoaderService extends BaseDataLoaderService {
-	@Resource(name="ExcelExImportService")
+@Service("OrderExcelDataLoaderService")
+public class OrderExcelDataLoaderService extends BaseDataLoaderService {
+	@Resource(name="OrderExcelService")
 	private IExImportService excelService;
 	
 	@Resource(name="OrderService")
@@ -62,8 +61,7 @@ public class ExcelDataLoaderService extends BaseDataLoaderService {
 		if(mark == null){
 			excelService.importFrom(in);
 			markService.markOrder(day);
-			ExcelExImportService excelImportService = (ExcelExImportService)excelService;
-			List<Order> orders = excelImportService.getOrders();
+			List<Order> orders = (List<Order>) excelService.getDataSet();
 			// 更新账单使用方案和库存数据
 			updateRelativeInfo(orders);
 			// 生成账单流水

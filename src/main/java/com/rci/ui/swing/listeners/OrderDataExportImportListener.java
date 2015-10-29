@@ -1,13 +1,12 @@
 package com.rci.ui.swing.listeners;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +14,6 @@ import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.Timer;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
@@ -24,15 +21,22 @@ import javax.swing.filechooser.FileFilter;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
+import com.rci.exceptions.ExceptionConstant.SERVICE;
+import com.rci.metadata.dto.OrderDTO;
+import com.rci.metadata.dto.OrderItemDTO;
+import com.rci.metadata.service.IDataFetchService;
 import com.rci.service.IDataLoaderService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
+import com.rci.service.utils.IExImportService;
+import com.rci.service.utils.excel.ExcelSheet;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
-import com.rci.ui.swing.handler.ExcelDataExport;
+import com.rci.ui.swing.handler.DataExport;
 import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
 import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
@@ -43,128 +47,63 @@ import com.rci.ui.swing.views.builder.WindowBuilderFactory;
 import com.rci.ui.swing.vos.OrderItemVO;
 import com.rci.ui.swing.vos.OrderVO;
 
-public class DataIOListener implements ActionListener,ListSelectionListener {
-	public static final int EXPORT = 0;
-	public static final int IMPORT = 1;
-	
-	private int action;
-	
-//	private IDataFetchService fetchService;
-	
+public class OrderDataExportImportListener extends DataExportImportListener implements ListSelectionListener {
 	private ContentPanel contentPane;
 	
 	private ConculsionPanel conclusionPane;
 	
 	private Map<AccountCode,BigDecimal> sumMap;
 	
-	public DataIOListener(int action){
-		this.action = action;
-//		fetchService = (IDataFetchService) SpringUtils.getBean("DataFetchService");
+	public OrderDataExportImportListener(int action) {
+		super(action);
 	}
-	
+
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(action == EXPORT){
-			exportData();
-		}else if(action == IMPORT){
-			importData();
-		}
+	protected String getFileName() {
+		return DateUtil.date2Str(new Date(), "yyyyMMdd") + ".xls";
 	}
-	
-	/**
-	 * 
-	 * Describle(描述)： 数据导出
-	 *
-	 * 方法名称：exportData
-	 *
-	 * 所在类名：DataIOHandler
-	 *
-	 * Create Time:2015年8月25日 上午10:20:38
-	 *
-	 */
-	public void exportData(){
-		String name = DateUtil.date2Str(new Date(), "yyyyMMdd") + ".xls";
-		// 构造文件保存对话框
-		final JFileChooser chooser = new JFileChooser();
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-		chooser.setMultiSelectionEnabled(false);
-		chooser.setAcceptAllFileFilterUsed(false);
-		chooser.setDialogTitle("原始数据文件导出");
-		// 设置文件名称
-		chooser.setSelectedFile(new File(name));
-		// 添加文件过滤器
-		chooser.addChoosableFileFilter(new FileFilter() {
 
-			@Override
-			public boolean accept(File f) {
-				return true;
-			}
-
-			@Override
-			public String getDescription() {
-				return "所有文件(*.*)";
-			}
-
-		});
-		chooser.addChoosableFileFilter(new FileFilter() {
-
-			@Override
-			public boolean accept(File f) {
-				if (f.getName().endsWith("xls") || f.getName().endsWith("xlsx") || f.isDirectory()) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-
-			@Override
-			public String getDescription() {
-				return "Excel文件(*.xls)";
-			}
-
-		});
-		int result = chooser.showSaveDialog(null);
-		switch (result) {
-		case JFileChooser.APPROVE_OPTION:
-			ProgressWinBuilder progressBarBuilder = WindowBuilderFactory.createProgressWinBuilder();
-			PopWindow progressBarWin = progressBarBuilder.retrieveWindow();
-			final JProgressBar bar = progressBarBuilder.getBar();
-			final ExcelDataExport target = new ExcelDataExport(chooser,progressBarWin);
-			new Thread(target).start();
-			
-			bar.setMinimum(0);
-			bar.setMaximum(target.getAmount());
-			Timer timer = new Timer(300,new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					bar.setValue(target.getCurrent());
-					
-				}
-			});
-			timer.start();
-			
-			break;
-		case JFileChooser.CANCEL_OPTION:
-			System.out.println("取消");
-		case JFileChooser.ERROR_OPTION:
-			System.out.println("Error");
-		}
+	@Override
+	protected String getDialogTitle() {
+		return "原始数据文件导出";
 	}
-	
-	/**
-	 * 
-	 * Describle(描述)： 数据导入
-	 *
-	 * 方法名称：importData
-	 *
-	 * 所在类名：DataIOHandler
-	 *
-	 * Create Time:2015年8月25日 上午10:20:24
-	 *
-	 */
-	public void importData(){
+
+	@Override
+	protected DataExport getDataExport() {
+		ProgressWinBuilder progressBarBuilder = WindowBuilderFactory.createProgressWinBuilder();
+		PopWindow progressBarWin = progressBarBuilder.retrieveWindow();
+		progressBar = progressBarBuilder.getBar();
+		IExImportService service = (IExImportService) SpringUtils.getBean("OrderExcelService");
+		DataExport export = new DataExport(fileChooser,progressBarWin,service);
+		
+		try{
+			IDataFetchService fetchService = (IDataFetchService) SpringUtils.getBean("DataFetchService");
+			String fileName = fileChooser.getSelectedFile().getName();
+			List<ExcelSheet> sheets = new ArrayList<ExcelSheet>();
+			String dateStr = fileName.substring(0,fileName.indexOf("."));
+			Date exportDate = DateUtil.parseDate(dateStr, "yyyyMMdd");
+			ExcelSheet sheet1 = new ExcelSheet(OrderDTO.class,"订单列表");
+			List<OrderDTO> orders = fetchService.fetchOrders(exportDate, DateUtil.addDays(exportDate, 1));
+			if(CollectionUtils.isEmpty(orders)){
+				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "没有数据，备份文件失败");
+			}
+			sheet1.setDataset(orders);
+			
+			ExcelSheet sheet2 = new ExcelSheet(OrderItemDTO.class,"菜品销售列表");
+			List<OrderItemDTO> orderItems = fetchService.fetchOrderItems(exportDate, DateUtil.addDays(exportDate, 1));
+			sheet2.setDataset(orderItems);
+			
+			sheets.add(sheet1);
+			sheets.add(sheet2);
+			export.setSheets(sheets);
+		}catch(Exception e){
+			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, e.getMessage());
+		}
+		return export;
+	}
+
+	@Override
+	protected void importData() {
 		// 构造文件保存对话框
 		final JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -214,7 +153,7 @@ public class DataIOListener implements ActionListener,ListSelectionListener {
 					try {
 						Date date = DateUtil.parseDate(day, "yyyyMMdd");
 						BufferedInputStream bin = new BufferedInputStream(new FileInputStream(new File(chooser.getSelectedFile().getAbsolutePath())));
-						IDataLoaderService loaderService = (IDataLoaderService) SpringUtils.getBean("ExcelDataLoaderService");
+						IDataLoaderService loaderService = (IDataLoaderService) SpringUtils.getBean("OrderExcelDataLoaderService");
 						loaderService.load(bin, date);
 						IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
 						List<OrderVO> ordervos = orderService.accquireOrderVOsByDay(day);
@@ -257,8 +196,32 @@ public class DataIOListener implements ActionListener,ListSelectionListener {
 			break;
 		}
 	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent event) {
+		if(event.getSource() == contentPane.getMainTable().getSelectionModel()
+				&& contentPane.getMainTable().getRowSelectionAllowed()){
+			int row = contentPane.getMainTable().getSelectedRow();
+			if(row != -1){
+				String payno = (String) contentPane.getMainTable().getValueAt(row, 2);
+				loadItemData(payno);
+			}
+		}
+	}
 	
-	public void loadItemData(String payno){
+	/**
+	 * 
+	 * Describle(描述)：加载订单详细数据
+	 *
+	 * 方法名称：loadItemData
+	 *
+	 * 所在类名：OrderDataExportListener
+	 *
+	 * Create Time:2015年10月28日 上午9:55:00
+	 *  
+	 * @param payno
+	 */
+	private void loadItemData(String payno){
 		IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
 		List<OrderItemVO> orderItems = orderService.queryOrderItemVOsByPayno(payno);
 		OrderItemTableModel oitm = (OrderItemTableModel) contentPane.getItemTable().getModel();
@@ -266,6 +229,18 @@ public class DataIOListener implements ActionListener,ListSelectionListener {
 		oitm.fireTableDataChanged();
 	}
 	
+	/**
+	 * 
+	 * Describle(描述)： 加载订单统计数据
+	 *
+	 * 方法名称：loadSumData
+	 *
+	 * 所在类名：OrderDataExportListener
+	 *
+	 * Create Time:2015年10月28日 上午9:55:20
+	 *  
+	 * @param date
+	 */
 	private void loadSumData(Date date){
 		sumMap = new HashMap<AccountCode,BigDecimal>();
 		IOrderAccountRefService oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
@@ -278,52 +253,28 @@ public class DataIOListener implements ActionListener,ListSelectionListener {
 		conclusionPane.setQueryDate(date);
 		conclusionPane.setSumMap(sumMap);
 	}
-	
-	public int getAction() {
-		return action;
-	}
 
-	public void setAction(int action) {
-		this.action = action;
-	}
-
-	/**
-	 * @return the contentPane
-	 */
 	public ContentPanel getContentPane() {
 		return contentPane;
 	}
 
-	/**
-	 * @param contentPane the contentPane to set
-	 */
 	public void setContentPane(ContentPanel contentPane) {
 		this.contentPane = contentPane;
 	}
 
-	/**
-	 * @return the conclusionPane
-	 */
 	public ConculsionPanel getConclusionPane() {
 		return conclusionPane;
 	}
 
-	/**
-	 * @param conclusionPane the conclusionPane to set
-	 */
 	public void setConclusionPane(ConculsionPanel conclusionPane) {
 		this.conclusionPane = conclusionPane;
 	}
 
-	@Override
-	public void valueChanged(ListSelectionEvent event) {
-		if(event.getSource() == contentPane.getMainTable().getSelectionModel()
-				&& contentPane.getMainTable().getRowSelectionAllowed()){
-			int row = contentPane.getMainTable().getSelectedRow();
-			if(row != -1){
-				String payno = (String) contentPane.getMainTable().getValueAt(row, 2);
-				loadItemData(payno);
-			}
-		}
+	public Map<AccountCode, BigDecimal> getSumMap() {
+		return sumMap;
+	}
+
+	public void setSumMap(Map<AccountCode, BigDecimal> sumMap) {
+		this.sumMap = sumMap;
 	}
 }

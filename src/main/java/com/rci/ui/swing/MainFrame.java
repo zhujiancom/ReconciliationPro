@@ -29,8 +29,9 @@ import com.rci.config.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.listeners.ActionHandler;
 import com.rci.ui.swing.listeners.CleanListener;
-import com.rci.ui.swing.listeners.DataIOListener;
+import com.rci.ui.swing.listeners.DataExportImportListener;
 import com.rci.ui.swing.listeners.FrameListener;
+import com.rci.ui.swing.listeners.OrderDataExportImportListener;
 import com.rci.ui.swing.listeners.QueryListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.ConculsionPanel;
@@ -51,6 +52,7 @@ public class MainFrame extends JFrame {
 	private final FrameListener dragListener;
 
 	public MainFrame() throws Exception{
+		this.setSize(PropertyUtils.getIntegerValue("mainframe.width"), PropertyUtils.getIntegerValue("mainframe.height"));
 		initComponent();
 		QueryListener listener = new QueryListener(contentPane);
 		listener.setConclusionPane(conclusionPane);
@@ -86,7 +88,7 @@ public class MainFrame extends JFrame {
 		/* 绑定查询form */
 		containerPanel.add(queryPanel, BorderLayout.NORTH);
 		/* 绑定订单内容和警告日志展示列表 */
-		contentPane = new ContentPanel(JSplitPane.HORIZONTAL_SPLIT);
+		contentPane = new ContentPanel(JSplitPane.HORIZONTAL_SPLIT,this.getWidth(),this.getHeight());
 		containerPanel.add(contentPane, BorderLayout.CENTER);
 		/* 绑定 总结页脚 */
 		containerPanel.add(conclusionPane, BorderLayout.SOUTH);
@@ -217,11 +219,13 @@ public class MainFrame extends JFrame {
 		});
 
 		// 数据导出
-		DataIOListener dataExportListener = new DataIOListener(DataIOListener.EXPORT);
+//		DataIOListener dataExportListener = new DataIOListener(DataIOListener.EXPORT);
+		DataExportImportListener dataExportListener = new OrderDataExportImportListener(DataExportImportListener.EXPORT);
 		dataExport.addActionListener(dataExportListener);
 		
 		//数据导入
-		DataIOListener dataImportListener = new DataIOListener(DataIOListener.IMPORT);
+//		DataIOListener dataImportListener = new DataIOListener(DataIOListener.IMPORT);
+		OrderDataExportImportListener dataImportListener = new OrderDataExportImportListener(DataExportImportListener.IMPORT);
 		dataImportListener.setConclusionPane(conclusionPane);
 		dataImportListener.setContentPane(contentPane);
 		dataImport.addActionListener(dataImportListener);

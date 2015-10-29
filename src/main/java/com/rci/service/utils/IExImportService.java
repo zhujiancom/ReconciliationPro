@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.rci.exceptions.ServiceException;
-import com.rci.service.utils.excel.IExcelSheet;
+import com.rci.service.utils.excel.ExcelSheet;
 
 public interface IExImportService {
 	/**
@@ -51,7 +51,8 @@ public interface IExImportService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public <T> Collection<T> getDataSet() throws ServiceException;
+	@SuppressWarnings("rawtypes")
+	public Collection getDataSet() throws ServiceException;
 	
 	/**
 	 * 
@@ -66,7 +67,7 @@ public interface IExImportService {
 	 * @param customSheets
 	 * @throws ServiceException
 	 */
-	public void setCustomSheet(List<IExcelSheet> customSheets) throws ServiceException;
+	public void setCustomSheet(List<ExcelSheet> customSheets) throws ServiceException;
 	
 	
 }

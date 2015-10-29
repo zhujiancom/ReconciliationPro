@@ -1,6 +1,7 @@
 package com.rci.ui.swing.views;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -30,14 +31,15 @@ public class ContentPanel extends JSplitPane {
 	private JTable itemTable; //展示 orderItem 列表
 	private JTextArea textArea; //警告日志展示面板
 	
-	public ContentPanel(int orientation){
+	public ContentPanel(int orientation,int width, int height){
 		super(orientation,true);
+		this.setSize(width, height);
 		buildPane();
 	}
 	
 	public void buildPane(){
-		this.setDividerLocation(500);
 		this.setDividerSize(5);
+		this.setDividerLocation(0.6);
 		JScrollPane mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mainTable = new OrderTable();
@@ -112,5 +114,9 @@ public class ContentPanel extends JSplitPane {
 
 	public void setTextArea(JTextArea textArea) {
 		this.textArea = textArea;
+	}
+	
+	public void setDimension(int width,int height){
+		this.setSize(width, height);
 	}
 }

@@ -23,6 +23,8 @@ import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.ISchemeService;
 import com.rci.tools.SpringUtils;
+import com.rci.ui.swing.listeners.DataExportImportListener;
+import com.rci.ui.swing.listeners.SchemeDataExportImportListener;
 import com.rci.ui.swing.listeners.VendorCheckListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.SchemeStatusRadioButton;
@@ -41,6 +43,7 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 	private JButton refreshBtn;
 	private JButton delBtn;
 	private JButton exportBtn;
+	private JButton importBtn;
 	
 	@Override
 	public PopWindow retrieveWindow() {
@@ -102,15 +105,20 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		refreshBtn.setToolTipText("刷新");
 		refreshBtn.setBounds(120, 4, 24, 24);
 
-		exportBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/export_1.png", "skin/gray/images/24x24/export_2.png");
+		exportBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/export_3.png", null);
 		exportBtn.setToolTipText("导出");
-		exportBtn.setBounds(120, 4, 24, 24);
+		exportBtn.setBounds(160, 4, 24, 24);
+		
+		importBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/import_1.png", null);
+		importBtn.setToolTipText("导入");
+		importBtn.setBounds(200, 4, 24, 24);
 		
 		operaPane.add(addBtn);
 		operaPane.add(delBtn);
 		operaPane.add(editBtn);
 		operaPane.add(refreshBtn);
 		operaPane.add(exportBtn);
+		operaPane.add(importBtn);
 		
 		//添加
 		addBtn.addActionListener(new ActionListener() {
@@ -170,13 +178,11 @@ public class SchemeManagementWinBuilder implements PopWindowBuilder {
 		});
 		
 		//活动数据导出
-		exportBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
+		DataExportImportListener dataExportListener = new SchemeDataExportImportListener(DataExportImportListener.EXPORT);
+		exportBtn.addActionListener(dataExportListener);
+		
+		DataExportImportListener dataImportListener = new SchemeDataExportImportListener(DataExportImportListener.IMPORT);
+		importBtn.addActionListener(dataImportListener);
 		
 		table.addMouseListener(new MouseListener() {
 					

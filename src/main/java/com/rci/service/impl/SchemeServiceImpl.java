@@ -4,6 +4,7 @@
 package com.rci.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import com.rci.bean.dto.SchemeDTO;
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Scheme;
 import com.rci.dao.impl.SafeDetachedCriteria;
@@ -95,6 +98,18 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 		.add(SafeRestrictions.great("price", queryDTO.getPrice()));
 		sdc.addOrder(Order.asc("vendor"));
 		return baseDAO.queryListByCriteria(sdc);
+	}
+
+	@Override
+	public List<SchemeDTO> getAllSchemes() {
+		List<SchemeDTO> schemeDTOs = new ArrayList<SchemeDTO>();
+		List<Scheme> schemes = getAll();
+		if(!CollectionUtils.isEmpty(schemes)){
+			for(Scheme scheme:schemes){
+				schemeDTOs.add(beanMapper.map(scheme, SchemeDTO.class));
+			}
+		}
+		return schemeDTOs;
 	}
 
 }

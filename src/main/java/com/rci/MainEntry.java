@@ -24,7 +24,6 @@ public class MainEntry {
 			Image frameIcon = Toolkit.getDefaultToolkit().createImage(sysIconUrl);
 			frame.setIconImage(frameIcon);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setSize(900, 600);
 			frame.setLocationRelativeTo(null); // 相对居中, 在frame设置size之后
 			/* 全屏设置1 */
 //			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()

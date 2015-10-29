@@ -20,7 +20,13 @@
 							http://www.springframework.org/schema/task/spring-task-4.0.xsd">
 	<bean id="beanMapper" class="org.dozer.spring.DozerBeanMapperFactoryBean"
 		scope="singleton">
-		<property name="mappingFiles" value="classpath*:/dozer/*Mapping.xml" />
+<!-- 		<property name="mappingFiles" value="classpath*:/dozer/*Mapping.xml"/> -->
+			<property name="mappingFiles">
+				<list>
+					<value>dozer/dozer-global-configuration.xml</value>
+					<value>dozer/*Mapping.xml</value>
+				</list>
+			</property>
 		<property name="customConvertersWithId">
 			<map>
 				<entry key="paymodeConvert" value-ref="PaymodeConverter"/>

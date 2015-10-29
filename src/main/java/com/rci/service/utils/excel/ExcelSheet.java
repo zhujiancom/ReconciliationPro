@@ -1,29 +1,42 @@
 package com.rci.service.utils.excel;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 
 public class ExcelSheet{
+	private HSSFWorkbook workbook;
+	
 	@SuppressWarnings("rawtypes")
 	private Class clazz;
 	
 	private String title;
 	
-	private Boolean hasHeader;
+	private Boolean hasHeader = true;
 	
 	@SuppressWarnings("rawtypes")
-	private List dataset;
+	private Collection dataset;
 	
 	private HSSFCellStyle titleStyle; //标题样式
 	
 	private HSSFCellStyle contentStyle; //正文内容样式
+	
+	private HSSFCellStyle textStyle; //文本格式
+	
+	private HSSFCellStyle dateStyle;
 
 	public ExcelSheet(String title){
 		this.title = title;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public ExcelSheet(Class clazz,String title){
+		this(title);
+		this.clazz = clazz; 
 	}
 	
 	public String getTitle() {
@@ -35,6 +48,9 @@ public class ExcelSheet{
 	}
 
 	public HSSFCellStyle getTitleStyle() {
+		if(titleStyle == null){
+			titleStyle = getDefaultTitleCellStyle();
+		}
 		return titleStyle;
 	}
 
@@ -43,6 +59,9 @@ public class ExcelSheet{
 	}
 
 	public HSSFCellStyle getContentStyle() {
+		if(contentStyle == null){
+			contentStyle = getDefaultContentCellStyle();
+		}
 		return contentStyle;
 	}
 
@@ -50,7 +69,7 @@ public class ExcelSheet{
 		this.contentStyle = contentStyle;
 	}
 	
-	public HSSFCellStyle getDefaultTitleCellStyle(HSSFWorkbook workbook){
+	public HSSFCellStyle getDefaultTitleCellStyle(){
 		HSSFCellStyle defaultStyle = workbook.createCellStyle();
 		//前景色
 		defaultStyle.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
@@ -74,12 +93,29 @@ public class ExcelSheet{
 		return defaultStyle;
 	}
 	
-	public HSSFCellStyle getDefaultContentCellStyle(HSSFWorkbook workbook){
+	public HSSFCellStyle getDefaultContentCellStyle(){
 		HSSFCellStyle defaultStyle = workbook.createCellStyle();
 		defaultStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
 		return defaultStyle;
 	}
-
+	
+	public HSSFCellStyle getTextCellStyle(){
+		if(textStyle == null){
+			textStyle = workbook.createCellStyle();
+			HSSFDataFormat fmt = workbook.createDataFormat();
+			textStyle.setDataFormat(fmt.getFormat("@"));
+			textStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+		}
+		return textStyle;
+	}
+	
+	public HSSFCellStyle getDefaultDateCellStyle(String pattern){
+		HSSFCellStyle defaultStyle = workbook.createCellStyle();
+		HSSFDataFormat fmt = workbook.createDataFormat();
+		defaultStyle.setDataFormat(fmt.getFormat(pattern));
+		return defaultStyle;
+	}
+	
 	public Boolean getHasHeader() {
 		return hasHeader;
 	}
@@ -99,14 +135,31 @@ public class ExcelSheet{
 	}
 
 	@SuppressWarnings("rawtypes")
-	public List getDataset() {
-		return dataset;
-	}
-
-	@SuppressWarnings("rawtypes")
-	public void setDataset(List dataset) {
+	public void setDataset(Collection dataset) {
 		this.dataset = dataset;
 	}
 
+	@SuppressWarnings("rawtypes")
+	public Collection getDataset() {
+		return dataset;
+	}
 
+	public HSSFWorkbook getWorkbook() {
+		return workbook;
+	}
+
+	public void setWorkbook(HSSFWorkbook workbook) {
+		this.workbook = workbook;
+	}
+
+	public HSSFCellStyle getDateStyle() {
+		if(dateStyle == null){
+			dateStyle = getDefaultDateCellStyle("yyyy-MM-dd");
+		}
+		return dateStyle;
+	}
+
+	public void setDateStyle(HSSFCellStyle dateStyle) {
+		this.dateStyle = dateStyle;
+	}
 }
