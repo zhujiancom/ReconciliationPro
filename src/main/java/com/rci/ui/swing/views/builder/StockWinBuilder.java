@@ -32,12 +32,7 @@ public class StockWinBuilder implements PopWindowBuilder {
 		return stockWindow;
 	}
 
-	@Override
-	public void createQueryPane() {
-		throw new UnsupportedOperationException("库存展示窗口没有query面板");
-	}
 
-	@Override
 	public void createContentPane() {
 		mainScrollPane = new JScrollPane();
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -45,9 +40,5 @@ public class StockWinBuilder implements PopWindowBuilder {
 		mainScrollPane.setViewportView(stockTable);
 	}
 
-	@Override
-	public void createBottomPane() {
-		throw new UnsupportedOperationException("库存展示窗口没有Bottom面板");
-	}
 
 }

@@ -19,7 +19,7 @@ public class PopWindow extends JFrame {
 	private final static int WIN_WIDTH = 800;
 	private final static int WIN_HEIGHT = 600;
 	private JPanel containerPanel;
-	
+
 	public PopWindow(){
 		this(WIN_WIDTH,WIN_HEIGHT);
 	}

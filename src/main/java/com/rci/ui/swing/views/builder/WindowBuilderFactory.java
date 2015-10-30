@@ -1,10 +1,11 @@
 package com.rci.ui.swing.views.builder;
 
 import com.rci.contants.BusinessConstant;
+import com.rci.ui.swing.views.PopWindow;
 
 public class WindowBuilderFactory {
 	public static void createExpressReateWindow(){
-		new ExpressRateWinBuilder().retrieveWindow();
+		ExpressRateWinBuilder.getInstance().retrieveWindow();
 	}
 	
 	/**
@@ -53,7 +54,7 @@ public class WindowBuilderFactory {
 	 * @return
 	 */
 	public static void createTurnoverWindow(){
-		new TurnoverWinBuilder().retrieveWindow();
+		TurnoverWinBuilder.getInstance().retrieveWindow();
 	}
 	
 	/**
@@ -70,18 +71,22 @@ public class WindowBuilderFactory {
 	 * @return
 	 */
 	public static void createStockManagementWindow(){
-		new StockManagementWinBuilder().retrieveWindow();
+		StockManagementWinBuilder.getInstance().retrieveWindow();
 	}
 	
 	public static ProgressWinBuilder createProgressWinBuilder(){
 		return new ProgressWinBuilder();
 	}
 	
-	public static void createSchemeManagementWindow(){
-		new SchemeManagementWinBuilder().retrieveWindow();
+	public static PopWindow createSchemeManagementWindow(){
+		return SchemeManagementWinBuilder.getInstance().retrieveWindow();
 	}
 	
-	public static void createSchemeAddFormWindow(){
-		new SchemeCreateWinBuilder().retrieveWindow();
+	public static PopWindow createSchemeCreateWindow(){
+		return SchemeCreateWinBuilder.getInstance().retrieveWindow();
+	}
+	
+	public static PopWindow createCalendarWindow(){
+		return CalendarWinBuilder.getInstance().retrieveWindow();
 	}
 }

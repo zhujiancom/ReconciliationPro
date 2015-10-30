@@ -92,13 +92,6 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 		return modifyForm;
 	}
 
-	@Override
-	public void createQueryPane() {
-		// TODO Auto-generated method stub
-
-	}
-	
-	@Override
 	public void createContentPane() {
 		JPanel mainPane = new JPanel();
 		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
@@ -197,12 +190,6 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 		tenthPane.add(activeBtn);
 		tenthPane.add(inactiveBtn);
 		mainPane.add(tenthPane);
-	}
-
-	@Override
-	public void createBottomPane() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

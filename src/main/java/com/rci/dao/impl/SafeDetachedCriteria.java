@@ -30,6 +30,7 @@ public class SafeDetachedCriteria extends DetachedCriteria{
 		super(entityName);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static SafeDetachedCriteria forClass(Class clazz) {
 		return new SafeDetachedCriteria(clazz.getName());
 	}

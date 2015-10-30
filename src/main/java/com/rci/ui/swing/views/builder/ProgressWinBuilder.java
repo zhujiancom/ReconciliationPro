@@ -19,24 +19,11 @@ public class ProgressWinBuilder implements PopWindowBuilder {
 		return progressWindow;
 	}
 
-	@Override
-	public void createQueryPane() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void createContentPane() {
 		bar = new JProgressBar(JProgressBar.HORIZONTAL);
 		bar.setStringPainted(true);
 		bar.setBorderPainted(true);
 		bar.setVisible(true);
-	}
-
-	@Override
-	public void createBottomPane() {
-		// TODO Auto-generated method stub
-
 	}
 
 	public JProgressBar getBar() {
