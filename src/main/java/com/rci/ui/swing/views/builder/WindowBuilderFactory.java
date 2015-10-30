@@ -81,12 +81,4 @@ public class WindowBuilderFactory {
 	public static PopWindow createSchemeManagementWindow(){
 		return SchemeManagementWinBuilder.getInstance().retrieveWindow();
 	}
-	
-	public static PopWindow createSchemeCreateWindow(){
-		return SchemeCreateWinBuilder.getInstance().retrieveWindow();
-	}
-	
-	public static PopWindow createCalendarWindow(){
-		return CalendarWinBuilder.getInstance().retrieveWindow();
-	}
 }

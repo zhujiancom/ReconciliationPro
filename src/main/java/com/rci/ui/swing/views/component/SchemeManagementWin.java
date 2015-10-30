@@ -32,8 +32,8 @@ import com.rci.ui.swing.model.SchemeTable.SchemeTabelModel;
 import com.rci.ui.swing.model.VendorJCheckBox;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.views.builder.PopWindowBuilder;
+import com.rci.ui.swing.views.builder.SchemeCreateWinBuilder;
 import com.rci.ui.swing.views.builder.SchemeModifyWinBuilder;
-import com.rci.ui.swing.views.builder.WindowBuilderFactory;
 import com.rci.ui.swing.vos.SchemeVO;
 
 public class SchemeManagementWin extends PopWindow {
@@ -136,8 +136,8 @@ public class SchemeManagementWin extends PopWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SchemeCreateWin win = (SchemeCreateWin) WindowBuilderFactory.createSchemeCreateWindow();
-				win.setCheckListener(checkListener);
+				PopWindowBuilder winBuilder = new SchemeCreateWinBuilder(checkListener);
+				winBuilder.retrieveWindow();
 			}
 		});
 		

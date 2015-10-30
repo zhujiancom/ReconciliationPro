@@ -54,11 +54,18 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 	@Override
 	public Scheme getScheme(Vendor vendor, BigDecimal freePrice, Date date) {
 		DetachedCriteria dc = DetachedCriteria.forClass(Scheme.class);
-		dc.add(Restrictions.eq("vendor", vendor)).add(Restrictions.eq("price", freePrice))
-		.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
-		.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
-		logger.debug("vendor="+vendor+", freePrice="+freePrice+", date="+date);
-		return baseDAO.queryUniqueByCriteria(dc);
+		Scheme scheme = null;
+		try{
+			dc.add(Restrictions.eq("vendor", vendor)).add(Restrictions.eq("price", freePrice))
+			.add(Restrictions.eq("activityStatus", ActivityStatus.ACTIVE))
+			.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
+			scheme = baseDAO.queryUniqueByCriteria(dc); 
+		}catch(Exception e){
+			List<Scheme> schemes = baseDAO.queryListByCriteria(dc); 
+			scheme = schemes.get(0);
+			logger.warn("--- "+scheme.getName()+" --- 活动重复"+schemes.size()+"条，默认取第一条");
+		}
+		return scheme; 
 	}
 
 	/* 

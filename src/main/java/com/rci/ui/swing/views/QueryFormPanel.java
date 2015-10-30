@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +16,6 @@ import javax.swing.JTextField;
 
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.ui.swing.model.ButtonFactory;
-import com.rci.ui.swing.views.builder.WindowBuilderFactory;
 
 public class QueryFormPanel extends JPanel implements ItemListener{
 
@@ -79,20 +76,6 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 
 		JLabel rciTime = new JLabel("日期");
 		timeInput = new JTextField(10);
-		timeInput.addMouseListener(new MouseAdapter() {
-//			PopWindow win;
-			@Override
-			public void mousePressed(MouseEvent e) {
-//				if(win == null){
-//					win = WindowBuilderFactory.createCalendarWindow();
-//				}else{
-//					if(win.isDisplayable()){
-//						win.setVisible(true);
-//					}
-//				}
-				WindowBuilderFactory.createCalendarWindow();
-			}
-		});
 		queryBtn = ButtonFactory.createImageButton("查询","skin/gray/images/24x24/search.png", null);
 		cleanBtn = ButtonFactory.createImageButton("清空","skin/gray/images/24x24/empty_trash.png", null);
 //		queryPane.add(eleOnlinePayLabel);

@@ -68,11 +68,6 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 	IMetadataService metaService;
 	private VendorCheckListener checkListener;
 	
-//	public SchemeModifyWinBuilder(SchemeVO data,JTable table) {
-//		super();
-//		metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
-//	}
-	
 	public SchemeModifyWinBuilder(VendorCheckListener checkListener) {
 		this.checkListener = checkListener;
 		metaService = (IMetadataService) SpringUtils.getBean("MetadataService");

@@ -8,7 +8,7 @@ public abstract class AbstractWinBuilder implements PopWindowBuilder {
 	public PopWindow retrieveWindow() {
 		if(win == null){
 			win = createWindow();
-		}else if(win.isDisplayable()){
+		}else{
 			win.setVisible(true);
 		}
 		return win;
@@ -16,22 +16,4 @@ public abstract class AbstractWinBuilder implements PopWindowBuilder {
 	
 	protected abstract PopWindow createWindow();
 	
-//	@Override
-//	public void createQueryPane() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void createContentPane() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void createBottomPane() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-
 }

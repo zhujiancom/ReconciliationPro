@@ -20,7 +20,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
@@ -48,7 +47,6 @@ public class MainFrame extends JFrame {
 	private ConculsionPanel conclusionPane = new ConculsionPanel(); // 统计信息面板
 	private QueryFormPanel queryPanel = new QueryFormPanel(); // 查询面板
 	ContentPanel contentPane; // 订单数据内容展示面板
-	JProgressBar bar;
 	private final FrameListener dragListener;
 
 	public MainFrame() throws Exception{
@@ -134,12 +132,14 @@ public class MainFrame extends JFrame {
 		
 		JPanel rightP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		rightP.setBackground(Color.BLACK);
-		final JButton normalBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/exit-to-full-screen-white.png",null);
-		normalBtn.setToolTipText("最大化");
-		menubar.add(normalBtn);
-		JButton closeBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/close.png",null);
+		JButton minimizeBtn = ButtonFactory.createImageButton("skin/gray/images/16x16/minimize_2.png",null);
+		final JButton maximizeBtn = ButtonFactory.createImageButton("skin/gray/images/16x16/maximize_2.png",null);
+		maximizeBtn.setToolTipText("最大化");
+		menubar.add(maximizeBtn);
+		JButton closeBtn = ButtonFactory.createImageButton("skin/gray/images/16x16/close.png",null);
 		closeBtn.setToolTipText("关闭");
-		rightP.add(normalBtn);
+		rightP.add(minimizeBtn);
+		rightP.add(maximizeBtn);
 		rightP.add(closeBtn);
 		menubar.add(rightP);
 		
@@ -238,8 +238,8 @@ public class MainFrame extends JFrame {
 				System.exit(0);
 			}
 		});
-		//窗口最大化最小化
-		normalBtn.addActionListener(new ActionListener() {
+		//窗口最大化
+		maximizeBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -248,19 +248,28 @@ public class MainFrame extends JFrame {
 					device.setFullScreenWindow(frame);
 					frame.removeMouseListener(dragListener);
 					frame.removeMouseMotionListener(dragListener);
-					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/exit-to-full-screen-white.png");
-					normalBtn.setIcon(new ImageIcon(btnUrl));
-					normalBtn.setToolTipText("向下还原");
+					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/normalize_2.png");
+					maximizeBtn.setIcon(new ImageIcon(btnUrl));
+					maximizeBtn.setToolTipText("向下还原");
 				}else{
 					device.setFullScreenWindow(null);
 					frame.addMouseListener(dragListener);
 					frame.addMouseMotionListener(dragListener);
-					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/full-screen-white.png");
-					normalBtn.setIcon(new ImageIcon(btnUrl));
-					normalBtn.setToolTipText("最大化");
+					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/maximize_2.png");
+					maximizeBtn.setIcon(new ImageIcon(btnUrl));
+					maximizeBtn.setToolTipText("最大化");
 				}
 			}
 		});
+		//窗口最小化
+		minimizeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.setExtendedState(JFrame.ICONIFIED);
+			}
+		});
+		
 		return menubar;
 	}
 }
