@@ -103,7 +103,7 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 		.add(SafeRestrictions.eq("activityStatus", queryDTO.getStatus()))
 		.add(SafeRestrictions.ands(SafeRestrictions.great("endDate", queryDTO.getEndDate()),SafeRestrictions.less("startDate", queryDTO.getStartDate())))
 		.add(SafeRestrictions.great("price", queryDTO.getPrice()));
-		sdc.addOrder(Order.asc("vendor"));
+		sdc.addOrder(Order.asc("vendor")).addOrder(Order.asc("startDate"));
 		return baseDAO.queryListByCriteria(sdc);
 	}
 

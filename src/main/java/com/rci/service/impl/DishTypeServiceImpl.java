@@ -8,6 +8,8 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.DishType;
+import com.rci.exceptions.ExceptionConstant.SERVICE;
+import com.rci.exceptions.ExceptionManage;
 import com.rci.service.IDishTypeService;
 import com.rci.service.base.BaseServiceImpl;
 
@@ -15,9 +17,15 @@ import com.rci.service.base.BaseServiceImpl;
 public class DishTypeServiceImpl extends BaseServiceImpl<DishType, Long> implements IDishTypeService {
 	@Override
 	public DishType queryDishTypeByNo(String no) {
-		DetachedCriteria dc = DetachedCriteria.forClass(DishType.class);
-		dc.add(Restrictions.eq("dtNo", no));
-		return baseDAO.queryUniqueByCriteria(dc);
+		try{
+			DetachedCriteria dc = DetachedCriteria.forClass(DishType.class);
+			dc.add(Restrictions.eq("dtNo", no));
+			return baseDAO.queryUniqueByCriteria(dc);
+		}catch(Exception e){
+			logger.debug("query dish error: dishTypeno = "+no);
+			ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, e);
+		}
+		return null;
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import com.rci.dao.impl.DefaultHibernateDAOFacadeImpl;
  *	
  */
 public class BaseServiceImpl<T extends BaseEntity, PK extends Serializable> implements IBaseService<T,PK>{
-	private transient Log logger = LogFactory.getLog(BaseServiceImpl.class);
+	protected transient Log logger = LogFactory.getLog(BaseServiceImpl.class);
 	@Autowired
 	protected DefaultHibernateDAOFacadeImpl<T, PK> baseDAO;
 
