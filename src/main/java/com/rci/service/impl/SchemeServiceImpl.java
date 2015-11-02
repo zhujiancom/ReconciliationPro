@@ -61,7 +61,7 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 			.add(Restrictions.and(Restrictions.ge("endDate", date),Restrictions.le("startDate", date)));
 			scheme = baseDAO.queryUniqueByCriteria(dc); 
 		}catch(Exception e){
-			List<Scheme> schemes = baseDAO.queryListByCriteria(dc); 
+			List<Scheme> schemes = baseDAO.queryListByCriteria(dc);
 			scheme = schemes.get(0);
 			logger.warn("--- "+scheme.getName()+" --- 活动重复"+schemes.size()+"条，默认取第一条");
 		}

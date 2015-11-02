@@ -199,6 +199,7 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 			scheme.setPrice(new BigDecimal(priceInput.getText().trim()));
 			scheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
 			scheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
+			scheme.setStartDate(DateUtil.parseDate(startInput.getText().trim(),"yyyyMMdd"));
 			scheme.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
 			if(StringUtils.hasText(floorInput.getText())){
 				scheme.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
