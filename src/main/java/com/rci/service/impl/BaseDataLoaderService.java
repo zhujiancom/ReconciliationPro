@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
@@ -75,6 +76,9 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 	private IDishService dishService;
 	
 	protected void updateRelativeInfo(List<Order> orders){
+		if(CollectionUtils.isEmpty(orders)){
+			return ;
+		}
 		// 解析订单各种账户收入的金额，判断订单使用的方案
 		Map<String, BigDecimal> stockMap = new HashMap<String, BigDecimal>();
 		for (Order order : orders) {
