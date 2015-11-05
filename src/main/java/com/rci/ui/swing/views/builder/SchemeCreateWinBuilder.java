@@ -37,6 +37,7 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 	private JScrollPane sPane;
 	private JTextField nameInput = new JTextField(30);
 	private JComboBox<LabelValueBean<String>> vendorInput;
+	private JComboBox<LabelValueBean<String>> schemeTypeInput;
 	private JTextField priceInput = new JTextField(30);
 	private JTextField postPriceInput = new JTextField(30);
 	private JTextField spreadInput = new JTextField(30);
@@ -46,6 +47,7 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 	private JTextField ceilInput = new JTextField(30);
 	private JLabel name = new JLabel("活动名称");
 	private JLabel vendor = new JLabel("活动平台");
+	private JLabel schemeType = new JLabel("活动类型");
 	private JLabel price = new JLabel("优惠金额");
 	private JLabel postPrice = new JLabel("平台补贴");
 	private JLabel spread = new JLabel("餐厅补贴");
@@ -135,6 +137,13 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 		vendorInput = new JComboBox<LabelValueBean<String>>(vcm);
 		secondPane.add(vendorInput);
 		mainPane.add(secondPane);
+		JPanel elevenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
+		List<LabelValueBean<String>> schemeTypeList = EnumUtils.getEnumLabelValueBeanList(SchemeType.class, false);
+		VendorComboBoxModel stcm = new VendorComboBoxModel(schemeTypeList);
+		schemeTypeInput = new JComboBox<LabelValueBean<String>>(stcm);
+		elevenPane.add(schemeType);
+		elevenPane.add(schemeTypeInput);
+		mainPane.add(elevenPane);
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		thirdPane.add(price);
 		thirdPane.add(priceInput);
@@ -174,20 +183,26 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 		if(vendorInput.getSelectedItem() == null){
 			ExceptionManage.throwServiceException("请选择活动平台!");
 		}
+		LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
+		Vendor vendor = Vendor.valueOf(item.getValue());
+		if(schemeTypeInput.getSelectedItem() == null && (Vendor.DZDP.equals(vendor) || Vendor.MT.equals(vendor) || Vendor.BDNM.equals(vendor))){
+			ExceptionManage.throwServiceException("请选择活动类型!");
+		}
+		
 		if(!StringUtils.hasText(priceInput.getText())){
-			throw new ServiceException("优惠金额必填!");
+			ExceptionManage.throwServiceException("优惠金额必填!");
 		}
 		if(!StringUtils.hasText(postPriceInput.getText())){
-			throw new ServiceException("平台补贴金额必填!");
+			ExceptionManage.throwServiceException("平台补贴金额必填!");
 		}
 		if(!StringUtils.hasText(spreadInput.getText())){
-			throw new ServiceException("餐厅补贴金额必填!");
+			ExceptionManage.throwServiceException("餐厅补贴金额必填!");
 		}
 		if(!StringUtils.hasText(startInput.getText())){
-			throw new ServiceException("开始时间必填!");
+			ExceptionManage.throwServiceException("开始时间必填!");
 		}
 		if(!StringUtils.hasText(endInput.getText())){
-			throw new ServiceException("结束时间必填!");
+			ExceptionManage.throwServiceException("结束时间必填!");
 		}
 	}
 	

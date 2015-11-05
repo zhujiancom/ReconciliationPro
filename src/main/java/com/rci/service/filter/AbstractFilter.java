@@ -104,6 +104,15 @@ public abstract class AbstractFilter implements CalculateFilter {
 		if(dish.getDishName().indexOf("套餐C") != -1){
 			return SchemeType.SUIT_98;
 		}
+		if(dish.getDishName().indexOf("套餐D") != -1){
+			return SchemeType.SUIT_128;
+		}
+		if(dish.getDishName().indexOf("套餐E") != -1){
+			return SchemeType.SUIT_200;
+		}
+		if(dish.getDishName().indexOf("套餐B-1") != -1){
+			return SchemeType.SUIT_50;
+		}
 		return null;
 	}
 	

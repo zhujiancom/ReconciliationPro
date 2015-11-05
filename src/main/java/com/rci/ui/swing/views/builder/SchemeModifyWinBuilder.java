@@ -23,6 +23,7 @@ import org.hibernate.service.spi.ServiceException;
 
 import com.rci.bean.LabelValueBean;
 import com.rci.enums.BusinessEnums.ActivityStatus;
+import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.service.core.IMetadataService;
@@ -44,6 +45,7 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 	private JScrollPane sPane;
 	private JTextField nameInput;
 	private JComboBox<LabelValueBean<String>> vendorInput;
+	private JComboBox<LabelValueBean<String>> schemeTypeInput;
 	private JTextField priceInput ;
 	private JTextField postPriceInput;
 	private JTextField spreadInput;
@@ -53,6 +55,7 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 	private JTextField ceilInput;
 	private JLabel name = new JLabel("活动名称");
 	private JLabel vendor = new JLabel("活动平台");
+	private JLabel schemeType = new JLabel("活动类型");
 	private JLabel price = new JLabel("优惠金额");
 	private JLabel postPrice = new JLabel("平台补贴");
 	private JLabel spread = new JLabel("餐厅补贴");
@@ -105,6 +108,17 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 		vendorInput.setSelectedItem(labelvalue);
 		secondPane.add(vendorInput);
 		mainPane.add(secondPane);
+		if(scheme.getType() != null){
+			JPanel thirteenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
+			List<LabelValueBean<String>> schemeTypeList = EnumUtils.getEnumLabelValueBeanList(SchemeType.class, false);
+			VendorComboBoxModel stcm = new VendorComboBoxModel(schemeTypeList);
+			schemeTypeInput = new JComboBox<LabelValueBean<String>>(stcm);
+			LabelValueBean<String> selectSchemeTypevalue = new LabelValueBean<String>(EnumUtils.getEnumMessage(scheme.getType()),scheme.getType().name());
+			schemeTypeInput.setSelectedItem(selectSchemeTypevalue);
+			thirteenPane.add(schemeType);
+			thirteenPane.add(schemeTypeInput);
+			mainPane.add(thirteenPane);
+		}
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		thirdPane.add(price);
 		priceInput = new JTextField(StringUtils.trimToEmpty(scheme.getPrice()),30);

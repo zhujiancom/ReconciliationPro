@@ -26,7 +26,7 @@ public final class BusinessEnums {
 	}
 	
 	/**
-	 * remark (备注):支付方式种类 {50代金券，100代金券，套餐A,套餐B,套餐C,免单,现金}
+	 * remark (备注):支付方式种类 {50代金券，100代金券，套餐A,套餐B,套餐B-1,套餐C,套餐D,套餐E,免单,现金}
 	 * 
 	 * @author zj
 	 *	
@@ -41,7 +41,7 @@ public final class BusinessEnums {
 	 *
 	 */
 	public static enum SchemeType{
-		CHIT_50,CHIT_100,SUIT_32,SUIT_68,SUIT_98,FREE,CASH
+		CHIT_50,CHIT_100,SUIT_32,SUIT_68,SUIT_98,SUIT_128,SUIT_200,SUIT_50,FREE,CASH
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public final class BusinessEnums {
 	}
 	
 	public static enum Vendor{
-		ELE,DZDP,MTWM,MT,LS,TDD,WMCR,SH,MTSUPER;
+		ELE,DZDP,MTWM,MT,LS,TDD,WMCR,SH,MTSUPER,BDNM;
 	}
 	
 	public static enum StockOpType{
