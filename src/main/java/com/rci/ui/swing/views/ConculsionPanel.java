@@ -300,26 +300,46 @@ public class ConculsionPanel extends JPanel {
 	}
 	
 	public void refreshUI() {
-		getCashValue().setText(getTotalAmount(AccountCode.CASH_MACHINE).toString());
-		getPosValue().setText(getTotalAmount(AccountCode.POS).toString());
-		getMtValue().setText(getTotalAmount(AccountCode.MT).toString());
-		getTgValue().setText(getTotalAmount(AccountCode.DPTG).toString());
-		getShValue().setText(getTotalAmount(AccountCode.DPSH).toString());
-		getEleValue().setText(getTotalAmount(AccountCode.ELE).toString());
-		getEleFreeValue().setText(getTotalAmount(AccountCode.FREE_ELE).toString());
-		getEleSdRemark().setText(getELESDAllowanceAmount(queryDate));
-		getTddValue().setText(getTotalAmount(AccountCode.ALIPAY).toString());
-		getMtSuperValue().setText(getTotalAmount(AccountCode.MT_SUPER).toString());
-		getMtwmValue().setText(getTotalAmount(AccountCode.MTWM).toString());
-		getMtwmFreeValue().setText(getTotalAmount(AccountCode.FREE_MTWM).toString());
-		getFreeValue().setText(getTotalAmount(AccountCode.FREE).toString());
-		getTotalValue().setText(getTotalDayAmount(queryDate).toString());
-		getTgRemark().setText(getTicketStatistic(queryDate,Vendor.DZDP));
-		getMtRemark().setText(getTicketStatistic(queryDate,Vendor.MT));
-		getEleRemark().setText(getValidCount(queryDate, Vendor.ELE));
-		getMtwmRemark().setText(getValidCount(queryDate,Vendor.MTWM));
-		getWmcrValue().setText(getTotalAmount(AccountCode.WMCR).toString());
-		getWmcrbtValue().setText(getTotalAmount(AccountCode.FREE_WMCR).toString());
+		String cashmachine = getTotalAmount(AccountCode.CASH_MACHINE).toString();
+		String pos = getTotalAmount(AccountCode.CASH_MACHINE).toString();
+		String mt = getTotalAmount(AccountCode.MT).toString();
+		String dptg = getTotalAmount(AccountCode.DPTG).toString();
+		String sh = getTotalAmount(AccountCode.DPSH).toString();
+		String ele = getTotalAmount(AccountCode.ELE).toString();
+		String elefree = getTotalAmount(AccountCode.FREE_ELE).toString();
+		BigDecimal elesdremark = getELESDAllowanceAmount(queryDate);
+		String tdd = getTotalAmount(AccountCode.ALIPAY).toString();
+		String mtsuper = getTotalAmount(AccountCode.MT_SUPER).toString();
+		String mtwm = getTotalAmount(AccountCode.MTWM).toString();
+		String freemtwm = getTotalAmount(AccountCode.FREE_MTWM).toString();
+		String free = getTotalAmount(AccountCode.FREE).toString();
+		String total = getTotalDayAmount(queryDate).toString();
+		String tgremark = getTicketStatistic(queryDate,Vendor.DZDP);
+		String mtremark = getTicketStatistic(queryDate,Vendor.MT);
+		Long eleremark = getValidCount(queryDate, Vendor.ELE);
+		Long mtwmremark = getValidCount(queryDate,Vendor.MTWM);
+		String wmcr = getTotalAmount(AccountCode.WMCR).toString();
+		String freewmcr = getTotalAmount(AccountCode.FREE_WMCR).toString();
+		getCashValue().setText(cashmachine);
+		getPosValue().setText(pos);
+		getMtValue().setText(mt);
+		getTgValue().setText(dptg);
+		getShValue().setText(sh);
+		getEleValue().setText(ele);
+		getEleFreeValue().setText(elefree);
+		getEleSdRemark().setText(elesdremark);
+		getTddValue().setText(tdd);
+		getMtSuperValue().setText(mtsuper);
+		getMtwmValue().setText(mtwm);
+		getMtwmFreeValue().setText(freemtwm);
+		getFreeValue().setText(free);
+		getTotalValue().setText(total);
+		getTgRemark().setText(tgremark);
+		getMtRemark().setText(mtremark);
+		getEleRemark().setText(eleremark);
+		getMtwmRemark().setText(mtwmremark);
+		getWmcrValue().setText(wmcr);
+		getWmcrbtValue().setText(freewmcr);
 	}
 	
 	/**

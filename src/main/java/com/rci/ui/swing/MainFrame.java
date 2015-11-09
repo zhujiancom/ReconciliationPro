@@ -47,10 +47,12 @@ public class MainFrame extends JFrame {
 	private ConculsionPanel conclusionPane = new ConculsionPanel(); // 统计信息面板
 	private QueryFormPanel queryPanel = new QueryFormPanel(); // 查询面板
 	ContentPanel contentPane; // 订单数据内容展示面板
-	private final FrameListener dragListener;
+	private FrameListener frameListener;
 
 	public MainFrame() throws Exception{
+		this.setUndecorated(true);
 		this.setSize(PropertyUtils.getIntegerValue("mainframe.width"), PropertyUtils.getIntegerValue("mainframe.height"));
+		frameListener = new FrameListener(this); 
 		initComponent();
 		QueryListener listener = new QueryListener(contentPane);
 		listener.setConclusionPane(conclusionPane);
@@ -65,13 +67,10 @@ public class MainFrame extends JFrame {
 		clistener.setQueryPanel(queryPanel);
 		queryPanel.getCleanBtn().addActionListener(clistener);
 		
-		dragListener = new FrameListener(this); 
-		this.addMouseListener(dragListener);
-		this.addMouseMotionListener(dragListener);
-		
+		this.addMouseListener(frameListener);
+		this.addMouseMotionListener(frameListener);
 		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -109,7 +108,6 @@ public class MainFrame extends JFrame {
 	private JMenuBar buildMenuBar() {
 		JMenuBar menubar = new JMenuBar();
 		menubar.setBackground(Color.BLACK);
-		
 		JButton logoBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/logo.png", null);
 		JMenu system = new JMenu("系统");
 		system.setForeground(Color.WHITE);
@@ -142,6 +140,7 @@ public class MainFrame extends JFrame {
 		rightP.add(maximizeBtn);
 		rightP.add(closeBtn);
 		menubar.add(rightP);
+		frameListener.setMaximizeBtn(maximizeBtn);
 		
 		JMenuItem sysInit = ButtonFactory.createMenuItem("系统初始化");
 		JMenuItem baseReset = ButtonFactory.createMenuItem("基础数据重置", "skin/gray/images/16x16/basereset.png");
@@ -246,15 +245,15 @@ public class MainFrame extends JFrame {
 				GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 				if(device.getFullScreenWindow() == null){
 					device.setFullScreenWindow(frame);
-					frame.removeMouseListener(dragListener);
-					frame.removeMouseMotionListener(dragListener);
+					frame.removeMouseListener(frameListener);
+					frame.removeMouseMotionListener(frameListener);
 					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/normalize_2.png");
 					maximizeBtn.setIcon(new ImageIcon(btnUrl));
 					maximizeBtn.setToolTipText("向下还原");
 				}else{
 					device.setFullScreenWindow(null);
-					frame.addMouseListener(dragListener);
-					frame.addMouseMotionListener(dragListener);
+					frame.addMouseListener(frameListener);
+					frame.addMouseMotionListener(frameListener);
 					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/maximize_2.png");
 					maximizeBtn.setIcon(new ImageIcon(btnUrl));
 					maximizeBtn.setToolTipText("最大化");

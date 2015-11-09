@@ -1,7 +1,5 @@
 package com.rci.bean;
 
-import java.math.BigDecimal;
-
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.base.DictItem;
 import com.rci.service.base.IDictItemService;
@@ -13,7 +11,6 @@ public class SchemeWrapper {
 
 	private Integer count;
 
-	private BigDecimal postAmount;
 
 	public SchemeWrapper() {
 	}
@@ -55,17 +52,9 @@ public class SchemeWrapper {
 			name.append(scheme.getName()).append("【").append(+this.count)
 					.append("】").append(unitName);
 		} else {
-			name.append(scheme.getName()).append("-").append(postAmount);
+			name.append(scheme.getName()).append("-").append(scheme.getPostPrice());
 		}
 		return name.toString();
-	}
-
-	public BigDecimal getPostAmount() {
-		return postAmount;
-	}
-
-	public void setPostAmount(BigDecimal postAmount) {
-		this.postAmount = postAmount;
 	}
 
 	public void increasement() {

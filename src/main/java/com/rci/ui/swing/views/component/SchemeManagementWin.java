@@ -237,12 +237,15 @@ public class SchemeManagementWin extends PopWindow {
 		JCheckBox mtCheck = new VendorJCheckBox(4,Vendor.MT,"美团");
 		mtCheck.addItemListener(checkListener);
 		mtCheck.setBounds(560, 4, 80, 24);
-		JCheckBox shCheck = new VendorJCheckBox(4,Vendor.SH,"闪惠");
-		shCheck.addItemListener(checkListener);
-		shCheck.setBounds(640, 4, 80, 24);
-		JCheckBox mtsuperCheck = new VendorJCheckBox(4,Vendor.SH,"美团超券");
-		mtsuperCheck.addItemListener(checkListener);
-		mtsuperCheck.setBounds(720, 4, 80, 24);
+		JCheckBox bdnmCheck = new VendorJCheckBox(4,Vendor.BDNM,"百度糯米");
+		bdnmCheck.addItemListener(checkListener);
+		bdnmCheck.setBounds(640, 4, 80, 24);
+//		JCheckBox shCheck = new VendorJCheckBox(4,Vendor.SH,"闪惠");
+//		shCheck.addItemListener(checkListener);
+//		shCheck.setBounds(640, 4, 80, 24);
+//		JCheckBox mtsuperCheck = new VendorJCheckBox(4,Vendor.MTSUPER,"美团超券");
+//		mtsuperCheck.addItemListener(checkListener);
+//		mtsuperCheck.setBounds(720, 4, 80, 24);
 		
 		ButtonGroup checkGroup = new ButtonGroup();
 		checkGroup.add(allCheck);
@@ -251,8 +254,7 @@ public class SchemeManagementWin extends PopWindow {
 		checkGroup.add(dptgCheck);
 		checkGroup.add(wmcrCheck);
 		checkGroup.add(mtCheck);
-		checkGroup.add(shCheck);
-		checkGroup.add(mtsuperCheck);
+		checkGroup.add(bdnmCheck);
 		
 		operaPane.add(allCheck);
 		operaPane.add(eleCheck);
@@ -260,8 +262,7 @@ public class SchemeManagementWin extends PopWindow {
 		operaPane.add(dptgCheck);
 		operaPane.add(wmcrCheck);
 		operaPane.add(mtCheck);
-		operaPane.add(shCheck);
-		operaPane.add(mtsuperCheck);
+		operaPane.add(bdnmCheck);
 	}
 
 	/**

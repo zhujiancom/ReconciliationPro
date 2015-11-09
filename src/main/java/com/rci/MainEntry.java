@@ -28,7 +28,7 @@ public class MainEntry {
 			/* 全屏设置1 */
 //			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
 //	                .getDefaultScreenDevice();
-			frame.setUndecorated(true);
+//			frame.setUndecorated(true);
 //			gd.setFullScreenWindow(frame);
 			
 			/* 全屏设置 2*/

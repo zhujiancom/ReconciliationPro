@@ -52,7 +52,7 @@ public class ButtonFactory {
 		btn.setUI(new BasicButtonUI());
 		btn.setContentAreaFilled(false);
 		btn.setMargin(new Insets(0,0,0,0));
-		btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btn.setBorder(BorderFactory.createEmptyBorder());
 		if(StringUtils.hasText(pressedIcon)){
 			URL pressedBtnUrl = ButtonFactory.class.getClassLoader().getResource(pressedIcon);

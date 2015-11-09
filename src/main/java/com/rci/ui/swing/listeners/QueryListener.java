@@ -151,6 +151,7 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 		OrderDataLoader dataLoader = new OrderDataLoader(queryDate,paymodes);
 		dataLoader.setContentPane(contentPane);
 		dataLoader.setConclusionPane(conclusionPane);
+		dataLoader.setQueryPane(queryPanel);
 		new Thread(dataLoader).start();
 	}
 

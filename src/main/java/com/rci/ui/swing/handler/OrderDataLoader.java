@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.springframework.util.CollectionUtils;
 
@@ -25,6 +26,7 @@ import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
 import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
+import com.rci.ui.swing.views.QueryFormPanel;
 import com.rci.ui.swing.vos.OrderItemVO;
 import com.rci.ui.swing.vos.OrderVO;
 
@@ -36,6 +38,8 @@ public class OrderDataLoader implements Runnable {
 	private ContentPanel contentPane;
 	
 	private ConculsionPanel conclusionPane;
+	
+	private QueryFormPanel queryPane;
 	
 	private IDataLoaderService loaderService;
 	
@@ -50,6 +54,13 @@ public class OrderDataLoader implements Runnable {
 	
 	@Override
 	public void run() {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				queryPane.getActionLabel().setText("正在查询，请稍后。。。");
+			}
+		});
 		//1.加载 order 数据
 		loaderService = (IDataLoaderService) SpringUtils.getBean("DBDataLoaderService");
 		loaderService.load(queryDate);
@@ -90,6 +101,13 @@ public class OrderDataLoader implements Runnable {
 			//2. 根据订单数据统计今日收入明细
 			loadSumData(queryDate);
 			conclusionPane.refreshUI();
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					queryPane.getActionLabel().setText("查询完毕！");
+				}
+			});
 		}else{
 			otm.setRowCount(0);
 			ottm.setRowCount(0);
@@ -163,6 +181,14 @@ public class OrderDataLoader implements Runnable {
 
 	public void setConclusionPane(ConculsionPanel conclusionPane) {
 		this.conclusionPane = conclusionPane;
+	}
+
+	public QueryFormPanel getQueryPane() {
+		return queryPane;
+	}
+
+	public void setQueryPane(QueryFormPanel queryPane) {
+		this.queryPane = queryPane;
 	}
 
 }

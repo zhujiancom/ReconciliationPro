@@ -1,6 +1,8 @@
 package com.rci.ui.swing.views;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -34,6 +36,8 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private JButton queryBtn;
 	private JButton cleanBtn;
 	private JTextField timeInput;
+	
+	private JLabel actionLabel;
 	
 	private JCheckBox allCheck;
 	private JCheckBox eleCheck;
@@ -84,11 +88,25 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 //		queryPane.add(eleOrderCount);
 //		queryPane.add(elePerAllowanceLabel);
 //		queryPane.add(elePerAllowanceAmount);
-
+		JPanel actionPane = new JPanel();
+		actionPane.setPreferredSize(new Dimension(200,30));
+		actionLabel = new JLabel();
+//		font-family: "Arial Rounded MT Bold","Helvetica Rounded",Arial,sans-serif
+//		font-family: "Courier New",Courier,"Lucida Sans Typewriter","Lucida Typewriter",monospace
+//		Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+//		for(int i=0;i<fonts.length;i++){
+//			System.out.println(fonts[i]);
+//		}
+		actionLabel.setFont(new Font("微软雅黑", Font.PLAIN, 16));
+		actionLabel.setForeground(Color.RED);
+		actionPane.add(actionLabel);
+		
 		queryPane.add(rciTime);
 		queryPane.add(timeInput);
 		queryPane.add(queryBtn);
 		queryPane.add(cleanBtn);
+		queryPane.add(actionPane);
+		
 		this.add(queryPane);
 		this.add(createCheckPane()); //添加复选框
 		this.setVisible(true);
@@ -299,5 +317,13 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 
 	public void setPaymodes(Set<PaymodeCode> paymodes) {
 		this.paymodes = paymodes;
+	}
+
+	public JLabel getActionLabel() {
+		return actionLabel;
+	}
+
+	public void setActionLabel(JLabel actionLabel) {
+		this.actionLabel = actionLabel;
 	}
 }
