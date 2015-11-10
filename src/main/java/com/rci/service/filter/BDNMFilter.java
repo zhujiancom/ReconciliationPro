@@ -26,25 +26,19 @@ import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
 
-/**
- * 拉手网
- * 
- * @author zj
- * 
- */
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class LSFilter extends AbstractFilter {
+public class BDNMFilter extends AbstractFilter {
 	private Map<SchemeType, Integer> suitMap;
-	
+
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(PaymodeCode.LS);
+		return paymodeMapping.containsKey(PaymodeCode.BDNM);
 	}
 
 	@Override
-	public void generateScheme(Order order,FilterChain chain) {
-		order.setFramework(OrderFramework.LS);
+	protected void generateScheme(Order order, FilterChain chain) {
+		order.setFramework(OrderFramework.TS);
 		suitMap = new HashMap<SchemeType,Integer>();
 		/* 标记该订单中是否有套餐 */
 		boolean suitFlag = false;
@@ -66,7 +60,7 @@ public class LSFilter extends AbstractFilter {
 				// 2.如果是套餐内菜品，则过滤
 				continue;
 			}
-			if ("P".equals(item.getSuitFlag())) {
+			if (count.compareTo(countBack) != 0 && "P".equals(item.getSuitFlag())) {
 				if (!suitFlag) {
 					suitFlag = true;
 				}
@@ -99,24 +93,18 @@ public class LSFilter extends AbstractFilter {
 			
 		}
 		//将套餐中的饮料从不可打折金额中除去
-		Integer suitACount = suitMap.get(SchemeType.SUIT_32);
-		Integer suitBCount = suitMap.get(SchemeType.SUIT_68);
-		if(suitACount != null && suitACount != 0){
-			Integer beverageAmount = suitACount*7;
-			nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
-			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
-		}
-		if(suitBCount != null && suitBCount != 0){
-			Integer beverageAmount = suitBCount*16;
+		Integer suitB1Count = suitMap.get(SchemeType.SUIT_50);
+		if(suitB1Count != null && suitB1Count != 0){
+			Integer beverageAmount = suitB1Count*8;
 			nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
 			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
 		}
 		//设置订单中不可打折金额
-		if(!nodiscountAmount.equals(BigDecimal.ZERO) && order.getNodiscountAmount() == null){
+		if(nodiscountAmount.intValue() != 0 && order.getNodiscountAmount() == null){
 			order.setNodiscountAmount(nodiscountAmount);
 		}
 		// 分析客户使用了哪些代金券
-		BigDecimal chitAmount = order.getPaymodeMapping().get(PaymodeCode.LS);
+		BigDecimal chitAmount = order.getPaymodeMapping().get(PaymodeCode.BDNM);
 		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
 		if(freeAmount!=null){
 			bediscountAmount = bediscountAmount.subtract(freeAmount);
@@ -124,15 +112,18 @@ public class LSFilter extends AbstractFilter {
 		if(bediscountAmount.compareTo(chitAmount) < 0){
 			//如果可打折金额小于代金券实际使用金额，则这单属于异常单
 			order.setUnusual(YOrN.Y);
-			logger.warn("---【损失单】【"+order.getPayNo()+"】[拉手网支付异常]---， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额");
+			logger.warn("---【损失单】【"+order.getPayNo()+"】[百度糯米支付异常]---， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额");
+			String warningInfo = "[百度糯米支付异常]--- 实际支付金额："+chitAmount+", 可打折金额："+bediscountAmount+", 不可打折金额： "+nodiscountAmount+". 代金券支付金额不能大于可打折金额";
+			order.setWarningInfo(warningInfo);
 		}
 		try{
 			Date queryDate = DateUtil.parseDate(order.getDay(), "yyyyMMdd");
-			Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount,Vendor.LS,suitFlag,queryDate);
+			Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, Vendor.BDNM,suitFlag,queryDate);
 			if(!CollectionUtils.isEmpty(schemes)){
-				createTicketStatistic(order.getDay(), Vendor.LS, schemes);
+				createTicketStatistic(order.getDay(), Vendor.BDNM, schemes);
 				String schemeName = order.getSchemeName();
 				BigDecimal postAmount = BigDecimal.ZERO;
+				BigDecimal onlineFreeAmount = BigDecimal.ZERO;
 				for(Iterator<Entry<SchemeType,SchemeWrapper>> it=schemes.entrySet().iterator();it.hasNext();){
 					Entry<SchemeType,SchemeWrapper> entry = it.next();
 					SchemeWrapper wrapper = entry.getValue();
@@ -142,29 +133,27 @@ public class LSFilter extends AbstractFilter {
 						schemeName = wrapper.getName();
 					}
 					postAmount = postAmount.add(calculateTG(wrapper.getScheme(), wrapper.getCount()));
+					onlineFreeAmount = onlineFreeAmount.add(calculateOnlineFreeAmount(wrapper.getScheme(), wrapper.getCount()));
 				}
 				order.setSchemeName(schemeName);
 				//保存账户关联信息
-				preserveOAR(postAmount,AccountCode.LS,order);
+				preserveOAR(postAmount,AccountCode.BDNM,order);
+				preserveOAR(onlineFreeAmount,AccountCode.FREE_ONLINE,order);
 			}
 		}catch(Exception e){
 			
 		}
 	}
 
-
 	@Override
 	protected Map<SchemeType, Integer> getSuitMap() {
 		return suitMap;
 	}
 
-	/* 
-	 * @see com.rci.service.filter.AbstractFilter#validation(com.rci.bean.entity.Order)
-	 */
 	@Override
 	protected void validation(Order order) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }
