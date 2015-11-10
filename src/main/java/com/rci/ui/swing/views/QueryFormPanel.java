@@ -51,6 +51,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private JCheckBox posCheck;
 	private JCheckBox tddCheck;
 	private JCheckBox alipayCheck;
+	private JCheckBox bdnmCheck;
 	private Set<PaymodeCode> paymodes = new HashSet<PaymodeCode>();
 
 	public QueryFormPanel() {
@@ -151,6 +152,9 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		posCheck = new JCheckBox("银联支付");
 		posCheck.addItemListener(this);
 		
+		bdnmCheck = new JCheckBox("百度糯米");
+		bdnmCheck.addItemListener(this);
+		
 		checkPane.add(allCheck);
 		checkPane.add(cashCheck);
 		checkPane.add(eleCheck);
@@ -162,6 +166,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		checkPane.add(tddCheck);
 		checkPane.add(alipayCheck);
 		checkPane.add(posCheck);
+		checkPane.add(bdnmCheck);
 		return checkPane;
 	}
 
@@ -228,6 +233,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 			posCheck.setSelected(false);
 			tddCheck.setSelected(false);
 			alipayCheck.setSelected(false);
+			bdnmCheck.setSelected(false);
 			paymodes.clear();
 		}
 		if(source == cashCheck){
@@ -308,6 +314,14 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 				paymodes.add(PaymodeCode.ZFB);	
 			}else{
 				paymodes.remove(PaymodeCode.ZFB);
+			}
+		}
+		if(source == bdnmCheck){
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				allCheck.setSelected(false);
+				paymodes.add(PaymodeCode.BDNM);	
+			}else{
+				paymodes.remove(PaymodeCode.BDNM);
 			}
 		}
 	}
