@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.springframework.util.CollectionUtils;
@@ -100,18 +99,25 @@ public class OrderDataLoader implements Runnable {
 			}
 			//2. 根据订单数据统计今日收入明细
 			loadSumData(queryDate);
-			conclusionPane.refreshUI();
 			SwingUtilities.invokeLater(new Runnable() {
 				
 				@Override
 				public void run() {
+					conclusionPane.refreshUI();
 					queryPane.getActionLabel().setText("查询完毕！");
 				}
 			});
 		}else{
 			otm.setRowCount(0);
 			ottm.setRowCount(0);
-			JOptionPane.showMessageDialog(null, "没有记录");
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					conclusionPane.clearData();
+					queryPane.getActionLabel().setText("没有记录！");
+				}
+			});
 		}
 	}
 	

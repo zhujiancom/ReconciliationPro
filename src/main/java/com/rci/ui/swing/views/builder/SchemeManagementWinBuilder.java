@@ -7,12 +7,12 @@ public class SchemeManagementWinBuilder extends AbstractWinBuilder {
 
 	private SchemeManagementWinBuilder(){}
 	
-	private static class SchemeManagementWinBuilderHoder{
+	private static class SchemeManagementWinBuilderHolder{
 		private static SchemeManagementWinBuilder instance = new SchemeManagementWinBuilder();
 	}
 	
 	public static SchemeManagementWinBuilder getInstance(){
-		return SchemeManagementWinBuilderHoder.instance;
+		return SchemeManagementWinBuilderHolder.instance;
 	}
 	
 	@Override

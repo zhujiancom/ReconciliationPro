@@ -2,6 +2,7 @@ package com.rci.ui.swing.views;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
@@ -88,8 +89,8 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 //		queryPane.add(eleOrderCount);
 //		queryPane.add(elePerAllowanceLabel);
 //		queryPane.add(elePerAllowanceAmount);
-		JPanel actionPane = new JPanel();
-		actionPane.setPreferredSize(new Dimension(200,30));
+		JPanel actionPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		actionPane.setPreferredSize(new Dimension(300,30));
 		actionLabel = new JLabel();
 //		font-family: "Arial Rounded MT Bold","Helvetica Rounded",Arial,sans-serif
 //		font-family: "Courier New",Courier,"Lucida Sans Typewriter","Lucida Typewriter",monospace

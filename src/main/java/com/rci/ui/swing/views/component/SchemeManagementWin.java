@@ -56,7 +56,6 @@ public class SchemeManagementWin extends PopWindow {
 	public SchemeManagementWin(int width,int height,String title){
 		super(width,height,title);
 		createContentPane();
-		
 	}
 	
 	public void createContentPane() {

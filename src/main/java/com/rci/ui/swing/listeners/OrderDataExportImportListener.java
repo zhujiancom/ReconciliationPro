@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
@@ -42,6 +43,7 @@ import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
 import com.rci.ui.swing.views.PopWindow;
+import com.rci.ui.swing.views.QueryFormPanel;
 import com.rci.ui.swing.views.builder.ProgressWinBuilder;
 import com.rci.ui.swing.views.builder.WindowBuilderFactory;
 import com.rci.ui.swing.vos.OrderItemVO;
@@ -53,6 +55,8 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 	private ConculsionPanel conclusionPane;
 	
 	private Map<AccountCode,BigDecimal> sumMap;
+	
+	private QueryFormPanel queryPanel;
 	
 	public OrderDataExportImportListener(int action) {
 		super(action);
@@ -151,6 +155,13 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 					String fileName = chooser.getSelectedFile().getName();
 					String day = fileName.substring(0,fileName.indexOf("."));
 					try {
+						SwingUtilities.invokeLater(new Runnable() {
+							
+							@Override
+							public void run() {
+								queryPanel.getActionLabel().setText("正在导入订单数据，请稍后。。。");
+							}
+						});
 						Date date = DateUtil.parseDate(day, "yyyyMMdd");
 						BufferedInputStream bin = new BufferedInputStream(new FileInputStream(new File(chooser.getSelectedFile().getAbsolutePath())));
 						IDataLoaderService loaderService = (IDataLoaderService) SpringUtils.getBean("OrderExcelDataLoaderService");
@@ -174,7 +185,14 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 						//2. 根据订单数据统计今日收入明细
 						loadSumData(date);
 						conclusionPane.refreshUI();
-						JOptionPane.showMessageDialog(null, "导入成功");
+//						JOptionPane.showMessageDialog(null, "导入成功");
+						SwingUtilities.invokeLater(new Runnable() {
+							
+							@Override
+							public void run() {
+								queryPanel.getActionLabel().setText("导入成功！");
+							}
+						});
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 					} catch (ParseException e) {
@@ -276,5 +294,13 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 
 	public void setSumMap(Map<AccountCode, BigDecimal> sumMap) {
 		this.sumMap = sumMap;
+	}
+
+	public QueryFormPanel getQueryPanel() {
+		return queryPanel;
+	}
+
+	public void setQueryPanel(QueryFormPanel queryPanel) {
+		this.queryPanel = queryPanel;
 	}
 }

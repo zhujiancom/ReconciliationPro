@@ -149,7 +149,7 @@ public class MainFrame extends JFrame {
 		JMenuItem viewStock = ButtonFactory.createMenuItem("库存查看", "skin/gray/images/16x16/stock.png");
 		JMenuItem setStock = ButtonFactory.createMenuItem("库存进货", "skin/gray/images/16x16/restock.png");
 		JMenuItem stockManagement = ButtonFactory.createMenuItem("库存管理", "skin/gray/images/16x16/stockmanage.png");
-		JMenuItem schemeMangement = ButtonFactory.createMenuItem("在线活动管理", "skin/gray/images/16x16/activity.png");
+		JMenuItem schemeManagement = ButtonFactory.createMenuItem("在线活动管理", "skin/gray/images/16x16/activity.png");
 		system.add(sysInit);
 		system.add(baseReset);
 		operation.add(dataExport);
@@ -157,7 +157,7 @@ public class MainFrame extends JFrame {
 		view.add(viewStock);
 		setting.add(setStock);
 		setting.add(stockManagement);
-		setting.add(schemeMangement);
+		setting.add(schemeManagement);
 
 		JMenuItem expressRate = ButtonFactory.createMenuItem("外送率统计", "skin/gray/images/16x16/takeout.png");
 		JMenuItem earning = ButtonFactory.createMenuItem("营业额统计", "skin/gray/images/16x16/statistic.png");
@@ -209,7 +209,7 @@ public class MainFrame extends JFrame {
 		});
 		
 		// 活动设置
-		schemeMangement.addActionListener(new ActionListener() {
+		schemeManagement.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -227,6 +227,7 @@ public class MainFrame extends JFrame {
 		OrderDataExportImportListener dataImportListener = new OrderDataExportImportListener(DataExportImportListener.IMPORT);
 		dataImportListener.setConclusionPane(conclusionPane);
 		dataImportListener.setContentPane(contentPane);
+		dataImportListener.setQueryPanel(queryPanel);
 		dataImport.addActionListener(dataImportListener);
 		
 		//系统退出

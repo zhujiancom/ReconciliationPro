@@ -301,7 +301,7 @@ public class ConculsionPanel extends JPanel {
 	
 	public void refreshUI() {
 		String cashmachine = getTotalAmount(AccountCode.CASH_MACHINE).toString();
-		String pos = getTotalAmount(AccountCode.CASH_MACHINE).toString();
+		String pos = getTotalAmount(AccountCode.POS).toString();
 		String mt = getTotalAmount(AccountCode.MT).toString();
 		String dptg = getTotalAmount(AccountCode.DPTG).toString();
 		String sh = getTotalAmount(AccountCode.DPSH).toString();
