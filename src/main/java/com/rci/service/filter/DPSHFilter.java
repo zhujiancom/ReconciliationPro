@@ -1,6 +1,8 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
+import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
 
@@ -70,6 +73,17 @@ public class DPSHFilter extends AbstractFilter {
 		if(!nodiscountAmount.equals(BigDecimal.ZERO) && order.getNodiscountAmount() == null){
 			order.setNodiscountAmount(nodiscountAmount);
 		}
+		
+		try {
+			Date date = DateUtil.parseDate(order.getDay(), "yyyyMMdd");
+			if(order.getCheckoutTime().after(DateUtil.getTimeOfDay(date, 22, 0, 0, 0))){  //过了22:00闪惠没有优惠
+				preserveOAR(onlineAmount,AccountCode.DPSH,order);
+				return;
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
 		
 		if(onlineAmount.compareTo(originAmount) == 0){
 			BigDecimal[] result = calculatePostAmount(originAmount.subtract(nodiscountAmount),order.getDay(),Vendor.SH);
