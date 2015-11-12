@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.Dish;
+import com.rci.dao.impl.SafeDetachedCriteria;
+import com.rci.dao.impl.SafeRestrictions;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.service.IDishService;
 import com.rci.service.base.BaseServiceImpl;
@@ -59,4 +61,15 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 		baseDAO.update(dish);
 	}
 
+
+
+	@Override
+	public List<Dish> queryDishesByType(String typename) {
+		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(Dish.class);
+		sdc.createAlias("dishType", "type");
+		sdc.add(SafeRestrictions.eq("type.dtName", typename)).add(SafeRestrictions.eq("stopFlag", YOrN.N));
+		return baseDAO.queryListByCriteria(sdc);
+	}
+
+	
 }

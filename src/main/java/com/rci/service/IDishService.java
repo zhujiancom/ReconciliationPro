@@ -14,4 +14,6 @@ public interface IDishService extends IBaseService<Dish, Long>{
 	public List<DishVO> queryDishes(boolean isStocked);
 	
 	public void rwupdateDishInfo(Dish dish);
+	
+	public List<Dish> queryDishesByType(String typename);
 }

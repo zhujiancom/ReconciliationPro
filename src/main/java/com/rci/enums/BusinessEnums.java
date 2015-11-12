@@ -40,9 +40,9 @@ public final class BusinessEnums {
 	 *
 	 *
 	 */
-	public static enum SchemeType{
-		CHIT_50,CHIT_100,SUIT_32,SUIT_68,SUIT_98,SUIT_128,SUIT_200,SUIT_50,FREE,CASH
-	}
+//	public static enum SchemeType{
+//		CHIT_50,CHIT_100,SUIT_32,SUIT_68,SUIT_98,SUIT_128,SUIT_138,SUIT_198,SUIT_200,SUIT_50
+//	}
 	
 	/**
 	 * remark (备注): 流水生成方式，{ 自动，手动 }
@@ -83,6 +83,25 @@ public final class BusinessEnums {
 	
 	public static enum ActivityStatus{
 		ACTIVE,INACTIVE
+	}
+	
+	/**
+	 * 
+	 * remark (备注): 活动类型 （代金券，外卖活动）
+	 *
+	 * @author zj
+	 *	
+	 * 项目名称：ReconciliationPro
+	 *
+	 * 类名称：ActivityType
+	 *
+	 * 包名称：com.rci.enums
+	 *
+	 * Create Time: 2015年11月11日 下午3:58:29
+	 *
+	 */
+	public static enum ActivityType{
+		VOUCHER,TAKEOUT
 	}
 	
 	public static enum Vendor{

@@ -348,4 +348,8 @@ public class StringUtils {
 	public static String getFilename(String path) {
 		return org.springframework.util.StringUtils.getFilename(path);
 	}
+	
+	 public static String leftPad(String str, int size, char padChar) {
+		 return org.apache.commons.lang.StringUtils.leftPad(str,size,padChar);
+    }
 }

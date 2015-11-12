@@ -35,4 +35,10 @@ public class DishVO {
 	public void setStockFlag(YOrN stockFlag) {
 		this.stockFlag = stockFlag;
 	}
+
+	@Override
+	public String toString() {
+		return dishName;
+	}
+	
 }

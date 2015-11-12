@@ -65,6 +65,8 @@ public class Dish extends BaseEntity{
 	/* 是否受库存管理  */
 	private YOrN stockFlag;
 	
+	private YOrN suitFlag;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
 	@Column(name="did", nullable=false,updatable=false)
@@ -131,6 +133,16 @@ public class Dish extends BaseEntity{
 
 	public void setStockFlag(YOrN stockFlag) {
 		this.stockFlag = stockFlag;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="suit_flag")
+	public YOrN getSuitFlag() {
+		return suitFlag;
+	}
+
+	public void setSuitFlag(YOrN suitFlag) {
+		this.suitFlag = suitFlag;
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import javax.swing.ListSelectionModel;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.ISchemeService;
+import com.rci.tools.EnumUtils;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.listeners.DataExportImportListener;
 import com.rci.ui.swing.listeners.SchemeDataExportImportListener;
@@ -34,6 +35,7 @@ import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.views.builder.PopWindowBuilder;
 import com.rci.ui.swing.views.builder.SchemeCreateWinBuilder;
 import com.rci.ui.swing.views.builder.SchemeModifyWinBuilder;
+import com.rci.ui.swing.views.builder.WindowBuilderFactory;
 import com.rci.ui.swing.vos.SchemeVO;
 
 public class SchemeManagementWin extends PopWindow {
@@ -47,7 +49,8 @@ public class SchemeManagementWin extends PopWindow {
 	private JScrollPane scrollPane;
 	private JTable table;
 	private JButton addBtn;
-	private JButton editBtn;
+//	private JButton editBtn;
+	private JButton settingBtn;
 	private JButton refreshBtn;
 	private JButton delBtn;
 	private JButton exportBtn;
@@ -107,9 +110,13 @@ public class SchemeManagementWin extends PopWindow {
 		delBtn.setToolTipText("删除");
 		delBtn.setBounds(40, 4, 24, 24);
 		
-		editBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/editBtn_0.png", null);
-		editBtn.setToolTipText("更新");
-		editBtn.setBounds(80, 4, 24, 24);
+//		editBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/editBtn_0.png", null);
+//		editBtn.setToolTipText("更新");
+//		editBtn.setBounds(80, 4, 24, 24);
+		
+		settingBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/settingBtn_0.png", null);
+		settingBtn.setToolTipText("活动类型设置");
+		settingBtn.setBounds(80, 4, 24, 24);
 		
 		refreshBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/refreshBtn_0.png", "skin/gray/images/24x24/refreshBtn_1.png");
 		refreshBtn.setToolTipText("刷新");
@@ -125,7 +132,8 @@ public class SchemeManagementWin extends PopWindow {
 		
 		operaPane.add(addBtn);
 		operaPane.add(delBtn);
-		operaPane.add(editBtn);
+//		operaPane.add(editBtn);
+		operaPane.add(settingBtn);
 		operaPane.add(refreshBtn);
 		operaPane.add(exportBtn);
 		operaPane.add(importBtn);
@@ -171,18 +179,27 @@ public class SchemeManagementWin extends PopWindow {
 			}
 		});
 		
-		//编辑
-		editBtn.addActionListener(new ActionListener() {
+//		//编辑
+//		editBtn.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				int selectIndex = table.getSelectedRow();
+//				if(selectIndex < 0){
+//					JOptionPane.showMessageDialog(null, "请选择一条要修改的数据！");
+//					return;
+//				}
+//				PopWindowBuilder winBuilder = new SchemeModifyWinBuilder(checkListener);
+//				winBuilder.retrieveWindow();
+//			}
+//		});
+		
+		//活动类型设置
+		settingBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selectIndex = table.getSelectedRow();
-				if(selectIndex < 0){
-					JOptionPane.showMessageDialog(null, "请选择一条要修改的数据！");
-					return;
-				}
-				PopWindowBuilder winBuilder = new SchemeModifyWinBuilder(checkListener);
-				winBuilder.retrieveWindow();
+				WindowBuilderFactory.createSchemeTypeMainWindow();
 			}
 		});
 		
@@ -221,22 +238,22 @@ public class SchemeManagementWin extends PopWindow {
 		allCheck.setSelected(true);
 		allCheck.addItemListener(checkListener);
 		allCheck.setBounds(160, 4, 80, 24);
-		JCheckBox eleCheck = new VendorJCheckBox(1,Vendor.ELE,"饿了么");
+		JCheckBox eleCheck = new VendorJCheckBox(1,Vendor.ELE,EnumUtils.getEnumMessage(Vendor.ELE));
 		eleCheck.addItemListener(checkListener);
 		eleCheck.setBounds(240, 4, 80, 24);
-		JCheckBox mtwmCheck = new VendorJCheckBox(2,Vendor.MTWM,"美团外卖");
+		JCheckBox mtwmCheck = new VendorJCheckBox(2,Vendor.MTWM,EnumUtils.getEnumMessage(Vendor.MTWM));
 		mtwmCheck.addItemListener(checkListener);
 		mtwmCheck.setBounds(320, 4, 80, 24);
-		JCheckBox dptgCheck = new VendorJCheckBox(3,Vendor.DZDP,"大众点评");
+		JCheckBox dptgCheck = new VendorJCheckBox(3,Vendor.DZDP,EnumUtils.getEnumMessage(Vendor.DZDP));
 		dptgCheck.addItemListener(checkListener);
 		dptgCheck.setBounds(400, 4, 80, 24);
-		JCheckBox wmcrCheck = new VendorJCheckBox(4,Vendor.WMCR,"外卖超人");
+		JCheckBox wmcrCheck = new VendorJCheckBox(4,Vendor.WMCR,EnumUtils.getEnumMessage(Vendor.WMCR));
 		wmcrCheck.addItemListener(checkListener);
 		wmcrCheck.setBounds(480, 4, 80, 24);
-		JCheckBox mtCheck = new VendorJCheckBox(4,Vendor.MT,"美团");
+		JCheckBox mtCheck = new VendorJCheckBox(4,Vendor.MT,EnumUtils.getEnumMessage(Vendor.MT));
 		mtCheck.addItemListener(checkListener);
 		mtCheck.setBounds(560, 4, 80, 24);
-		JCheckBox bdnmCheck = new VendorJCheckBox(4,Vendor.BDNM,"百度糯米");
+		JCheckBox bdnmCheck = new VendorJCheckBox(4,Vendor.BDNM,EnumUtils.getEnumMessage(Vendor.BDNM));
 		bdnmCheck.addItemListener(checkListener);
 		bdnmCheck.setBounds(640, 4, 80, 24);
 //		JCheckBox shCheck = new VendorJCheckBox(4,Vendor.SH,"闪惠");

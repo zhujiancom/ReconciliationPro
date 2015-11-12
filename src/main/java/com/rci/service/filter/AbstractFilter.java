@@ -1,7 +1,6 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,21 +21,25 @@ import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.Scheme;
+import com.rci.bean.entity.SchemeType;
+import com.rci.bean.entity.TicketInfo;
 import com.rci.bean.entity.TicketStatistic;
 import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.ActivityStatus;
-import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.enums.BusinessEnums.ActivityType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
-import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
+import com.rci.exceptions.ExceptionManage;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IAccountService;
 import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.ISchemeService;
+import com.rci.service.ISchemeTypeService;
+import com.rci.service.ITicketInfoService;
 import com.rci.service.ITicketStatisticService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
@@ -64,6 +67,12 @@ public abstract class AbstractFilter implements CalculateFilter {
 	
 	@Resource(name="TicketStatisticService")
 	private ITicketStatisticService statisticService;
+	
+	@Resource(name="TicketInfoService")
+	private ITicketInfoService ticketService;
+	
+	@Resource(name="SchemeTypeService")
+	protected ISchemeTypeService schemeTypeService;
 	
 	
 	@Override
@@ -93,28 +102,31 @@ public abstract class AbstractFilter implements CalculateFilter {
 		return false;
 	}
 	
-	protected SchemeType getSuitSchemeType(String dishNo){
-		Dish dish = dishService.findDishByNo(dishNo);
-		if(dish.getDishName().indexOf("套餐A") != -1){
-			return SchemeType.SUIT_32;
-		}
-		if(dish.getDishName().indexOf("套餐B") != -1){
-			return SchemeType.SUIT_68;
-		}
-		if(dish.getDishName().indexOf("套餐C") != -1){
-			return SchemeType.SUIT_98;
-		}
-		if(dish.getDishName().indexOf("套餐D") != -1){
-			return SchemeType.SUIT_128;
-		}
-		if(dish.getDishName().indexOf("套餐E") != -1){
-			return SchemeType.SUIT_200;
-		}
-		if(dish.getDishName().indexOf("套餐B-1") != -1){
-			return SchemeType.SUIT_50;
-		}
-		return null;
-	}
+//	protected SchemeType getSuitSchemeType(String dishNo){
+//		Dish dish = dishService.findDishByNo(dishNo);
+//		if(dish.getDishName().indexOf("套餐A") != -1){
+//			return SchemeType.SUIT_32;
+//		}
+//		if(dish.getDishName().indexOf("套餐B") != -1){
+//			return SchemeType.SUIT_68;
+//		}
+//		if(dish.getDishName().indexOf("套餐C") != -1){
+//			return SchemeType.SUIT_98;
+//		}
+//		if(dish.getDishName().indexOf("套餐D+") != -1){
+//			return SchemeType.SUIT_128;
+//		}
+//		if(dish.getDishName().indexOf("套餐D") != -1){
+//			return SchemeType.SUIT_138;
+//		}
+//		if(dish.getDishName().indexOf("套餐E+") != -1){
+//			return SchemeType.SUIT_200;
+//		}
+//		if(dish.getDishName().indexOf("套餐B-1") != -1){
+//			return SchemeType.SUIT_50;
+//		}
+//		return null;
+//	}
 	
 	protected Boolean isSingleDiscount(BigDecimal rate){
 		if(rate.compareTo(new BigDecimal(80)) == 0 || rate.compareTo(new BigDecimal(100)) == 0){
@@ -147,7 +159,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 				Entry<SchemeType, Integer> entry = it.next();
 				SchemeType type = entry.getKey();
 				Integer count = entry.getValue();
-				Scheme scheme = schemeService.getScheme(type,vendor,queryDate);
+				Scheme scheme = schemeService.getScheme(type.getTypeNo(),vendor,queryDate);
 				BigDecimal suitPrice = scheme.getPrice();
 				suitAmount = suitAmount.add(suitPrice.multiply(new BigDecimal(count)));
 				SchemeWrapper schemewrapper = new SchemeWrapper(scheme,count);
@@ -155,51 +167,86 @@ public abstract class AbstractFilter implements CalculateFilter {
 			}
 		}
 		BigDecimal leftAmount = amount.subtract(suitAmount);
-		loopSchemes(leftAmount.intValue(),schemes,vendor,queryDate);
+//		loopSchemes(leftAmount.intValue(),schemes,vendor,queryDate);
+		loopSchemes(leftAmount,schemes,vendor,queryDate);
 		return schemes;
 	}
 	
-	private void loopSchemes(Integer amount, Map<SchemeType,SchemeWrapper> schemes,Vendor vendor,Date queryDate) {
-		if(amount <= 0){
+	/**
+	 * 
+	 * Describle(描述)： 计算代金券消费情况
+	 *
+	 * 方法名称：loopSchemes
+	 *
+	 * 所在类名：AbstractFilter
+	 *
+	 * Create Time:2015年11月11日 下午3:35:30
+	 *  
+	 * @param amount
+	 * @param schemes
+	 * @param vendor
+	 * @param queryDate
+	 */
+//	private void loopSchemes(Integer amount, Map<SchemeType,SchemeWrapper> schemes,Vendor vendor,Date queryDate) {
+//		if(amount <= 0){
+//			return;
+//		}
+//		if (amount > 100) {
+//			// 金额在大于100，使用100元代金券
+//			SchemeWrapper schemewrapper = null;
+//			SchemeType chit100 = schemeTypeService.getSchemeType();
+//			if(schemes.get(SchemeType.CHIT_100) != null){
+//				schemewrapper = schemes.get(SchemeType.CHIT_100);
+//				schemewrapper.increasement();
+//			}else{
+//				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,vendor,queryDate);
+//				schemewrapper = new SchemeWrapper(scheme,1);
+//				schemes.put(SchemeType.CHIT_100, schemewrapper);
+//			}
+//			amount = amount - 100;
+//		}else if (50 < amount && amount <= 100) {
+//			// 金额在50-100之间，使用100元代金券
+//			SchemeWrapper schemewrapper = null;
+//			if(schemes.get(SchemeType.CHIT_100) != null){
+//				schemewrapper = schemes.get(SchemeType.CHIT_100);
+//				schemewrapper.increasement();
+//			}else{
+//				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,vendor,queryDate);
+//				schemewrapper = new SchemeWrapper(scheme,1);
+//				schemes.put(SchemeType.CHIT_100, schemewrapper);
+//			}
+//			amount = amount - 100;
+//		}else if(amount >0 && amount <= 50){
+//			// 金额在小于等于50，使用50元代金券
+//			SchemeWrapper schemewrapper = null;
+//			if(schemes.get(SchemeType.CHIT_50) != null){
+//				schemewrapper = schemes.get(SchemeType.CHIT_50);
+//				schemewrapper.increasement();
+//			}else{
+//				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_50,vendor,queryDate);
+//				schemewrapper = new SchemeWrapper(scheme,1);
+//				schemes.put(SchemeType.CHIT_50, schemewrapper);
+//			}
+//			amount = amount - 50;
+//		}
+//		loopSchemes(amount,schemes,vendor,queryDate);
+//	}
+	
+	private void loopSchemes(BigDecimal amount, Map<SchemeType,SchemeWrapper> schemes,Vendor vendor,Date queryDate) {
+		if(amount.compareTo(BigDecimal.ZERO) <= 0){
 			return;
 		}
-		if (amount > 100) {
-			// 金额在大于100，使用100元代金券
-			SchemeWrapper schemewrapper = null;
-			if(schemes.get(SchemeType.CHIT_100) != null){
-				schemewrapper = schemes.get(SchemeType.CHIT_100);
-				schemewrapper.increasement();
-			}else{
-				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,vendor,queryDate);
-				schemewrapper = new SchemeWrapper(scheme,1);
-				schemes.put(SchemeType.CHIT_100, schemewrapper);
-			}
-			amount = amount - 100;
-		}else if (50 < amount && amount <= 100) {
-			// 金额在50-100之间，使用100元代金券
-			SchemeWrapper schemewrapper = null;
-			if(schemes.get(SchemeType.CHIT_100) != null){
-				schemewrapper = schemes.get(SchemeType.CHIT_100);
-				schemewrapper.increasement();
-			}else{
-				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_100,vendor,queryDate);
-				schemewrapper = new SchemeWrapper(scheme,1);
-				schemes.put(SchemeType.CHIT_100, schemewrapper);
-			}
-			amount = amount - 100;
-		}else if(amount >0 && amount <= 50){
-			// 金额在小于等于50，使用50元代金券
-			SchemeWrapper schemewrapper = null;
-			if(schemes.get(SchemeType.CHIT_50) != null){
-				schemewrapper = schemes.get(SchemeType.CHIT_50);
-				schemewrapper.increasement();
-			}else{
-				Scheme scheme = schemeService.getScheme(SchemeType.CHIT_50,vendor,queryDate);
-				schemewrapper = new SchemeWrapper(scheme,1);
-				schemes.put(SchemeType.CHIT_50, schemewrapper);
-			}
-			amount = amount - 50;
+		SchemeType type = schemeTypeService.getSchemeType(amount, ActivityType.VOUCHER);
+		SchemeWrapper schemewrapper = null;
+		if(schemes.get(type) != null){
+			schemewrapper = schemes.get(type);
+			schemewrapper.increasement();
+		}else{
+			Scheme scheme = schemeService.getScheme(type.getTypeNo(),vendor,queryDate);
+			schemewrapper = new SchemeWrapper(scheme,1);
+			schemes.put(type, schemewrapper);
 		}
+		amount = amount.subtract(type.getCeilAmount());
 		loopSchemes(amount,schemes,vendor,queryDate);
 	}
 	
@@ -287,46 +334,91 @@ public abstract class AbstractFilter implements CalculateFilter {
 	}
 	
 	protected void createTicketStatistic(String day,Vendor vendor,Map<SchemeType,SchemeWrapper> schemes){
-	try{
-		Date queryDate = DateUtil.parseDate(day,"yyyyMMdd");
-		TicketStatistic ts = statisticService.queryTicketStatisticByDate(queryDate, vendor);
-		//统计代金券信息
-		if(ts == null){
-			ts = new TicketStatistic();
-			ts.setChit50(schemes.get(SchemeType.CHIT_50)==null?0:schemes.get(SchemeType.CHIT_50).getCount());
-			ts.setChit100(schemes.get(SchemeType.CHIT_100)==null?0:schemes.get(SchemeType.CHIT_100).getCount());
-			ts.setSuit32(schemes.get(SchemeType.SUIT_32)==null?0:schemes.get(SchemeType.SUIT_32).getCount());
-			ts.setSuit68(schemes.get(SchemeType.SUIT_68)==null?0:schemes.get(SchemeType.SUIT_68).getCount());
-			ts.setSuit98(schemes.get(SchemeType.SUIT_98)==null?0:schemes.get(SchemeType.SUIT_98).getCount());
-			ts.setVendor(vendor);
-			ts.setDate(queryDate);
-			statisticService.rwCreate(ts);
-		}else{
-			Integer chit50 = schemes.get(SchemeType.CHIT_50)==null?0:schemes.get(SchemeType.CHIT_50).getCount();
-			if(chit50 > 0){
-				ts.setChit50(ts.getChit50()+chit50);
+		try{
+			Date queryDate = DateUtil.parseDate(day,"yyyyMMdd");
+			for(Iterator<Entry<SchemeType,SchemeWrapper>> it = schemes.entrySet().iterator();it.hasNext();){
+				Entry<SchemeType,SchemeWrapper> entry = it.next();
+				SchemeType type = entry.getKey();
+				SchemeWrapper wrapper = entry.getValue();
+				TicketStatistic ts = statisticService.queryTicketStatisticByDateAndType(type, queryDate, vendor);
+				if(ts == null){
+					ts = new TicketStatistic();
+					ts.setValifyCount(wrapper.getCount());
+					ts.setVendor(vendor);
+					ts.setDate(queryDate);
+					statisticService.rwCreate(ts);
+				}else{
+					ts.setValifyCount(ts.getValifyCount()+wrapper.getCount());
+					statisticService.rwUpdate(ts);
+				}
 			}
-			Integer chit100 = schemes.get(SchemeType.CHIT_100)==null?0:schemes.get(SchemeType.CHIT_100).getCount();
-			if(chit100 > 0){
-				ts.setChit100(ts.getChit100()+chit100);
-			}
-			Integer suit32 = schemes.get(SchemeType.SUIT_32)==null?0:schemes.get(SchemeType.SUIT_32).getCount();
-			if(suit32 > 0){
-				ts.setSuit32(ts.getSuit32()+suit32);
-			}
-			Integer suit68 = schemes.get(SchemeType.SUIT_68)==null?0:schemes.get(SchemeType.SUIT_68).getCount();
-			if(suit68 > 0){
-				ts.setSuit68(ts.getSuit68()+suit68);
-			}
-			Integer suit98 = schemes.get(SchemeType.SUIT_98)==null?0:schemes.get(SchemeType.SUIT_98).getCount();
-			if(suit98 > 0){
-				ts.setSuit98(ts.getSuit98()+suit98);
-			}
-			statisticService.rwUpdate(ts);
+		}catch(Exception e){
+			
 		}
-	} catch (ParseException e) {
-		e.printStackTrace();
+//	try{
+//		Date queryDate = DateUtil.parseDate(day,"yyyyMMdd");
+//		TicketStatistic ts = statisticService.queryTicketStatisticByDate(queryDate, vendor);
+		//统计代金券信息
+//		if(ts == null){
+//			ts = new TicketStatistic();
+//			ts.setChit50(schemes.get(SchemeType.CHIT_50)==null?0:schemes.get(SchemeType.CHIT_50).getCount());
+//			ts.setChit100(schemes.get(SchemeType.CHIT_100)==null?0:schemes.get(SchemeType.CHIT_100).getCount());
+//			ts.setSuit32(schemes.get(SchemeType.SUIT_32)==null?0:schemes.get(SchemeType.SUIT_32).getCount());
+//			ts.setSuit68(schemes.get(SchemeType.SUIT_68)==null?0:schemes.get(SchemeType.SUIT_68).getCount());
+//			ts.setSuit98(schemes.get(SchemeType.SUIT_98)==null?0:schemes.get(SchemeType.SUIT_98).getCount());
+//			ts.setVendor(vendor);
+//			ts.setDate(queryDate);
+//			statisticService.rwCreate(ts);
+//		}else{
+//			Integer chit50 = schemes.get(SchemeType.CHIT_50)==null?0:schemes.get(SchemeType.CHIT_50).getCount();
+//			if(chit50 > 0){
+//				ts.setChit50(ts.getChit50()+chit50);
+//			}
+//			Integer chit100 = schemes.get(SchemeType.CHIT_100)==null?0:schemes.get(SchemeType.CHIT_100).getCount();
+//			if(chit100 > 0){
+//				ts.setChit100(ts.getChit100()+chit100);
+//			}
+//			Integer suit32 = schemes.get(SchemeType.SUIT_32)==null?0:schemes.get(SchemeType.SUIT_32).getCount();
+//			if(suit32 > 0){
+//				ts.setSuit32(ts.getSuit32()+suit32);
+//			}
+//			Integer suit68 = schemes.get(SchemeType.SUIT_68)==null?0:schemes.get(SchemeType.SUIT_68).getCount();
+//			if(suit68 > 0){
+//				ts.setSuit68(ts.getSuit68()+suit68);
+//			}
+//			Integer suit98 = schemes.get(SchemeType.SUIT_98)==null?0:schemes.get(SchemeType.SUIT_98).getCount();
+//			if(suit98 > 0){
+//				ts.setSuit98(ts.getSuit98()+suit98);
+//			}
+//			statisticService.rwUpdate(ts);
+//		}
+//	} catch (ParseException e) {
+//		e.printStackTrace();
+//	}
 	}
+	
+	protected void createTicketRecord(String day,Vendor vendor,Map<SchemeType,SchemeWrapper> schemes){
+		try{
+			Date queryDate = DateUtil.parseDate(day,"yyyyMMdd");
+			for(Iterator<Entry<SchemeType,SchemeWrapper>> it = schemes.entrySet().iterator();it.hasNext();){
+				Entry<SchemeType,SchemeWrapper> entry = it.next();
+				SchemeType type = entry.getKey();
+				SchemeWrapper wrapper = entry.getValue();
+				TicketInfo ticketInfo = ticketService.queryTicketStatisticByDateAndType(type, queryDate, vendor);
+				if(ticketInfo == null){
+					ticketInfo = new TicketInfo();
+					ticketInfo.setValifyCount(wrapper.getCount());
+					ticketInfo.setVendor(vendor);
+					ticketInfo.setDate(queryDate);
+					ticketService.rwCreate(ticketInfo);
+				}else{
+					ticketInfo.setValifyCount(ticketInfo.getValifyCount()+wrapper.getCount());
+					ticketService.rwUpdate(ticketInfo);
+				}
+			}
+		}catch(Exception e){
+			
+		}
 	}
 	
 	protected abstract void validation(Order order);

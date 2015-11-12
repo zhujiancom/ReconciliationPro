@@ -16,10 +16,10 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
+import com.rci.bean.entity.SchemeType;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
-import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DateUtil;
@@ -70,7 +70,7 @@ public class DPTGFilter extends AbstractFilter {
 				if (!suitFlag) {
 					suitFlag = true;
 				}
-				SchemeType type = getSuitSchemeType(dishNo);
+				SchemeType type = schemeTypeService.getSchemeTypeByDishno(dishNo);
 				Integer suitCount = suitMap.get(type);
 				Integer itemCount = count.subtract(countBack).intValue();
 				if (suitCount != null) {
@@ -99,18 +99,29 @@ public class DPTGFilter extends AbstractFilter {
 			
 		}
 		//将套餐中的饮料从不可打折金额中除去
-		Integer suitACount = suitMap.get(SchemeType.SUIT_32);
-		Integer suitBCount = suitMap.get(SchemeType.SUIT_68);
-		if(suitACount != null && suitACount != 0){
-			Integer beverageAmount = suitACount*7;
-			nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
-			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
+//		Integer suitACount = suitMap.get(SchemeType.SUIT_32);
+//		Integer suitBCount = suitMap.get(SchemeType.SUIT_68);
+//		if(suitACount != null && suitACount != 0){
+//			Integer beverageAmount = suitACount*7;
+//			nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
+//			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
+//		}
+//		if(suitBCount != null && suitBCount != 0){
+//			Integer beverageAmount = suitBCount*16;
+//			nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
+//			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
+//		}
+		
+		for(Iterator<Entry<SchemeType,Integer>> it=suitMap.entrySet().iterator();it.hasNext();){
+			Entry<SchemeType,Integer> entry = it.next();
+			SchemeType stype = entry.getKey();
+			Integer count = entry.getValue();
+			if(stype.getBeverageAmount() != null && stype.getBeverageAmount().compareTo(BigDecimal.ZERO ) != 0){
+				BigDecimal beverageAmount = DigitUtil.mutiplyDown(stype.getBeverageAmount(), new BigDecimal(count));
+				nodiscountAmount = nodiscountAmount.subtract(beverageAmount);
+			}
 		}
-		if(suitBCount != null && suitBCount != 0){
-			Integer beverageAmount = suitBCount*16;
-			nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
-			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
-		}
+		
 		//设置订单中不可打折金额
 		if(nodiscountAmount.intValue() != 0 && order.getNodiscountAmount() == null){
 			order.setNodiscountAmount(nodiscountAmount);

@@ -18,7 +18,6 @@ import javax.persistence.Transient;
 
 import com.rci.bean.entity.base.AccessoryEntity;
 import com.rci.enums.BusinessEnums.ActivityStatus;
-import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.tools.DateUtil;
 
@@ -53,8 +52,8 @@ public class Scheme extends AccessoryEntity {
 	/* 方案单位， 代金券： 张， 套餐： 份 */
 	private String unitCode;
 
-	/* 方案类型 ， 由字典项中获取. Scheme -> CHIT_50,CHIT_100,SUIT_32,SUIT_68,SUIT_98,FREE,CASH*/
-	private SchemeType type;
+	/* 方案类型 */
+	private String typeno;
 	
 	/* 活动开始时间  */
 	private Date startDate;
@@ -146,21 +145,13 @@ public class Scheme extends AccessoryEntity {
 		this.unitCode = unitCode;
 	}
 
-
-	/**
-	 * @return the type
-	 */
-	@Enumerated(EnumType.STRING)
-	@Column(name="s_type")
-	public SchemeType getType() {
-		return type;
+	@Column(name="typeno")
+	public String getTypeno() {
+		return typeno;
 	}
 
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(SchemeType type) {
-		this.type = type;
+	public void setTypeno(String typeno) {
+		this.typeno = typeno;
 	}
 
 	@Temporal(TemporalType.DATE)

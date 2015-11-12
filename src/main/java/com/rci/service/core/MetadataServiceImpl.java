@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.dto.SchemeQueryDTO;
+import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Scheme;
+import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.Stock;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.metadata.service.IDataTransformService;
@@ -19,9 +21,13 @@ import com.rci.service.IDishService;
 import com.rci.service.IDishTypeService;
 import com.rci.service.IPayModeService;
 import com.rci.service.ISchemeService;
+import com.rci.service.ISchemeTypeService;
 import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
 import com.rci.tools.EnumUtils;
+import com.rci.tools.StringUtils;
+import com.rci.ui.swing.vos.DishVO;
+import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
 import com.rci.ui.swing.vos.StockVO;
 
@@ -41,6 +47,8 @@ public class MetadataServiceImpl implements IMetadataService {
 	private IStockService stockService;
 	@Resource(name="SchemeService")
 	private ISchemeService schemeService;
+	@Resource(name="SchemeTypeService")
+	private ISchemeTypeService schemeTypeService;
 //	@Resource(name = "fetchScheduler")
 //	private Scheduler scheduler;
 	
@@ -99,7 +107,7 @@ public class MetadataServiceImpl implements IMetadataService {
 	}
 
 	@Override
-	public List<SchemeVO> dishplaySchemes(SchemeQueryDTO queryDTO) {
+	public List<SchemeVO> displaySchemes(SchemeQueryDTO queryDTO) {
 		List<SchemeVO> schemeVOs = new ArrayList<SchemeVO>();
 		List<Scheme> schemes = schemeService.getSchemes(queryDTO);
 		if(!CollectionUtils.isEmpty(schemes)){
@@ -147,6 +155,68 @@ public class MetadataServiceImpl implements IMetadataService {
 		Scheme scheme = schemeService.get(sid);
 		scheme.setActivityStatus(ActivityStatus.INACTIVE);
 		schemeService.rwUpdate(scheme);
+	}
+
+	@Override
+	public List<SchemeTypeVO> displaySchemeTypes(ActivityStatus status) {
+		List<SchemeType> schemeTypes = schemeTypeService.getSchemeTypes(status);
+		List<SchemeTypeVO> vos = new ArrayList<SchemeTypeVO>();
+		if(!CollectionUtils.isEmpty(schemeTypes)){
+			for(SchemeType type:schemeTypes){
+				SchemeTypeVO vo = beanMapper.map(type, SchemeTypeVO.class);
+				vos.add(vo); 
+			}
+		}
+		return vos;
+	}
+
+	@Override
+	public List<DishVO> displayDishSuits() {
+		List<Dish> dishes = dishService.queryDishesByType("套餐");
+		List<DishVO> vos = new ArrayList<DishVO>();
+		if(!CollectionUtils.isEmpty(dishes)){
+			for(Dish dish:dishes){
+				DishVO vo = beanMapper.map(dish, DishVO.class);
+				vos.add(vo);
+			}
+		}
+		return vos;
+	}
+
+	@Override
+	public void createSchemeType(SchemeTypeVO schemeTypevo) {
+		SchemeType schemeType = beanMapper.map(schemeTypevo, SchemeType.class);
+		schemeType.setStatus(ActivityStatus.ACTIVE);
+		schemeTypeService.rwCreate(schemeType);
+		String typeno = StringUtils.leftPad(schemeType.getStid().toString(), 3, '0');
+		schemeType.setTypeNo(typeno);
+		schemeTypeService.rwUpdate(schemeType);
+	}
+
+	@Override
+	public void updateSchemeType(SchemeTypeVO schemeTypevo) {
+		SchemeType schemeType = schemeTypeService.get(schemeTypevo.getStid());
+		schemeType.setTypeName(schemeTypevo.getTypeName());
+		schemeType.setDishNo(schemeTypevo.getDishNo());
+		schemeType.setBeverageAmount(schemeTypevo.getDiscountAmount());
+		schemeType.setActivity(schemeTypevo.getActivity());
+		schemeType.setFloorAmount(schemeTypevo.getFloorAmount());
+		schemeType.setCeilAmount(schemeTypevo.getCeilAmount());
+		schemeTypeService.rwUpdate(schemeType);
+	}
+
+	@Override
+	public void activeSchemeType(Long stid) {
+		SchemeType schemeType = schemeTypeService.get(stid);
+		schemeType.setStatus(ActivityStatus.ACTIVE);
+		schemeTypeService.rwUpdate(schemeType);
+	}
+
+	@Override
+	public void inactiveSchemeType(Long stid) {
+		SchemeType schemeType = schemeTypeService.get(stid);
+		schemeType.setStatus(ActivityStatus.INACTIVE);
+		schemeTypeService.rwUpdate(schemeType);
 	}
 
 }

@@ -9,10 +9,7 @@ import javax.swing.table.TableColumnModel;
 
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.enums.BusinessEnums.ActivityStatus;
-import com.rci.enums.BusinessEnums.Vendor;
-import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
-import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.vos.SchemeVO;
 
 public class SchemeTable extends BaseTable {
@@ -64,31 +61,18 @@ public class SchemeTable extends BaseTable {
 
 	@Override
 	protected void setModel() {
-		IMetadataService metaservice = (IMetadataService) SpringUtils.getBean("MetadataService");
 		SchemeQueryDTO queryDTO = new SchemeQueryDTO();
 		queryDTO.setStatus(ActivityStatus.ACTIVE);
-		List<SchemeVO> schemes = metaservice.dishplaySchemes(queryDTO);
+		List<SchemeVO> schemes = metaservice.displaySchemes(queryDTO);
 		SchemeTabelModel dm = new SchemeTabelModel(columnNum);
 		dm.setItems(schemes);
 		super.setModel(dm);
 	}
 	
-	@Deprecated
-	public void refresh(Vendor vendor){
-		SchemeTabelModel dm = (SchemeTabelModel) this.getModel();
-		IMetadataService metaservice = (IMetadataService) SpringUtils.getBean("MetadataService");
-		SchemeQueryDTO queryDTO = new SchemeQueryDTO();
-		queryDTO.setStatus(ActivityStatus.ACTIVE);
-		queryDTO.setVendor(vendor);
-		List<SchemeVO> schemes = metaservice.dishplaySchemes(queryDTO);
-		dm.setItems(schemes);
-		dm.fireTableDataChanged();
-	}
 	
 	public void refresh(SchemeQueryDTO queryDTO){
 		SchemeTabelModel dm = (SchemeTabelModel) this.getModel();
-		IMetadataService metaservice = (IMetadataService) SpringUtils.getBean("MetadataService");
-		List<SchemeVO> schemes = metaservice.dishplaySchemes(queryDTO);
+		List<SchemeVO> schemes = metaservice.displaySchemes(queryDTO);
 		dm.setItems(schemes);
 		dm.fireTableDataChanged();
 	}
@@ -99,7 +83,7 @@ public class SchemeTable extends BaseTable {
 		 * 
 		 */
 		private static final long serialVersionUID = -2413115263590198586L;
-		private List<SchemeVO> items = Collections.emptyList();;
+		private List<SchemeVO> items = Collections.emptyList();
 		private int columnNum;
 		
 		public SchemeTabelModel(int columnNum){

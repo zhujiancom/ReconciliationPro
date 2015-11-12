@@ -26,7 +26,6 @@ import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.BusinessEnums;
 import com.rci.enums.BusinessEnums.PaymodeCode;
-import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums;
 import com.rci.tools.StringUtils;
 @Entity

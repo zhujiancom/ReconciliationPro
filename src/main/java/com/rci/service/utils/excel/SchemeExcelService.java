@@ -26,7 +26,6 @@ import com.rci.annotation.ExcelColumn;
 import com.rci.bean.dto.SchemeDTO;
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.ActivityStatus;
-import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
@@ -105,10 +104,6 @@ public class SchemeExcelService extends AbstractExcelOperationService {
 								value = ActivityStatus.valueOf(cell.getStringCellValue());
 							}else if(wMethod.getParameterTypes()[0] == Vendor.class){
 								value = Vendor.valueOf(cell.getStringCellValue());
-							}else if(wMethod.getParameterTypes()[0] == SchemeType.class){
-								if(StringUtils.hasText(cell.getStringCellValue())){
-									value = SchemeType.valueOf(cell.getStringCellValue());
-								}
 							}else{
 								value = cell.getStringCellValue();
 							}

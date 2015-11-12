@@ -2,6 +2,7 @@ package com.rci.metadata.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,6 +42,7 @@ import com.rci.service.IPayModeService;
 import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
 import com.rci.tools.DateUtil;
+import com.rci.tools.properties.PropertyUtils;
 
 @Service("DataTransformService")
 public class DataTransformServiceImpl implements IDataTransformService {
@@ -96,7 +98,9 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			DishTypeDTO typeDTO = typeDTOs.get(i);
 			List<DishDTO> dishDTOs = fetchService.fetchAllDishesByType(typeDTO.getTypeno());
 			DishType type = beanMapper.map(typeDTO, DishType.class);
-			if("23".equals(typeDTO.getTypeno())){
+			String[] notdiscountDishNums = PropertyUtils.getStringArrayValue("nodiscount.dishno");
+			List<String> nodiscountDishContainer = Arrays.asList(notdiscountDishNums);
+			if(nodiscountDishContainer.contains(typeDTO.getTypeno())){
 				type.setNotDiscount(YOrN.Y);
 			}
 			List<Dish> dishes = new LinkedList<Dish>();

@@ -3,6 +3,9 @@ package com.rci.service.core;
 import java.util.List;
 
 import com.rci.bean.dto.SchemeQueryDTO;
+import com.rci.enums.BusinessEnums.ActivityStatus;
+import com.rci.ui.swing.vos.DishVO;
+import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
 import com.rci.ui.swing.vos.StockVO;
 
@@ -80,10 +83,31 @@ public interface IMetadataService {
 	 *  
 	 * @return
 	 */
-	List<SchemeVO> dishplaySchemes(SchemeQueryDTO queryDTO);
+	List<SchemeVO> displaySchemes(SchemeQueryDTO queryDTO);
 	
 	void createScheme(SchemeVO schemevo);
 	void updateScheme(SchemeVO schemevo);
 	void activeScheme(Long sid);
 	void inactiveScheme(Long sid);
+	
+	List<SchemeTypeVO> displaySchemeTypes(ActivityStatus status);
+	
+	/**
+	 * 
+	 * Describle(描述)：获取套餐菜品
+	 *
+	 * 方法名称：displayDishSuits
+	 *
+	 * 所在类名：IMetadataService
+	 *
+	 * Create Time:2015年11月12日 下午4:26:08
+	 *  
+	 * @return
+	 */
+	List<DishVO> displayDishSuits();
+	
+	void createSchemeType(SchemeTypeVO schemeTypevo);
+	void updateSchemeType(SchemeTypeVO schemeTypevo);
+	void activeSchemeType(Long stid);
+	void inactiveSchemeType(Long stid);
 }

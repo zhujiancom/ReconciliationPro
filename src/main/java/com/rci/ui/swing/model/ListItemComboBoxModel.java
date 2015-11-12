@@ -5,10 +5,8 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 
-import com.rci.bean.LabelValueBean;
-
-public class VendorComboBoxModel extends AbstractListModel<LabelValueBean<String>>
-		implements ComboBoxModel<LabelValueBean<String>> {
+public class ListItemComboBoxModel<T> extends AbstractListModel<T>
+		implements ComboBoxModel<T> {
 	/**
 	 * 
 	 */
@@ -16,15 +14,15 @@ public class VendorComboBoxModel extends AbstractListModel<LabelValueBean<String
 
 //	private Object selectedItem;
 	
-	private LabelValueBean<String> selectedItem;
+	private T selectedItem;
 	
-	private List<LabelValueBean<String>> itemList;
+	private List<T> itemList;
 	
-	public VendorComboBoxModel() {
+	public ListItemComboBoxModel() {
 		super();
 	}
 
-	public VendorComboBoxModel(List<LabelValueBean<String>> itemList) {
+	public ListItemComboBoxModel(List<T> itemList) {
 		super();
 		this.itemList = itemList;
 	}
@@ -35,13 +33,14 @@ public class VendorComboBoxModel extends AbstractListModel<LabelValueBean<String
 	}
 
 	@Override
-	public LabelValueBean<String> getElementAt(int index) {
-		return itemList.get(index);
+	public T getElementAt(int index) {
+		return (T) itemList.get(index);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setSelectedItem(Object anItem) {
-		selectedItem = (LabelValueBean<String>) anItem;
+		selectedItem =  (T) anItem;
 	}
 
 	@Override

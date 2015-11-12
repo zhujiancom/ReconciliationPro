@@ -5,8 +5,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import com.rci.annotation.ExcelColumn;
+import com.rci.bean.entity.SchemeType;
 import com.rci.enums.BusinessEnums.ActivityStatus;
-import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 
 public class SchemeDTO {

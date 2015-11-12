@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Properties;
 
 import com.rci.config.GlobalSettings;
+import com.rci.tools.StringUtils;
 
 /**
  * @Description
@@ -49,6 +50,16 @@ public class PropertyUtils{
 		}catch(NumberFormatException nfe){
 			return BigDecimal.ZERO;
 		}
+	}
+	
+	public static String[] getStringArrayValue(String key){
+		return getStringArrayValue(key,',');
+	}
+	
+	public static String[] getStringArrayValue(String key,char separatorChar){
+		String value = p.getProperty(key);
+		String[] result = StringUtils.split(value, separatorChar);
+		return result;		
 	}
 	
 }

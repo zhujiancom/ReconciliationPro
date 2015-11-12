@@ -1,7 +1,9 @@
 package com.rci.service;
 
 import java.util.Date;
+import java.util.List;
 
+import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.TicketStatistic;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.base.IBaseService;
@@ -22,8 +24,9 @@ public interface ITicketStatisticService extends IBaseService<TicketStatistic, L
 	 * @param vendor
 	 * @return
 	 */
-	TicketStatistic queryTicketStatisticByDate(Date date,Vendor vendor);
+	List<TicketStatistic> queryTicketStatisticByDate(Date date,Vendor vendor);
 	
+	TicketStatistic queryTicketStatisticByDateAndType(SchemeType stype, Date date,Vendor vendor);
 	
 	void deleteTicketStatistic(String time);
 }

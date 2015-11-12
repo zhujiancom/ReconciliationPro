@@ -17,10 +17,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.rci.bean.LabelValueBean;
-import com.rci.enums.BusinessEnums.SchemeType;
+import com.rci.bean.entity.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
+import com.rci.service.ISchemeTypeService;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.EnumUtils;
@@ -28,7 +29,7 @@ import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
 import com.rci.ui.swing.listeners.VendorCheckListener;
 import com.rci.ui.swing.model.ButtonFactory;
-import com.rci.ui.swing.model.VendorComboBoxModel;
+import com.rci.ui.swing.model.ListItemComboBoxModel;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.vos.SchemeVO;
 
@@ -37,7 +38,7 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 	private JScrollPane sPane;
 	private JTextField nameInput = new JTextField(30);
 	private JComboBox<LabelValueBean<String>> vendorInput;
-	private JComboBox<LabelValueBean<String>> schemeTypeInput;
+	private JComboBox<SchemeType> schemeTypeInput;
 	private JTextField priceInput = new JTextField(30);
 	private JTextField postPriceInput = new JTextField(30);
 	private JTextField spreadInput = new JTextField(30);
@@ -69,28 +70,15 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 		try{
 			validation();
 			@SuppressWarnings("unchecked")
-			LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
+			LabelValueBean<String> vendorSelected = (LabelValueBean<String>) vendorInput.getSelectedItem();
 			SchemeVO newScheme = new SchemeVO();
-			Vendor vendor = Vendor.valueOf(item.getValue());
+			Vendor vendor = Vendor.valueOf(vendorSelected.getValue());
 			newScheme.setVendor(vendor);
 			newScheme.setName(nameInput.getText());
 			BigDecimal price = new BigDecimal(priceInput.getText().trim());
-			if(price.compareTo(new BigDecimal("50")) == 0){
-				newScheme.setType(SchemeType.CHIT_50);
-			}
-			if(price.compareTo(new BigDecimal("100")) == 0){
-				newScheme.setType(SchemeType.CHIT_100);
-			}
-			if(price.compareTo(new BigDecimal("98")) == 0){
-				newScheme.setType(SchemeType.SUIT_98);
-			}
-			if(price.compareTo(new BigDecimal("68")) == 0){
-				newScheme.setType(SchemeType.SUIT_68);
-			}
-			if(price.compareTo(new BigDecimal("32")) == 0){
-				newScheme.setType(SchemeType.SUIT_32);
-			}
 			newScheme.setPrice(price);
+			SchemeType stypeSelected = (SchemeType) schemeTypeInput.getSelectedItem();
+			newScheme.setTypeno(stypeSelected.getTypeNo());
 			newScheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
 			newScheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
 			newScheme.setStartDate(DateUtil.parseDate(startInput.getText().trim(), "yyyyMMdd"));
@@ -133,14 +121,17 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
 		secondPane.add(vendor);
 		List<LabelValueBean<String>> itemList = EnumUtils.getEnumLabelValueBeanList(Vendor.class, false);
-		VendorComboBoxModel vcm = new VendorComboBoxModel(itemList);
+		ListItemComboBoxModel<LabelValueBean<String>> vcm = new ListItemComboBoxModel<LabelValueBean<String>>(itemList);
 		vendorInput = new JComboBox<LabelValueBean<String>>(vcm);
 		secondPane.add(vendorInput);
 		mainPane.add(secondPane);
 		JPanel elevenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
-		List<LabelValueBean<String>> schemeTypeList = EnumUtils.getEnumLabelValueBeanList(SchemeType.class, false);
-		VendorComboBoxModel stcm = new VendorComboBoxModel(schemeTypeList);
-		schemeTypeInput = new JComboBox<LabelValueBean<String>>(stcm);
+//		List<LabelValueBean<String>> schemeTypeList = EnumUtils.getEnumLabelValueBeanList(SchemeType.class, false);
+		ISchemeTypeService schemeTypeService = (ISchemeTypeService) SpringUtils.getBean("SchemeTypeService");
+		List<SchemeType> schemeTypes = schemeTypeService.getAll();
+		ListItemComboBoxModel<SchemeType> stcm = new ListItemComboBoxModel<SchemeType>(schemeTypes);
+//		DisplayableComboBoxModel stcm = new DisplayableComboBoxModel(schemeTypeList);
+		schemeTypeInput = new JComboBox<SchemeType>(stcm);
 		elevenPane.add(schemeType);
 		elevenPane.add(schemeTypeInput);
 		mainPane.add(elevenPane);

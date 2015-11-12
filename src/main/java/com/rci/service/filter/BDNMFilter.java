@@ -16,10 +16,10 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
+import com.rci.bean.entity.SchemeType;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
-import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.DateUtil;
@@ -64,7 +64,8 @@ public class BDNMFilter extends AbstractFilter {
 				if (!suitFlag) {
 					suitFlag = true;
 				}
-				SchemeType type = getSuitSchemeType(dishNo);
+//				SchemeType type = getSuitSchemeType(dishNo);
+				SchemeType type = schemeTypeService.getSchemeTypeByDishno(dishNo);
 				Integer suitCount = suitMap.get(type);
 				Integer itemCount = count.subtract(countBack).intValue();
 				if (suitCount != null) {
@@ -93,11 +94,14 @@ public class BDNMFilter extends AbstractFilter {
 			
 		}
 		//将套餐中的饮料从不可打折金额中除去
-		Integer suitB1Count = suitMap.get(SchemeType.SUIT_50);
-		if(suitB1Count != null && suitB1Count != 0){
-			Integer beverageAmount = suitB1Count*8;
-			nodiscountAmount = nodiscountAmount.subtract(new BigDecimal(beverageAmount));
-			bediscountAmount = bediscountAmount.add(new BigDecimal(beverageAmount));
+		for(Iterator<Entry<SchemeType,Integer>> it=suitMap.entrySet().iterator();it.hasNext();){
+			Entry<SchemeType,Integer> entry = it.next();
+			SchemeType stype = entry.getKey();
+			Integer count = entry.getValue();
+			if(stype.getBeverageAmount() != null){
+				BigDecimal beverageAmount = DigitUtil.mutiplyDown(stype.getBeverageAmount(), new BigDecimal(count));
+				nodiscountAmount = nodiscountAmount.subtract(beverageAmount);
+			}
 		}
 		//设置订单中不可打折金额
 		if(nodiscountAmount.intValue() != 0 && order.getNodiscountAmount() == null){

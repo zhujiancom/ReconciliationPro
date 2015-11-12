@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.EleSDStatistic;
-import com.rci.bean.entity.TicketStatistic;
+import com.rci.bean.entity.TicketInfo;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
-import com.rci.service.ITicketStatisticService;
+import com.rci.service.ITicketInfoService;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.vos.ExpressRateVO;
@@ -26,8 +26,10 @@ import com.rci.ui.swing.vos.TurnoverVO;
 
 @Service("StatisticCenterFacade")
 public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
-	@Resource(name="TicketStatisticService")
-	private ITicketStatisticService ticketService;
+//	@Resource(name="TicketStatisticService")
+//	private ITicketStatisticService ticketService;
+	@Resource(name="TicketInfoService")
+	private ITicketInfoService ticketService;
 	@Resource(name="OrderService")
 	private IOrderService orderService;
 	@Resource(name="ELESDStatisticService")
@@ -37,11 +39,19 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 	
 	@Override
 	public String getTicketStatistic(Date date, Vendor vendor) {
-		TicketStatistic ts = ticketService.queryTicketStatisticByDate(date, vendor);
-		if(ts != null){
-			return ts.getName();
+//		List<TicketStatistic> ts = ticketService.queryTicketStatisticByDate(date, vendor);
+//		if(ts != null){
+//			return ts.getName();
+//		}
+		StringBuffer sb = new StringBuffer();
+		List<TicketInfo> ticketInfos = ticketService.queryTicketStatisticByDate(date, vendor);
+		if(!CollectionUtils.isEmpty(ticketInfos)){
+			for(TicketInfo info:ticketInfos){
+				sb.append(",").append(info.getName()).append(info.getValifyCount()).append(" 张");
+			}
+			sb.substring(1);
 		}
-		return "";
+		return sb.toString();
 	}
 
 	@Override

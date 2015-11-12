@@ -3,6 +3,9 @@ package com.rci.ui.swing.model;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
+import com.rci.service.core.IMetadataService;
+import com.rci.tools.SpringUtils;
+
 public abstract class BaseTable extends JTable {
 	/**
 	 * 
@@ -10,6 +13,12 @@ public abstract class BaseTable extends JTable {
 	private static final long serialVersionUID = -7637179254128694436L;
 	
 	protected int columnNum;
+	
+	protected static final IMetadataService metaservice;
+	
+	static{
+		metaservice = (IMetadataService) SpringUtils.getBean("MetadataService");
+	}
 
 	public BaseTable(){
 		this.setRowHeight(30);

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.rci.enums.BusinessEnums.ActivityStatus;
-import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 
 public class SchemeVO {
@@ -28,7 +27,8 @@ public class SchemeVO {
 	/* 餐厅补贴 */
 	private BigDecimal spread;
 	
-	private SchemeType type;
+//	private SchemeType type;
+	private String typeno;
 	
 	/* 开始时间 */
 	private Date startDate;
@@ -104,13 +104,13 @@ public class SchemeVO {
 		this.spread = spread;
 	}
 
-	public SchemeType getType() {
-		return type;
-	}
-
-	public void setType(SchemeType type) {
-		this.type = type;
-	}
+//	public SchemeType getType() {
+//		return type;
+//	}
+//
+//	public void setType(SchemeType type) {
+//		this.type = type;
+//	}
 
 	public Date getStartDate() {
 		return startDate;
@@ -174,5 +174,13 @@ public class SchemeVO {
 
 	public void setModifyTime(Date modifyTime) {
 		this.modifyTime = modifyTime;
+	}
+
+	public String getTypeno() {
+		return typeno;
+	}
+
+	public void setTypeno(String typeno) {
+		this.typeno = typeno;
 	}
 }

@@ -9,6 +9,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
+import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.TicketStatistic;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.ITicketStatisticService;
@@ -19,9 +20,10 @@ import com.rci.tools.DateUtil;
 public class TicketStatisticServiceImpl extends BaseServiceImpl<TicketStatistic, Long> implements ITicketStatisticService{
 
 	@Override
-	public TicketStatistic queryTicketStatisticByDate(Date date, Vendor vendor) {
+	public TicketStatistic queryTicketStatisticByDateAndType(SchemeType stype, Date date, Vendor vendor) {
 		DetachedCriteria dc = DetachedCriteria.forClass(TicketStatistic.class);
-		dc.add(Restrictions.eq("date", date)).add(Restrictions.eq("vendor", vendor));
+		dc.createAlias("schemeType", "schemeType");
+		dc.add(Restrictions.eq("date", date)).add(Restrictions.eq("vendor", vendor)).add(Restrictions.eq("schemeType.typeNo", stype.getTypeNo()));
 		return baseDAO.queryUniqueByCriteria(dc);
 	}
 
@@ -37,6 +39,14 @@ public class TicketStatisticServiceImpl extends BaseServiceImpl<TicketStatistic,
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	@Override
+	public List<TicketStatistic> queryTicketStatisticByDate(Date date, Vendor vendor) {
+		DetachedCriteria dc = DetachedCriteria.forClass(TicketStatistic.class);
+		dc.add(Restrictions.eq("date", date)).add(Restrictions.eq("vendor", vendor));
+		return baseDAO.queryListByCriteria(dc);
 	}
 
 }

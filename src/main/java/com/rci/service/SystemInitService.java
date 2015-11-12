@@ -1,6 +1,5 @@
 package com.rci.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,17 +9,13 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.DishType;
-import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.account.Account;
 import com.rci.bean.entity.base.DictGroup;
 import com.rci.bean.entity.base.DictItem;
-import com.rci.enums.BusinessEnums.ActivityStatus;
-import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.base.IDictGroupService;
 import com.rci.service.base.IDictItemService;
-import com.rci.tools.DateUtil;
 
 @Service("SystemInitService")
 public class SystemInitService implements InitializingBean{
@@ -122,113 +117,6 @@ public class SystemInitService implements InitializingBean{
 	 *
 	 */
 	private void initSchemes(){
-		List<Scheme> schemes = new ArrayList<Scheme>();
-		Scheme s1 = new Scheme();
-		s1.setName("美团50元代金券");
-		s1.setPaymodeno("99");
-		s1.setPostPrice(new BigDecimal(43.56));
-		s1.setPrice(new BigDecimal(50));
-		s1.setType(SchemeType.CHIT_50);
-		s1.setUnitCode("PC");
-		
-		Scheme s2 = new Scheme();
-		s2.setName("美团100元代金券");
-		s2.setPaymodeno("99");
-		s2.setPostPrice(new BigDecimal(87.12));
-		s2.setPrice(new BigDecimal(100));
-		s2.setType(SchemeType.CHIT_100);
-		s2.setUnitCode("PC");
-		
-		Scheme s3 = new Scheme();
-		s3.setName("美团套餐A");
-		s3.setPaymodeno("99");
-		s3.setPostPrice(new BigDecimal(31.68));
-		s3.setPrice(new BigDecimal(32));
-		s3.setType(SchemeType.SUIT_32);
-		s3.setUnitCode("PKG");
-		
-		Scheme s4 = new Scheme();
-		s4.setName("美团套餐B");
-		s4.setPaymodeno("99");
-		s4.setPostPrice(new BigDecimal(67.32));
-		s4.setPrice(new BigDecimal(68));
-		s4.setType(SchemeType.SUIT_68);
-		s4.setUnitCode("PKG");
-		
-		Scheme s5 = new Scheme();
-		s5.setName("美团套餐C");
-		s5.setPaymodeno("99");
-		s5.setPostPrice(new BigDecimal(97.02));
-		s5.setPrice(new BigDecimal(98));
-		s5.setType(SchemeType.SUIT_98);
-		s5.setUnitCode("PKG");
-		
-		Scheme s6 = new Scheme();
-		s6.setName("大众点评50元代金券");
-		s6.setPaymodeno("98");
-		s6.setPostPrice(new BigDecimal(43.56));
-		s6.setPrice(new BigDecimal(50));
-		s6.setType(SchemeType.CHIT_50);
-		s6.setUnitCode("PC");
-		
-		Scheme s7 = new Scheme();
-		s7.setName("大众点评100元代金券");
-		s7.setPaymodeno("98");
-		s7.setPostPrice(new BigDecimal(87.12));
-		s7.setPrice(new BigDecimal(100));
-		s7.setType(SchemeType.CHIT_100);
-		s7.setUnitCode("PC");
-		
-		Scheme s8 = new Scheme();
-		s8.setName("大众点评套餐A");
-		s8.setPaymodeno("98");
-		s8.setPostPrice(new BigDecimal(31.68));
-		s8.setPrice(new BigDecimal(32));
-		s8.setType(SchemeType.SUIT_32);
-		s8.setUnitCode("PKG");
-		
-		Scheme s9 = new Scheme();
-		s9.setName("大众点评套餐B");
-		s9.setPaymodeno("98");
-		s9.setPostPrice(new BigDecimal(67.32));
-		s9.setPrice(new BigDecimal(68));
-		s9.setType(SchemeType.SUIT_68);
-		s9.setUnitCode("PKG");
-		
-		Scheme s10 = new Scheme();
-		s10.setName("大众点评套餐C");
-		s10.setPaymodeno("98");
-		s10.setPostPrice(new BigDecimal(97.12));
-		s10.setPrice(new BigDecimal(98));
-		s10.setType(SchemeType.SUIT_98);
-		s10.setUnitCode("PKG");
-		
-		Scheme s11 = new Scheme();
-		s11.setName("饿了么新用户优惠（不叠加）");
-		s11.setActivityStatus(ActivityStatus.ACTIVE);
-		s11.setPaymodeno("11");
-		s11.setPrice(new BigDecimal("15"));
-		s11.setPostPrice(new BigDecimal("15"));
-		s11.setSpread(BigDecimal.ZERO);
-		s11.setStartDate(DateUtil.parseDate("2015-03-27"));
-		s11.setEndDate(DateUtil.parseDate("2015-05-18"));
-		s11.setUnitCode("PC");
-		
-		Scheme s12 = new Scheme();
-		s12.setName("饿了么满20减12");
-		s12.setActivityStatus(ActivityStatus.ACTIVE);
-		s12.setPaymodeno("11");
-		s12.setPrice(new BigDecimal("12"));
-		s12.setPostPrice(new BigDecimal("9"));
-		s12.setSpread(new BigDecimal("3"));
-		s12.setStartDate(DateUtil.parseDate("2015-05-06"));
-		s12.setEndDate(DateUtil.parseDate("2015-05-20"));
-		s12.setUnitCode("PC");
-		
-		schemes.add(s1);schemes.add(s2);schemes.add(s3);schemes.add(s4);schemes.add(s5);
-		schemes.add(s6);schemes.add(s7);schemes.add(s8);schemes.add(s9);schemes.add(s10);
-		schemes.add(s11);schemes.add(s12);
-		schemeService.rwCreate(schemes.toArray(new Scheme[0]));
 	}
 
 	/**

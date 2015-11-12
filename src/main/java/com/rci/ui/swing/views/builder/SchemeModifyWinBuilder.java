@@ -22,10 +22,11 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.service.spi.ServiceException;
 
 import com.rci.bean.LabelValueBean;
+import com.rci.bean.entity.SchemeType;
 import com.rci.enums.BusinessEnums.ActivityStatus;
-import com.rci.enums.BusinessEnums.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.exceptions.ExceptionManage;
+import com.rci.service.ISchemeTypeService;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.EnumUtils;
@@ -33,8 +34,8 @@ import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
 import com.rci.ui.swing.listeners.VendorCheckListener;
 import com.rci.ui.swing.model.ButtonFactory;
+import com.rci.ui.swing.model.ListItemComboBoxModel;
 import com.rci.ui.swing.model.SchemeTable.SchemeTabelModel;
-import com.rci.ui.swing.model.VendorComboBoxModel;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.vos.SchemeVO;
 
@@ -45,7 +46,7 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 	private JScrollPane sPane;
 	private JTextField nameInput;
 	private JComboBox<LabelValueBean<String>> vendorInput;
-	private JComboBox<LabelValueBean<String>> schemeTypeInput;
+	private JComboBox<SchemeType> schemeTypeInput;
 	private JTextField priceInput ;
 	private JTextField postPriceInput;
 	private JTextField spreadInput;
@@ -102,18 +103,19 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
 		secondPane.add(vendor);
 		List<LabelValueBean<String>> itemList = EnumUtils.getEnumLabelValueBeanList(Vendor.class, false);
-		VendorComboBoxModel vcm = new VendorComboBoxModel(itemList);
+		ListItemComboBoxModel<LabelValueBean<String>> vcm = new ListItemComboBoxModel<LabelValueBean<String>>(itemList);
 		vendorInput = new JComboBox<LabelValueBean<String>>(vcm);
 		LabelValueBean<String> labelvalue = new LabelValueBean<String>(scheme.getDishplayVendor(),scheme.getVendor().name());
 		vendorInput.setSelectedItem(labelvalue);
 		secondPane.add(vendorInput);
 		mainPane.add(secondPane);
-		if(scheme.getType() != null){
+		if(StringUtils.hasText(scheme.getTypeno())){
 			JPanel thirteenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
-			List<LabelValueBean<String>> schemeTypeList = EnumUtils.getEnumLabelValueBeanList(SchemeType.class, false);
-			VendorComboBoxModel stcm = new VendorComboBoxModel(schemeTypeList);
-			schemeTypeInput = new JComboBox<LabelValueBean<String>>(stcm);
-			LabelValueBean<String> selectSchemeTypevalue = new LabelValueBean<String>(EnumUtils.getEnumMessage(scheme.getType()),scheme.getType().name());
+			ISchemeTypeService schemeTypeService = (ISchemeTypeService) SpringUtils.getBean("SchemeTypeService");
+			List<SchemeType> schemeTypes = schemeTypeService.getAll();
+			ListItemComboBoxModel<SchemeType> stcm = new ListItemComboBoxModel<SchemeType>(schemeTypes);
+			schemeTypeInput = new JComboBox<SchemeType>(stcm);
+			SchemeType selectSchemeTypevalue = schemeTypeService.getSchemeTypeByNo(scheme.getTypeno());
 			schemeTypeInput.setSelectedItem(selectSchemeTypevalue);
 			thirteenPane.add(schemeType);
 			thirteenPane.add(schemeTypeInput);
