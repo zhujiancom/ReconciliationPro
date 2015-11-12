@@ -156,8 +156,13 @@ public class SchemeType extends AccessoryEntity{
 
 	@Override
 	public boolean equals(Object param) {
-		SchemeType obj = (SchemeType) param;
-		return new EqualsBuilder().append(this.typeNo,obj.typeNo).isEquals();
+		boolean equals = false;
+		if(param != null && SchemeType.class.isAssignableFrom(param.getClass())){
+			SchemeType obj = (SchemeType) param;
+			equals = new EqualsBuilder().append(this.typeNo,obj.typeNo).isEquals();
+		}
+		
+		return equals;
 	}
 
 	@Override
