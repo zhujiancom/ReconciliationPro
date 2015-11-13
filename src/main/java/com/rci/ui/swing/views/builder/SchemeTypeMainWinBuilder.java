@@ -31,7 +31,7 @@ public class SchemeTypeMainWinBuilder extends AbstractWinBuilder {
 
 	@Override
 	protected PopWindow createWindow() {
-		return new SchemeTypeMainWin(900,600,"在线平台活动设置");
+		return new SchemeTypeMainWin(900,600,"活动类型设置");
 	}
 
 }

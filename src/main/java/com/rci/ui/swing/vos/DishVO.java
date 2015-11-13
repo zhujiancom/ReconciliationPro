@@ -1,5 +1,8 @@
 package com.rci.ui.swing.vos;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.rci.enums.CommonEnums.YOrN;
 
 public class DishVO {
@@ -34,6 +37,21 @@ public class DishVO {
 
 	public void setStockFlag(YOrN stockFlag) {
 		this.stockFlag = stockFlag;
+	}
+
+	@Override
+	public boolean equals(Object paramObject) {
+		boolean isEqual = false;
+		if(paramObject != null && DishVO.class.isAssignableFrom(paramObject.getClass())){
+			DishVO obj = (DishVO) paramObject;
+			isEqual = new EqualsBuilder().append(this.dishNo, obj.dishNo).isEquals();
+		}
+		return isEqual;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,37).append(this.dishNo).toHashCode();
 	}
 
 	@Override

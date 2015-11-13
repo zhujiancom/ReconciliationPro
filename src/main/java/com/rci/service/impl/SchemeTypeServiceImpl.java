@@ -7,8 +7,10 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 
+import com.rci.bean.dto.SchemeTypeQueryDTO;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.ActivityStatus;
+import com.rci.dao.impl.SafeDetachedCriteria;
+import com.rci.dao.impl.SafeRestrictions;
 import com.rci.enums.BusinessEnums.ActivityType;
 import com.rci.service.ISchemeTypeService;
 import com.rci.service.base.BaseServiceImpl;
@@ -55,9 +57,10 @@ public class SchemeTypeServiceImpl extends BaseServiceImpl<SchemeType, Long> imp
 	}
 
 	@Override
-	public List<SchemeType> getSchemeTypes(ActivityStatus status) {
-		DetachedCriteria sdc = DetachedCriteria.forClass(SchemeType.class);
-		sdc.add(Restrictions.eq("status", status));
+	public List<SchemeType> getSchemeTypes(SchemeTypeQueryDTO queryDTO) {
+		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(SchemeType.class);
+		sdc.add(SafeRestrictions.eq("status", queryDTO.getStatus()))
+			.add(SafeRestrictions.eq("activity", queryDTO.getActivity()));
 		return baseDAO.queryListByCriteria(sdc);
 	}
 }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Dish;
+import com.rci.bean.entity.DishSeries;
 import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
@@ -28,6 +29,7 @@ import com.rci.bean.entity.Paymode;
 import com.rci.bean.entity.TableInfo;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.dto.DishDTO;
+import com.rci.metadata.dto.DishSeriesDTO;
 import com.rci.metadata.dto.DishTypeDTO;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
@@ -93,30 +95,76 @@ public class DataTransformServiceImpl implements IDataTransformService {
 
 	@Override
 	public void transformDishInfo() {
+//		List<DishTypeDTO> typeDTOs = fetchService.fetchAllDishTypes();
+//		for(int i=0;i<typeDTOs.size();i++){
+//			DishTypeDTO typeDTO = typeDTOs.get(i);
+//			List<DishDTO> dishDTOs = fetchService.fetchAllDishesByType(typeDTO.getTypeno());
+//			DishType type = beanMapper.map(typeDTO, DishType.class);
+//			String[] notdiscountDishNums = PropertyUtils.getStringArrayValue("nodiscount.dishno");
+//			List<String> nodiscountDishContainer = Arrays.asList(notdiscountDishNums);
+//			if(nodiscountDishContainer.contains(typeDTO.getTypeno())){
+//				type.setNotDiscount(YOrN.Y);
+//			}
+//			List<Dish> dishes = new LinkedList<Dish>();
+//			List<String> stockDishNos = stockService.getStockDishNumbers();
+//			for(DishDTO dishDTO:dishDTOs){
+//				Dish dish = beanMapper.map(dishDTO, Dish.class);
+//				dish.setDishType(type);
+//				if(stockDishNos.contains(dish.getDishNo())){
+//					dish.setStockFlag(YOrN.Y);
+//				}else{
+//					dish.setStockFlag(YOrN.N);
+//				}
+//				dishes.add(dish);
+//				dishService.rwCreate(dish);
+//			}
+//		}
+		List<DishSeriesDTO> seriesDTOs =fetchService.fetchAllDishSeries();
+		Map<String,DishSeries> seriesMap = new HashMap<String,DishSeries>();
+		for(DishSeriesDTO seriesDTO:seriesDTOs){
+			DishSeries series = beanMapper.map(seriesDTO, DishSeries.class);
+			seriesMap.put(seriesDTO.getSeriesno(),series);
+		}
 		List<DishTypeDTO> typeDTOs = fetchService.fetchAllDishTypes();
-		for(int i=0;i<typeDTOs.size();i++){
-			DishTypeDTO typeDTO = typeDTOs.get(i);
-			List<DishDTO> dishDTOs = fetchService.fetchAllDishesByType(typeDTO.getTypeno());
+		Map<String,DishType> typesMap = new HashMap<String,DishType>();
+		for(DishTypeDTO typeDTO:typeDTOs){
+			if(typeDTO.getTypename().equals("0")){
+				continue;
+			}
 			DishType type = beanMapper.map(typeDTO, DishType.class);
-			String[] notdiscountDishNums = PropertyUtils.getStringArrayValue("nodiscount.dishno");
+			String[] notdiscountDishNums = PropertyUtils.getStringArrayValue("notdiscount.dishno");
 			List<String> nodiscountDishContainer = Arrays.asList(notdiscountDishNums);
 			if(nodiscountDishContainer.contains(typeDTO.getTypeno())){
 				type.setNotDiscount(YOrN.Y);
 			}
-			List<Dish> dishes = new LinkedList<Dish>();
-			List<String> stockDishNos = stockService.getStockDishNumbers();
-			for(DishDTO dishDTO:dishDTOs){
-				Dish dish = beanMapper.map(dishDTO, Dish.class);
-				dish.setDishType(type);
-				if(stockDishNos.contains(dish.getDishNo())){
-					dish.setStockFlag(YOrN.Y);
-				}else{
-					dish.setStockFlag(YOrN.N);
-				}
-				dishes.add(dish);
-				dishService.rwCreate(dish);
-			}
+			typesMap.put(typeDTO.getTypeno(), type);
 		}
+		List<DishDTO> dishDTOs = fetchService.fetchAllDish();
+		List<String> stockDishNos = stockService.getStockDishNumbers();
+		List<Dish> dishes = new LinkedList<Dish>();
+		for(DishDTO dishDTO:dishDTOs){
+			Dish dish = beanMapper.map(dishDTO, Dish.class);
+			if("0".equals(dishDTO.getDishName())){
+				continue;
+			}
+			DishType type = typesMap.get(dishDTO.getDishType());
+			DishSeries series = seriesMap.get(dishDTO.getSeriesno());
+			if(type == null || series == null){
+				continue;
+			}
+			type.setDishSeries(series);
+			type.setSeriesno(series.getSeriesno());
+			dish.setDishType(type);
+			dish.setDishSeries(series);
+			if(stockDishNos.contains(dish.getDishNo())){
+				dish.setStockFlag(YOrN.Y);
+			}else{
+				dish.setStockFlag(YOrN.N);
+			}
+			dishes.add(dish);
+//			dishService.rwCreate(dish);
+		}
+		dishService.rwCreate(dishes.toArray(new Dish[0]));
 	}
 	
 	public Dish transformDishInfo(String dishno){

@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -19,6 +21,21 @@ import javax.persistence.Transient;
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.CommonEnums;
 
+/**
+ * 
+ * remark (备注): 菜品小类
+ *
+ * @author zj
+ *	
+ * 项目名称：ReconciliationPro
+ *
+ * 类名称：DishType
+ *
+ * 包名称：com.rci.bean.entity
+ *
+ * Create Time: 2015年11月13日 下午3:45:41
+ *
+ */
 @Entity
 @Table(name="bus_tb_dish_type")
 public class DishType extends BaseEntity {
@@ -38,6 +55,11 @@ public class DishType extends BaseEntity {
 	private List<Dish> dishes;
 	
 	private CommonEnums.YOrN notDiscount;
+	
+	private DishSeries dishSeries;
+	
+	/* 菜品大类 */
+	private String seriesno;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -77,6 +99,16 @@ public class DishType extends BaseEntity {
 		this.dishes = dishes;
 	}
 
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="dish_series_id")
+	public DishSeries getDishSeries() {
+		return dishSeries;
+	}
+
+	public void setDishSeries(DishSeries dishSeries) {
+		this.dishSeries = dishSeries;
+	}
+
 	@Enumerated(EnumType.STRING)
 	@Column(name="not_discount")
 	public CommonEnums.YOrN getNotDiscount() {
@@ -85,6 +117,15 @@ public class DishType extends BaseEntity {
 
 	public void setNotDiscount(CommonEnums.YOrN notDiscount) {
 		this.notDiscount = notDiscount;
+	}
+
+	@Column(name="series_no")
+	public String getSeriesno() {
+		return seriesno;
+	}
+
+	public void setSeriesno(String seriesno) {
+		this.seriesno = seriesno;
 	}
 
 	@Override

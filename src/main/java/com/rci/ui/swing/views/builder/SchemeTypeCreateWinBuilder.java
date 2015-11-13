@@ -17,13 +17,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.rci.bean.LabelValueBean;
-import com.rci.bean.entity.SchemeType;
 import com.rci.enums.BusinessEnums.ActivityType;
-import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
 import com.rci.service.core.IMetadataService;
-import com.rci.tools.DateUtil;
 import com.rci.tools.EnumUtils;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
@@ -31,6 +28,8 @@ import com.rci.ui.swing.listeners.ActivityTypeCheckListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.ListItemComboBoxModel;
 import com.rci.ui.swing.views.PopWindow;
+import com.rci.ui.swing.views.component.DishSelectWin;
+import com.rci.ui.swing.views.component.SelectedDishPanel;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 
@@ -40,6 +39,8 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 	
 	private JTextField nameInput = new JTextField(30);
 	private JComboBox<DishVO> dishInput;
+	private JButton addBtn;
+	private SelectedDishPanel selectedDishPanel;
 	private JComboBox<LabelValueBean<String>> activityTypeInput;
 	private JTextField discountInput = new JTextField(30);
 	private JTextField floorInput = new JTextField(30);
@@ -116,10 +117,14 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 		mainPane.add(firstPane);
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,0));
 		secondPane.add(dish);
-		List<DishVO> itemList = metaService.displayDishSuits();
-		ListItemComboBoxModel<DishVO> vcm = new ListItemComboBoxModel<DishVO>(itemList);
-		dishInput = new JComboBox<DishVO>(vcm);
-		secondPane.add(dishInput);
+//		List<DishVO> itemList = metaService.displayDishSuits();
+//		ListItemComboBoxModel<DishVO> vcm = new ListItemComboBoxModel<DishVO>(itemList);
+//		dishInput = new JComboBox<DishVO>(vcm);
+//		secondPane.add(dishInput);
+//		addBtn = ButtonFactory.createImageButton("选择菜品", "skin/gray/images/24x24/addBtn_2.png", null);
+//		secondPane.add(addBtn);
+		selectedDishPanel = new SelectedDishPanel();
+		secondPane.add(selectedDishPanel);
 		mainPane.add(secondPane);
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		thirdPane.add(discount);
@@ -145,6 +150,7 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 		confirmBtn.addActionListener(this);
 		seventhPane.add(confirmBtn);
 		mainPane.add(seventhPane);
+		
 	}
 	
 	public void validation() throws ServiceException{

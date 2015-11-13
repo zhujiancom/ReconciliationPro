@@ -109,18 +109,16 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 		vendorInput.setSelectedItem(labelvalue);
 		secondPane.add(vendorInput);
 		mainPane.add(secondPane);
-		if(StringUtils.hasText(scheme.getTypeno())){
-			JPanel thirteenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
-			ISchemeTypeService schemeTypeService = (ISchemeTypeService) SpringUtils.getBean("SchemeTypeService");
-			List<SchemeType> schemeTypes = schemeTypeService.getAll();
-			ListItemComboBoxModel<SchemeType> stcm = new ListItemComboBoxModel<SchemeType>(schemeTypes);
-			schemeTypeInput = new JComboBox<SchemeType>(stcm);
-			SchemeType selectSchemeTypevalue = schemeTypeService.getSchemeTypeByNo(scheme.getTypeno());
-			schemeTypeInput.setSelectedItem(selectSchemeTypevalue);
-			thirteenPane.add(schemeType);
-			thirteenPane.add(schemeTypeInput);
-			mainPane.add(thirteenPane);
-		}
+		JPanel thirteenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
+		ISchemeTypeService schemeTypeService = (ISchemeTypeService) SpringUtils.getBean("SchemeTypeService");
+		List<SchemeType> schemeTypes = schemeTypeService.getAll();
+		ListItemComboBoxModel<SchemeType> stcm = new ListItemComboBoxModel<SchemeType>(schemeTypes);
+		schemeTypeInput = new JComboBox<SchemeType>(stcm);
+		SchemeType selectSchemeTypevalue = schemeTypeService.getSchemeTypeByNo(scheme.getTypeno());
+		schemeTypeInput.setSelectedItem(selectSchemeTypevalue);
+		thirteenPane.add(schemeType);
+		thirteenPane.add(schemeTypeInput);
+		mainPane.add(thirteenPane);
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		thirdPane.add(price);
 		priceInput = new JTextField(StringUtils.trimToEmpty(scheme.getPrice()),30);
@@ -211,6 +209,10 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 			LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
 			String vendor = item.getValue();
 			scheme.setVendor(Vendor.valueOf(vendor));
+			SchemeType schemeType = (SchemeType) schemeTypeInput.getSelectedItem();
+			if(schemeType != null){
+				scheme.setTypeno(schemeType.getTypeNo());
+			}
 			scheme.setName(nameInput.getText());
 			scheme.setPrice(new BigDecimal(priceInput.getText().trim()));
 			scheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
@@ -231,13 +233,19 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 			JOptionPane.showMessageDialog(null, new JLabel("<html><h4 color='red'>"+se.getMessage()+"</h3></html>"));
 		}catch (Exception ex){
 			logger.error(ex);
-			JOptionPane.showMessageDialog(null, "请填写必填项");
+			JOptionPane.showMessageDialog(null, ex.getMessage());
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void validation() throws ServiceException{
 		if(vendorInput.getSelectedItem() == null){
 			ExceptionManage.throwServiceException("请选择活动平台!");
+		}
+		LabelValueBean<String> item = (LabelValueBean<String>) vendorInput.getSelectedItem();
+		Vendor vendor = Vendor.valueOf(item.getValue());
+		if(schemeTypeInput.getSelectedItem() == null && (Vendor.DZDP.equals(vendor) || Vendor.MT.equals(vendor) || Vendor.BDNM.equals(vendor))){
+			ExceptionManage.throwServiceException("请选择活动类型!");
 		}
 		if(!StringUtils.hasText(priceInput.getText())){
 			throw new ServiceException("优惠金额必填!");

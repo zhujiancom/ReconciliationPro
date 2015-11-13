@@ -1,6 +1,7 @@
 package com.rci.ui.swing.vos;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.ActivityType;
@@ -25,6 +26,10 @@ public class SchemeTypeVO {
 	private ActivityStatus status;
 	
 	private ActivityType activity;
+	
+	private Date createTime;
+
+	private Date modifyTime;
 
 	public Long getStid() {
 		return stid;
@@ -104,6 +109,22 @@ public class SchemeTypeVO {
 
 	public void setActivity(ActivityType activity) {
 		this.activity = activity;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
 	}
 	
 }

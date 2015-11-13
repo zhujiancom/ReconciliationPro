@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
+import com.rci.bean.dto.SchemeTypeQueryDTO;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.tools.EnumUtils;
 import com.rci.ui.swing.vos.SchemeTypeVO;
@@ -25,7 +26,8 @@ public class SchemeTypeTable extends BaseTable {
 
 	@Override
 	protected void setModel() {
-		List<SchemeTypeVO> schemeTypeVOs = metaservice.displaySchemeTypes(ActivityStatus.ACTIVE);
+		SchemeTypeQueryDTO queryDTO = new SchemeTypeQueryDTO(ActivityStatus.ACTIVE);
+		List<SchemeTypeVO> schemeTypeVOs = metaservice.displaySchemeTypes(queryDTO);
 		SchemeTypeTabelModel dm = new SchemeTypeTabelModel(columnNum);
 		dm.setItems(schemeTypeVOs);
 		super.setModel(dm);
@@ -50,9 +52,9 @@ public class SchemeTypeTable extends BaseTable {
 		cm.getColumn(5).setPreferredWidth(150);
 	}
 	
-	public void refresh(){
+	public void refresh(SchemeTypeQueryDTO queryDTO){
 		SchemeTypeTabelModel dm = (SchemeTypeTabelModel) this.getModel();
-		List<SchemeTypeVO> schemeTypes = metaservice.displaySchemeTypes(ActivityStatus.ACTIVE);
+		List<SchemeTypeVO> schemeTypes = metaservice.displaySchemeTypes(queryDTO);
 		dm.setItems(schemeTypes);
 		dm.fireTableDataChanged();
 	}

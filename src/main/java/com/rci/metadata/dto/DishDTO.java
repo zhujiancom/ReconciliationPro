@@ -37,6 +37,9 @@ public class DishDTO {
 	/* 产品类型  */
 	private String dishType;
 	
+	/* 产品大类 */
+	private String seriesno;
+	
 	/* 是否停用 */
 	private YOrN stopFlag;
 
@@ -83,5 +86,14 @@ public class DishDTO {
 
 	public void setStopFlag(YOrN stopFlag) {
 		this.stopFlag = stopFlag;
+	}
+
+	@ColumnName("ch_seriesno")
+	public String getSeriesno() {
+		return seriesno;
+	}
+
+	public void setSeriesno(String seriesno) {
+		this.seriesno = seriesno;
 	}
 }

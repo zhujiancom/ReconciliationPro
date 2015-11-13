@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.rci.mapping.BeanRowMappers;
 import com.rci.metadata.NativeSQLBuilder;
 import com.rci.metadata.dto.DishDTO;
+import com.rci.metadata.dto.DishSeriesDTO;
 import com.rci.metadata.dto.DishTypeDTO;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
@@ -38,6 +39,11 @@ public class DataFetchServiceImpl implements IDataFetchService {
 	private JdbcTemplate sqlServerJdbcTemplate;
 	
 	@Override
+	public List<DishDTO> fetchAllDish(){
+		return sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_ALL_DISH, new BeanRowMappers<DishDTO>(DishDTO.class));
+	}
+	
+	@Override
 	public List<DishDTO> fetchAllDishesByType(String typeno) {
 		List<DishDTO> dishes = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_DISH_By_TYPENO,new Object[]{typeno}, new BeanRowMappers<DishDTO>(DishDTO.class));
 		return dishes;
@@ -45,8 +51,14 @@ public class DataFetchServiceImpl implements IDataFetchService {
 	
 	@Override
 	public List<DishTypeDTO> fetchAllDishTypes() {
-		List<DishTypeDTO> types = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_DISH_TYPE, new BeanRowMappers<DishTypeDTO>(DishTypeDTO.class));
+		List<DishTypeDTO> types = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_ALL_DISH_TYPE, new BeanRowMappers<DishTypeDTO>(DishTypeDTO.class));
 		return types;
+	}
+	
+	@Override
+	public List<DishSeriesDTO> fetchAllDishSeries(){
+		List<DishSeriesDTO> series = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_ALL_DISH_SERIES, new BeanRowMappers<DishSeriesDTO>(DishSeriesDTO.class));
+		return series;
 	}
 
 	@Override
@@ -81,6 +93,16 @@ public class DataFetchServiceImpl implements IDataFetchService {
 	@Override
 	public DishTypeDTO fetchDishTypeByNo(String typeno) {
 		return sqlServerJdbcTemplate.queryForObject(NativeSQLBuilder.QUERY_DISH_TYPE_BY_NO,new Object[]{typeno},new BeanRowMappers<DishTypeDTO>(DishTypeDTO.class));
+	}
+	
+	@Override
+	public DishSeriesDTO fetchDishSeriesByNo(String seriesno){
+		return sqlServerJdbcTemplate.queryForObject(NativeSQLBuilder.QUERY_DISH_SERIES_BY_NO,new Object[]{seriesno},new BeanRowMappers<DishSeriesDTO>(DishSeriesDTO.class));
+	}
+	
+	@Override
+	public List<DishTypeDTO> fetchDishTypeBySeriesNo(String seriesno){
+		return sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_DISH_TYPE_BY_SERIES_NO,new Object[]{seriesno},new BeanRowMappers<DishTypeDTO>(DishTypeDTO.class));
 	}
 
 	@Override

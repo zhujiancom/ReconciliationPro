@@ -3,7 +3,7 @@ package com.rci.service.core;
 import java.util.List;
 
 import com.rci.bean.dto.SchemeQueryDTO;
-import com.rci.enums.BusinessEnums.ActivityStatus;
+import com.rci.bean.dto.SchemeTypeQueryDTO;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
@@ -90,7 +90,7 @@ public interface IMetadataService {
 	void activeScheme(Long sid);
 	void inactiveScheme(Long sid);
 	
-	List<SchemeTypeVO> displaySchemeTypes(ActivityStatus status);
+	List<SchemeTypeVO> displaySchemeTypes(SchemeTypeQueryDTO queryDTO);
 	
 	/**
 	 * 
@@ -110,4 +110,7 @@ public interface IMetadataService {
 	void updateSchemeType(SchemeTypeVO schemeTypevo);
 	void activeSchemeType(Long stid);
 	void inactiveSchemeType(Long stid);
+	
+	DishVO getDishByNo(String dishno);
+	
 }

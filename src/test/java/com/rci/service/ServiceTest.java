@@ -68,6 +68,8 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	private IMetadataService metadataService;
 	@Resource(name="StockService")
 	private IStockService stockService;
+	@Resource(name="DishSeriesService")
+	private IDishSeriesService dishseriesService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -186,6 +188,11 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 //			System.out.println(type.getDtid());
 //			dishtypeService.delete(type);
 //		}
+	}
+	
+	@Test
+	public void testDishSeriesDelete(){
+		dishseriesService.deleteAll();
 	}
 	
 	@Test

@@ -51,6 +51,9 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 	@Override
 	public DishVO queryDish(String no) {
 		Dish dish = findDishByNo(no);
+		if(dish == null){
+			return null;
+		}
 		return beanMapper.map(dish, DishVO.class);
 	}
 

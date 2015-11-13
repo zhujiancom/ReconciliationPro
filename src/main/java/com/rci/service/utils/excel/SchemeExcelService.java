@@ -76,6 +76,9 @@ public class SchemeExcelService extends AbstractExcelOperationService {
 						HSSFCell cell = row.getCell(index);
 						Object value = null;
 						Method wMethod = pdr.getWriteMethod();
+						if(cell == null){
+							continue;
+						}
 						if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
 							if(wMethod.getParameterTypes()[0] == BigDecimal.class){
 								value = new BigDecimal(cell.getNumericCellValue());

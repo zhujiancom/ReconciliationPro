@@ -59,6 +59,8 @@ public class Dish extends BaseEntity{
 	/* 菜品类型  */
 	private DishType dishType;
 	
+	private DishSeries dishSeries;
+	
 	/* 是否停用 */
 	private YOrN stopFlag;
 	
@@ -113,6 +115,16 @@ public class Dish extends BaseEntity{
 
 	public void setDishType(DishType dishType) {
 		this.dishType = dishType;
+	}
+
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="dish_series_id")
+	public DishSeries getDishSeries() {
+		return dishSeries;
+	}
+
+	public void setDishSeries(DishSeries dishSeries) {
+		this.dishSeries = dishSeries;
 	}
 
 	@Enumerated(EnumType.STRING)

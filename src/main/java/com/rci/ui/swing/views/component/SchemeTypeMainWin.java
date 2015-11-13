@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -30,6 +32,7 @@ import com.rci.ui.swing.model.SchemeTypeTable.SchemeTypeTabelModel;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.views.builder.PopWindowBuilder;
 import com.rci.ui.swing.views.builder.SchemeTypeCreateWinBuilder;
+import com.rci.ui.swing.views.builder.SchemeTypeModifyWinBuilder;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 
 public class SchemeTypeMainWin extends PopWindow {
@@ -131,6 +134,16 @@ public class SchemeTypeMainWin extends PopWindow {
 				model.removeRow(selectIndex);
 			}
 		});
+		//更新
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2){
+					PopWindowBuilder winBuilder = new SchemeTypeModifyWinBuilder(checkListener);
+					winBuilder.retrieveWindow();
+				}
+			}
+		});
 	}
 	
 	private void createCheckBoxBtn(final ActivityTypeCheckListener checkListener){
@@ -145,6 +158,10 @@ public class SchemeTypeMainWin extends PopWindow {
 		takeoutCheck.addItemListener(checkListener);
 		takeoutCheck.setBounds(320, 4, 80, 24);
 		
+		ButtonGroup checkGroup = new ButtonGroup();
+		checkGroup.add(allCheck);
+		checkGroup.add(voucherCheck);
+		checkGroup.add(takeoutCheck);
 		operaPane.add(allCheck);
 		operaPane.add(voucherCheck);
 		operaPane.add(takeoutCheck);

@@ -8,7 +8,9 @@ public class DishTypeDTO {
 	
 	/* 菜品类型名称 */
 	private String typename;
-
+	
+	/* 菜品大类 */
+	private String seriesno;
 	
 	@ColumnName("ch_typeno")
 	public String getTypeno() {
@@ -26,5 +28,14 @@ public class DishTypeDTO {
 
 	public void setTypename(String typename) {
 		this.typename = typename;
+	}
+
+	@ColumnName("ch_seriesno")
+	public String getSeriesno() {
+		return seriesno;
+	}
+
+	public void setSeriesno(String seriesno) {
+		this.seriesno = seriesno;
 	}
 }

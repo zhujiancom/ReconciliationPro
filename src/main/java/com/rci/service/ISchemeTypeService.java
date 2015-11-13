@@ -3,6 +3,7 @@ package com.rci.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.rci.bean.dto.SchemeTypeQueryDTO;
 import com.rci.bean.entity.SchemeType;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.ActivityType;
@@ -15,5 +16,5 @@ public interface ISchemeTypeService extends IBaseService<SchemeType, Long>{
 	
 	SchemeType getSchemeTypeByNo(String typeno);
 	
-	List<SchemeType> getSchemeTypes(ActivityStatus status);
+	List<SchemeType> getSchemeTypes(SchemeTypeQueryDTO queryDTO);
 }

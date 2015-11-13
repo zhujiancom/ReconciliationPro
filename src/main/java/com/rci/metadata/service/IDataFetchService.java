@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.rci.metadata.dto.DishDTO;
+import com.rci.metadata.dto.DishSeriesDTO;
 import com.rci.metadata.dto.DishTypeDTO;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
@@ -11,6 +12,19 @@ import com.rci.metadata.dto.PaymodeDTO;
 import com.rci.metadata.dto.TableDTO;
 
 public interface IDataFetchService {
+	/**
+	 * 
+	 * Describle(描述)： 查找所有菜品
+	 *
+	 * 方法名称：fetchAllDish
+	 *
+	 * 所在类名：IDataFetchService
+	 *
+	 * Create Time:2015年11月13日 下午4:26:18
+	 *  
+	 * @return
+	 */
+	List<DishDTO> fetchAllDish();
 	/**
 	 * 
 	 * Describle(描述)： 根据菜品编号查找菜品信息
@@ -55,6 +69,23 @@ public interface IDataFetchService {
 	 * @return
 	 */
 	DishTypeDTO fetchDishTypeByNo(String typeno);
+	
+	List<DishTypeDTO> fetchDishTypeBySeriesNo(String seriesno);
+	/**
+	 * 
+	 * Describle(描述)：获取菜品的大类
+	 *
+	 * 方法名称：fetchAllDishSeries
+	 *
+	 * 所在类名：IDataFetchService
+	 *
+	 * Create Time:2015年11月13日 下午4:13:41
+	 *  
+	 * @return
+	 */
+	List<DishSeriesDTO> fetchAllDishSeries();
+	
+	DishSeriesDTO fetchDishSeriesByNo(String seriesno);
 	
 	/**
 	 * 

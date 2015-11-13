@@ -11,12 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.dto.SchemeQueryDTO;
+import com.rci.bean.dto.SchemeTypeQueryDTO;
 import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.Stock;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.metadata.service.IDataTransformService;
+import com.rci.service.IDishSeriesService;
 import com.rci.service.IDishService;
 import com.rci.service.IDishTypeService;
 import com.rci.service.IPayModeService;
@@ -35,6 +37,8 @@ import com.rci.ui.swing.vos.StockVO;
 public class MetadataServiceImpl implements IMetadataService {
 	@Resource(name="DishTypeService")
 	private IDishTypeService dishtypeService;
+	@Resource(name="DishSeriesService")
+	private IDishSeriesService dishseriesService;
 	@Resource(name="DishService")
 	private IDishService dishService;
 	@Resource(name="PayModeService")
@@ -69,7 +73,8 @@ public class MetadataServiceImpl implements IMetadataService {
 	@Override
 	public void clearMetadata() {
 		/* 清除菜品 */
-		dishtypeService.deleteAll();
+//		dishtypeService.deleteAll();
+		dishseriesService.deleteAll();
 		
 		/* 清除支付方式  */
 		paymodeService.deleteAll();
@@ -132,6 +137,7 @@ public class MetadataServiceImpl implements IMetadataService {
 	public void updateScheme(SchemeVO schemevo){
 		Scheme scheme = schemeService.get(schemevo.getSid());
 		scheme.setName(schemevo.getName());
+		scheme.setTypeno(schemevo.getTypeno());
 		scheme.setStartDate(schemevo.getStartDate());
 		scheme.setEndDate(schemevo.getEndDate());
 		scheme.setPrice(schemevo.getPrice());
@@ -158,8 +164,8 @@ public class MetadataServiceImpl implements IMetadataService {
 	}
 
 	@Override
-	public List<SchemeTypeVO> displaySchemeTypes(ActivityStatus status) {
-		List<SchemeType> schemeTypes = schemeTypeService.getSchemeTypes(status);
+	public List<SchemeTypeVO> displaySchemeTypes(SchemeTypeQueryDTO queryDTO) {
+		List<SchemeType> schemeTypes = schemeTypeService.getSchemeTypes(queryDTO);
 		List<SchemeTypeVO> vos = new ArrayList<SchemeTypeVO>();
 		if(!CollectionUtils.isEmpty(schemeTypes)){
 			for(SchemeType type:schemeTypes){
@@ -217,6 +223,11 @@ public class MetadataServiceImpl implements IMetadataService {
 		SchemeType schemeType = schemeTypeService.get(stid);
 		schemeType.setStatus(ActivityStatus.INACTIVE);
 		schemeTypeService.rwUpdate(schemeType);
+	}
+
+	@Override
+	public DishVO getDishByNo(String dishno) {
+		return dishService.queryDish(dishno);
 	}
 
 }

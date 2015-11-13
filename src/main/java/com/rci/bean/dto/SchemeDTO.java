@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import com.rci.annotation.ExcelColumn;
-import com.rci.bean.entity.SchemeType;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.Vendor;
 
@@ -25,7 +24,8 @@ public class SchemeDTO {
 	/* 餐厅补贴 */
 	private BigDecimal spread;
 	
-	private SchemeType type;
+//	private SchemeType type;
+	private String typeno;
 	
 	/* 开始时间 */
 	private Date startDate;
@@ -96,13 +96,22 @@ public class SchemeDTO {
 		this.spread = spread;
 	}
 
+//	@ExcelColumn(value="代金券类型",index=6)
+//	public SchemeType getType() {
+//		return type;
+//	}
+//
+//	public void setType(SchemeType type) {
+//		this.type = type;
+//	}
+	
 	@ExcelColumn(value="代金券类型",index=6)
-	public SchemeType getType() {
-		return type;
+	public String getTypeno() {
+		return typeno;
 	}
 
-	public void setType(SchemeType type) {
-		this.type = type;
+	public void setTypeno(String typeno) {
+		this.typeno = typeno;
 	}
 
 	@ExcelColumn(value="开始时间",index=7)
