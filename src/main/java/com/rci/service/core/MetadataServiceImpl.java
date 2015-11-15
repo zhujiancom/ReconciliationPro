@@ -73,7 +73,6 @@ public class MetadataServiceImpl implements IMetadataService {
 	@Override
 	public void clearMetadata() {
 		/* 清除菜品 */
-//		dishtypeService.deleteAll();
 		dishseriesService.deleteAll();
 		
 		/* 清除支付方式  */

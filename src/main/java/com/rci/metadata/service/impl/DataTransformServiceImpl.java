@@ -161,10 +161,10 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			}else{
 				dish.setStockFlag(YOrN.N);
 			}
-			dishes.add(dish);
-//			dishService.rwCreate(dish);
+//			dishes.add(dish);
+			dishService.rwCreate(dish);
 		}
-		dishService.rwCreate(dishes.toArray(new Dish[0]));
+//		dishService.rwCreate(dishes.toArray(new Dish[0]));
 	}
 	
 	public Dish transformDishInfo(String dishno){

@@ -1,6 +1,7 @@
 package com.rci.ui.swing.views.builder;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -164,6 +166,8 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 		mainPane.add(twelvePane);
 		JPanel tenthPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		confirmBtn = ButtonFactory.createImageButton("skin/gray/images/64x64/saveBtn_0.png", null);
+		confirmBtn.setHorizontalTextPosition(SwingConstants.CENTER);
+		confirmBtn.setForeground(Color.WHITE);
 		confirmBtn.addActionListener(this);
 		activeBtn = new JButton("启用");
 		inactiveBtn = new JButton("停用");

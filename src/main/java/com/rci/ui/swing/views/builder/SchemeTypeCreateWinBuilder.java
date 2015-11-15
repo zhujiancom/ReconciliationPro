@@ -1,6 +1,7 @@
 package com.rci.ui.swing.views.builder;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import com.rci.bean.LabelValueBean;
 import com.rci.enums.BusinessEnums.ActivityType;
@@ -28,7 +30,6 @@ import com.rci.ui.swing.listeners.ActivityTypeCheckListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.ListItemComboBoxModel;
 import com.rci.ui.swing.views.PopWindow;
-import com.rci.ui.swing.views.component.DishSelectWin;
 import com.rci.ui.swing.views.component.SelectedDishPanel;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
@@ -147,6 +148,8 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 		mainPane.add(sixthPane);
 		JPanel seventhPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		confirmBtn = ButtonFactory.createImageButton("保存","skin/gray/images/64x64/saveBtn_0.png", null);
+		confirmBtn.setHorizontalTextPosition(SwingConstants.CENTER);
+		confirmBtn.setForeground(Color.WHITE);
 		confirmBtn.addActionListener(this);
 		seventhPane.add(confirmBtn);
 		mainPane.add(seventhPane);
