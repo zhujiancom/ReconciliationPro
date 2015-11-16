@@ -67,10 +67,10 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 
 
 	@Override
-	public List<Dish> queryDishesByType(String typename) {
+	public List<Dish> queryDishesBySeries(String seriesName) {
 		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(Dish.class);
-		sdc.createAlias("dishType", "type");
-		sdc.add(SafeRestrictions.eq("type.dtName", typename)).add(SafeRestrictions.eq("stopFlag", YOrN.N));
+		sdc.createAlias("dishSeries", "series");
+		sdc.add(SafeRestrictions.eq("series.seriesname", seriesName)).add(SafeRestrictions.eq("stopFlag", YOrN.N));
 		return baseDAO.queryListByCriteria(sdc);
 	}
 

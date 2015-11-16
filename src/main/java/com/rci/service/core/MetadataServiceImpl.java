@@ -27,7 +27,6 @@ import com.rci.service.ISchemeTypeService;
 import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
 import com.rci.tools.EnumUtils;
-import com.rci.tools.StringUtils;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
@@ -177,7 +176,7 @@ public class MetadataServiceImpl implements IMetadataService {
 
 	@Override
 	public List<DishVO> displayDishSuits() {
-		List<Dish> dishes = dishService.queryDishesByType("套餐");
+		List<Dish> dishes = dishService.queryDishesBySeries("套菜");
 		List<DishVO> vos = new ArrayList<DishVO>();
 		if(!CollectionUtils.isEmpty(dishes)){
 			for(Dish dish:dishes){
@@ -193,9 +192,6 @@ public class MetadataServiceImpl implements IMetadataService {
 		SchemeType schemeType = beanMapper.map(schemeTypevo, SchemeType.class);
 		schemeType.setStatus(ActivityStatus.ACTIVE);
 		schemeTypeService.rwCreate(schemeType);
-		String typeno = StringUtils.leftPad(schemeType.getStid().toString(), 3, '0');
-		schemeType.setTypeNo(typeno);
-		schemeTypeService.rwUpdate(schemeType);
 	}
 
 	@Override
@@ -207,6 +203,7 @@ public class MetadataServiceImpl implements IMetadataService {
 		schemeType.setActivity(schemeTypevo.getActivity());
 		schemeType.setFloorAmount(schemeTypevo.getFloorAmount());
 		schemeType.setCeilAmount(schemeTypevo.getCeilAmount());
+		schemeType.setRealAmount(schemeTypevo.getRealAmount());
 		schemeTypeService.rwUpdate(schemeType);
 	}
 

@@ -246,7 +246,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 			schemewrapper = new SchemeWrapper(scheme,1);
 			schemes.put(type, schemewrapper);
 		}
-		amount = amount.subtract(type.getCeilAmount());
+		amount = amount.subtract(type.getRealAmount());
 		loopSchemes(amount,schemes,vendor,queryDate);
 	}
 	

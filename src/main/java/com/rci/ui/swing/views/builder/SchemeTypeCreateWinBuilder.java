@@ -39,16 +39,20 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 	private JScrollPane sPane;
 	
 	private JTextField nameInput = new JTextField(30);
+	private JTextField typenoInput = new JTextField(30);
 	private JComboBox<DishVO> dishInput;
 	private JButton addBtn;
 	private SelectedDishPanel selectedDishPanel;
 	private JComboBox<LabelValueBean<String>> activityTypeInput;
 	private JTextField discountInput = new JTextField(30);
+	private JTextField realAmountInput = new JTextField(30);
 	private JTextField floorInput = new JTextField(30);
 	private JTextField ceilInput = new JTextField(30);
 	private JLabel name = new JLabel("活动类型名称");
+	private JLabel typeno = new JLabel("活动类型编号");
 	private JLabel dish = new JLabel("适用菜品");
 	private JLabel discount = new JLabel("不可打折金额");
+	private JLabel realAmount = new JLabel("可抵扣金额");
 	private JLabel floor = new JLabel("最低消费金额");
 	private JLabel ceil = new JLabel("最高消费金额");
 	private JLabel activityType = new JLabel("活动形式");
@@ -74,6 +78,7 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 			ActivityType activityType = ActivityType.valueOf(activityTypeSelected.getValue());
 			newSchemeType.setActivity(activityType);
 			newSchemeType.setTypeName(nameInput.getText());
+			newSchemeType.setTypeNo(typenoInput.getText());
 			if(StringUtils.hasText(discountInput.getText())){
 				BigDecimal discountAmount = new BigDecimal(discountInput.getText().trim());
 				newSchemeType.setDiscountAmount(discountAmount);
@@ -82,6 +87,7 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 			if(dish != null){
 				newSchemeType.setDishNo(dish.getDishNo());
 			}
+			newSchemeType.setRealAmount(new BigDecimal(realAmountInput.getText().trim()));
 			if(StringUtils.hasText(floorInput.getText())){
 				newSchemeType.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
 			}
@@ -116,21 +122,29 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 		firstPane.add(name);
 		firstPane.add(nameInput);
 		mainPane.add(firstPane);
+		JPanel eightPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+		eightPane.add(typeno);
+		eightPane.add(typenoInput);
+		mainPane.add(eightPane);
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,0));
 		secondPane.add(dish);
-//		List<DishVO> itemList = metaService.displayDishSuits();
-//		ListItemComboBoxModel<DishVO> vcm = new ListItemComboBoxModel<DishVO>(itemList);
-//		dishInput = new JComboBox<DishVO>(vcm);
-//		secondPane.add(dishInput);
+		List<DishVO> itemList = metaService.displayDishSuits();
+		ListItemComboBoxModel<DishVO> vcm = new ListItemComboBoxModel<DishVO>(itemList);
+		dishInput = new JComboBox<DishVO>(vcm);
+		secondPane.add(dishInput);
 //		addBtn = ButtonFactory.createImageButton("选择菜品", "skin/gray/images/24x24/addBtn_2.png", null);
 //		secondPane.add(addBtn);
-		selectedDishPanel = new SelectedDishPanel();
-		secondPane.add(selectedDishPanel);
+//		selectedDishPanel = new SelectedDishPanel();
+//		secondPane.add(selectedDishPanel);
 		mainPane.add(secondPane);
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		thirdPane.add(discount);
 		thirdPane.add(discountInput);
 		mainPane.add(thirdPane);
+		JPanel ninthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+		ninthPane.add(realAmount);
+		ninthPane.add(realAmountInput);
+		mainPane.add(ninthPane);
 		JPanel forthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		forthPane.add(floor);
 		forthPane.add(floorInput);
@@ -159,6 +173,12 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 	public void validation() throws ServiceException{
 		if(!StringUtils.hasText(nameInput.getText())){
 			ExceptionManage.throwServiceException("活动类型名称必填!");
+		}
+		if(!StringUtils.hasText(typenoInput.getText())){
+			ExceptionManage.throwServiceException("活动类型编号必填!");
+		}
+		if(!StringUtils.hasText(realAmountInput.getText())){
+			ExceptionManage.throwServiceException("抵扣金额必填!");
 		}
 		if(activityTypeInput.getSelectedItem() == null){
 			ExceptionManage.throwServiceException("请选择活动形式!");

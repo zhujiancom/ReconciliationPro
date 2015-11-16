@@ -82,6 +82,7 @@ public class MainFrame extends JFrame {
 		Container containerPanel = this.getContentPane();
 		BorderLayout layout = new BorderLayout(0, 10);
 		containerPanel.setLayout(layout);
+		
 		/* 绑定查询form */
 		containerPanel.add(queryPanel, BorderLayout.NORTH);
 		/* 绑定订单内容和警告日志展示列表 */

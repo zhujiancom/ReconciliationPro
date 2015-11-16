@@ -47,6 +47,9 @@ public class SchemeType extends AccessoryEntity{
 	/* 面值金额上限 */
 	private BigDecimal ceilAmount;
 	
+	/* 抵扣金额 */
+	private BigDecimal realAmount;
+	
 	/*  活动类型 （代金券，外卖活动） */
 	private ActivityType activity;
 	
@@ -113,6 +116,15 @@ public class SchemeType extends AccessoryEntity{
 	@Column(name="ceil_amount")
 	public BigDecimal getCeilAmount() {
 		return ceilAmount;
+	}
+
+	@Column(name="real_amount")
+	public BigDecimal getRealAmount() {
+		return realAmount;
+	}
+
+	public void setRealAmount(BigDecimal realAmount) {
+		this.realAmount = realAmount;
 	}
 
 	public void setFloorAmount(BigDecimal floorAmount) {

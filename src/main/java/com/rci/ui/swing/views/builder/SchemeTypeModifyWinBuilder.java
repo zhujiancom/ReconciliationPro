@@ -47,14 +47,18 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 	private SchemeTypeVO schemeType;
 	private JScrollPane sPane;
 	private JTextField nameInput;
+	private JTextField typenoInput;
 	private JComboBox<DishVO> dishInput;
 	private JComboBox<LabelValueBean<String>> activityTypeInput;
 	private JTextField discountInput;
+	private JTextField realAmountInput;
 	private JTextField floorInput;
 	private JTextField ceilInput;
 	private JLabel name = new JLabel("活动类型名称");
+	private JLabel typeno = new JLabel("活动类型编号");
 	private JLabel dish = new JLabel("适用菜品");
 	private JLabel discount = new JLabel("不可打折金额");
+	private JLabel realAmount = new JLabel("可抵扣金额");
 	private JLabel floor = new JLabel("最低消费金额");
 	private JLabel ceil = new JLabel("最高消费金额");
 	private JLabel activityType = new JLabel("活动形式");
@@ -76,6 +80,7 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 		try{
 			validation();
 			schemeType.setTypeName(nameInput.getText());
+			schemeType.setTypeNo(typenoInput.getText());
 			DishVO dish = (DishVO) dishInput.getSelectedItem();
 			if(dish != null){
 				schemeType.setDishNo(dish.getDishNo());
@@ -83,9 +88,11 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 			if(StringUtils.hasText(discountInput.getText())){
 				schemeType.setDiscountAmount(new BigDecimal(discountInput.getText().trim()));
 			}
+			schemeType.setRealAmount(new BigDecimal(realAmountInput.getText().trim()));
 			schemeType.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
 			schemeType.setCeilAmount(new BigDecimal(ceilInput.getText().trim()));
-			ActivityType activityType = (ActivityType) activityTypeInput.getSelectedItem();
+			LabelValueBean<String> activityTypeVal = (LabelValueBean<String>) activityTypeInput.getSelectedItem();
+			ActivityType activityType = ActivityType.valueOf(activityTypeVal.getValue()); 
 			schemeType.setActivity(activityType);
 			metaService.updateSchemeType(schemeType);
 			JOptionPane.showMessageDialog(null, "活动修改成功！");
@@ -122,6 +129,11 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 		nameInput = new JTextField(schemeType.getTypeName(),30);
 		firstPane.add(nameInput);
 		mainPane.add(firstPane);
+		JPanel eightPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+		eightPane.add(typeno);
+		typenoInput = new JTextField(schemeType.getTypeNo(),30);
+		eightPane.add(typenoInput);
+		mainPane.add(eightPane);
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,0));
 		secondPane.add(dish);
 		List<DishVO> itemList = metaService.displayDishSuits();
@@ -136,6 +148,11 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 		discountInput = new JTextField(StringUtils.trimToEmpty(schemeType.getDiscountAmount()),30);
 		thirdPane.add(discountInput);
 		mainPane.add(thirdPane);
+		JPanel ninthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+		ninthPane.add(realAmount);
+		realAmountInput = new JTextField(StringUtils.trimToEmpty(schemeType.getRealAmount()),30);
+		ninthPane.add(realAmountInput);
+		mainPane.add(ninthPane);
 		JPanel forthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		forthPane.add(floor);
 		floorInput = new JTextField(StringUtils.trimToEmpty(schemeType.getFloorAmount()),30);
@@ -211,11 +228,17 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 		if(activityTypeInput.getSelectedItem() == null){
 			ExceptionManage.throwServiceException("请选择活动形式!");
 		}
+		if(!StringUtils.hasText(realAmountInput.getText())){
+			ExceptionManage.throwServiceException("抵扣金额必填!");
+		}
 		if(!StringUtils.hasText(floorInput.getText())){
 			ExceptionManage.throwServiceException("请填写最低消费金额!");
 		}
 		if(!StringUtils.hasText(ceilInput.getText())){
 			ExceptionManage.throwServiceException("请填写最高消费金额!");
+		}
+		if(activityTypeInput.getSelectedItem() == null){
+			ExceptionManage.throwServiceException("请选择活动形式!");
 		}
 	}
 

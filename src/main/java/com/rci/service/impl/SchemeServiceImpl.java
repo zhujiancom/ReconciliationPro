@@ -26,6 +26,7 @@ import com.rci.dao.impl.SafeDetachedCriteria;
 import com.rci.dao.impl.SafeRestrictions;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.exceptions.ExceptionManage;
 import com.rci.service.ISchemeService;
 import com.rci.service.base.BaseServiceImpl;
 
@@ -72,10 +73,14 @@ public class SchemeServiceImpl extends BaseServiceImpl<Scheme, Long> implements
 	 */
 	@Override
 	public Scheme getScheme(String typeno, Vendor vendor,Date date) {
-		DetachedCriteria sdc = DetachedCriteria.forClass(Scheme.class);
-		sdc.add(Restrictions.eq("typeno", typeno)).add(Restrictions.eq("vendor", vendor)).add(Restrictions.and(Restrictions.ge("endDate", date), Restrictions.le("startDate", date)));
-		Scheme scheme = baseDAO.queryUniqueByCriteria(sdc);
-		return scheme;
+		try{
+			DetachedCriteria sdc = DetachedCriteria.forClass(Scheme.class);
+			sdc.add(Restrictions.eq("typeno", typeno)).add(Restrictions.eq("vendor", vendor)).add(Restrictions.and(Restrictions.ge("endDate", date), Restrictions.le("startDate", date)));
+			return baseDAO.queryUniqueByCriteria(sdc);
+		}catch(Exception e){
+			ExceptionManage.throwServiceException(e.getMessage());
+		}
+		return null;
 	}
 
 	/* 

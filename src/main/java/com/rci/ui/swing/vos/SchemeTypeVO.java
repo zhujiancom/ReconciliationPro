@@ -19,6 +19,8 @@ public class SchemeTypeVO {
 	
 	private BigDecimal discountAmount;
 	
+	private BigDecimal realAmount;
+	
 	private BigDecimal floorAmount;
 	
 	private BigDecimal ceilAmount;
@@ -93,6 +95,14 @@ public class SchemeTypeVO {
 
 	public void setDiscountAmount(BigDecimal discountAmount) {
 		this.discountAmount = discountAmount;
+	}
+
+	public BigDecimal getRealAmount() {
+		return realAmount;
+	}
+
+	public void setRealAmount(BigDecimal realAmount) {
+		this.realAmount = realAmount;
 	}
 
 	public void setFloorAmount(BigDecimal floorAmount) {
