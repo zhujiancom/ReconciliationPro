@@ -22,6 +22,7 @@ import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
+import com.rci.exceptions.ExceptionManage;
 import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
@@ -60,6 +61,10 @@ public class MTFilter extends AbstractFilter {
 					suitFlag = true;
 				}
 				SchemeType type = schemeTypeService.getSchemeTypeByDishno(dishNo);
+				if(type == null){
+					logger.error("活动类型未找到，对应菜品编号："+dishNo);
+					ExceptionManage.throwServiceException("活动类型未找到，对应菜品编号："+dishNo);
+				}
 				Integer suitCount = suitMap.get(type);
 				Integer itemCount = count.subtract(countBack).intValue();
 				if (suitCount != null) {
@@ -98,6 +103,7 @@ public class MTFilter extends AbstractFilter {
 			if(stype.getBeverageAmount() != null){
 				BigDecimal beverageAmount = DigitUtil.mutiplyDown(stype.getBeverageAmount(), new BigDecimal(count));
 				nodiscountAmount = nodiscountAmount.subtract(beverageAmount);
+				bediscountAmount = bediscountAmount.add(beverageAmount);
 			}
 		}
 		
@@ -122,7 +128,8 @@ public class MTFilter extends AbstractFilter {
 			Date queryDate = DateUtil.parseDate(order.getDay(), "yyyyMMdd");
 			Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, Vendor.MT,suitFlag,queryDate);
 			if(!CollectionUtils.isEmpty(schemes)){
-				createTicketStatistic(order.getDay(), Vendor.MT, schemes);
+//				createTicketStatistic(order.getDay(), Vendor.MT, schemes);
+				createTicketRecord(order, Vendor.MT, schemes);
 				String schemeName = order.getSchemeName();
 				BigDecimal postAmount = BigDecimal.ZERO;
 				BigDecimal onlineFreeAmount = BigDecimal.ZERO;

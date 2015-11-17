@@ -124,7 +124,8 @@ public class BDNMFilter extends AbstractFilter {
 			Date queryDate = DateUtil.parseDate(order.getDay(), "yyyyMMdd");
 			Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, Vendor.BDNM,suitFlag,queryDate);
 			if(!CollectionUtils.isEmpty(schemes)){
-				createTicketStatistic(order.getDay(), Vendor.BDNM, schemes);
+//				createTicketStatistic(order.getDay(), Vendor.BDNM, schemes);
+				createTicketRecord(order, Vendor.BDNM, schemes);
 				String schemeName = order.getSchemeName();
 				BigDecimal postAmount = BigDecimal.ZERO;
 				BigDecimal onlineFreeAmount = BigDecimal.ZERO;

@@ -119,6 +119,7 @@ public class DPTGFilter extends AbstractFilter {
 			if(stype.getBeverageAmount() != null && stype.getBeverageAmount().compareTo(BigDecimal.ZERO ) != 0){
 				BigDecimal beverageAmount = DigitUtil.mutiplyDown(stype.getBeverageAmount(), new BigDecimal(count));
 				nodiscountAmount = nodiscountAmount.subtract(beverageAmount);
+				bediscountAmount = bediscountAmount.add(beverageAmount);
 			}
 		}
 		
@@ -143,7 +144,7 @@ public class DPTGFilter extends AbstractFilter {
 			Date queryDate = DateUtil.parseDate(order.getDay(), "yyyyMMdd");
 			Map<SchemeType,SchemeWrapper> schemes = createSchemes(chitAmount, Vendor.DZDP,suitFlag,queryDate);
 			if(!CollectionUtils.isEmpty(schemes)){
-				createTicketStatistic(order.getDay(), Vendor.DZDP, schemes);
+				createTicketRecord(order, Vendor.DZDP, schemes);
 				String schemeName = order.getSchemeName();
 				BigDecimal postAmount = BigDecimal.ZERO;
 				BigDecimal onlineFreeAmount = BigDecimal.ZERO;

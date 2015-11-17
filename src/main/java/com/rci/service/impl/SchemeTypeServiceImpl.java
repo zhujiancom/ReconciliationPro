@@ -44,7 +44,7 @@ public class SchemeTypeServiceImpl extends BaseServiceImpl<SchemeType, Long> imp
 	@Override
 	public SchemeType getSchemeType(BigDecimal amount,ActivityType activity) {
 		DetachedCriteria sdc = DetachedCriteria.forClass(SchemeType.class);
-		sdc.add(Restrictions.and(Restrictions.le("floorAmount", amount),Restrictions.gt("ceilAmount", amount)))
+		sdc.add(Restrictions.and(Restrictions.lt("floorAmount", amount),Restrictions.ge("ceilAmount", amount)))
 			.add(Restrictions.eq("activity", activity));
 		return baseDAO.queryUniqueByCriteria(sdc);
 	}

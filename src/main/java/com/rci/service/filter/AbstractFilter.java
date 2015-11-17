@@ -333,28 +333,29 @@ public abstract class AbstractFilter implements CalculateFilter {
 		orderService.rwUpdate(order);
 	}
 	
-	protected void createTicketStatistic(String day,Vendor vendor,Map<SchemeType,SchemeWrapper> schemes){
-		try{
-			Date queryDate = DateUtil.parseDate(day,"yyyyMMdd");
-			for(Iterator<Entry<SchemeType,SchemeWrapper>> it = schemes.entrySet().iterator();it.hasNext();){
-				Entry<SchemeType,SchemeWrapper> entry = it.next();
-				SchemeType type = entry.getKey();
-				SchemeWrapper wrapper = entry.getValue();
-				TicketStatistic ts = statisticService.queryTicketStatisticByDateAndType(type, queryDate, vendor);
-				if(ts == null){
-					ts = new TicketStatistic();
-					ts.setValifyCount(wrapper.getCount());
-					ts.setVendor(vendor);
-					ts.setDate(queryDate);
-					statisticService.rwCreate(ts);
-				}else{
-					ts.setValifyCount(ts.getValifyCount()+wrapper.getCount());
-					statisticService.rwUpdate(ts);
-				}
-			}
-		}catch(Exception e){
-			
-		}
+//	@Deprecated
+//	protected void createTicketStatistic(String day,Vendor vendor,Map<SchemeType,SchemeWrapper> schemes){
+//		try{
+//			Date queryDate = DateUtil.parseDate(day,"yyyyMMdd");
+//			for(Iterator<Entry<SchemeType,SchemeWrapper>> it = schemes.entrySet().iterator();it.hasNext();){
+//				Entry<SchemeType,SchemeWrapper> entry = it.next();
+//				SchemeType type = entry.getKey();
+//				SchemeWrapper wrapper = entry.getValue();
+//				TicketStatistic ts = statisticService.queryTicketStatisticByDateAndType(type, queryDate, vendor);
+//				if(ts == null){
+//					ts = new TicketStatistic();
+//					ts.setValifyCount(wrapper.getCount());
+//					ts.setVendor(vendor);
+//					ts.setDate(queryDate);
+//					statisticService.rwCreate(ts);
+//				}else{
+//					ts.setValifyCount(ts.getValifyCount()+wrapper.getCount());
+//					statisticService.rwUpdate(ts);
+//				}
+//			}
+//		}catch(Exception e){
+//			
+//		}
 //	try{
 //		Date queryDate = DateUtil.parseDate(day,"yyyyMMdd");
 //		TicketStatistic ts = statisticService.queryTicketStatisticByDate(queryDate, vendor);
@@ -395,11 +396,11 @@ public abstract class AbstractFilter implements CalculateFilter {
 //	} catch (ParseException e) {
 //		e.printStackTrace();
 //	}
-	}
+//	}
 	
-	protected void createTicketRecord(String day,Vendor vendor,Map<SchemeType,SchemeWrapper> schemes){
+	protected void createTicketRecord(Order order,Vendor vendor,Map<SchemeType,SchemeWrapper> schemes){
 		try{
-			Date queryDate = DateUtil.parseDate(day,"yyyyMMdd");
+			Date queryDate = DateUtil.parseDate(order.getDay(),"yyyyMMdd");
 			for(Iterator<Entry<SchemeType,SchemeWrapper>> it = schemes.entrySet().iterator();it.hasNext();){
 				Entry<SchemeType,SchemeWrapper> entry = it.next();
 				SchemeType type = entry.getKey();
@@ -407,6 +408,8 @@ public abstract class AbstractFilter implements CalculateFilter {
 				TicketInfo ticketInfo = ticketService.queryTicketStatisticByDateAndType(type, queryDate, vendor);
 				if(ticketInfo == null){
 					ticketInfo = new TicketInfo();
+					ticketInfo.setSchemeType(type);
+					ticketInfo.setName(type.getTypeName());
 					ticketInfo.setValifyCount(wrapper.getCount());
 					ticketInfo.setVendor(vendor);
 					ticketInfo.setDate(queryDate);

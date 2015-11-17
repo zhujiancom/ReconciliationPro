@@ -47,9 +47,9 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 		List<TicketInfo> ticketInfos = ticketService.queryTicketStatisticByDate(date, vendor);
 		if(!CollectionUtils.isEmpty(ticketInfos)){
 			for(TicketInfo info:ticketInfos){
-				sb.append(",").append(info.getName()).append(info.getValifyCount()).append(" 张");
+				sb.append(",").append(info.getName()).append(":").append(info.getValifyCount()).append(" 张");
 			}
-			sb.substring(1);
+			return sb.substring(1);
 		}
 		return sb.toString();
 	}

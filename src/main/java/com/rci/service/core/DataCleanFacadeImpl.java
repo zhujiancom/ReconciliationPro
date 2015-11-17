@@ -12,6 +12,7 @@ import com.rci.service.IELESDStatisticService;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderService;
 import com.rci.service.IStockService;
+import com.rci.service.ITicketInfoService;
 import com.rci.service.ITicketStatisticService;
 import com.rci.tools.DateUtil;
 
@@ -25,6 +26,10 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 	
 	@Resource(name="TicketStatisticService")
 	private ITicketStatisticService tsService;
+	
+	@Resource(name="TicketInfoService")
+	private ITicketInfoService ticketService;
+	
 	@Resource(name="StockService")
 	private IStockService stockService;
 	@Resource(name="AccFlowService")
@@ -47,6 +52,7 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 		accFlowService.rwDeleteFlowInfo(time, DataGenerateType.AUTO);
 	}
 
+	@Deprecated
 	@Override
 	public void deleteTicketStatistic(String time) {
 		tsService.deleteTicketStatistic(time);
@@ -71,9 +77,15 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 		deleteOrders(time);
 		deleteMark(time);
 		deleteFlowInfo(time,DataGenerateType.AUTO);
-		deleteTicketStatistic(time);
+//		deleteTicketStatistic(time);
+		deleteTicketInfo(time);
 		deleteELESDInfo(time);
 		deleteStockInfo(time);
+	}
+
+	@Override
+	public void deleteTicketInfo(String time) {
+		ticketService.deleteTicketStatistic(time);
 	}
 
 }

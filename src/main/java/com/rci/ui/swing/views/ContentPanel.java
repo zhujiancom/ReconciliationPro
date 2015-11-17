@@ -9,7 +9,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 
-import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.service.core.DataCleanFacade;
@@ -84,12 +83,13 @@ public class ContentPanel extends JSplitPane {
 			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "日期格式错误");
 		}
 		DataCleanFacade datacleaner = (DataCleanFacade) SpringUtils.getBean("DataCleanFacade");
-		datacleaner.deleteOrders(time);
-		datacleaner.deleteMark(time);
-		datacleaner.deleteFlowInfo(time,DataGenerateType.AUTO);
-		datacleaner.deleteTicketStatistic(time);
-		datacleaner.deleteELESDInfo(time);
-		datacleaner.deleteStockInfo(time);
+//		datacleaner.deleteOrders(time);
+//		datacleaner.deleteMark(time);
+//		datacleaner.deleteFlowInfo(time,DataGenerateType.AUTO);
+//		datacleaner.deleteTicketStatistic(time);
+//		datacleaner.deleteELESDInfo(time);
+//		datacleaner.deleteStockInfo(time);
+		datacleaner.cleanAllOfOneDay(time);
 	}
 
 	public JTable getMainTable() {

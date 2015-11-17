@@ -58,7 +58,10 @@ public interface DataCleanFacade {
 	 *  
 	 * @param time
 	 */
+	@Deprecated
 	public void deleteTicketStatistic(String time);
+	
+	public void deleteTicketInfo(String time);
 	
 	/**
 	 * 

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import com.rci.exceptions.ServiceException;
 import com.rci.ui.swing.views.ConculsionPanel;
@@ -23,27 +24,37 @@ public class CleanListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		final String time = queryPanel.getTimeInput().getText();
-//		new Thread(new Runnable(){
-//
-//			@Override
-//			public void run() {
-//				try{
-//					contentPane.clearData(time);
-//					conclusionPane.clearData();
-//					JOptionPane.showMessageDialog(null, "日期："+time+" 数据清除成功！");
-//				}catch(ServiceException se){
-//					JOptionPane.showMessageDialog(null, se.getMessage());
-//				}
-//			}
-//			
-//		}).start();
-		try{
-			contentPane.clearData(time);
-			conclusionPane.clearData();
-			JOptionPane.showMessageDialog(null, "日期："+time+" 数据清除成功！");
-		}catch(ServiceException se){
-			JOptionPane.showMessageDialog(null, new JLabel("<html><font color='red'>"+se.getMessage()+"</font></html>"));	
-		}
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				try{
+					SwingUtilities.invokeLater(new Runnable(){
+
+						@Override
+						public void run() {
+							queryPanel.getActionLabel().setText("正在清除 "+ time +" 数据！");
+						}
+						
+					});
+					contentPane.clearData(time);
+					conclusionPane.clearData();
+					SwingUtilities.invokeLater(new Runnable(){
+
+						@Override
+						public void run() {
+							queryPanel.getActionLabel().setText("日期："+time+" 数据清除成功！");
+						}
+						
+					});
+					JOptionPane.showMessageDialog(null, "日期："+time+" 数据清除成功！");
+					queryPanel.getActionLabel().setText(null);
+				}catch(ServiceException se){
+					JOptionPane.showMessageDialog(null, new JLabel("<html><font color='red'>"+se.getMessage()+"</font></html>"));	
+				}
+			}
+			
+		}).start();
 	}
 
 	public ConculsionPanel getConclusionPane() {
