@@ -40,4 +40,11 @@ public class DishTypeServiceImpl extends BaseServiceImpl<DishType, Long> impleme
 	public void delete(DishType type){
 		((IDishTypeService)AopContext.currentProxy()).rwDelete(type.getDtid());
 	}
+
+	@Override
+	public List<DishType> queryDishTypesBySeriesno(String seriesno) {
+		DetachedCriteria dc = DetachedCriteria.forClass(DishType.class);
+		dc.add(Restrictions.eq("seriesno", seriesno));
+		return baseDAO.queryListByCriteria(dc);
+	}
 }

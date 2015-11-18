@@ -1,5 +1,7 @@
 package com.rci.service;
 
+import java.util.List;
+
 import com.rci.bean.entity.DishType;
 import com.rci.service.base.IBaseService;
 
@@ -33,4 +35,6 @@ public interface IDishTypeService extends IBaseService<DishType, Long>{
 	DishType queryDishTypeByNo(String no);
 	
 	void delete(DishType type);
+	
+	List<DishType> queryDishTypesBySeriesno(String seriesno);
 }

@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.dto.SchemeTypeQueryDTO;
+import com.rci.ui.swing.vos.DishSeriesVO;
+import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
@@ -112,5 +114,11 @@ public interface IMetadataService {
 	void inactiveSchemeType(Long stid);
 	
 	DishVO getDishByNo(String dishno);
+	
+	List<DishSeriesVO> getAllDishSeries();
+	
+	List<DishTypeVO> getAllDishTypeBySeriesNo(String seriesno);
+	
+	List<DishVO> getAllDishByTypeNo(String typeno);
 	
 }

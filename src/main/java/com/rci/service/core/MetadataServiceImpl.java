@@ -13,6 +13,8 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.dto.SchemeTypeQueryDTO;
 import com.rci.bean.entity.Dish;
+import com.rci.bean.entity.DishSeries;
+import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.Stock;
@@ -27,6 +29,8 @@ import com.rci.service.ISchemeTypeService;
 import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
 import com.rci.tools.EnumUtils;
+import com.rci.ui.swing.vos.DishSeriesVO;
+import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
@@ -224,6 +228,42 @@ public class MetadataServiceImpl implements IMetadataService {
 	@Override
 	public DishVO getDishByNo(String dishno) {
 		return dishService.queryDish(dishno);
+	}
+
+	@Override
+	public List<DishSeriesVO> getAllDishSeries() {
+		List<DishSeriesVO> result = new ArrayList<DishSeriesVO>();
+		List<DishSeries> series = dishseriesService.getAll();
+		if(!CollectionUtils.isEmpty(series)){
+			for(DishSeries ds:series){
+				result.add(beanMapper.map(ds, DishSeriesVO.class));
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public List<DishTypeVO> getAllDishTypeBySeriesNo(String seriesno) {
+		List<DishType> types = dishtypeService.queryDishTypesBySeriesno(seriesno);
+		List<DishTypeVO> typevos = new ArrayList<DishTypeVO>();
+		if(!CollectionUtils.isEmpty(types)){
+			for(DishType type:types){
+				typevos.add(beanMapper.map(type, DishTypeVO.class));
+			}
+		}
+		return typevos;
+	}
+
+	@Override
+	public List<DishVO> getAllDishByTypeNo(String typeno) {
+		List<Dish> dishes = dishService.queryDishesByTypeno(typeno);
+		List<DishVO> vos = new ArrayList<DishVO>();
+		if(!CollectionUtils.isEmpty(dishes)){
+			for(Dish dish:dishes){
+				vos.add(beanMapper.map(dish, DishVO.class));
+			}
+		}
+		return vos;
 	}
 
 }

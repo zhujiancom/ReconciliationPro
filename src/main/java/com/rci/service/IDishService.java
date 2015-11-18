@@ -16,4 +16,6 @@ public interface IDishService extends IBaseService<Dish, Long>{
 	public void rwupdateDishInfo(Dish dish);
 	
 	public List<Dish> queryDishesBySeries(String seriesName);
+	
+	public List<Dish> queryDishesByTypeno(String typeno);
 }

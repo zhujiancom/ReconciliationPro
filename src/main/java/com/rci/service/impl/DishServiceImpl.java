@@ -74,5 +74,15 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 		return baseDAO.queryListByCriteria(sdc);
 	}
 
+
+
+	@Override
+	public List<Dish> queryDishesByTypeno(String typeno) {
+		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(Dish.class);
+		sdc.createAlias("dishType", "type");
+		sdc.add(SafeRestrictions.eq("type.dtNo", typeno)).add(SafeRestrictions.eq("stopFlag", YOrN.N));
+		return baseDAO.queryListByCriteria(sdc);
+	}
+
 	
 }

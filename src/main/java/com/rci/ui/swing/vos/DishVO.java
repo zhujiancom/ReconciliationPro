@@ -1,5 +1,7 @@
 package com.rci.ui.swing.vos;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -11,6 +13,8 @@ public class DishVO {
 	
 	/* 菜品名称   */
 	private String dishName;
+	
+	private BigDecimal dishPrice;
 	
 	/* 是否受库存管理  */
 	private YOrN stockFlag;
@@ -37,6 +41,14 @@ public class DishVO {
 
 	public void setStockFlag(YOrN stockFlag) {
 		this.stockFlag = stockFlag;
+	}
+
+	public BigDecimal getDishPrice() {
+		return dishPrice;
+	}
+
+	public void setDishPrice(BigDecimal dishPrice) {
+		this.dishPrice = dishPrice;
 	}
 
 	@Override
