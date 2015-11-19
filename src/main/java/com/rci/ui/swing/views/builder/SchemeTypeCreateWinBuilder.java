@@ -40,8 +40,7 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 	
 	private JTextField nameInput = new JTextField(30);
 	private JTextField typenoInput = new JTextField(30);
-	private JComboBox<DishVO> dishInput;
-	private JButton addBtn;
+//	private JComboBox<DishVO> dishInput;
 	private SelectedDishPanel selectedDishPanel;
 	private JComboBox<LabelValueBean<String>> activityTypeInput;
 	private JTextField discountInput = new JTextField(30);
@@ -77,15 +76,16 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 			SchemeTypeVO newSchemeType = new SchemeTypeVO();
 			ActivityType activityType = ActivityType.valueOf(activityTypeSelected.getValue());
 			newSchemeType.setActivity(activityType);
+			List<DishVO> selectDishes = selectedDishPanel.getSelectedDishes();
+//			if(!CollectionUtils.isEmpty(selectDishes)){
+//				
+//			}
+			newSchemeType.setDishes(selectDishes);
 			newSchemeType.setTypeName(nameInput.getText());
 			newSchemeType.setTypeNo(typenoInput.getText());
 			if(StringUtils.hasText(discountInput.getText())){
 				BigDecimal discountAmount = new BigDecimal(discountInput.getText().trim());
 				newSchemeType.setDiscountAmount(discountAmount);
-			}
-			DishVO dish = (DishVO) dishInput.getSelectedItem();
-			if(dish != null){
-				newSchemeType.setDishNo(dish.getDishNo());
 			}
 			newSchemeType.setRealAmount(new BigDecimal(realAmountInput.getText().trim()));
 			if(StringUtils.hasText(floorInput.getText())){
@@ -128,14 +128,12 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 		mainPane.add(eightPane);
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,0));
 		secondPane.add(dish);
-		List<DishVO> itemList = metaService.displayDishSuits();
-		ListItemComboBoxModel<DishVO> vcm = new ListItemComboBoxModel<DishVO>(itemList);
-		dishInput = new JComboBox<DishVO>(vcm);
-		secondPane.add(dishInput);
-//		addBtn = ButtonFactory.createImageButton("选择菜品", "skin/gray/images/24x24/addBtn_2.png", null);
-//		secondPane.add(addBtn);
-//		selectedDishPanel = new SelectedDishPanel();
-//		secondPane.add(selectedDishPanel);
+//		List<DishVO> itemList = metaService.displayDishSuits();
+//		ListItemComboBoxModel<DishVO> vcm = new ListItemComboBoxModel<DishVO>(itemList);
+//		dishInput = new JComboBox<DishVO>(vcm);
+//		secondPane.add(dishInput);
+		selectedDishPanel = new SelectedDishPanel();
+		secondPane.add(selectedDishPanel);
 		mainPane.add(secondPane);
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		thirdPane.add(discount);

@@ -2,6 +2,7 @@ package com.rci.ui.swing.views.component;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -12,6 +13,10 @@ import javax.swing.JPanel;
 
 import org.springframework.util.CollectionUtils;
 
+import com.rci.service.core.IMetadataService;
+import com.rci.tools.SpringUtils;
+import com.rci.tools.StringUtils;
+import com.rci.ui.swing.listeners.DishSelectListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.vos.DishVO;
 
@@ -24,11 +29,20 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 	
 	private JButton addBtn;
 	
-	private List<DishVO> selectedDishes;
+	private List<DishVO> selectedDishes = new ArrayList<DishVO>();
 	
-	private JLabel displayLabel;
+	private String typeno;
+	
+	private JLabel displayLabel = new JLabel();
+	
+	private DishSelectWin win;
 	
 	public SelectedDishPanel(){
+		initComponent();
+	}
+	
+	public SelectedDishPanel(String typeno){
+		this.typeno = typeno;
 		initComponent();
 	}
 
@@ -36,34 +50,32 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 		BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 		this.setLayout(layout);
 		addBtn = ButtonFactory.createImageButton("选择菜品", "skin/gray/images/24x24/addBtn_2.png", null);
-		StringBuffer sb = new StringBuffer();
-		String selectedDishNames = "套餐C(原味)";
-		if(!CollectionUtils.isEmpty(selectedDishes)){
-			for(DishVO dish:selectedDishes){
-				sb.append(",").append(dish.getDishName());
+		if(StringUtils.hasText(typeno)){
+			IMetadataService metadataService = (IMetadataService) SpringUtils.getBean("MetadataService");
+			List<DishVO> dishes = metadataService.getRefDishesBySchemeTypeno(typeno);
+			StringBuffer sb = new StringBuffer();
+			if(!CollectionUtils.isEmpty(dishes)){
+				for(DishVO dish:dishes){
+					sb.append(",").append(dish.getDishName());
+				}
+				displayLabel.setText(sb.substring(1));
 			}
-			selectedDishNames = sb.substring(1);
 		}
-		displayLabel = new JLabel(selectedDishNames);
 		this.add(addBtn);
 		this.add(Box.createVerticalStrut(10));
 		this.add(displayLabel);
-		
 		addBtn.addActionListener(this);
 	}
 
-//	@Override
-//	public void updateUI() {
-//		StringBuffer sb = new StringBuffer();
-//		String selectedDishNames = "";
-//		if(!CollectionUtils.isEmpty(selectedDishes)){
-//			for(DishVO dish:selectedDishes){
-//				sb.append(",").append(dish.getDishName());
-//			}
-//			selectedDishNames = sb.substring(1);
-//		}
-//		displayLabel.setText(selectedDishNames);
-//	}
+	public void reflushView(){
+		win.close();
+		StringBuffer sb = new StringBuffer();
+		for(DishVO dish:selectedDishes){
+			sb.append(",").append(dish.getDishName());
+		}
+		displayLabel.setText(sb.substring(1));
+		this.repaint();
+	}
 
 	public JButton getAddBtn() {
 		return addBtn;
@@ -88,10 +100,18 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 	public void setDisplayLabel(JLabel displayLabel) {
 		this.displayLabel = displayLabel;
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
-		DishSelectWin win = new DishSelectWin(900,600,"菜品选择");
-		win.setParentPanel(this);
+		DishSelectListener selectListener = new DishSelectListener(this);
+		win = new DishSelectWin(selectListener,900,600,"菜品选择");
+	}
+
+	public String getTypeno() {
+		return typeno;
+	}
+
+	public void setTypeno(String typeno) {
+		this.typeno = typeno;
 	}
 }

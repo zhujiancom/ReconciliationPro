@@ -8,20 +8,18 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
+import com.rci.ui.swing.listeners.DishSelectListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.DishJCheckBox;
 import com.rci.ui.swing.vos.DishTypeVO;
@@ -41,8 +39,11 @@ public class DisplayDishPanel extends JPanel {
 	
 	private IMetadataService metadataService;
 	
-	public DisplayDishPanel(String seriesno){
+	private DishSelectListener selectListener;
+	
+	public DisplayDishPanel(String seriesno,DishSelectListener selectListener){
 		this.seriesno = seriesno;
+		this.selectListener = selectListener;
 		metadataService = (IMetadataService) SpringUtils.getBean("MetadataService");
 		initComponent();
 	}
@@ -116,13 +117,7 @@ public class DisplayDishPanel extends JPanel {
 			for(DishVO dish:dishes){
 				DishJCheckBox c = new DishJCheckBox(dish.getDishName()+"-"+dish.getDishPrice(),dish);
 				c.setBackground(Color.WHITE);
-				c.addItemListener(new ItemListener() {
-					
-					@Override
-					public void itemStateChanged(ItemEvent paramItemEvent) {
-						
-					}
-				});
+				c.addItemListener(selectListener);
 				this.add(c);
 			}
 		}

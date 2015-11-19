@@ -37,6 +37,7 @@ import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.ListItemComboBoxModel;
 import com.rci.ui.swing.model.SchemeTypeTable.SchemeTypeTabelModel;
 import com.rci.ui.swing.views.PopWindow;
+import com.rci.ui.swing.views.component.SelectedDishPanel;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 
@@ -48,7 +49,8 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 	private JScrollPane sPane;
 	private JTextField nameInput;
 	private JTextField typenoInput;
-	private JComboBox<DishVO> dishInput;
+//	private JComboBox<DishVO> dishInput;
+	private SelectedDishPanel selectedDishPanel;
 	private JComboBox<LabelValueBean<String>> activityTypeInput;
 	private JTextField discountInput;
 	private JTextField realAmountInput;
@@ -81,10 +83,12 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 			validation();
 			schemeType.setTypeName(nameInput.getText());
 			schemeType.setTypeNo(typenoInput.getText());
-			DishVO dish = (DishVO) dishInput.getSelectedItem();
-			if(dish != null){
-				schemeType.setDishNo(dish.getDishNo());
-			}
+//			DishVO dish = (DishVO) dishInput.getSelectedItem();
+//			if(dish != null){
+//				schemeType.setDishNo(dish.getDishNo());
+//			}
+			List<DishVO> selectDishes = selectedDishPanel.getSelectedDishes();
+			schemeType.setDishes(selectDishes);
 			if(StringUtils.hasText(discountInput.getText())){
 				schemeType.setDiscountAmount(new BigDecimal(discountInput.getText().trim()));
 			}
@@ -136,12 +140,14 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 		mainPane.add(eightPane);
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,0));
 		secondPane.add(dish);
-		List<DishVO> itemList = metaService.displayDishSuits();
-		ListItemComboBoxModel<DishVO> vcm = new ListItemComboBoxModel<DishVO>(itemList);
-		dishInput = new JComboBox<DishVO>(vcm);
-		DishVO dish = metaService.getDishByNo(schemeType.getDishNo());
-		dishInput.setSelectedItem(dish);
-		secondPane.add(dishInput);
+//		List<DishVO> itemList = metaService.displayDishSuits();
+//		ListItemComboBoxModel<DishVO> vcm = new ListItemComboBoxModel<DishVO>(itemList);
+//		dishInput = new JComboBox<DishVO>(vcm);
+//		DishVO dish = metaService.getDishByNo(schemeType.getDishNo());
+//		dishInput.setSelectedItem(dish);
+//		secondPane.add(dishInput);
+		selectedDishPanel = new SelectedDishPanel(schemeType.getTypeNo());
+		secondPane.add(selectedDishPanel);
 		mainPane.add(secondPane);
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		thirdPane.add(discount);

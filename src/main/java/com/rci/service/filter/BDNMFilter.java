@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.SchemeWrapper;
+import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.SchemeType;
@@ -64,8 +65,8 @@ public class BDNMFilter extends AbstractFilter {
 				if (!suitFlag) {
 					suitFlag = true;
 				}
-//				SchemeType type = getSuitSchemeType(dishNo);
-				SchemeType type = schemeTypeService.getSchemeTypeByDishno(dishNo);
+				Dish dish = dishService.findDishByNo(dishNo);
+				SchemeType type = dish.getSchemeType();
 				Integer suitCount = suitMap.get(type);
 				Integer itemCount = count.subtract(countBack).intValue();
 				if (suitCount != null) {

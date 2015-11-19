@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
+import com.rci.ui.swing.listeners.DishSelectListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.vos.DishSeriesVO;
 
@@ -29,6 +30,8 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 5660269571100372333L;
 	
 	private JPanel containerPane;
+	
+	private DishSelectListener selectListener;
 
 	private Point currentPoint;
 	
@@ -44,8 +47,9 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 	
 	private JPanel mainPane;
 	
-	public SeriesTypePanel(JPanel containerPane){
+	public SeriesTypePanel(JPanel containerPane,DishSelectListener selectListener){
 		this.containerPane = containerPane;
+		this.selectListener = selectListener;
 		metadataService = (IMetadataService) SpringUtils.getBean("MetadataService");
 		initComponent();
 	}
@@ -84,7 +88,7 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 			currentPoint = btn.getLocation();
 			final String seriesno = dsv.getSeriesno();
 			if(dishPane == null){
-				dishPane = new DisplayDishPanel(seriesno);
+				dishPane = new DisplayDishPanel(seriesno,selectListener);
 				containerPane.add(dishPane,BorderLayout.CENTER);
 			}
 			btn.addActionListener(this);
@@ -157,7 +161,7 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 		JButton btn = (JButton) event.getSource();
 		containerPane.remove(dishPane);
-		dishPane = new DisplayDishPanel(btn.getName());
+		dishPane = new DisplayDishPanel(btn.getName(),selectListener);
 		containerPane.add(dishPane,BorderLayout.CENTER);
 		containerPane.updateUI();
 		containerPane.repaint();

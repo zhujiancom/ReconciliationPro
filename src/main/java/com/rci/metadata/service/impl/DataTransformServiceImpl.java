@@ -141,7 +141,6 @@ public class DataTransformServiceImpl implements IDataTransformService {
 		}
 		List<DishDTO> dishDTOs = fetchService.fetchAllDish();
 		List<String> stockDishNos = stockService.getStockDishNumbers();
-		List<Dish> dishes = new LinkedList<Dish>();
 		for(DishDTO dishDTO:dishDTOs){
 			Dish dish = beanMapper.map(dishDTO, Dish.class);
 			if("0".equals(dishDTO.getDishName())){
@@ -161,10 +160,8 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			}else{
 				dish.setStockFlag(YOrN.N);
 			}
-//			dishes.add(dish);
 			dishService.rwCreate(dish);
 		}
-//		dishService.rwCreate(dishes.toArray(new Dish[0]));
 	}
 	
 	public Dish transformDishInfo(String dishno){

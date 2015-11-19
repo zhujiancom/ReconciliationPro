@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.StockOpLog;
 import com.rci.bean.entity.TableInfo;
@@ -30,7 +31,6 @@ import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.vos.DishVO;
-import com.rci.ui.swing.vos.SchemeVO;
 
 @ContextConfiguration({"classpath:spring/spring-db.xml","classpath:spring/spring-common.xml"})
 public class ServiceTest extends AbstractJUnit4SpringContextTests{
@@ -259,5 +259,11 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 		List<DishVO> dishes = dishService.queryDishes(false);
 		System.out.println(dishes.size());
 		
+	}
+	
+	@Test
+	public void testGetDishByNo(){
+		Dish dish = dishService.findDishByNo("708");
+		System.out.println(dish.getSchemeType());
 	}
 }

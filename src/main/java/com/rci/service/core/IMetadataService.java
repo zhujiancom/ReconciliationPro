@@ -121,4 +121,5 @@ public interface IMetadataService {
 	
 	List<DishVO> getAllDishByTypeNo(String typeno);
 	
+	List<DishVO> getRefDishesBySchemeTypeno(String typeno);
 }

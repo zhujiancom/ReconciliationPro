@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import com.rci.ui.swing.listeners.DishSelectListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.PopWindow;
 
@@ -16,16 +17,17 @@ public class DishSelectWin extends PopWindow {
 	 */
 	private static final long serialVersionUID = 2248904392389671255L;
 	
-	private SelectedDishPanel parentPanel;
+	private DishSelectListener selectListener;
 	
-	public DishSelectWin(int width,int height,String title){
+	public DishSelectWin(DishSelectListener selectListener,int width,int height,String title){
 		super(width,height,title);
+		this.selectListener = selectListener;
 		createContentPane();
 	}
 
 	private void createContentPane() {
 		JPanel containerPanel = this.getContainerPanel();
-		containerPanel.add(new SeriesTypePanel(containerPanel),BorderLayout.NORTH);
+		containerPanel.add(new SeriesTypePanel(containerPanel,selectListener),BorderLayout.NORTH);
 //		containerPanel.add(buildDishPane(),BorderLayout.CENTER);
 //		containerPanel.add(new DisplayDishPanel("01"),BorderLayout.CENTER);
 		containerPanel.add(buildOperatePane(),BorderLayout.SOUTH);
@@ -38,15 +40,16 @@ public class DishSelectWin extends PopWindow {
 		JButton cancelBtn = ButtonFactory.createImageButton("取消","skin/gray/images/64x64/cancel_btn.png",null);
 		panel.add(confirmBtn);
 		panel.add(cancelBtn);
+		confirmBtn.addActionListener(selectListener);
 		return panel;
 	}
 
-	public SelectedDishPanel getParentPanel() {
-		return parentPanel;
+	public DishSelectListener getSelectListener() {
+		return selectListener;
 	}
 
-	public void setParentPanel(SelectedDishPanel parentPanel) {
-		this.parentPanel = parentPanel;
+	public void setSelectListener(DishSelectListener selectListener) {
+		this.selectListener = selectListener;
 	}
 
 }

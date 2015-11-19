@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.rci.enums.CommonEnums.YOrN;
 
 public class DishVO {
+	private Long did;
 	/* 菜品编号 */
 	private String dishNo;
 	
@@ -18,6 +19,14 @@ public class DishVO {
 	
 	/* 是否受库存管理  */
 	private YOrN stockFlag;
+
+	public Long getDid() {
+		return did;
+	}
+
+	public void setDid(Long did) {
+		this.did = did;
+	}
 
 	public String getDishNo() {
 		return dishNo;

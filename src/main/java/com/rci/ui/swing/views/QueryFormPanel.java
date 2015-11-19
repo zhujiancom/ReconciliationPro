@@ -1,13 +1,10 @@
 package com.rci.ui.swing.views;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.HashSet;
@@ -22,7 +19,6 @@ import javax.swing.JTextField;
 
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.ui.swing.model.ButtonFactory;
-import com.rci.ui.swing.views.component.DishSelectWin;
 
 public class QueryFormPanel extends JPanel implements ItemListener{
 
@@ -83,15 +79,18 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 //		eleOrderCount = new JTextField(5);
 //		JLabel elePerAllowanceLabel = new JLabel("每单优惠金额");
 //		elePerAllowanceAmount = new JTextField(5);
-		JButton btn = new JButton("选择菜品");
-		btn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				DishSelectWin win = new DishSelectWin(900,600,"菜品选择");
-			}
-		});
-		queryPane.add(btn, new FlowLayout(FlowLayout.LEFT));
+		
+		//测试代码
+//		JButton btn = new JButton("选择菜品");
+//		btn.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				DishSelectListener selectListener = new DishSelectListener();
+//				DishSelectWin win = new DishSelectWin(selectListener,900,600,"菜品选择");
+//			}
+//		});
+//		queryPane.add(btn, new FlowLayout(FlowLayout.LEFT));
 		
 		JLabel rciTime = new JLabel("日期");
 		timeInput = new JTextField(10);

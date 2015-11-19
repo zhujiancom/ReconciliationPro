@@ -35,13 +35,6 @@ public class SchemeTypeServiceImpl extends BaseServiceImpl<SchemeType, Long> imp
 		ISchemeTypeService {
 
 	@Override
-	public SchemeType getSchemeTypeByDishno(String dishno) {
-		DetachedCriteria sdc = DetachedCriteria.forClass(SchemeType.class);
-		sdc.add(Restrictions.eq("dishNo", dishno));
-		return baseDAO.queryUniqueByCriteria(sdc);
-	}
-
-	@Override
 	public SchemeType getSchemeType(BigDecimal amount,ActivityType activity) {
 		DetachedCriteria sdc = DetachedCriteria.forClass(SchemeType.class);
 		sdc.add(Restrictions.and(Restrictions.lt("floorAmount", amount),Restrictions.ge("ceilAmount", amount)))

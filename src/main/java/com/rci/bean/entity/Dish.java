@@ -61,6 +61,8 @@ public class Dish extends BaseEntity{
 	
 	private DishSeries dishSeries;
 	
+	private SchemeType schemeType;
+	
 	/* 是否停用 */
 	private YOrN stopFlag;
 	
@@ -121,6 +123,16 @@ public class Dish extends BaseEntity{
 	@JoinColumn(name="dish_series_id")
 	public DishSeries getDishSeries() {
 		return dishSeries;
+	}
+
+	@ManyToOne(cascade={CascadeType.ALL})
+	@JoinColumn(name="scheme_type_id")
+	public SchemeType getSchemeType() {
+		return schemeType;
+	}
+
+	public void setSchemeType(SchemeType schemeType) {
+		this.schemeType = schemeType;
 	}
 
 	public void setDishSeries(DishSeries dishSeries) {

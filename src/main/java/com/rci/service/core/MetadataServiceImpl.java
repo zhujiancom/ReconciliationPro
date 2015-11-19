@@ -172,6 +172,14 @@ public class MetadataServiceImpl implements IMetadataService {
 		if(!CollectionUtils.isEmpty(schemeTypes)){
 			for(SchemeType type:schemeTypes){
 				SchemeTypeVO vo = beanMapper.map(type, SchemeTypeVO.class);
+				List<DishVO> dishes = vo.getDishes();
+				if(!CollectionUtils.isEmpty(dishes)){
+					StringBuffer sb = new StringBuffer();
+					for(DishVO dish:dishes){
+						sb.append(",").append(dish.getDishName());
+					}
+					vo.setDishName(sb.substring(1));
+				}
 				vos.add(vo); 
 			}
 		}
@@ -195,6 +203,16 @@ public class MetadataServiceImpl implements IMetadataService {
 	public void createSchemeType(SchemeTypeVO schemeTypevo) {
 		SchemeType schemeType = beanMapper.map(schemeTypevo, SchemeType.class);
 		schemeType.setStatus(ActivityStatus.ACTIVE);
+		List<DishVO> dishvos = schemeTypevo.getDishes();
+		List<Dish> dishes = new ArrayList<Dish>();
+		if(!CollectionUtils.isEmpty(dishvos)){
+			for(DishVO dishvo:dishvos){
+				Dish dish = dishService.get(dishvo.getDid());
+				dish.setSchemeType(schemeType);
+				dishes.add(dish);
+			}
+			schemeType.setDishes(dishes);
+		}
 		schemeTypeService.rwCreate(schemeType);
 	}
 
@@ -202,12 +220,20 @@ public class MetadataServiceImpl implements IMetadataService {
 	public void updateSchemeType(SchemeTypeVO schemeTypevo) {
 		SchemeType schemeType = schemeTypeService.get(schemeTypevo.getStid());
 		schemeType.setTypeName(schemeTypevo.getTypeName());
-		schemeType.setDishNo(schemeTypevo.getDishNo());
 		schemeType.setBeverageAmount(schemeTypevo.getDiscountAmount());
 		schemeType.setActivity(schemeTypevo.getActivity());
 		schemeType.setFloorAmount(schemeTypevo.getFloorAmount());
 		schemeType.setCeilAmount(schemeTypevo.getCeilAmount());
 		schemeType.setRealAmount(schemeTypevo.getRealAmount());
+		List<Dish> dishes = new ArrayList<Dish>();
+		List<DishVO> dishvos = schemeTypevo.getDishes();
+		if(!CollectionUtils.isEmpty(dishvos)){
+			for(DishVO dishvo:dishvos){
+				Dish dish = dishService.get(dishvo.getDid());
+				dishes.add(dish);
+			}
+			schemeType.setDishes(dishes);
+		}
 		schemeTypeService.rwUpdate(schemeType);
 	}
 
@@ -257,6 +283,19 @@ public class MetadataServiceImpl implements IMetadataService {
 	@Override
 	public List<DishVO> getAllDishByTypeNo(String typeno) {
 		List<Dish> dishes = dishService.queryDishesByTypeno(typeno);
+		List<DishVO> vos = new ArrayList<DishVO>();
+		if(!CollectionUtils.isEmpty(dishes)){
+			for(Dish dish:dishes){
+				vos.add(beanMapper.map(dish, DishVO.class));
+			}
+		}
+		return vos;
+	}
+
+	@Override
+	public List<DishVO> getRefDishesBySchemeTypeno(String typeno) {
+		SchemeType schemeType = schemeTypeService.getSchemeTypeByNo(typeno);
+		List<Dish> dishes = schemeType.getDishes();
 		List<DishVO> vos = new ArrayList<DishVO>();
 		if(!CollectionUtils.isEmpty(dishes)){
 			for(Dish dish:dishes){

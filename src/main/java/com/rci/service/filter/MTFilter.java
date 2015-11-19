@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.SchemeWrapper;
+import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.SchemeType;
@@ -60,7 +61,8 @@ public class MTFilter extends AbstractFilter {
 				if (!suitFlag) {
 					suitFlag = true;
 				}
-				SchemeType type = schemeTypeService.getSchemeTypeByDishno(dishNo);
+				Dish dish = dishService.findDishByNo(dishNo);
+				SchemeType type = dish.getSchemeType();
 				if(type == null){
 					logger.error("活动类型未找到，对应菜品编号："+dishNo);
 					ExceptionManage.throwServiceException("活动类型未找到，对应菜品编号："+dishNo);

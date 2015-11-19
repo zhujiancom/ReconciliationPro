@@ -8,7 +8,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
-import javax.swing.SwingConstants;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import com.rci.tools.StringUtils;

@@ -1,12 +1,13 @@
 package com.rci.ui.swing.vos;
 
+
 public class DishTypeVO {
 	private Long dtid;
 	
 	private String dtNo;
 	
 	private String dtName;
-
+	
 	public Long getDtid() {
 		return dtid;
 	}
@@ -30,6 +31,4 @@ public class DishTypeVO {
 	public void setDtName(String dtName) {
 		this.dtName = dtName;
 	}
-	
-	
 }

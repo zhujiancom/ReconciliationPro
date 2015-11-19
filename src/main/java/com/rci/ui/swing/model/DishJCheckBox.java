@@ -22,4 +22,12 @@ public class DishJCheckBox extends JCheckBox {
 	protected String paramString() {
 		return dish.getDishName()+"-"+dish.getDishPrice();
 	}
+
+	public DishVO getDish() {
+		return dish;
+	}
+
+	public void setDish(DishVO dish) {
+		this.dish = dish;
+	}
 }

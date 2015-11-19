@@ -2,14 +2,19 @@ package com.rci.bean.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -36,7 +41,7 @@ public class SchemeType extends AccessoryEntity{
 	private String typeName;
 	
 	/* 对应的菜品 */
-	private String dishNo;
+	private List<Dish> dishes;
 	
 	/* 包含饮料金额 */
 	private BigDecimal beverageAmount;
@@ -74,12 +79,6 @@ public class SchemeType extends AccessoryEntity{
 		return typeName;
 	}
 
-	@Column(name="dishno")
-	public String getDishNo() {
-		return dishNo;
-	}
-
-
 	public void setStid(Long stid) {
 		this.stid = stid;
 	}
@@ -94,10 +93,6 @@ public class SchemeType extends AccessoryEntity{
 		this.typeName = typeName;
 	}
 
-
-	public void setDishNo(String dishNo) {
-		this.dishNo = dishNo;
-	}
 
 	@Column(name="beverage_amount")
 	public BigDecimal getBeverageAmount() {
@@ -153,6 +148,16 @@ public class SchemeType extends AccessoryEntity{
 
 	public void setStatus(ActivityStatus status) {
 		this.status = status;
+	}
+
+	@OneToMany(cascade=CascadeType.MERGE,fetch=FetchType.LAZY)
+	@JoinColumn(name="scheme_type_id")
+	public List<Dish> getDishes() {
+		return dishes;
+	}
+
+	public void setDishes(List<Dish> dishes) {
+		this.dishes = dishes;
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.TicketInfo;
-import com.rci.bean.entity.TicketStatistic;
 import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.ActivityStatus;
