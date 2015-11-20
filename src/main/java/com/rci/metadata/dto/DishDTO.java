@@ -42,6 +42,8 @@ public class DishDTO {
 	
 	/* 是否停用 */
 	private YOrN stopFlag;
+	
+	private YOrN suitFlag;
 
 	@ColumnName("ch_dishno")
 	public String getDishNo() {
@@ -86,6 +88,15 @@ public class DishDTO {
 
 	public void setStopFlag(YOrN stopFlag) {
 		this.stopFlag = stopFlag;
+	}
+
+	@ColumnName("ch_suitflag")
+	public YOrN getSuitFlag() {
+		return suitFlag;
+	}
+
+	public void setSuitFlag(YOrN suitFlag) {
+		this.suitFlag = suitFlag;
 	}
 
 	@ColumnName("ch_seriesno")

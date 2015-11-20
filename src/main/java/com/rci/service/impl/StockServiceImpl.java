@@ -80,7 +80,6 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
 	public void rwAddStock(String dishNo) {
 		Stock stock = new Stock(dishNo);
 		Dish dish = dishService.findDishByNo(dishNo);
-		dish.setStockFlag(YOrN.Y);
 		dishService.rwupdateDishInfo(dish);
 		stock.setDishName(dish.getDishName());
 		stock.setSno(dishNo);
@@ -94,7 +93,6 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements
 	public void rwRemoveStock(Long stockId){
 		Stock stock = get(stockId);
 		Dish dish = dishService.findDishByNo(stock.getDishNo());
-		dish.setStockFlag(YOrN.N);
 		dishService.rwupdateDishInfo(dish);
 		super.rwDelete(stockId);
 	}

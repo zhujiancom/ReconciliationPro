@@ -70,6 +70,8 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	private IStockService stockService;
 	@Resource(name="DishSeriesService")
 	private IDishSeriesService dishseriesService;
+	@Resource(name="SchemeTypeService")
+	private ISchemeTypeDishRefService sdrefService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -262,8 +264,8 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	}
 	
 	@Test
-	public void testGetDishByNo(){
-		Dish dish = dishService.findDishByNo("708");
-		System.out.println(dish.getSchemeType());
+	public void testDeleteSchemeTypeWithDishRef(){
+		sdrefService.deleteRefByTypeno("");
 	}
+	
 }

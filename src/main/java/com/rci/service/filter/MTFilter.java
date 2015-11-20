@@ -62,7 +62,7 @@ public class MTFilter extends AbstractFilter {
 					suitFlag = true;
 				}
 				Dish dish = dishService.findDishByNo(dishNo);
-				SchemeType type = dish.getSchemeType();
+				SchemeType type = null;//dish.getSchemeType();
 				if(type == null){
 					logger.error("活动类型未找到，对应菜品编号："+dishNo);
 					ExceptionManage.throwServiceException("活动类型未找到，对应菜品编号："+dishNo);

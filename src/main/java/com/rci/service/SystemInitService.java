@@ -12,7 +12,6 @@ import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.account.Account;
 import com.rci.bean.entity.base.DictGroup;
 import com.rci.bean.entity.base.DictItem;
-import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.base.IDictGroupService;
 import com.rci.service.base.IDictItemService;
@@ -59,7 +58,6 @@ public class SystemInitService implements InitializingBean{
 		initDictionary();
 		//4. 设置饮料为不可打折菜品类型
 		DishType dishType = dishTypeService.queryDishTypeByNo("23");
-		dishType.setNotDiscount(YOrN.Y);
 		dishTypeService.rwUpdate(dishType);
 	}
 	

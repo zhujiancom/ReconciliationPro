@@ -72,7 +72,7 @@ public class DPTGFilter extends AbstractFilter {
 					suitFlag = true;
 				}
 				Dish dish = dishService.findDishByNo(dishNo);
-				SchemeType type = dish.getSchemeType();
+				SchemeType type = null;//dish.getSchemeType();
 				Integer suitCount = suitMap.get(type);
 				Integer itemCount = count.subtract(countBack).intValue();
 				if (suitCount != null) {

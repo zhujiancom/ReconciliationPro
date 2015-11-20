@@ -85,6 +85,10 @@ public final class BusinessEnums {
 		ACTIVE,INACTIVE
 	}
 	
+	public static enum State{
+		VALID,INVALID,OVERDUE
+	}
+	
 	/**
 	 * 
 	 * remark (备注): 活动类型 （代金券，外卖活动）

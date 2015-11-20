@@ -20,6 +20,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.rci.bean.entity.base.BaseEntity;
+import com.rci.enums.CommonEnums;
 import com.rci.enums.CommonEnums.YOrN;
 
 /**
@@ -56,20 +57,23 @@ public class Dish extends BaseEntity{
 	/* 菜品单价 */
 	private BigDecimal dishPrice;
 	
-	/* 菜品类型  */
+	/* 菜品类型 小类 */
 	private DishType dishType;
 	
+	/* 菜品类型大类 */
 	private DishSeries dishSeries;
-	
-	private SchemeType schemeType;
 	
 	/* 是否停用 */
 	private YOrN stopFlag;
 	
 	/* 是否受库存管理  */
-	private YOrN stockFlag;
+//	private YOrN stockFlag;
 	
+	/* 是否是套餐 */
 	private YOrN suitFlag;
+	
+	/* 是否可打折 */
+	private CommonEnums.YOrN deductFlag;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -125,15 +129,15 @@ public class Dish extends BaseEntity{
 		return dishSeries;
 	}
 
-	@ManyToOne(cascade={CascadeType.ALL})
-	@JoinColumn(name="scheme_type_id")
-	public SchemeType getSchemeType() {
-		return schemeType;
-	}
-
-	public void setSchemeType(SchemeType schemeType) {
-		this.schemeType = schemeType;
-	}
+//	@ManyToOne(cascade={CascadeType.ALL})
+//	@JoinColumn(name="scheme_type_id")
+//	public SchemeType getSchemeType() {
+//		return schemeType;
+//	}
+//
+//	public void setSchemeType(SchemeType schemeType) {
+//		this.schemeType = schemeType;
+//	}
 
 	public void setDishSeries(DishSeries dishSeries) {
 		this.dishSeries = dishSeries;
@@ -149,15 +153,15 @@ public class Dish extends BaseEntity{
 		this.stopFlag = stopFlag;
 	}
 
-	@Enumerated(EnumType.STRING)
-	@Column(name="stock_flag")
-	public YOrN getStockFlag() {
-		return stockFlag;
-	}
-
-	public void setStockFlag(YOrN stockFlag) {
-		this.stockFlag = stockFlag;
-	}
+//	@Enumerated(EnumType.STRING)
+//	@Column(name="stock_flag")
+//	public YOrN getStockFlag() {
+//		return stockFlag;
+//	}
+//
+//	public void setStockFlag(YOrN stockFlag) {
+//		this.stockFlag = stockFlag;
+//	}
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="suit_flag")
@@ -167,6 +171,16 @@ public class Dish extends BaseEntity{
 
 	public void setSuitFlag(YOrN suitFlag) {
 		this.suitFlag = suitFlag;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="deduct_flag")
+	public CommonEnums.YOrN getDeductFlag() {
+		return deductFlag;
+	}
+
+	public void setDeductFlag(CommonEnums.YOrN deductFlag) {
+		this.deductFlag = deductFlag;
 	}
 
 	@Override

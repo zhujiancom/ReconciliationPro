@@ -17,6 +17,7 @@ import com.rci.bean.entity.DishSeries;
 import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
+import com.rci.bean.entity.SchemeTypeDishRef;
 import com.rci.bean.entity.Stock;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.metadata.service.IDataTransformService;
@@ -25,6 +26,7 @@ import com.rci.service.IDishService;
 import com.rci.service.IDishTypeService;
 import com.rci.service.IPayModeService;
 import com.rci.service.ISchemeService;
+import com.rci.service.ISchemeTypeDishRefService;
 import com.rci.service.ISchemeTypeService;
 import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
@@ -56,6 +58,8 @@ public class MetadataServiceImpl implements IMetadataService {
 	private ISchemeService schemeService;
 	@Resource(name="SchemeTypeService")
 	private ISchemeTypeService schemeTypeService;
+	@Resource(name="SchemeTypeDishRefService")
+	private ISchemeTypeDishRefService sdrefService;
 //	@Resource(name = "fetchScheduler")
 //	private Scheduler scheduler;
 	
@@ -204,16 +208,15 @@ public class MetadataServiceImpl implements IMetadataService {
 		SchemeType schemeType = beanMapper.map(schemeTypevo, SchemeType.class);
 		schemeType.setStatus(ActivityStatus.ACTIVE);
 		List<DishVO> dishvos = schemeTypevo.getDishes();
-		List<Dish> dishes = new ArrayList<Dish>();
+		List<SchemeTypeDishRef> refs = new ArrayList<SchemeTypeDishRef>(); 
 		if(!CollectionUtils.isEmpty(dishvos)){
 			for(DishVO dishvo:dishvos){
-				Dish dish = dishService.get(dishvo.getDid());
-				dish.setSchemeType(schemeType);
-				dishes.add(dish);
+				SchemeTypeDishRef typedishRef= new SchemeTypeDishRef(schemeType.getTypeNo(),dishvo.getDishNo(), dishvo.getDishName());
+				refs.add(typedishRef);
 			}
-			schemeType.setDishes(dishes);
 		}
 		schemeTypeService.rwCreate(schemeType);
+		sdrefService.rwCreate(refs.toArray(new SchemeTypeDishRef[0]));
 	}
 
 	@Override
@@ -232,7 +235,7 @@ public class MetadataServiceImpl implements IMetadataService {
 				Dish dish = dishService.get(dishvo.getDid());
 				dishes.add(dish);
 			}
-			schemeType.setDishes(dishes);
+//			schemeType.setDishes(dishes);
 		}
 		schemeTypeService.rwUpdate(schemeType);
 	}
@@ -295,13 +298,13 @@ public class MetadataServiceImpl implements IMetadataService {
 	@Override
 	public List<DishVO> getRefDishesBySchemeTypeno(String typeno) {
 		SchemeType schemeType = schemeTypeService.getSchemeTypeByNo(typeno);
-		List<Dish> dishes = schemeType.getDishes();
+//		List<Dish> dishes = schemeType.getDishes();
 		List<DishVO> vos = new ArrayList<DishVO>();
-		if(!CollectionUtils.isEmpty(dishes)){
-			for(Dish dish:dishes){
-				vos.add(beanMapper.map(dish, DishVO.class));
-			}
-		}
+//		if(!CollectionUtils.isEmpty(dishes)){
+//			for(Dish dish:dishes){
+//				vos.add(beanMapper.map(dish, DishVO.class));
+//			}
+//		}
 		return vos;
 	}
 

@@ -95,9 +95,9 @@ public abstract class AbstractFilter implements CalculateFilter {
 			dish = transformService.transformDishInfo(dishNo);
 		}
 		DishType type = dish.getDishType();
-		if(type != null && YOrN.isY(type.getNotDiscount())){
-			return true;
-		}
+//		if(type != null && YOrN.isY(type.getNotDiscount())){
+//			return true;
+//		}
 		return false;
 	}
 	

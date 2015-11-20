@@ -2,7 +2,6 @@ package com.rci.metadata.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,7 +26,6 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.Paymode;
 import com.rci.bean.entity.TableInfo;
-import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.dto.DishDTO;
 import com.rci.metadata.dto.DishSeriesDTO;
 import com.rci.metadata.dto.DishTypeDTO;
@@ -44,7 +42,6 @@ import com.rci.service.IPayModeService;
 import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
 import com.rci.tools.DateUtil;
-import com.rci.tools.properties.PropertyUtils;
 
 @Service("DataTransformService")
 public class DataTransformServiceImpl implements IDataTransformService {
@@ -95,30 +92,6 @@ public class DataTransformServiceImpl implements IDataTransformService {
 
 	@Override
 	public void transformDishInfo() {
-//		List<DishTypeDTO> typeDTOs = fetchService.fetchAllDishTypes();
-//		for(int i=0;i<typeDTOs.size();i++){
-//			DishTypeDTO typeDTO = typeDTOs.get(i);
-//			List<DishDTO> dishDTOs = fetchService.fetchAllDishesByType(typeDTO.getTypeno());
-//			DishType type = beanMapper.map(typeDTO, DishType.class);
-//			String[] notdiscountDishNums = PropertyUtils.getStringArrayValue("nodiscount.dishno");
-//			List<String> nodiscountDishContainer = Arrays.asList(notdiscountDishNums);
-//			if(nodiscountDishContainer.contains(typeDTO.getTypeno())){
-//				type.setNotDiscount(YOrN.Y);
-//			}
-//			List<Dish> dishes = new LinkedList<Dish>();
-//			List<String> stockDishNos = stockService.getStockDishNumbers();
-//			for(DishDTO dishDTO:dishDTOs){
-//				Dish dish = beanMapper.map(dishDTO, Dish.class);
-//				dish.setDishType(type);
-//				if(stockDishNos.contains(dish.getDishNo())){
-//					dish.setStockFlag(YOrN.Y);
-//				}else{
-//					dish.setStockFlag(YOrN.N);
-//				}
-//				dishes.add(dish);
-//				dishService.rwCreate(dish);
-//			}
-//		}
 		List<DishSeriesDTO> seriesDTOs =fetchService.fetchAllDishSeries();
 		Map<String,DishSeries> seriesMap = new HashMap<String,DishSeries>();
 		for(DishSeriesDTO seriesDTO:seriesDTOs){
@@ -132,15 +105,9 @@ public class DataTransformServiceImpl implements IDataTransformService {
 				continue;
 			}
 			DishType type = beanMapper.map(typeDTO, DishType.class);
-			String[] notdiscountDishNums = PropertyUtils.getStringArrayValue("notdiscount.dishno");
-			List<String> nodiscountDishContainer = Arrays.asList(notdiscountDishNums);
-			if(nodiscountDishContainer.contains(typeDTO.getTypeno())){
-				type.setNotDiscount(YOrN.Y);
-			}
 			typesMap.put(typeDTO.getTypeno(), type);
 		}
 		List<DishDTO> dishDTOs = fetchService.fetchAllDish();
-		List<String> stockDishNos = stockService.getStockDishNumbers();
 		for(DishDTO dishDTO:dishDTOs){
 			Dish dish = beanMapper.map(dishDTO, Dish.class);
 			if("0".equals(dishDTO.getDishName())){
@@ -155,11 +122,6 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			type.setSeriesno(series.getSeriesno());
 			dish.setDishType(type);
 			dish.setDishSeries(series);
-			if(stockDishNos.contains(dish.getDishNo())){
-				dish.setStockFlag(YOrN.Y);
-			}else{
-				dish.setStockFlag(YOrN.N);
-			}
 			dishService.rwCreate(dish);
 		}
 	}
@@ -172,7 +134,6 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			dType = beanMapper.map(dTypeDTO, DishType.class);
 		}
 		Dish dish = beanMapper.map(dishDTO, Dish.class);
-		dish.setStockFlag(YOrN.N);
 		dish.setDishType(dType);
 		dishService.rwCreate(dish);
 		return dish;

@@ -6,8 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +17,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.rci.bean.entity.base.BaseEntity;
-import com.rci.enums.CommonEnums;
 
 /**
  * 
@@ -54,7 +51,7 @@ public class DishType extends BaseEntity {
 	
 	private List<Dish> dishes;
 	
-	private CommonEnums.YOrN notDiscount;
+//	private CommonEnums.YOrN notDiscount;
 	
 	private DishSeries dishSeries;
 	
@@ -109,15 +106,15 @@ public class DishType extends BaseEntity {
 		this.dishSeries = dishSeries;
 	}
 
-	@Enumerated(EnumType.STRING)
-	@Column(name="not_discount")
-	public CommonEnums.YOrN getNotDiscount() {
-		return notDiscount;
-	}
-
-	public void setNotDiscount(CommonEnums.YOrN notDiscount) {
-		this.notDiscount = notDiscount;
-	}
+//	@Enumerated(EnumType.STRING)
+//	@Column(name="not_discount")
+//	public CommonEnums.YOrN getNotDiscount() {
+//		return notDiscount;
+//	}
+//
+//	public void setNotDiscount(CommonEnums.YOrN notDiscount) {
+//		this.notDiscount = notDiscount;
+//	}
 
 	@Column(name="series_no")
 	public String getSeriesno() {

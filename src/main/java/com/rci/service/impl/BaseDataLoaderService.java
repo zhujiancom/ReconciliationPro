@@ -169,27 +169,27 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 			String dishNo = item.getDishNo();
 			Dish dish = dishService.findDishByNo(dishNo);
 			if(dish != null){
-				if(YOrN.isY(dish.getStockFlag())){
-					BigDecimal count = item.getCount().subtract(item.getCountback());
-					List<Stock> stocks = stockService.getStocksByDish(dishNo);
-					for(Stock stock:stocks){
-						BigDecimal totalAmount = stock.getAmount().multiply(count);
-						StockOpLog sol = new StockOpLog(dishNo,totalAmount);
-						sol.setConsumeTime(item.getConsumeTime());
-						sol.setDay(order.getDay());
-						sol.setType(StockOpType.CONSUME);
-						sol.setDishName(stock.getDishName());
-						sol.setSno(stock.getSno());
-						BigDecimal storeAmount = stockMap.get(stock.getSno());
-						if(storeAmount != null){
-							storeAmount = storeAmount.add(totalAmount);
-						}else{
-							storeAmount = totalAmount;
-						}
-						stockMap.put(stock.getSno(), storeAmount);
-						stockService.insertStockOpLog(sol);
-					}
-				}
+//				if(YOrN.isY(dish.getStockFlag())){
+//					BigDecimal count = item.getCount().subtract(item.getCountback());
+//					List<Stock> stocks = stockService.getStocksByDish(dishNo);
+//					for(Stock stock:stocks){
+//						BigDecimal totalAmount = stock.getAmount().multiply(count);
+//						StockOpLog sol = new StockOpLog(dishNo,totalAmount);
+//						sol.setConsumeTime(item.getConsumeTime());
+//						sol.setDay(order.getDay());
+//						sol.setType(StockOpType.CONSUME);
+//						sol.setDishName(stock.getDishName());
+//						sol.setSno(stock.getSno());
+//						BigDecimal storeAmount = stockMap.get(stock.getSno());
+//						if(storeAmount != null){
+//							storeAmount = storeAmount.add(totalAmount);
+//						}else{
+//							storeAmount = totalAmount;
+//						}
+//						stockMap.put(stock.getSno(), storeAmount);
+//						stockService.insertStockOpLog(sol);
+//					}
+//				}
 			}
 		}
 	}

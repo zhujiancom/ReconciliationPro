@@ -2,19 +2,14 @@ package com.rci.bean.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -39,9 +34,6 @@ public class SchemeType extends AccessoryEntity{
 	private String typeNo;
 	
 	private String typeName;
-	
-	/* 对应的菜品 */
-	private List<Dish> dishes;
 	
 	/* 包含饮料金额 */
 	private BigDecimal beverageAmount;
@@ -150,15 +142,15 @@ public class SchemeType extends AccessoryEntity{
 		this.status = status;
 	}
 
-	@OneToMany(cascade=CascadeType.MERGE,fetch=FetchType.LAZY)
-	@JoinColumn(name="scheme_type_id")
-	public List<Dish> getDishes() {
-		return dishes;
-	}
-
-	public void setDishes(List<Dish> dishes) {
-		this.dishes = dishes;
-	}
+//	@OneToMany(cascade=CascadeType.MERGE,fetch=FetchType.LAZY)
+//	@JoinColumn(name="scheme_type_id")
+//	public List<Dish> getDishes() {
+//		return dishes;
+//	}
+//
+//	public void setDishes(List<Dish> dishes) {
+//		this.dishes = dishes;
+//	}
 
 	@Override
 	@Transient
