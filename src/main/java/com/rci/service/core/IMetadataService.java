@@ -7,6 +7,7 @@ import com.rci.bean.dto.SchemeTypeQueryDTO;
 import com.rci.ui.swing.vos.DishSeriesVO;
 import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
+import com.rci.ui.swing.vos.InventoryVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
 import com.rci.ui.swing.vos.StockVO;
@@ -122,4 +123,6 @@ public interface IMetadataService {
 	List<DishVO> getAllDishByTypeNo(String typeno);
 	
 	List<DishVO> getRefDishesBySchemeTypeno(String typeno);
+	
+	List<InventoryVO> displayAllInventory();
 }

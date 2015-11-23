@@ -3,11 +3,28 @@
  */
 package com.rci.ui.swing.views.component;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.net.URL;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 
+import com.rci.ui.swing.model.ButtonFactory;
+import com.rci.ui.swing.model.InventoryTable;
 import com.rci.ui.swing.views.PopWindow;
+import com.rci.ui.swing.views.component.tab.Tab;
+import com.rci.ui.swing.views.component.tab.TabbedPane;
+import com.rci.ui.swing.views.component.tab.TabbedPaneListener;
 
 /**
  * remark (备注):
@@ -47,12 +64,29 @@ public class InventoryManagementWin extends PopWindow {
 	 */
 	private void createContent() {
 		JPanel containerPanel = this.getContainerPanel();
-		JTabbedPane tabPanel = new JTabbedPane(JTabbedPane.TOP);
 		JPanel dishlistPanel = new ProductionPanel();
 		JPanel purchasePanel = new PurchasePanel();
-		tabPanel.add(dishlistPanel,"菜品在售列表");
-		tabPanel.add(purchasePanel,"进货记录");
-		containerPanel.add(tabPanel);
+		URL iconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/warning.png");
+		ImageIcon icon = new ImageIcon(iconUrl);
+		TabbedPane tabbedPane = new TabbedPane();
+		tabbedPane.addTabbedPaneListener(new TabbedPaneListener() {
+			
+			@Override
+			public void tabSelected(Tab tab, Component component, int index) {
+				if(index == 0){
+					ProductionPanel pp =  (ProductionPanel) component;
+					pp.refresh();
+				}
+			}
+			
+			@Override
+			public void tabAdded(Tab tab, Component component, int index) {
+			}
+		});
+		tabbedPane.addTab("菜品在售列表", null, dishlistPanel);
+		tabbedPane.addTab("进货记录", null, purchasePanel);
+		tabbedPane.addTab("沽清警告", icon, new JLabel("测试三"));
+		containerPanel.add(tabbedPane);
 	}
 	
 	/**
@@ -75,6 +109,15 @@ public class InventoryManagementWin extends PopWindow {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
+		
+		private JTable table;
+		private JScrollPane scrollPane;
+		private JPanel actionBar;
+		private JButton addBtn;
+		private JButton delBtn;
+		private JButton relatedDishBtn;
+		private JButton purchaseBtn;
+		
 
 		public ProductionPanel(){
 			initComponent();
@@ -92,7 +135,53 @@ public class InventoryManagementWin extends PopWindow {
 		 *   
 		 */
 		private void initComponent() {
-			this.add(new JLabel("菜品在售列表"));
+			setLayout(new BorderLayout());
+			
+			table = new InventoryTable();
+			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			
+			scrollPane = new JScrollPane();
+			scrollPane.setBorder(BorderFactory.createEmptyBorder());
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setViewportView(table);
+			add(createActionBar(),BorderLayout.NORTH);
+			add(scrollPane,BorderLayout.CENTER);
+		}
+		
+		private JPanel createActionBar(){
+			actionBar = new JPanel();
+			actionBar.setBorder(BorderFactory.createEmptyBorder());
+			actionBar.setLayout(null);
+			actionBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+			actionBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+			actionBar.setBackground(Color.WHITE);
+			
+			addBtn = ButtonFactory.createImageButton("添加","skin/gray/images/24x24/addBtn_0.png", "skin/gray/images/24x24/addBtn_1.png");
+			addBtn.setToolTipText("添加");
+			addBtn.setBounds(4, 4, 24, 24);
+			
+			delBtn = ButtonFactory.createImageButton("删除","skin/gray/images/24x24/delBtn_0.png", "skin/gray/images/24x24/delBtn_1.png");
+			delBtn.setToolTipText("删除");
+			delBtn.setBounds(40, 4, 24, 24);
+			
+			relatedDishBtn = ButtonFactory.createImageButton("关联菜品","skin/gray/images/btn_1.png",null);
+			relatedDishBtn.setToolTipText("关联菜品");
+			relatedDishBtn.setHorizontalTextPosition(SwingConstants.CENTER);
+			
+			purchaseBtn = ButtonFactory.createImageButton("进货","skin/gray/images/24x24/restock.png",null);
+			
+			actionBar.add(addBtn);
+			actionBar.add(delBtn);
+			actionBar.add(relatedDishBtn);
+			actionBar.add(purchaseBtn);
+			return actionBar;
+		}
+		
+		public void refresh(){
+			invalidate();
+			validate();
+			repaint();
 		}
 	}
 	

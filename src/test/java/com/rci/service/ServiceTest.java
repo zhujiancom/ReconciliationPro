@@ -265,7 +265,6 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void testDeleteSchemeTypeWithDishRef(){
-		sdrefService.deleteRefByTypeno("");
 	}
 	
 }

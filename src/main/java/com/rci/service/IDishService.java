@@ -18,4 +18,6 @@ public interface IDishService extends IBaseService<Dish, Long>{
 	public List<Dish> queryDishesBySeries(String seriesName);
 	
 	public List<Dish> queryDishesByTypeno(String typeno);
+	
+	public List<Dish> queryDishesByNos(String[] dishnos);
 }

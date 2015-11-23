@@ -19,6 +19,7 @@ import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.SchemeTypeDishRef;
 import com.rci.bean.entity.Stock;
+import com.rci.bean.entity.inventory.Inventory;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishSeriesService;
@@ -30,10 +31,13 @@ import com.rci.service.ISchemeTypeDishRefService;
 import com.rci.service.ISchemeTypeService;
 import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
+import com.rci.service.inventory.IInventoryDishRefService;
+import com.rci.service.inventory.IInventoryService;
 import com.rci.tools.EnumUtils;
 import com.rci.ui.swing.vos.DishSeriesVO;
 import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
+import com.rci.ui.swing.vos.InventoryVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
 import com.rci.ui.swing.vos.StockVO;
@@ -60,8 +64,10 @@ public class MetadataServiceImpl implements IMetadataService {
 	private ISchemeTypeService schemeTypeService;
 	@Resource(name="SchemeTypeDishRefService")
 	private ISchemeTypeDishRefService sdrefService;
-//	@Resource(name = "fetchScheduler")
-//	private Scheduler scheduler;
+	@Resource(name="InventoryService")
+	private IInventoryService inventoryService;
+	@Resource(name="InventoryDishRef")
+	private IInventoryDishRefService idrService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -310,6 +316,21 @@ public class MetadataServiceImpl implements IMetadataService {
 //			}
 //		}
 		return vos;
+	}
+
+	@Override
+	public List<InventoryVO> displayAllInventory() {
+		List<InventoryVO> result = new ArrayList<InventoryVO>();
+		List<Inventory> inventories = inventoryService.queryValidInventories();
+		if(!CollectionUtils.isEmpty(inventories)){
+			for(Inventory inv:inventories){
+				InventoryVO invvo = beanMapper.map(inv, InventoryVO.class);
+				String relatedDishNames = idrService.queryRelatedDishNames(inv.getIno());
+				invvo.setRelatedDishes(relatedDishNames);
+				result.add(invvo);
+			}
+		}
+		return result;
 	}
 
 }
