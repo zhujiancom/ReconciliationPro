@@ -85,4 +85,8 @@ public class WindowBuilderFactory {
 	public static PopWindow createSchemeTypeMainWindow(){
 		return SchemeTypeMainWinBuilder.getInstance().retrieveWindow();
 	}
+	
+	public static PopWindow createInventoryManagementWindow(){
+		return InventoryManagementWinBuilder.getInstance().retrieveWindow();
+	}
 }

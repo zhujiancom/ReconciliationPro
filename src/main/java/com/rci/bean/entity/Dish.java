@@ -73,7 +73,7 @@ public class Dish extends BaseEntity{
 	private YOrN suitFlag;
 	
 	/* 是否可打折 */
-	private CommonEnums.YOrN deductFlag;
+	private CommonEnums.YOrN discountFlag;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -173,14 +173,20 @@ public class Dish extends BaseEntity{
 		this.suitFlag = suitFlag;
 	}
 
+	/**
+	 * @return the discountFlag
+	 */
 	@Enumerated(EnumType.STRING)
-	@Column(name="deduct_flag")
-	public CommonEnums.YOrN getDeductFlag() {
-		return deductFlag;
+	@Column(name="discount_flag")
+	public CommonEnums.YOrN getDiscountFlag() {
+		return discountFlag;
 	}
 
-	public void setDeductFlag(CommonEnums.YOrN deductFlag) {
-		this.deductFlag = deductFlag;
+	/**
+	 * @param discountFlag the discountFlag to set
+	 */
+	public void setDiscountFlag(CommonEnums.YOrN discountFlag) {
+		this.discountFlag = discountFlag;
 	}
 
 	@Override

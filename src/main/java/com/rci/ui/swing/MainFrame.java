@@ -120,6 +120,8 @@ public class MainFrame extends JFrame {
 		setting.setForeground(Color.WHITE);
 		JMenu statistic = new JMenu("统计");
 		statistic.setForeground(Color.WHITE);
+		JMenu management = new JMenu("管理");
+		management.setForeground(Color.WHITE);
 		final JFrame frame = this;
 		menubar.add(logoBtn);
 		menubar.add(Box.createHorizontalStrut(10));
@@ -128,6 +130,7 @@ public class MainFrame extends JFrame {
 		menubar.add(view);
 		menubar.add(setting);
 		menubar.add(statistic);
+		menubar.add(management);
 		
 		JPanel rightP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		rightP.setBackground(Color.BLACK);
@@ -164,6 +167,13 @@ public class MainFrame extends JFrame {
 		JMenuItem earning = ButtonFactory.createMenuItem("营业额统计", "skin/gray/images/16x16/statistic.png");
 		statistic.add(expressRate);
 		statistic.add(earning);
+		
+		JMenuItem dishManage = ButtonFactory.createMenuItem("菜品管理", "skin/gray/images/16x16/dish.png");
+		JMenuItem inventoryManage = ButtonFactory.createMenuItem("库存管理", "skin/gray/images/16x16/stockmanage.png");
+		JMenuItem activityManage = ButtonFactory.createMenuItem("活动管理", "skin/gray/images/16x16/activity.png");
+		management.add(dishManage);
+		management.add(inventoryManage);
+		management.add(activityManage);
 
 		ActionHandler handler = new ActionHandler();
 		sysInit.addActionListener(handler.dataInit());
@@ -271,6 +281,20 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
+		//库存管理
+		inventoryManage.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						WindowBuilderFactory.createInventoryManagementWindow();
+					}
+				}).start();
+			}
+		});
 		return menubar;
 	}
 }

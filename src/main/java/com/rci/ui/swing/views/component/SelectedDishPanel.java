@@ -19,6 +19,7 @@ import com.rci.tools.StringUtils;
 import com.rci.ui.swing.listeners.DishSelectListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.vos.DishVO;
+import com.rci.ui.swing.vos.SchemeTypeVO;
 
 public class SelectedDishPanel extends JPanel implements ActionListener{
 
@@ -31,7 +32,7 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 	
 	private List<DishVO> selectedDishes = new ArrayList<DishVO>();
 	
-	private String typeno;
+	private SchemeTypeVO schemeType;
 	
 	private JLabel displayLabel = new JLabel();
 	
@@ -41,8 +42,8 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 		initComponent();
 	}
 	
-	public SelectedDishPanel(String typeno){
-		this.typeno = typeno;
+	public SelectedDishPanel(SchemeTypeVO schemeType){
+		this.schemeType = schemeType;
 		initComponent();
 	}
 
@@ -50,9 +51,8 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 		BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 		this.setLayout(layout);
 		addBtn = ButtonFactory.createImageButton("选择菜品", "skin/gray/images/24x24/addBtn_2.png", null);
-		if(StringUtils.hasText(typeno)){
-			IMetadataService metadataService = (IMetadataService) SpringUtils.getBean("MetadataService");
-			List<DishVO> dishes = metadataService.getRefDishesBySchemeTypeno(typeno);
+		if(schemeType != null){
+			List<DishVO> dishes = schemeType.getDishes();
 			StringBuffer sb = new StringBuffer();
 			if(!CollectionUtils.isEmpty(dishes)){
 				for(DishVO dish:dishes){
@@ -107,11 +107,17 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 		win = new DishSelectWin(selectListener,900,600,"菜品选择");
 	}
 
-	public String getTypeno() {
-		return typeno;
+	/**
+	 * @return the schemeType
+	 */
+	public SchemeTypeVO getSchemeType() {
+		return schemeType;
 	}
 
-	public void setTypeno(String typeno) {
-		this.typeno = typeno;
+	/**
+	 * @param schemeType the schemeType to set
+	 */
+	public void setSchemeType(SchemeTypeVO schemeType) {
+		this.schemeType = schemeType;
 	}
 }

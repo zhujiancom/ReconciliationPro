@@ -19,6 +19,13 @@ public class DishVO {
 	
 	/* 是否受库存管理  */
 	private YOrN stockFlag;
+	
+	public DishVO(){}
+	
+	public DishVO(String dishNo,String dishName){
+		this.dishNo = dishNo;
+		this.dishName = dishName;
+	}
 
 	public Long getDid() {
 		return did;
@@ -77,7 +84,7 @@ public class DishVO {
 
 	@Override
 	public String toString() {
-		return dishName;
+		return dishNo+"-"+dishName;
 	}
 	
 }

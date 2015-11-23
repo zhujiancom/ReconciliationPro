@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -23,6 +24,8 @@ import org.hibernate.internal.CriteriaImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.rci.bean.entity.base.AccessoryEntity;
@@ -314,8 +317,10 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 	}
 	
 	@Override
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public int executeHQL(String hql){
-		return getCurrentSession().createQuery(hql).executeUpdate();
+		Query query =getCurrentSession().createQuery(hql); 
+		return query.executeUpdate();
 	}
 
 	/* 

@@ -44,6 +44,8 @@ public class DishDTO {
 	private YOrN stopFlag;
 	
 	private YOrN suitFlag;
+	
+	private YOrN discountFlag;
 
 	@ColumnName("ch_dishno")
 	public String getDishNo() {
@@ -97,6 +99,21 @@ public class DishDTO {
 
 	public void setSuitFlag(YOrN suitFlag) {
 		this.suitFlag = suitFlag;
+	}
+
+	/**
+	 * @return the discountFlag
+	 */
+	@ColumnName("ch_discount")
+	public YOrN getDiscountFlag() {
+		return discountFlag;
+	}
+
+	/**
+	 * @param discountFlag the discountFlag to set
+	 */
+	public void setDiscountFlag(YOrN discountFlag) {
+		this.discountFlag = discountFlag;
 	}
 
 	@ColumnName("ch_seriesno")

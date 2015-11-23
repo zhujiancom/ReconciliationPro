@@ -106,6 +106,7 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 			JOptionPane.showMessageDialog(null, new JLabel("<html><h4 color='red'>"+se.getMessage()+"</h3></html>"));
 		}catch(Exception ex){
 			logger.error(ex);
+			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null, ex.getMessage());
 		}
 	}
@@ -140,13 +141,7 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 		mainPane.add(eightPane);
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,0));
 		secondPane.add(dish);
-//		List<DishVO> itemList = metaService.displayDishSuits();
-//		ListItemComboBoxModel<DishVO> vcm = new ListItemComboBoxModel<DishVO>(itemList);
-//		dishInput = new JComboBox<DishVO>(vcm);
-//		DishVO dish = metaService.getDishByNo(schemeType.getDishNo());
-//		dishInput.setSelectedItem(dish);
-//		secondPane.add(dishInput);
-		selectedDishPanel = new SelectedDishPanel(schemeType.getTypeNo());
+		selectedDishPanel = new SelectedDishPanel(schemeType);
 		secondPane.add(selectedDishPanel);
 		mainPane.add(secondPane);
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));

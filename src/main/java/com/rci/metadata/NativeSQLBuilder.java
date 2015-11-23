@@ -1,9 +1,9 @@
 package com.rci.metadata;
 
 public class NativeSQLBuilder {
-	public static final String QUERY_ALL_DISH="select rtrim(ch_dishno) 'ch_dishno',rtrim(vch_dishname) 'vch_dishname',rtrim(ch_typeno) 'ch_typeno',rtrim(ch_seriesno) 'ch_seriesno',num_price1,ch_stopflag,ch_suitflag from dbo.v_bt_dish";
+	public static final String QUERY_ALL_DISH="select rtrim(ch_dishno) 'ch_dishno',rtrim(vch_dishname) 'vch_dishname',rtrim(ch_typeno) 'ch_typeno',rtrim(ch_seriesno) 'ch_seriesno',num_price1,ch_stopflag,ch_suitflag,ch_discount from dbo.v_bt_dish";
 	/* 查询单个菜品 */
-	public static final String QUERY_DISH_BY_NO="select rtrim(ch_dishno) 'ch_dishno',vch_dishname,rtrim(ch_typeno) 'ch_typeno',num_price1,ch_stopflag,ch_suitflag from dbo.v_bt_dish where ch_dishno=?";
+	public static final String QUERY_DISH_BY_NO="select rtrim(ch_dishno) 'ch_dishno',vch_dishname,rtrim(ch_typeno) 'ch_typeno',num_price1,ch_stopflag,ch_suitflag,ch_discount from dbo.v_bt_dish where ch_dishno=?";
 	/* 查询单个菜品类型 */
 	public static final String QUERY_DISH_TYPE_BY_NO="select rtrim(ch_typeno) 'ch_typeno',vch_typename from dbo.cybr_bt_dish_type where ch_typeno=?";
 	/* 查询某个菜品大类下的小类 */
