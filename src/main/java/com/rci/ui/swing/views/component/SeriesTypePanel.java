@@ -33,13 +33,13 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 	
 	private DishSelectListener selectListener;
 
-	private Point currentPoint;
+	private Point currentPoint = new Point(0,0);
 	
 	private JButton leftBtn;
 	
 	private JButton rightBtn;
 	
-	private JPanel dishPane;
+	private DisplayDishPanel dishPane;
 	
 	private IMetadataService metadataService;
 	
@@ -74,18 +74,20 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 		});
 		
 		mainPane = new JPanel();
-		BoxLayout layout = new BoxLayout(mainPane, BoxLayout.X_AXIS);
-		mainPane.setLayout(layout);
+//		BoxLayout layout = new BoxLayout(mainPane, BoxLayout.X_AXIS);
+//		mainPane.setLayout(layout);
+		mainPane.setLayout(null);
 		mainPane.setPreferredSize(new Dimension(702,100));
 		mainPane.setBackground(Color.WHITE);
 		List<DishSeriesVO> dishSeries = metadataService.getAllDishSeries();
 		int index = 1;
+		int x = 0, y=0;
 		for(DishSeriesVO dsv:dishSeries){
 			JButton btn = ButtonFactory.createImageButton(dsv.getSeriesname(), "skin/gray/images/96x96/btn_"+index+".png",null);
 			btn.setName(dsv.getSeriesno());
 			btn.setHorizontalTextPosition(SwingConstants.CENTER);
+			btn.setBounds(x, y, 96, 96);
 			mainPane.add(btn);
-			currentPoint = btn.getLocation();
 			final String seriesno = dsv.getSeriesno();
 			if(dishPane == null){
 				dishPane = new DisplayDishPanel(seriesno,selectListener);
@@ -93,6 +95,7 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 			}
 			btn.addActionListener(this);
 			index++;
+			x += offset;
 		}
 		GridBagConstraints gb2 = new GridBagConstraints();
 		gb2.insets = new Insets(0,0,5,0);//设置控件的空白 , 上、左、下、右
@@ -139,7 +142,6 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 		for(int i=0;i<seriesTypeBtns.length;i++){
 			JButton btn = (JButton) seriesTypeBtns[i];
 			Point curPoint = seriesTypeBtns[i].getLocation();
-			System.out.println("before:"+btn.getText()+" - "+btn.getLocation());
 			if(currentPoint.x < totalLength-offset){
 				btn.setLocation(curPoint.x-offset, curPoint.y);
 			}
@@ -165,5 +167,18 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 		containerPane.add(dishPane,BorderLayout.CENTER);
 		containerPane.updateUI();
 		containerPane.repaint();
+//		if(dishPane == null){
+//			dishPane = new DisplayDishPanel(btn.getName(),selectListener);
+//			containerPane.add(dishPane,BorderLayout.CENTER);
+//		}
+//		dishPane.setSeriesno(btn.getName());
+//		dishPane.repaint();
+//		Component[] components = containerPane.getComponents();
+//		for(int i=0;i<components.length;i++){
+//			System.out.println(components[i]);
+//		}
+//		dishPane = (DisplayDishPanel) containerPane.getComponent(1);
+//		dishPane.setSeriesno(btn.getName());
+//		dishPane.refresh();
 	}
 }

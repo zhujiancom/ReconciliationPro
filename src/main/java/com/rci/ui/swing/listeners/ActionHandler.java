@@ -127,14 +127,4 @@ public class ActionHandler extends JFrame {
 			
 		};
 	}
-	
-	public ActionListener test(){
-		return new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null,metadataService.getTimerStatus());
-			}
-		};
-	}
 }

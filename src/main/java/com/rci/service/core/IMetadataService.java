@@ -1,5 +1,6 @@
 package com.rci.service.core;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.rci.bean.dto.SchemeQueryDTO;
@@ -29,6 +30,7 @@ import com.rci.ui.swing.vos.StockVO;
  *
  */
 public interface IMetadataService {
+	///////////////////////////////////////////// 基础数据操作模块   /////////////////////////////////////////////
 	/**
 	 * 
 	 * Describle(描述)： 重置基础数据
@@ -55,25 +57,7 @@ public interface IMetadataService {
 	 */
 	void clearMetadata();
 
-	/**
-	 * 
-	 * Describle(描述)： 查找dish
-	 *
-	 * 方法名称：getDishByNo
-	 *
-	 * 所在类名：IMetadataService
-	 *
-	 * Create Time:2015年7月13日 下午4:32:55
-	 *  
-	 * @param dishNo
-	 * @return
-	 */
-//	Dish getDishByNo(String dishNo);
-	
-	List<StockVO> displayStocks();
-	
-	String getTimerStatus();
-	
+	///////////////////////////////////////////// Scheme  活动管理模块     /////////////////////////////////////////////
 	/**
 	 * 
 	 * Describle(描述)：列车所有的活动
@@ -87,33 +71,20 @@ public interface IMetadataService {
 	 * @return
 	 */
 	List<SchemeVO> displaySchemes(SchemeQueryDTO queryDTO);
-	
 	void createScheme(SchemeVO schemevo);
 	void updateScheme(SchemeVO schemevo);
 	void activeScheme(Long sid);
 	void inactiveScheme(Long sid);
 	
+	/////////////////////////////////////////////  SchemeType 活动类型管理模块   /////////////////////////////////////////////
 	List<SchemeTypeVO> displaySchemeTypes(SchemeTypeQueryDTO queryDTO);
-	
-	/**
-	 * 
-	 * Describle(描述)：获取套餐菜品
-	 *
-	 * 方法名称：displayDishSuits
-	 *
-	 * 所在类名：IMetadataService
-	 *
-	 * Create Time:2015年11月12日 下午4:26:08
-	 *  
-	 * @return
-	 */
-	List<DishVO> displayDishSuits();
-	
 	void createSchemeType(SchemeTypeVO schemeTypevo);
 	void updateSchemeType(SchemeTypeVO schemeTypevo);
 	void activeSchemeType(Long stid);
 	void inactiveSchemeType(Long stid);
 	
+	
+	/////////////////////////////////////////////  Dish  菜品管理模块      /////////////////////////////////////////////
 	DishVO getDishByNo(String dishno);
 	
 	List<DishSeriesVO> getAllDishSeries();
@@ -122,7 +93,19 @@ public interface IMetadataService {
 	
 	List<DishVO> getAllDishByTypeNo(String typeno);
 	
-	List<DishVO> getRefDishesBySchemeTypeno(String typeno);
+	///////////////////////////////////////////////  Inventory  库存管理模块   /////////////////////////////////////////////
+	@Deprecated
+	List<StockVO> displayStocks();
 	
 	List<InventoryVO> displayAllInventory();
+	List<InventoryVO> queryInventory(String iname);
+	
+	boolean checkInventoryNoExist(String ino);
+	
+	void createInventory(InventoryVO inventoryvo);
+	void updateInventory(InventoryVO inventoryvo);
+	//停用库存产品
+	void disableInventory(Long iid);
+	void purchaseInventory(InventoryVO inventoryvo,BigDecimal purchaseAmount);
+	
 }

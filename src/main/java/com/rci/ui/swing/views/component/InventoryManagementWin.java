@@ -7,6 +7,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 
 import javax.swing.BorderFactory;
@@ -16,15 +18,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
+import com.rci.ui.swing.handler.InventoryActionPolicy;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.InventoryTable;
+import com.rci.ui.swing.model.InventoryTable.InventoryTabelModel;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.views.component.tab.Tab;
 import com.rci.ui.swing.views.component.tab.TabbedPane;
 import com.rci.ui.swing.views.component.tab.TabbedPaneListener;
+import com.rci.ui.swing.vos.InventoryVO;
 
 /**
  * remark (备注):
@@ -117,7 +123,10 @@ public class InventoryManagementWin extends PopWindow {
 		private JButton delBtn;
 		private JButton relatedDishBtn;
 		private JButton purchaseBtn;
-		
+		private JTextField keywordInput;
+		private JButton searchBtn;
+		private JButton refreshBtn;
+		private DishSelectWin win;
 
 		public ProductionPanel(){
 			initComponent();
@@ -137,7 +146,7 @@ public class InventoryManagementWin extends PopWindow {
 		private void initComponent() {
 			setLayout(new BorderLayout());
 			
-			table = new InventoryTable();
+			table = new InventoryTable(6);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			
 			scrollPane = new JScrollPane();
@@ -156,32 +165,89 @@ public class InventoryManagementWin extends PopWindow {
 			actionBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 			actionBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 			actionBar.setBackground(Color.WHITE);
+			InventoryActionPolicy policy = new InventoryActionPolicy(table);
 			
 			addBtn = ButtonFactory.createImageButton("添加","skin/gray/images/24x24/addBtn_0.png", "skin/gray/images/24x24/addBtn_1.png");
 			addBtn.setToolTipText("添加");
 			addBtn.setBounds(4, 4, 24, 24);
+			addBtn.addActionListener(policy.doAddAction());
 			
-			delBtn = ButtonFactory.createImageButton("删除","skin/gray/images/24x24/delBtn_0.png", "skin/gray/images/24x24/delBtn_1.png");
-			delBtn.setToolTipText("删除");
+			delBtn = ButtonFactory.createImageButton("停用","skin/gray/images/24x24/delBtn_0.png", "skin/gray/images/24x24/delBtn_1.png");
+			delBtn.setToolTipText("停用");
 			delBtn.setBounds(40, 4, 24, 24);
+			delBtn.addActionListener(policy.doDisableAction());
 			
-			relatedDishBtn = ButtonFactory.createImageButton("关联菜品","skin/gray/images/btn_1.png",null);
+			refreshBtn = ButtonFactory.createImageButton("刷新","skin/gray/images/24x24/refreshBtn_0.png", "skin/gray/images/24x24/refreshBtn_1.png");
+			refreshBtn.setToolTipText("刷新");
+			refreshBtn.setBounds(80, 4, 24, 24);
+			refreshBtn.addActionListener(policy.doReflushAction());
+			
+			relatedDishBtn = ButtonFactory.createImageButton("关联菜品","skin/gray/images/btn_orange.png",null);
 			relatedDishBtn.setToolTipText("关联菜品");
 			relatedDishBtn.setHorizontalTextPosition(SwingConstants.CENTER);
+			relatedDishBtn.setBounds(120,4,111,24);
+			relatedDishBtn.addActionListener(policy.doRelateDishAction());
 			
 			purchaseBtn = ButtonFactory.createImageButton("进货","skin/gray/images/24x24/restock.png",null);
+			purchaseBtn.setBounds(240,4,24,24);
+			purchaseBtn.addActionListener(policy.doPurchaseAction());
+			
+			JLabel keywordLabel = new JLabel("关键字查询：");
+			keywordLabel.setBounds(320, 4, 20, 24);
+			keywordInput = new JTextField(25);
+			keywordInput.setBounds(340,4,30,24);
+			searchBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/search_1.png",null);
+			searchBtn.setToolTipText("搜索");
+			searchBtn.setBounds(380,4,24,24);
+			policy.setKeywordInput(keywordInput);
+			searchBtn.addActionListener(policy.doQueryAction());
+			
+			table.addMouseListener(new MouseAdapter() {
+
+				@Override
+				public void mouseClicked(MouseEvent event) {
+					if(event.getClickCount() == 2){
+						int selectIndex = table.getSelectedRow();
+						InventoryTabelModel model = (InventoryTabelModel) table.getModel();
+						InventoryVO inventoryvo = model.getInventory(selectIndex);
+						new InventoryDetailWin(inventoryvo,300,350);
+					}
+				}
+				
+			});
 			
 			actionBar.add(addBtn);
 			actionBar.add(delBtn);
+			actionBar.add(refreshBtn);
 			actionBar.add(relatedDishBtn);
 			actionBar.add(purchaseBtn);
+			actionBar.add(keywordLabel);
+			actionBar.add(keywordInput);
+			actionBar.add(searchBtn);
 			return actionBar;
 		}
 		
 		public void refresh(){
+			((InventoryTable)table).reflush();
 			invalidate();
 			validate();
 			repaint();
+		}
+
+		public JTable getTable() {
+			return table;
+		}
+
+		public void setTable(JTable table) {
+			this.table = table;
+		}
+
+		public DishSelectWin getWin() {
+			return win;
+		}
+
+		public void setWin(DishSelectWin win) {
+			this.win = win;
 		}
 	}
 	

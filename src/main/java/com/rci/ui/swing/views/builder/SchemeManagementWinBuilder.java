@@ -20,4 +20,5 @@ public class SchemeManagementWinBuilder extends AbstractWinBuilder {
 		return new SchemeManagementWin(900,600,"在线平台活动设置");
 	}
 
+
 }

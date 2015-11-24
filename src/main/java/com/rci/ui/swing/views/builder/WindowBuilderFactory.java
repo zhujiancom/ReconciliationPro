@@ -89,4 +89,5 @@ public class WindowBuilderFactory {
 	public static PopWindow createInventoryManagementWindow(){
 		return InventoryManagementWinBuilder.getInstance().retrieveWindow();
 	}
+	
 }

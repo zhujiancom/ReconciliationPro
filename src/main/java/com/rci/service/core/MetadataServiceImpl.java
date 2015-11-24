@@ -1,5 +1,6 @@
 package com.rci.service.core;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,10 @@ import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.SchemeTypeDishRef;
 import com.rci.bean.entity.Stock;
 import com.rci.bean.entity.inventory.Inventory;
+import com.rci.bean.entity.inventory.InventoryDishRef;
+import com.rci.bean.entity.inventory.PurchaseRecord;
 import com.rci.enums.BusinessEnums.ActivityStatus;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishSeriesService;
 import com.rci.service.IDishService;
@@ -33,6 +37,8 @@ import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
 import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventoryService;
+import com.rci.service.inventory.IPurchaseRecordService;
+import com.rci.tools.DateUtil;
 import com.rci.tools.EnumUtils;
 import com.rci.ui.swing.vos.DishSeriesVO;
 import com.rci.ui.swing.vos.DishTypeVO;
@@ -68,6 +74,8 @@ public class MetadataServiceImpl implements IMetadataService {
 	private IInventoryService inventoryService;
 	@Resource(name="InventoryDishRef")
 	private IInventoryDishRefService idrService;
+	@Resource(name="PurchaseRecordService")
+	private IPurchaseRecordService purchaseService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -109,18 +117,6 @@ public class MetadataServiceImpl implements IMetadataService {
 			return stockVOs;
 		}
 		return null;
-	}
-
-	@Override
-	public String getTimerStatus() {
-//		try {
-//			if(scheduler.isStarted() && !scheduler.isInStandbyMode()){
-//				return "open";
-//			}
-//		} catch (SchedulerException e) {
-//			e.printStackTrace();
-//		}
-		return "closed";
 	}
 
 	@Override
@@ -192,19 +188,6 @@ public class MetadataServiceImpl implements IMetadataService {
 					vo.setDishName(sb.substring(1));
 				}
 				vos.add(vo); 
-			}
-		}
-		return vos;
-	}
-
-	@Override
-	public List<DishVO> displayDishSuits() {
-		List<Dish> dishes = dishService.queryDishesBySeries("套菜");
-		List<DishVO> vos = new ArrayList<DishVO>();
-		if(!CollectionUtils.isEmpty(dishes)){
-			for(Dish dish:dishes){
-				DishVO vo = beanMapper.map(dish, DishVO.class);
-				vos.add(vo);
 			}
 		}
 		return vos;
@@ -306,19 +289,6 @@ public class MetadataServiceImpl implements IMetadataService {
 	}
 
 	@Override
-	public List<DishVO> getRefDishesBySchemeTypeno(String typeno) {
-		SchemeType schemeType = schemeTypeService.getSchemeTypeByNo(typeno);
-//		List<Dish> dishes = schemeType.getDishes();
-		List<DishVO> vos = new ArrayList<DishVO>();
-//		if(!CollectionUtils.isEmpty(dishes)){
-//			for(Dish dish:dishes){
-//				vos.add(beanMapper.map(dish, DishVO.class));
-//			}
-//		}
-		return vos;
-	}
-
-	@Override
 	public List<InventoryVO> displayAllInventory() {
 		List<InventoryVO> result = new ArrayList<InventoryVO>();
 		List<Inventory> inventories = inventoryService.queryValidInventories();
@@ -326,7 +296,89 @@ public class MetadataServiceImpl implements IMetadataService {
 			for(Inventory inv:inventories){
 				InventoryVO invvo = beanMapper.map(inv, InventoryVO.class);
 				String relatedDishNames = idrService.queryRelatedDishNames(inv.getIno());
-				invvo.setRelatedDishes(relatedDishNames);
+				invvo.setRelatedDishNames(relatedDishNames);
+				result.add(invvo);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public boolean checkInventoryNoExist(String ino) {
+		Inventory inventory = inventoryService.queryInventoryByNo(ino);
+		if(inventory != null){
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void createInventory(InventoryVO inventoryvo) {
+		Inventory inventory = beanMapper.map(inventoryvo, Inventory.class);
+		inventory.setStatus(YOrN.Y);
+		List<InventoryDishRef> idrs = new ArrayList<InventoryDishRef>();
+		List<DishVO> dishes = inventoryvo.getRelatedDishes();
+		if(!CollectionUtils.isEmpty(dishes)){
+			for(DishVO dish:dishes){
+				InventoryDishRef idr = new InventoryDishRef(inventoryvo.getIno(),dish.getDishNo(),dish.getDishName());
+				idrs.add(idr);
+			}
+		}
+		inventoryService.rwCreate(inventory);
+		idrService.rwCreate(idrs.toArray(new InventoryDishRef[0]));
+	}
+
+	@Override
+	public void updateInventory(InventoryVO inventoryvo) {
+		Inventory inventory = inventoryService.get(inventoryvo.getIid());
+		List<InventoryDishRef> idrs = new ArrayList<InventoryDishRef>();
+		List<DishVO> dishes = inventoryvo.getRelatedDishes();
+		if(!CollectionUtils.isEmpty(dishes)){
+			idrService.deleteRelatedInfo(inventoryvo.getIno());
+			for(DishVO dish:dishes){
+				InventoryDishRef idr = new InventoryDishRef(inventoryvo.getIno(),dish.getDishNo(),dish.getDishName());
+				idrs.add(idr);
+			}
+		}
+		inventoryService.rwUpdate(inventory);
+		idrService.rwCreate(idrs.toArray(new InventoryDishRef[0]));
+	}
+
+	@Override
+	public void disableInventory(Long iid) {
+		Inventory inventory = inventoryService.get(iid);
+		inventory.setStatus(YOrN.N);
+		inventoryService.rwUpdate(inventory);
+	}
+
+	@Override
+	public void purchaseInventory(InventoryVO inventoryvo,
+			BigDecimal purchaseAmount) {
+		Inventory inventory = inventoryService.get(inventoryvo.getIid());
+		BigDecimal totalAmount = inventory.getTotalAmount() == null?BigDecimal.ZERO:inventory.getTotalAmount();
+		BigDecimal balanceAmount = inventory.getBalanceAmount() == null?BigDecimal.ZERO:inventory.getBalanceAmount();
+		inventory.setTotalAmount(totalAmount.add(purchaseAmount));
+		inventory.setBalanceAmount(balanceAmount.add(purchaseAmount));
+		inventoryService.rwUpdate(inventory);
+		
+		PurchaseRecord record = new PurchaseRecord(inventory.getIno());
+		record.setIname(inventory.getIname());
+		record.setPreBalanceAmount(balanceAmount);
+		record.setAfterBalanceAmount(balanceAmount.add(purchaseAmount));
+		record.setPurAmount(purchaseAmount);
+		record.setPurDate(DateUtil.getCurrentDate());
+		purchaseService.rwCreate(record);
+	}
+
+	@Override
+	public List<InventoryVO> queryInventory(String iname) {
+		List<InventoryVO> result = new ArrayList<InventoryVO>();
+		List<Inventory> inventories = inventoryService.queryInventoryByName(iname);
+		if(!CollectionUtils.isEmpty(inventories)){
+			for(Inventory inv:inventories){
+				InventoryVO invvo = beanMapper.map(inv, InventoryVO.class);
+				String relatedDishNames = idrService.queryRelatedDishNames(inv.getIno());
+				invvo.setRelatedDishNames(relatedDishNames);
 				result.add(invvo);
 			}
 		}

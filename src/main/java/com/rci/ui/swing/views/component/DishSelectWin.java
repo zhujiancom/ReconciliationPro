@@ -29,15 +29,15 @@ public class DishSelectWin extends PopWindow {
 		JPanel containerPanel = this.getContainerPanel();
 		containerPanel.add(new SeriesTypePanel(containerPanel,selectListener),BorderLayout.NORTH);
 //		containerPanel.add(buildDishPane(),BorderLayout.CENTER);
-//		containerPanel.add(new DisplayDishPanel("01"),BorderLayout.CENTER);
+//		containerPanel.add(new DisplayDishPanel(selectListener),BorderLayout.CENTER);
 		containerPanel.add(buildOperatePane(),BorderLayout.SOUTH);
 	}
 	
 	
 	private JPanel buildOperatePane(){
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER,20,0));
-		JButton confirmBtn = ButtonFactory.createImageButton("确定","skin/gray/images/64x64/confirm_btn.png",null);
-		JButton cancelBtn = ButtonFactory.createImageButton("取消","skin/gray/images/64x64/cancel_btn.png",null);
+		JButton confirmBtn = ButtonFactory.createImageButton("确定","skin/gray/images/btn_green.png",null);
+		JButton cancelBtn = ButtonFactory.createImageButton("取消","skin/gray/images/btn_purple.png",null);
 		panel.add(confirmBtn);
 		panel.add(cancelBtn);
 		confirmBtn.addActionListener(selectListener);

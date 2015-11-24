@@ -55,6 +55,9 @@ public class Inventory extends BaseEntity {
 	/* 是否在库存管理 */
 	private YOrN status;
 	
+	/* 基数， 芝士年糕基数是40 */
+	private BigDecimal cardinal;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "iid", nullable = false, updatable = false)
@@ -119,6 +122,15 @@ public class Inventory extends BaseEntity {
 
 	public void setStatus(YOrN status) {
 		this.status = status;
+	}
+
+	@Column(name="cardinal")
+	public BigDecimal getCardinal() {
+		return cardinal;
+	}
+
+	public void setCardinal(BigDecimal cardinal) {
+		this.cardinal = cardinal;
 	}
 
 	@Override

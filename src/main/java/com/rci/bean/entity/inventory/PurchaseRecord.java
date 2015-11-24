@@ -50,7 +50,17 @@ public class PurchaseRecord extends BaseEntity {
 	
 	private BigDecimal purAmount;
 	
-	private BigDecimal balanceAmount;
+	//进货前
+	private BigDecimal preBalanceAmount;
+	
+	//进货后
+	private BigDecimal afterBalanceAmount;
+	
+	public PurchaseRecord(){}
+	
+	public PurchaseRecord(String ino){
+		this.ino = ino;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,11 +90,6 @@ public class PurchaseRecord extends BaseEntity {
 		return purAmount;
 	}
 
-	@Column(name="balance_amount")
-	public BigDecimal getBalanceAmount() {
-		return balanceAmount;
-	}
-
 	public void setPrid(Long prid) {
 		this.prid = prid;
 	}
@@ -105,8 +110,22 @@ public class PurchaseRecord extends BaseEntity {
 		this.purAmount = purAmount;
 	}
 
-	public void setBalanceAmount(BigDecimal balanceAmount) {
-		this.balanceAmount = balanceAmount;
+	@Column(name="pre_balace_amount")
+	public BigDecimal getPreBalanceAmount() {
+		return preBalanceAmount;
+	}
+
+	@Column(name="after_balace_amount")
+	public BigDecimal getAfterBalanceAmount() {
+		return afterBalanceAmount;
+	}
+
+	public void setPreBalanceAmount(BigDecimal preBalanceAmount) {
+		this.preBalanceAmount = preBalanceAmount;
+	}
+
+	public void setAfterBalanceAmount(BigDecimal afterBalanceAmount) {
+		this.afterBalanceAmount = afterBalanceAmount;
 	}
 
 	@Override

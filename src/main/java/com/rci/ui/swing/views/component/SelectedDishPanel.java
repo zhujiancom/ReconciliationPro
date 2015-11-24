@@ -10,13 +10,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
-import org.springframework.util.CollectionUtils;
-
+import com.rci.tools.StringUtils;
 import com.rci.ui.swing.listeners.DishSelectListener;
+import com.rci.ui.swing.listeners.SelectedDishPanelListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.vos.DishVO;
-import com.rci.ui.swing.vos.SchemeTypeVO;
 
 public class SelectedDishPanel extends JPanel implements ActionListener{
 
@@ -29,7 +29,7 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 	
 	private List<DishVO> selectedDishes = new ArrayList<DishVO>();
 	
-	private SchemeTypeVO schemeType;
+	private String selectedDishNames;
 	
 	private JLabel displayLabel = new JLabel();
 	
@@ -39,24 +39,19 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 		initComponent();
 	}
 	
-	public SelectedDishPanel(SchemeTypeVO schemeType){
-		this.schemeType = schemeType;
+	public SelectedDishPanel(String selectedDishNames){
+		this.selectedDishNames = selectedDishNames;
 		initComponent();
 	}
 
 	private void initComponent() {
 		BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 		this.setLayout(layout);
-		addBtn = ButtonFactory.createImageButton("选择菜品", "skin/gray/images/24x24/addBtn_2.png", null);
-		if(schemeType != null){
-			List<DishVO> dishes = schemeType.getDishes();
-			StringBuffer sb = new StringBuffer();
-			if(!CollectionUtils.isEmpty(dishes)){
-				for(DishVO dish:dishes){
-					sb.append(",").append(dish.getDishName());
-				}
-				displayLabel.setText(sb.substring(1));
-			}
+		addBtn = ButtonFactory.createImageButton("菜品选择", "skin/gray/images/btn_orange.png", null);
+		addBtn.setToolTipText("菜品选择");
+		addBtn.setHorizontalTextPosition(SwingConstants.CENTER);
+		if(StringUtils.hasText(selectedDishNames)){
+			displayLabel.setText(selectedDishNames);
 		}
 		this.add(addBtn);
 		this.add(Box.createVerticalStrut(10));
@@ -100,21 +95,8 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
-		DishSelectListener selectListener = new DishSelectListener(this);
+		DishSelectListener selectListener = new SelectedDishPanelListener(this);
 		win = new DishSelectWin(selectListener,900,600,"菜品选择");
 	}
 
-	/**
-	 * @return the schemeType
-	 */
-	public SchemeTypeVO getSchemeType() {
-		return schemeType;
-	}
-
-	/**
-	 * @param schemeType the schemeType to set
-	 */
-	public void setSchemeType(SchemeTypeVO schemeType) {
-		this.schemeType = schemeType;
-	}
 }

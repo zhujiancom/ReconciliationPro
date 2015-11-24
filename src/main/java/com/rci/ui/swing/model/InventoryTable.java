@@ -15,13 +15,14 @@ public class InventoryTable extends BaseTable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3691238529428574569L;
-	public InventoryTable(){
+	public InventoryTable(int columnNum){
+		super(columnNum);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 	
 	@Override
 	protected void setModel() {
-		InventoryTabelModel dm = new InventoryTabelModel();
+		InventoryTabelModel dm = new InventoryTabelModel(columnNum);
 		List<InventoryVO> inventoryvos = metaservice.displayAllInventory();
 		dm.setItems(inventoryvos);
 		super.setModel(dm);
@@ -38,8 +39,17 @@ public class InventoryTable extends BaseTable {
 		cm.getColumn(2).setPreferredWidth(80);
 		cm.getColumn(3).setHeaderValue("已消费数量");
 		cm.getColumn(3).setPreferredWidth(80);
-		cm.getColumn(4).setHeaderValue("已关联菜品");
-		cm.getColumn(4).setPreferredWidth(350);
+		cm.getColumn(4).setHeaderValue("基数");
+		cm.getColumn(4).setPreferredWidth(80);
+		cm.getColumn(5).setHeaderValue("已关联菜品");
+		cm.getColumn(5).setPreferredWidth(350);
+	}
+	
+	public void reflush(){
+		InventoryTabelModel dm = (InventoryTabelModel) this.getModel();
+		List<InventoryVO> inventoryvos = metaservice.displayAllInventory();
+		dm.setItems(inventoryvos);
+		dm.fireTableDataChanged();
 	}
 	
 	public static class InventoryTabelModel extends AbstractTableModel{
@@ -51,12 +61,17 @@ public class InventoryTable extends BaseTable {
 
 		
 		private List<InventoryVO> items = Collections.emptyList();
+		private int columnNum;
 		
 		public InventoryTabelModel(){}
 		
+		public InventoryTabelModel(int columnNum){
+			this.columnNum = columnNum;
+		}
+		
 		@Override
 		public int getColumnCount() {
-			return this.getColumnCount();
+			return columnNum;
 		}
 
 		@Override
@@ -77,7 +92,9 @@ public class InventoryTable extends BaseTable {
 			case 3:
 				return vo.getConsumeAmount();
 			case 4:
-				return vo.getRelatedDishes();
+				return vo.getCardinal();
+			case 5:
+				return vo.getRelatedDishNames();
 			}
 			return null;
 		}
@@ -89,6 +106,15 @@ public class InventoryTable extends BaseTable {
 		public void setItems(List<InventoryVO> items) {
 			this.items = items;
 		}
+		
+		public InventoryVO getInventory(int rowIndex){
+			return items.get(rowIndex);
+		}
+		
+		public void removeRow(int row) {
+			items.remove(row);
+	        fireTableRowsDeleted(row, row);
+	    }
 	}
 
 }

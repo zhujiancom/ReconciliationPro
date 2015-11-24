@@ -28,6 +28,14 @@ public class InventoryDishRef extends BaseEntity {
 	private String dishno;
 	
 	private String dishname;
+	
+	public InventoryDishRef(){}
+	
+	public InventoryDishRef(String ino,String dishno,String dishname){
+		this.ino = ino;
+		this.dishno = dishno;
+		this.dishname = dishname;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

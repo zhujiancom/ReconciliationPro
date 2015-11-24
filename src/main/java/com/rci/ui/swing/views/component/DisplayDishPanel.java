@@ -2,6 +2,7 @@ package com.rci.ui.swing.views.component;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -19,6 +20,7 @@ import javax.swing.SwingConstants;
 
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
+import com.rci.tools.StringUtils;
 import com.rci.ui.swing.listeners.DishSelectListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.DishJCheckBox;
@@ -34,6 +36,7 @@ public class DisplayDishPanel extends JPanel {
 	private String seriesno;
 	
 	private JPanel leftPane;
+	private JPanel rightContentPane;
 	
 	private JScrollPane rightPane;
 	
@@ -41,11 +44,18 @@ public class DisplayDishPanel extends JPanel {
 	
 	private DishSelectListener selectListener;
 	
-	public DisplayDishPanel(String seriesno,DishSelectListener selectListener){
-		this.seriesno = seriesno;
+	public DisplayDishPanel(DishSelectListener selectListener){
 		this.selectListener = selectListener;
 		metadataService = (IMetadataService) SpringUtils.getBean("MetadataService");
 		initComponent();
+	}
+	
+	public DisplayDishPanel(String seriesno,DishSelectListener selectListener){
+		this(selectListener);
+		this.seriesno = seriesno;
+//		this.selectListener = selectListener;
+//		metadataService = (IMetadataService) SpringUtils.getBean("MetadataService");
+//		initComponent();
 	}
 
 	private void initComponent() {
@@ -56,10 +66,11 @@ public class DisplayDishPanel extends JPanel {
 		final CardLayout card= new CardLayout();
 		leftPane.setLayout(card);
 		
-		JPanel rightContentPane = new JPanel();
+		rightContentPane = new JPanel();
 		BoxLayout rightLayout = new BoxLayout(rightContentPane, BoxLayout.Y_AXIS);
 		rightContentPane.setLayout(rightLayout);
 		List<DishTypeVO> dishtypes = metadataService.getAllDishTypeBySeriesNo(seriesno);
+//		addContent(dishtypes);
 		int index = 1;
 		for(DishTypeVO type:dishtypes){
 			JButton btn = ButtonFactory.createImageButton(type.getDtName(),"skin/gray/images/64x64/btn_"+index+".png", null);
@@ -97,7 +108,57 @@ public class DisplayDishPanel extends JPanel {
 		gb2.gridy=0;	//起始点为第1行
 		this.add(rightPane,gb2);
 	}
+	private void addContent(List<DishTypeVO> dishtypes){
+		final CardLayout card = (CardLayout) leftPane.getLayout(); 
+		int index = 1;
+		for(DishTypeVO type:dishtypes){
+			JButton btn = ButtonFactory.createImageButton(type.getDtName(),"skin/gray/images/64x64/btn_"+index+".png", null);
+			btn.setHorizontalTextPosition(SwingConstants.CENTER);
+			rightContentPane.add(btn);
+			final String typeno = type.getDtNo();
+			leftPane.add(typeno,new DishPanel(type.getDtNo()));
+			index++;
+			btn.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent paramActionEvent) {
+					card.show(leftPane, typeno);
+				}
+			});
+		}
+	}
 	
+	public String getSeriesno() {
+		return seriesno;
+	}
+
+	public void setSeriesno(String seriesno) {
+		this.seriesno = seriesno;
+	}
+	
+	
+	
+//	@Override
+//	protected Graphics getComponentGraphics(Graphics paramGraphics) {
+//		if(StringUtils.hasText(seriesno)){
+//			List<DishTypeVO> dishtypes = metadataService.getAllDishTypeBySeriesNo(seriesno);
+////			leftPane.removeAll();
+////			rightContentPane.removeAll();
+//			addContent(dishtypes);
+//		}
+////		return super.getComponentGraphics(paramGraphics);
+//	}
+
+	public void refresh(){
+		List<DishTypeVO> dishtypes = metadataService.getAllDishTypeBySeriesNo(seriesno);
+		leftPane.removeAll();
+		rightContentPane.removeAll();
+		addContent(dishtypes);
+//		leftPane.updateUI();
+		leftPane.repaint();
+		rightContentPane.repaint();
+	}
+
 	public class DishPanel extends JPanel{
 		/**
 		 * 

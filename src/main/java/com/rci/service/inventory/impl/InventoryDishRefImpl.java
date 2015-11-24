@@ -39,7 +39,7 @@ public class InventoryDishRefImpl extends
 
 	@Override
 	public String queryRelatedDishNames(String ino) {
-		StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer("");
 		List<InventoryDishRef> idrs = queryByInventoryNo(ino);
 		if(!CollectionUtils.isEmpty(idrs)){
 			for(InventoryDishRef idr:idrs){
@@ -55,6 +55,12 @@ public class InventoryDishRefImpl extends
 		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(InventoryDishRef.class);
 		sdc.add(SafeRestrictions.eq("ino", ino));
 		return baseDAO.queryListByCriteria(sdc);
+	}
+
+	@Override
+	public void deleteRelatedInfo(String ino) {
+		String hql = "delete from InventoryDishRef idr where idr.ino='"+ino+"'";
+		baseDAO.executeHQL(hql);
 	}
 
 }

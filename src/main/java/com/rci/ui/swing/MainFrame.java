@@ -114,10 +114,10 @@ public class MainFrame extends JFrame {
 		system.setForeground(Color.WHITE);
 		JMenu operation = new JMenu("操作");
 		operation.setForeground(Color.WHITE);
-		JMenu view = new JMenu("查看");
-		view.setForeground(Color.WHITE);
-		JMenu setting = new JMenu("设置");
-		setting.setForeground(Color.WHITE);
+//		JMenu view = new JMenu("查看");
+//		view.setForeground(Color.WHITE);
+//		JMenu setting = new JMenu("设置");
+//		setting.setForeground(Color.WHITE);
 		JMenu statistic = new JMenu("统计");
 		statistic.setForeground(Color.WHITE);
 		JMenu management = new JMenu("管理");
@@ -127,8 +127,8 @@ public class MainFrame extends JFrame {
 		menubar.add(Box.createHorizontalStrut(10));
 		menubar.add(system);
 		menubar.add(operation);
-		menubar.add(view);
-		menubar.add(setting);
+//		menubar.add(view);
+//		menubar.add(setting);
 		menubar.add(statistic);
 		menubar.add(management);
 		
@@ -150,18 +150,18 @@ public class MainFrame extends JFrame {
 		JMenuItem baseReset = ButtonFactory.createMenuItem("基础数据重置", "skin/gray/images/16x16/basereset.png");
 		JMenuItem dataExport = ButtonFactory.createMenuItem("订单数据导出", "skin/gray/images/16x16/export_0.png");
 		JMenuItem dataImport = ButtonFactory.createMenuItem("订单数据导入", "skin/gray/images/16x16/import_0.png");
-		JMenuItem viewStock = ButtonFactory.createMenuItem("库存查看", "skin/gray/images/16x16/stock.png");
-		JMenuItem setStock = ButtonFactory.createMenuItem("库存进货", "skin/gray/images/16x16/restock.png");
-		JMenuItem stockManagement = ButtonFactory.createMenuItem("库存管理", "skin/gray/images/16x16/stockmanage.png");
-		JMenuItem schemeManagement = ButtonFactory.createMenuItem("在线活动管理", "skin/gray/images/16x16/activity.png");
+//		JMenuItem viewStock = ButtonFactory.createMenuItem("库存查看", "skin/gray/images/16x16/stock.png");
+//		JMenuItem setStock = ButtonFactory.createMenuItem("库存进货", "skin/gray/images/16x16/restock.png");
+//		JMenuItem stockManagement = ButtonFactory.createMenuItem("库存管理", "skin/gray/images/16x16/stockmanage.png");
+//		JMenuItem schemeManagement = ButtonFactory.createMenuItem("在线活动管理", "skin/gray/images/16x16/activity.png");
 		system.add(sysInit);
 		system.add(baseReset);
 		operation.add(dataExport);
 		operation.add(dataImport);
-		view.add(viewStock);
-		setting.add(setStock);
-		setting.add(stockManagement);
-		setting.add(schemeManagement);
+//		view.add(viewStock);
+//		setting.add(setStock);
+//		setting.add(stockManagement);
+//		setting.add(schemeManagement);
 
 		JMenuItem expressRate = ButtonFactory.createMenuItem("外送率统计", "skin/gray/images/16x16/takeout.png");
 		JMenuItem earning = ButtonFactory.createMenuItem("营业额统计", "skin/gray/images/16x16/statistic.png");
@@ -178,22 +178,22 @@ public class MainFrame extends JFrame {
 		ActionHandler handler = new ActionHandler();
 		sysInit.addActionListener(handler.dataInit());
 		baseReset.addActionListener(handler.baseReset());
-		// 库存查看事件
-		viewStock.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				WindowBuilderFactory.createViewStockWindow();
-			}
-		});
-		// 库存进货时间
-		setStock.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				WindowBuilderFactory.createReStockWindow();
-			}
-		});
+//		// 库存查看事件
+//		viewStock.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				WindowBuilderFactory.createViewStockWindow();
+//			}
+//		});
+//		// 库存进货时间
+//		setStock.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				WindowBuilderFactory.createReStockWindow();
+//			}
+//		});
 		// 外送率统计事件
 		expressRate.addActionListener(new ActionListener() {
 			
@@ -211,16 +211,16 @@ public class MainFrame extends JFrame {
 			}
 		});
 		// 库存管理事件
-		stockManagement.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				WindowBuilderFactory.createStockManagementWindow();
-			}
-		});
+//		stockManagement.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				WindowBuilderFactory.createStockManagementWindow();
+//			}
+//		});
 		
 		// 活动设置
-		schemeManagement.addActionListener(new ActionListener() {
+		activityManage.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {

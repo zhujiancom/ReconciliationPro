@@ -141,7 +141,7 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 		mainPane.add(eightPane);
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,0));
 		secondPane.add(dish);
-		selectedDishPanel = new SelectedDishPanel(schemeType);
+		selectedDishPanel = new SelectedDishPanel(schemeType.getDishName());
 		secondPane.add(selectedDishPanel);
 		mainPane.add(secondPane);
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));

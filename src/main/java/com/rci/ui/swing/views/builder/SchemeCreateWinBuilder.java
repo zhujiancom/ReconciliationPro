@@ -18,6 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.rci.bean.LabelValueBean;
 import com.rci.bean.entity.SchemeType;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -36,6 +39,7 @@ import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.vos.SchemeVO;
 
 public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
+	private static final Log logger = LogFactory.getLog(SchemeCreateWinBuilder.class);
 	private PopWindow addForm;
 	private JScrollPane sPane;
 	private JTextField nameInput = new JTextField(30);
@@ -100,6 +104,7 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 			JOptionPane.showMessageDialog(null, new JLabel("<html><h4 color='red'>"+se.getMessage()+"</h3></html>"));
 		}catch (Exception ex){
 			ex.printStackTrace();
+			logger.error("创建活动内容出错！", ex);
 		}
 	}
 

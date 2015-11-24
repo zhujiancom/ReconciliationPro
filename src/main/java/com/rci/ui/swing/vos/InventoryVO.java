@@ -1,6 +1,7 @@
 package com.rci.ui.swing.vos;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class InventoryVO {
 	private Long iid;
@@ -15,7 +16,12 @@ public class InventoryVO {
 	
 	private BigDecimal consumeAmount;
 	
-	private String relatedDishes;
+	private String relatedDishNames;
+	
+	private List<DishVO> relatedDishes;
+	
+	/* 基数， 芝士年糕基数是40 */
+	private BigDecimal cardinal;
 
 	public Long getIid() {
 		return iid;
@@ -39,10 +45,6 @@ public class InventoryVO {
 
 	public BigDecimal getConsumeAmount() {
 		return consumeAmount;
-	}
-
-	public String getRelatedDishes() {
-		return relatedDishes;
 	}
 
 	public void setIid(Long iid) {
@@ -69,7 +71,32 @@ public class InventoryVO {
 		this.consumeAmount = consumeAmount;
 	}
 
-	public void setRelatedDishes(String relatedDishes) {
+	public String getRelatedDishNames() {
+		return relatedDishNames;
+	}
+
+	public List<DishVO> getRelatedDishes() {
+		return relatedDishes;
+	}
+
+	public void setRelatedDishNames(String relatedDishNames) {
+		this.relatedDishNames = relatedDishNames;
+	}
+
+	public void setRelatedDishes(List<DishVO> relatedDishes) {
 		this.relatedDishes = relatedDishes;
+	}
+
+	public BigDecimal getCardinal() {
+		return cardinal;
+	}
+
+	public void setCardinal(BigDecimal cardinal) {
+		this.cardinal = cardinal;
+	}
+
+	@Override
+	public String toString() {
+		return "InventoryVO ["+iname+" - "+ino+"]";
 	}
 }
