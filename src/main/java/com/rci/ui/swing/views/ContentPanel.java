@@ -2,6 +2,7 @@ package com.rci.ui.swing.views;
 
 import java.awt.Color;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -40,6 +41,7 @@ public class ContentPanel extends JSplitPane {
 		this.setDividerLocation(0.6);
 		this.setResizeWeight(0.6);
 		JScrollPane mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
+		mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mainTable = new OrderTable();
 		mainScrollPane.setViewportView(mainTable);
@@ -48,6 +50,7 @@ public class ContentPanel extends JSplitPane {
 		rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));
 		JScrollPane rTopScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		rTopScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		rTopScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		itemTable = new OrderItemTable();
 		rTopScrollPane.setViewportView(itemTable);
 		

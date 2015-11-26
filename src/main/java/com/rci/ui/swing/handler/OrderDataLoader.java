@@ -89,6 +89,7 @@ public class OrderDataLoader implements Runnable {
 			otm.fireTableDataChanged();
 			
 			OrderVO order = otm.getOrderAt(0);
+			//设置表格默认第一行选中
 			contentPane.getMainTable().setRowSelectionAllowed(true);
 			contentPane.getMainTable().setRowSelectionInterval(0, 0);
 			loadItemData(order.getPayNo());

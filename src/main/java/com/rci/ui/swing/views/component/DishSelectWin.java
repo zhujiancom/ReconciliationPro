@@ -28,8 +28,6 @@ public class DishSelectWin extends PopWindow {
 	private void createContentPane() {
 		JPanel containerPanel = this.getContainerPanel();
 		containerPanel.add(new SeriesTypePanel(containerPanel,selectListener),BorderLayout.NORTH);
-//		containerPanel.add(buildDishPane(),BorderLayout.CENTER);
-//		containerPanel.add(new DisplayDishPanel(selectListener),BorderLayout.CENTER);
 		containerPanel.add(buildOperatePane(),BorderLayout.SOUTH);
 	}
 	

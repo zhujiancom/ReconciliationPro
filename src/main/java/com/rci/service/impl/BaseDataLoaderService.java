@@ -25,6 +25,7 @@ import com.rci.bean.entity.Stock;
 import com.rci.bean.entity.StockOpLog;
 import com.rci.bean.entity.account.AccFlow;
 import com.rci.bean.entity.account.Account;
+import com.rci.bean.entity.inventory.InventoryDishRef;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.enums.BusinessEnums.FlowType;
 import com.rci.enums.BusinessEnums.StockOpType;
@@ -41,6 +42,7 @@ import com.rci.service.filter.CalculateFilter;
 import com.rci.service.filter.FilterChain;
 import com.rci.service.filter.FreeFilter;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
+import com.rci.service.inventory.IInventoryDishRefService;
 
 /**
  * remark (备注):
@@ -75,6 +77,9 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 	@Resource(name="DishService")
 	private IDishService dishService;
 	
+	@Resource(name="InventoryDishRef")
+	private IInventoryDishRefService idrservice;
+	
 	protected void updateRelativeInfo(List<Order> orders){
 		if(CollectionUtils.isEmpty(orders)){
 			return ;
@@ -83,29 +88,30 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 		Map<String, BigDecimal> stockMap = new HashMap<String, BigDecimal>();
 		for (Order order : orders) {
 			parseOrder(order);
+			addInventoryConsumeLog(order);
 			// 插入库存变更记录
-			addStockOpLog(order, stockMap);
+//			addStockOpLog(order, stockMap);
 		}
 		// 更新库存表
-		for (Iterator<Entry<String, BigDecimal>> it = stockMap.entrySet()
-				.iterator(); it.hasNext();) {
-			Entry<String, BigDecimal> entry = it.next();
-			String sno = entry.getKey();
-			BigDecimal amount = entry.getValue();
-			// Stock stock = stockService.getStockByDishNo(dishNo);
-			Stock stock = stockService.getStockBySno(sno);
-			if (stock == null) {
-				throw new ServiceException(SERVICE.DATA_ERROR, sno
-						+ " - 该菜品不在库存控制范围内！");
-			} else {
-				BigDecimal balanceAmount = stock.getBalanceAmount().subtract(
-						amount);
-				BigDecimal consumeAmount = stock.getConsumeAmount().add(amount);
-				stock.setBalanceAmount(balanceAmount);
-				stock.setConsumeAmount(consumeAmount);
-				stockService.rwUpdate(stock);
-			}
-		}
+//		for (Iterator<Entry<String, BigDecimal>> it = stockMap.entrySet()
+//				.iterator(); it.hasNext();) {
+//			Entry<String, BigDecimal> entry = it.next();
+//			String sno = entry.getKey();
+//			BigDecimal amount = entry.getValue();
+//			// Stock stock = stockService.getStockByDishNo(dishNo);
+//			Stock stock = stockService.getStockBySno(sno);
+//			if (stock == null) {
+//				throw new ServiceException(SERVICE.DATA_ERROR, sno
+//						+ " - 该菜品不在库存控制范围内！");
+//			} else {
+//				BigDecimal balanceAmount = stock.getBalanceAmount().subtract(
+//						amount);
+//				BigDecimal consumeAmount = stock.getConsumeAmount().add(amount);
+//				stock.setBalanceAmount(balanceAmount);
+//				stock.setConsumeAmount(consumeAmount);
+//				stockService.rwUpdate(stock);
+//			}
+//		}
 	}
 
 	/* 
@@ -161,7 +167,7 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 		}
 	}
 
-	
+	@Deprecated
 	@Override
 	public void addStockOpLog(Order order, Map<String, BigDecimal> stockMap) {
 		List<OrderItem> items = order.getItems();
@@ -228,4 +234,14 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 		accService.rwUpdate(account);
 	}
 
+	private void addInventoryConsumeLog(Order order){
+		List<OrderItem> items = order.getItems();
+		for(OrderItem item:items){
+			String dishNo = item.getDishNo();
+			List<InventoryDishRef> idrs = idrservice.queryByDishNo(dishNo);
+			for(InventoryDishRef idr:idrs){
+				
+			}
+		}
+	}
 }

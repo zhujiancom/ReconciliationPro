@@ -3,14 +3,20 @@ package com.rci.service.core;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.rci.bean.dto.PurchaseRecordQueryDTO;
+import com.rci.bean.dto.SaleLogQueryDTO;
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.dto.SchemeTypeQueryDTO;
 import com.rci.ui.swing.vos.DishSeriesVO;
 import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.InventoryVO;
+import com.rci.ui.swing.vos.PurchaseRecordVO;
+import com.rci.ui.swing.vos.SaleLogDetailVO;
+import com.rci.ui.swing.vos.SaleLogVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
+import com.rci.ui.swing.vos.SellOffWarningVO;
 import com.rci.ui.swing.vos.StockVO;
 
 
@@ -107,5 +113,14 @@ public interface IMetadataService {
 	//停用库存产品
 	void disableInventory(Long iid);
 	void purchaseInventory(InventoryVO inventoryvo,BigDecimal purchaseAmount);
-	
+	//进货记录列表
+	List<PurchaseRecordVO> displayAllPurchaseRecord();
+	List<PurchaseRecordVO> queryRecords(PurchaseRecordQueryDTO queryDTO);
+	//库存销售记录
+	List<SaleLogVO> displaySaleLogs();
+	List<SaleLogDetailVO> displaySaleLogDetails(String ino);
+	List<SaleLogVO> querySaleLog(SaleLogQueryDTO queryDTO);
+	List<SaleLogDetailVO> querySaleLogDetail(SaleLogQueryDTO queryDTO);
+	//沽清列表
+	List<SellOffWarningVO> displayAllSellOffWarning();
 }

@@ -63,4 +63,11 @@ public class InventoryDishRefImpl extends
 		baseDAO.executeHQL(hql);
 	}
 
+	@Override
+	public List<InventoryDishRef> queryByDishNo(String dishno) {
+		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(InventoryDishRef.class);
+		sdc.add(SafeRestrictions.eq("dishno", dishno));
+		return baseDAO.queryListByCriteria(sdc);
+	}
+
 }

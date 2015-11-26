@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.springframework.util.CollectionUtils;
+
 import com.rci.tools.StringUtils;
 import com.rci.ui.swing.listeners.DishSelectListener;
 import com.rci.ui.swing.listeners.SelectedDishPanelListener;
@@ -62,10 +64,14 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 	public void reflushView(){
 		win.close();
 		StringBuffer sb = new StringBuffer();
-		for(DishVO dish:selectedDishes){
-			sb.append(",").append(dish.getDishName());
+		if(!CollectionUtils.isEmpty(selectedDishes)){
+			for(DishVO dish:selectedDishes){
+				sb.append(",").append(dish.getDishName());
+			}
+			displayLabel.setText(sb.substring(1));
+		}else{
+			displayLabel.setText(null);
 		}
-		displayLabel.setText(sb.substring(1));
 		this.repaint();
 	}
 

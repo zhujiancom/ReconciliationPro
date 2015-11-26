@@ -2,7 +2,6 @@ package com.rci.ui.swing.views.component;
 
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -20,7 +19,6 @@ import javax.swing.SwingConstants;
 
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
-import com.rci.tools.StringUtils;
 import com.rci.ui.swing.listeners.DishSelectListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.DishJCheckBox;
@@ -33,8 +31,6 @@ public class DisplayDishPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -3036983150085052451L;
 
-	private String seriesno;
-	
 	private JPanel leftPane;
 	private JPanel rightContentPane;
 	
@@ -49,14 +45,6 @@ public class DisplayDishPanel extends JPanel {
 		metadataService = (IMetadataService) SpringUtils.getBean("MetadataService");
 		initComponent();
 	}
-	
-	public DisplayDishPanel(String seriesno,DishSelectListener selectListener){
-		this(selectListener);
-		this.seriesno = seriesno;
-//		this.selectListener = selectListener;
-//		metadataService = (IMetadataService) SpringUtils.getBean("MetadataService");
-//		initComponent();
-	}
 
 	private void initComponent() {
 		GridBagLayout gblayout = new GridBagLayout();
@@ -69,24 +57,8 @@ public class DisplayDishPanel extends JPanel {
 		rightContentPane = new JPanel();
 		BoxLayout rightLayout = new BoxLayout(rightContentPane, BoxLayout.Y_AXIS);
 		rightContentPane.setLayout(rightLayout);
-		List<DishTypeVO> dishtypes = metadataService.getAllDishTypeBySeriesNo(seriesno);
+//		List<DishTypeVO> dishtypes = metadataService.getAllDishTypeBySeriesNo(seriesno);
 //		addContent(dishtypes);
-		int index = 1;
-		for(DishTypeVO type:dishtypes){
-			JButton btn = ButtonFactory.createImageButton(type.getDtName(),"skin/gray/images/64x64/btn_"+index+".png", null);
-			btn.setHorizontalTextPosition(SwingConstants.CENTER);
-			rightContentPane.add(btn);
-			final String typeno = type.getDtNo();
-			leftPane.add(typeno,new DishPanel(type.getDtNo()));
-			index++;
-			btn.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent paramActionEvent) {
-					card.show(leftPane, typeno);
-				}
-			});
-		}
 		rightPane = new JScrollPane(rightContentPane); 
 		rightPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		rightPane.setBorder(BorderFactory.createEmptyBorder());
@@ -127,38 +99,15 @@ public class DisplayDishPanel extends JPanel {
 			});
 		}
 	}
-	
-	public String getSeriesno() {
-		return seriesno;
-	}
 
-	public void setSeriesno(String seriesno) {
-		this.seriesno = seriesno;
-	}
-	
-	
-	
-//	@Override
-//	protected Graphics getComponentGraphics(Graphics paramGraphics) {
-//		if(StringUtils.hasText(seriesno)){
-//			List<DishTypeVO> dishtypes = metadataService.getAllDishTypeBySeriesNo(seriesno);
-////			leftPane.removeAll();
-////			rightContentPane.removeAll();
-//			addContent(dishtypes);
-//		}
-////		return super.getComponentGraphics(paramGraphics);
-//	}
-
-	public void refresh(){
-		List<DishTypeVO> dishtypes = metadataService.getAllDishTypeBySeriesNo(seriesno);
+	public void reflush(String seriesNO){
 		leftPane.removeAll();
 		rightContentPane.removeAll();
+		List<DishTypeVO> dishtypes = metadataService.getAllDishTypeBySeriesNo(seriesNO);
 		addContent(dishtypes);
-//		leftPane.updateUI();
-		leftPane.repaint();
-		rightContentPane.repaint();
+		leftPane.updateUI();
 	}
-
+	
 	public class DishPanel extends JPanel{
 		/**
 		 * 
@@ -175,10 +124,14 @@ public class DisplayDishPanel extends JPanel {
 			this.setLayout(new GridLayout(10, 2));
 			this.setBackground(Color.WHITE);
 			List<DishVO> dishes = metadataService.getAllDishByTypeNo(typeno);
+			List<DishVO> selectedDishes = selectListener.getOldDishes();
 			for(DishVO dish:dishes){
 				DishJCheckBox c = new DishJCheckBox(dish.getDishName()+"-"+dish.getDishPrice(),dish);
 				c.setBackground(Color.WHITE);
 				c.addItemListener(selectListener);
+				if(selectedDishes.contains(dish)){
+					c.setSelected(true);
+				}
 				this.add(c);
 			}
 		}

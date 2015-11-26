@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.criterion.MatchMode;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.inventory.Inventory;
@@ -40,7 +39,7 @@ public class InventoryServiceImpl extends BaseServiceImpl<Inventory, Long>
 	@Override
 	public List<Inventory> queryInventoryByName(String iname) {
 		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(Inventory.class);
-		sdc.add(SafeRestrictions.like("iname", iname, MatchMode.ANYWHERE));
+		sdc.add(SafeRestrictions.likeAnyWhere("iname", iname));
 		try{
 			return baseDAO.queryListByCriteria(sdc);
 		}catch(Exception e){

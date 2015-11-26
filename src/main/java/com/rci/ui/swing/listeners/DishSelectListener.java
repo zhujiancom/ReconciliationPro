@@ -4,12 +4,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.rci.ui.swing.model.DishJCheckBox;
+import com.rci.ui.swing.vos.DishVO;
 
 public abstract class DishSelectListener implements ItemListener,ActionListener {
-	protected List<DishJCheckBox> selectDishes = new ArrayList<DishJCheckBox>();
+	protected Set<DishJCheckBox> selectDishes = new HashSet<DishJCheckBox>();
+	protected List<DishVO> oldDishes = new ArrayList<DishVO>();
 //	private SelectedDishPanel displayPanel;
 	
 	public DishSelectListener(){}
@@ -38,15 +42,31 @@ public abstract class DishSelectListener implements ItemListener,ActionListener 
 //		displayPanel.reflushView();
 //	}
 	
-	public List<DishJCheckBox> getSelectDishes() {
-		return selectDishes;
-	}
+//	public List<DishJCheckBox> getSelectDishes() {
+//		return selectDishes;
+//	}
 //
 //	public SelectedDishPanel getDisplayPanel() {
 //		return displayPanel;
 //	}
 
-	public void setSelectDishes(List<DishJCheckBox> selectDishes) {
+//	public void setSelectDishes(List<DishJCheckBox> selectDishes) {
+//		this.selectDishes = selectDishes;
+//	}
+
+	public List<DishVO> getOldDishes() {
+		return oldDishes;
+	}
+
+	public void setOldDishes(List<DishVO> oldDishes) {
+		this.oldDishes = oldDishes;
+	}
+
+	public Set<DishJCheckBox> getSelectDishes() {
+		return selectDishes;
+	}
+
+	public void setSelectDishes(Set<DishJCheckBox> selectDishes) {
 		this.selectDishes = selectDishes;
 	}
 

@@ -48,7 +48,7 @@ public class SellOffWarning extends BaseEntity {
 
 	private String iname;
 
-	private Date so_date;
+	private Date soDate;
 
 	private State state;
 
@@ -69,12 +69,6 @@ public class SellOffWarning extends BaseEntity {
 		return iname;
 	}
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "so_date")
-	public Date getSo_date() {
-		return so_date;
-	}
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "state")
 	public State getState() {
@@ -92,9 +86,15 @@ public class SellOffWarning extends BaseEntity {
 	public void setIname(String iname) {
 		this.iname = iname;
 	}
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "so_date")
+	public Date getSoDate() {
+		return soDate;
+	}
 
-	public void setSo_date(Date so_date) {
-		this.so_date = so_date;
+	public void setSoDate(Date soDate) {
+		this.soDate = soDate;
 	}
 
 	public void setState(State state) {

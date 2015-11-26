@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.rci.bean.dto.PurchaseRecordQueryDTO;
+import com.rci.bean.dto.SaleLogQueryDTO;
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.dto.SchemeTypeQueryDTO;
 import com.rci.bean.entity.Dish;
@@ -23,6 +25,7 @@ import com.rci.bean.entity.Stock;
 import com.rci.bean.entity.inventory.Inventory;
 import com.rci.bean.entity.inventory.InventoryDishRef;
 import com.rci.bean.entity.inventory.PurchaseRecord;
+import com.rci.bean.entity.inventory.SellOffWarning;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.service.IDataTransformService;
@@ -36,16 +39,22 @@ import com.rci.service.ISchemeTypeService;
 import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
 import com.rci.service.inventory.IInventoryDishRefService;
+import com.rci.service.inventory.IInventorySellLogService;
 import com.rci.service.inventory.IInventoryService;
 import com.rci.service.inventory.IPurchaseRecordService;
+import com.rci.service.inventory.ISellOffWarningService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.EnumUtils;
 import com.rci.ui.swing.vos.DishSeriesVO;
 import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.InventoryVO;
+import com.rci.ui.swing.vos.PurchaseRecordVO;
+import com.rci.ui.swing.vos.SaleLogDetailVO;
+import com.rci.ui.swing.vos.SaleLogVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
+import com.rci.ui.swing.vos.SellOffWarningVO;
 import com.rci.ui.swing.vos.StockVO;
 
 @Service("MetadataService")
@@ -76,6 +85,10 @@ public class MetadataServiceImpl implements IMetadataService {
 	private IInventoryDishRefService idrService;
 	@Resource(name="PurchaseRecordService")
 	private IPurchaseRecordService purchaseService;
+	@Resource(name="InventorySellLogService")
+	private IInventorySellLogService sellLogService;
+	@Resource(name="SellOffWarningService")
+	private ISellOffWarningService sowarningService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -295,8 +308,17 @@ public class MetadataServiceImpl implements IMetadataService {
 		if(!CollectionUtils.isEmpty(inventories)){
 			for(Inventory inv:inventories){
 				InventoryVO invvo = beanMapper.map(inv, InventoryVO.class);
-				String relatedDishNames = idrService.queryRelatedDishNames(inv.getIno());
-				invvo.setRelatedDishNames(relatedDishNames);
+				StringBuffer sb = new StringBuffer("");
+				List<Dish> dishes = idrService.queryRelatedDishes(inv.getIno());
+				if(!CollectionUtils.isEmpty(dishes)){
+					List<DishVO> dishvos = new ArrayList<DishVO>();
+					for(Dish dish:dishes){
+						dishvos.add(beanMapper.map(dish, DishVO.class));
+						sb.append(",").append(dish.getDishName());
+					}
+					invvo.setRelatedDishes(dishvos);
+					invvo.setRelatedDishNames(sb.substring(1));
+				}
 				result.add(invvo);
 			}
 		}
@@ -383,6 +405,69 @@ public class MetadataServiceImpl implements IMetadataService {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public List<PurchaseRecordVO> displayAllPurchaseRecord() {
+		List<PurchaseRecord> records = purchaseService.getAll();
+		List<PurchaseRecordVO> vos = new ArrayList<PurchaseRecordVO>();
+		if(!CollectionUtils.isEmpty(records)){
+			for(PurchaseRecord record:records){
+				vos.add(beanMapper.map(record, PurchaseRecordVO.class));
+			}
+		}
+		return vos;
+	}
+
+	@Override
+	public List<PurchaseRecordVO> queryRecords(PurchaseRecordQueryDTO queryDTO) {
+		List<PurchaseRecord> records = purchaseService.fuzzyQuery(queryDTO);
+		List<PurchaseRecordVO> vos = new ArrayList<PurchaseRecordVO>();
+		if(!CollectionUtils.isEmpty(records)){
+			for(PurchaseRecord record:records){
+				vos.add(beanMapper.map(record, PurchaseRecordVO.class));
+			}
+		}
+		return vos;
+	}
+
+	@Override
+	public List<SaleLogVO> displaySaleLogs() {
+		String queryDay = DateUtil.date2Str(DateUtil.getCurrentDate(), "yyyyMMdd");
+		SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
+		queryDTO.setDay(queryDay);
+		return sellLogService.querySumSaleLog(queryDTO);
+	}
+
+	@Override
+	public List<SaleLogDetailVO> displaySaleLogDetails(String ino) {
+		SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
+		queryDTO.setIno(ino);
+		String queryDay = DateUtil.date2Str(DateUtil.getCurrentDate(), "yyyyMMdd");
+		queryDTO.setDay(queryDay);
+		return sellLogService.querySaleLogDetail(queryDTO);
+	}
+
+	@Override
+	public List<SaleLogVO> querySaleLog(SaleLogQueryDTO queryDTO) {
+		return sellLogService.querySumSaleLog(queryDTO);
+	}
+	
+	@Override
+	public List<SaleLogDetailVO> querySaleLogDetail(SaleLogQueryDTO queryDTO){
+		return sellLogService.querySaleLogDetail(queryDTO);
+	}
+
+	@Override
+	public List<SellOffWarningVO> displayAllSellOffWarning() {
+		List<SellOffWarning> warnings = sowarningService.getAll();
+		List<SellOffWarningVO> warningvos = new ArrayList<SellOffWarningVO>();
+		if(!CollectionUtils.isEmpty(warnings)){
+			for(SellOffWarning warning:warnings){
+				warningvos.add(beanMapper.map(warning, SellOffWarningVO.class));
+			}
+		}
+		return warningvos;
 	}
 
 }

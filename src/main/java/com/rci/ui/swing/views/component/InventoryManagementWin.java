@@ -7,30 +7,51 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.text.ParseException;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import com.rci.bean.dto.PurchaseRecordQueryDTO;
+import com.rci.bean.dto.SaleLogQueryDTO;
+import com.rci.tools.DateUtil;
+import com.rci.tools.StringUtils;
 import com.rci.ui.swing.handler.InventoryActionPolicy;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.InventoryTable;
 import com.rci.ui.swing.model.InventoryTable.InventoryTabelModel;
+import com.rci.ui.swing.model.PurchaseRecordTable;
+import com.rci.ui.swing.model.SaleLogDetailTable;
+import com.rci.ui.swing.model.SaleLogDetailTable.SaleLogDetailTableModel;
+import com.rci.ui.swing.model.SaleLogTable;
+import com.rci.ui.swing.model.SaleLogTable.SaleLogTableModel;
+import com.rci.ui.swing.model.SelloffWarningTable;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.views.component.tab.Tab;
 import com.rci.ui.swing.views.component.tab.TabbedPane;
 import com.rci.ui.swing.views.component.tab.TabbedPaneListener;
 import com.rci.ui.swing.vos.InventoryVO;
+import com.rci.ui.swing.vos.SaleLogVO;
 
 /**
  * remark (备注):
@@ -72,6 +93,8 @@ public class InventoryManagementWin extends PopWindow {
 		JPanel containerPanel = this.getContainerPanel();
 		JPanel dishlistPanel = new ProductionPanel();
 		JPanel purchasePanel = new PurchasePanel();
+		JPanel salePanel = new SalePanel(this.getWidth(),this.getHeight());
+		JPanel selloffPanel = new SelloffPanel();
 		URL iconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/warning.png");
 		ImageIcon icon = new ImageIcon(iconUrl);
 		TabbedPane tabbedPane = new TabbedPane();
@@ -83,6 +106,18 @@ public class InventoryManagementWin extends PopWindow {
 					ProductionPanel pp =  (ProductionPanel) component;
 					pp.refresh();
 				}
+				if(index == 1){
+					PurchasePanel purchasePanel =  (PurchasePanel) component;
+					purchasePanel.refresh();
+				}
+				if(index == 2){
+					SalePanel salePane = (SalePanel) component;
+					salePane.refresh();
+				}
+				if(index == 3){
+					SelloffPanel warningPanel = (SelloffPanel) component;
+					warningPanel.refresh();
+				}
 			}
 			
 			@Override
@@ -91,7 +126,8 @@ public class InventoryManagementWin extends PopWindow {
 		});
 		tabbedPane.addTab("菜品在售列表", null, dishlistPanel);
 		tabbedPane.addTab("进货记录", null, purchasePanel);
-		tabbedPane.addTab("沽清警告", icon, new JLabel("测试三"));
+		tabbedPane.addTab("销售记录", null, salePanel);
+		tabbedPane.addTab("沽清警告", icon, selloffPanel);
 		containerPanel.add(tabbedPane);
 	}
 	
@@ -146,7 +182,7 @@ public class InventoryManagementWin extends PopWindow {
 		private void initComponent() {
 			setLayout(new BorderLayout());
 			
-			table = new InventoryTable(6);
+			table = new InventoryTable(7);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			
 			scrollPane = new JScrollPane();
@@ -160,8 +196,6 @@ public class InventoryManagementWin extends PopWindow {
 		
 		private JPanel createActionBar(){
 			actionBar = new JPanel();
-			actionBar.setBorder(BorderFactory.createEmptyBorder());
-			actionBar.setLayout(null);
 			actionBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 			actionBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 			actionBar.setBackground(Color.WHITE);
@@ -169,36 +203,28 @@ public class InventoryManagementWin extends PopWindow {
 			
 			addBtn = ButtonFactory.createImageButton("添加","skin/gray/images/24x24/addBtn_0.png", "skin/gray/images/24x24/addBtn_1.png");
 			addBtn.setToolTipText("添加");
-			addBtn.setBounds(4, 4, 24, 24);
 			addBtn.addActionListener(policy.doAddAction());
 			
 			delBtn = ButtonFactory.createImageButton("停用","skin/gray/images/24x24/delBtn_0.png", "skin/gray/images/24x24/delBtn_1.png");
 			delBtn.setToolTipText("停用");
-			delBtn.setBounds(40, 4, 24, 24);
 			delBtn.addActionListener(policy.doDisableAction());
 			
 			refreshBtn = ButtonFactory.createImageButton("刷新","skin/gray/images/24x24/refreshBtn_0.png", "skin/gray/images/24x24/refreshBtn_1.png");
 			refreshBtn.setToolTipText("刷新");
-			refreshBtn.setBounds(80, 4, 24, 24);
 			refreshBtn.addActionListener(policy.doReflushAction());
 			
 			relatedDishBtn = ButtonFactory.createImageButton("关联菜品","skin/gray/images/btn_orange.png",null);
 			relatedDishBtn.setToolTipText("关联菜品");
 			relatedDishBtn.setHorizontalTextPosition(SwingConstants.CENTER);
-			relatedDishBtn.setBounds(120,4,111,24);
 			relatedDishBtn.addActionListener(policy.doRelateDishAction());
 			
 			purchaseBtn = ButtonFactory.createImageButton("进货","skin/gray/images/24x24/restock.png",null);
-			purchaseBtn.setBounds(240,4,24,24);
 			purchaseBtn.addActionListener(policy.doPurchaseAction());
 			
 			JLabel keywordLabel = new JLabel("关键字查询：");
-			keywordLabel.setBounds(320, 4, 20, 24);
 			keywordInput = new JTextField(25);
-			keywordInput.setBounds(340,4,30,24);
 			searchBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/search_1.png",null);
 			searchBtn.setToolTipText("搜索");
-			searchBtn.setBounds(380,4,24,24);
 			policy.setKeywordInput(keywordInput);
 			searchBtn.addActionListener(policy.doQueryAction());
 			
@@ -266,16 +292,46 @@ public class InventoryManagementWin extends PopWindow {
 	 * Create Time: 2015年11月21日 下午4:37:04
 	 *
 	 */
-	public class PurchasePanel extends JPanel{
+	public class PurchasePanel extends JPanel implements ActionListener{
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-
+		private JTable table;
+		private JScrollPane scrollPane;
+		private JPanel actionBar;
+		private JTextField keywordInput;
+		private JTextField timeInput;
+		private JButton searchBtn;
+		
 		public PurchasePanel(){
 			initComponent();
 		}
 
+		private JPanel createActionBar(){
+			actionBar = new JPanel();
+			actionBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+			actionBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+			actionBar.setBackground(Color.WHITE);
+			
+			JLabel dateLabel = new JLabel("日期");
+			timeInput = new JTextField(25);
+			JLabel keywordLabel = new JLabel("关键字查询：");
+			keywordInput = new JTextField(25);
+			searchBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/search_1.png",null);
+			searchBtn.setToolTipText("搜索");
+			searchBtn.addActionListener(this);
+			searchBtn.registerKeyboardAction(this,
+					KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+					JComponent.WHEN_IN_FOCUSED_WINDOW);
+			actionBar.add(dateLabel);
+			actionBar.add(timeInput);
+			actionBar.add(keywordLabel);
+			actionBar.add(keywordInput);
+			actionBar.add(searchBtn);
+			return actionBar;
+		}
+		
 		/**
 		 *
 		 * Describle(描述)：
@@ -288,7 +344,237 @@ public class InventoryManagementWin extends PopWindow {
 		 *   
 		 */
 		private void initComponent() {
-			this.add(new JLabel("进货记录"));			
+			setLayout(new BorderLayout());
+			table = new PurchaseRecordTable(5);
+			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);	
+			scrollPane = new JScrollPane();
+			scrollPane.setBorder(BorderFactory.createEmptyBorder());
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setViewportView(table);
+			add(createActionBar(),BorderLayout.NORTH);
+			add(scrollPane,BorderLayout.CENTER);
+		}
+		
+		public void refresh(){
+			((PurchaseRecordTable)table).refresh();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent paramActionEvent) {
+			String keyword = keywordInput.getText();
+			String time = timeInput.getText();
+			PurchaseRecordQueryDTO queryDTO = new PurchaseRecordQueryDTO();
+			if(StringUtils.hasText(time)){
+				try {
+					Date queryDate = DateUtil.parseDate(time, "yyyyMMdd");
+					queryDTO.setPurDate(queryDate);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+			if(StringUtils.hasText(keyword)){
+				queryDTO.setKeyword(keyword);
+			}
+			((PurchaseRecordTable)table).query(queryDTO);
+		}
+	}
+	
+	public class SalePanel extends JPanel implements ActionListener{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -1498379543085914073L;
+		private JPanel actionBar;
+		private JTextField keywordInput;
+		private JTextField timeInput;
+		private JButton searchBtn;
+		private int width;
+		private int height;
+		
+		private ContentPanel contentPane;
+		
+		public SalePanel(int width,int height){
+			this.width = width;
+			this.height = height;
+			initComponent();
+		}
+		
+		private JPanel createActionBar(){
+			actionBar = new JPanel();
+			actionBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+			actionBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+			actionBar.setBackground(Color.WHITE);
+			
+			JLabel dateLabel = new JLabel("日期");
+			timeInput = new JTextField(25);
+			JLabel keywordLabel = new JLabel("关键字查询：");
+			keywordInput = new JTextField(25);
+			searchBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/search_1.png",null);
+			searchBtn.setToolTipText("搜索");
+			searchBtn.addActionListener(this);
+			searchBtn.registerKeyboardAction(this,
+					KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+					JComponent.WHEN_IN_FOCUSED_WINDOW);
+			actionBar.add(dateLabel);
+			actionBar.add(timeInput);
+			actionBar.add(keywordLabel);
+			actionBar.add(keywordInput);
+			actionBar.add(searchBtn);
+			return actionBar;
+		}
+		
+		public class ContentPanel extends JSplitPane implements ListSelectionListener{
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 5447255020807010826L;
+			private SaleLogTable mainTable;
+			private SaleLogDetailTable subTable;
+			public ContentPanel(int orientation,int width, int height){
+				super(orientation,true);
+				this.setSize(width, height);
+				buildPane();
+			}
+			private void buildPane() {
+				this.setDividerSize(3);
+				this.setDividerLocation(0.4);
+				this.setResizeWeight(0.4);
+				JScrollPane mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
+				mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
+				mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				mainTable = new SaleLogTable(3);
+				mainScrollPane.setViewportView(mainTable);
+				mainTable.getSelectionModel().addListSelectionListener(this);
+				JScrollPane rTopScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
+				rTopScrollPane.setBorder(BorderFactory.createEmptyBorder());
+				rTopScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				subTable = new SaleLogDetailTable(new SaleLogDetailTableModel(4));
+				//默认选中第一行，确保subTable已被初始化
+				mainTable.setRowSelectionAllowed(true);
+				mainTable.setRowSelectionInterval(0,0);
+				rTopScrollPane.setViewportView(subTable);
+				
+				this.add(mainScrollPane);
+				this.add(rTopScrollPane);
+			}
+			@Override
+			public void valueChanged(ListSelectionEvent event) {
+				if(event.getSource() == mainTable.getSelectionModel()
+						&& mainTable.getRowSelectionAllowed()){
+					int row = mainTable.getSelectedRow();
+					if(row != -1){
+						SaleLogTableModel dm = (SaleLogTableModel) mainTable.getModel();
+						SaleLogVO salelogvo = dm.getItem(row);
+						SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
+						queryDTO.setIno(salelogvo.getIno());
+						queryDTO.setDay(DateUtil.date2Str(salelogvo.getSaleDate(), "yyyyMMdd"));
+						subTable.reflushTableData(queryDTO);
+					}
+				}
+			}
+			public SaleLogTable getMainTable() {
+				return mainTable;
+			}
+			public SaleLogDetailTable getSubTable() {
+				return subTable;
+			}
+			public void setMainTable(SaleLogTable mainTable) {
+				this.mainTable = mainTable;
+			}
+			public void setSubTable(SaleLogDetailTable subTable) {
+				this.subTable = subTable;
+			}
+		}
+		
+		/**
+		 *
+		 * Describle(描述)：
+		 *
+		 * 方法名称：initComponent
+		 *
+		 * 所在类名：PurchasePanel
+		 *
+		 * Create Time:2015年11月22日 下午3:13:44
+		 *   
+		 */
+		private void initComponent() {
+			setLayout(new BorderLayout());
+			add(createActionBar(),BorderLayout.NORTH);
+			contentPane = new ContentPanel(JSplitPane.HORIZONTAL_SPLIT,this.getWidth(),this.getHeight());
+			add(contentPane,BorderLayout.CENTER);
+		}
+		
+		public void refresh(){
+			SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
+			queryDTO.setDay(DateUtil.date2Str(DateUtil.getCurrentDate(),"yyyyMMdd"));
+			contentPane.getMainTable().reflushTableData(queryDTO);
+			contentPane.getMainTable().setRowSelectionInterval(0,0);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent paramActionEvent) {
+			SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
+			String keyword = keywordInput.getText();
+			String day = timeInput.getText();
+			queryDTO.setDay(day);
+			queryDTO.setKeyword(keyword);
+			contentPane.getMainTable().reflushTableData(queryDTO);
+			contentPane.getMainTable().setRowSelectionInterval(0,0);
+			SaleLogTableModel dm = (SaleLogTableModel) contentPane.getMainTable().getModel();
+			SaleLogVO salelogvo = dm.getItem(0);
+			if(salelogvo != null){
+				queryDTO.setIno(salelogvo.getIno());
+				queryDTO.setDay(DateUtil.date2Str(salelogvo.getSaleDate(), "yyyyMMdd"));
+				contentPane.getSubTable().reflushTableData(queryDTO);
+			}
+		}
+
+		public int getWidth() {
+			return width;
+		}
+
+		public int getHeight() {
+			return height;
+		}
+
+		public void setWidth(int width) {
+			this.width = width;
+		}
+
+		public void setHeight(int height) {
+			this.height = height;
+		}
+		
+	}
+
+	public class SelloffPanel extends JPanel{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 294560575471679923L;
+		private SelloffWarningTable table;
+		private JScrollPane scrollPane;
+		
+		public SelloffPanel(){
+			initComponent();
+		}
+		private void initComponent() {
+			setLayout(new FlowLayout(FlowLayout.LEFT));
+			table = new SelloffWarningTable(3);
+			scrollPane = new JScrollPane();
+			scrollPane.setBorder(BorderFactory.createEmptyBorder());
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setViewportView(table);
+//			add(scrollPane,BorderLayout.WEST);
+			add(scrollPane);
+		}
+		
+		public void refresh(){
+			table.reflushTableData();
 		}
 	}
 }

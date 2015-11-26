@@ -13,4 +13,6 @@ public interface IInventoryDishRefService extends
 	String queryRelatedDishNames(String ino);
 	
 	void deleteRelatedInfo(String ino);
+	
+	List<InventoryDishRef> queryByDishNo(String dishno);
 }

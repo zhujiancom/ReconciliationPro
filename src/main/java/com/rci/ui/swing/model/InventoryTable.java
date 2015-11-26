@@ -33,16 +33,18 @@ public class InventoryTable extends BaseTable {
 		TableColumnModel cm = this.getColumnModel();
 		cm.getColumn(0).setHeaderValue("品种名称");
 		cm.getColumn(0).setPreferredWidth(100);
-		cm.getColumn(1).setHeaderValue("库存总量");
+		cm.getColumn(1).setHeaderValue("库存编号");
 		cm.getColumn(1).setPreferredWidth(80);
-		cm.getColumn(2).setHeaderValue("库存余量");
+		cm.getColumn(2).setHeaderValue("库存总量");
 		cm.getColumn(2).setPreferredWidth(80);
-		cm.getColumn(3).setHeaderValue("已消费数量");
+		cm.getColumn(3).setHeaderValue("库存余量");
 		cm.getColumn(3).setPreferredWidth(80);
-		cm.getColumn(4).setHeaderValue("基数");
+		cm.getColumn(4).setHeaderValue("已消费数量");
 		cm.getColumn(4).setPreferredWidth(80);
-		cm.getColumn(5).setHeaderValue("已关联菜品");
-		cm.getColumn(5).setPreferredWidth(350);
+		cm.getColumn(5).setHeaderValue("基数");
+		cm.getColumn(5).setPreferredWidth(80);
+		cm.getColumn(6).setHeaderValue("已关联菜品");
+		cm.getColumn(6).setPreferredWidth(350);
 	}
 	
 	public void reflush(){
@@ -86,14 +88,16 @@ public class InventoryTable extends BaseTable {
 			case 0:
 				return vo.getIname();
 			case 1:
-				return vo.getTotalAmount();
+				return vo.getIno();
 			case 2:
-				return vo.getBalanceAmount();
+				return vo.getTotalAmount();
 			case 3:
-				return vo.getConsumeAmount();
+				return vo.getBalanceAmount();
 			case 4:
-				return vo.getCardinal();
+				return vo.getConsumeAmount();
 			case 5:
+				return vo.getCardinal();
+			case 6:
 				return vo.getRelatedDishNames();
 			}
 			return null;

@@ -1,6 +1,7 @@
 package com.rci.bean.entity.inventory;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +29,9 @@ public class InventoryDishRef extends BaseEntity {
 	private String dishno;
 	
 	private String dishname;
+	
+	/* 菜品规格 年糕火锅里年糕8个 */
+	private BigDecimal standard;
 	
 	public InventoryDishRef(){}
 	
@@ -73,6 +77,15 @@ public class InventoryDishRef extends BaseEntity {
 
 	public void setDishname(String dishname) {
 		this.dishname = dishname;
+	}
+
+	@Column(name="standard")
+	public BigDecimal getStandard() {
+		return standard;
+	}
+
+	public void setStandard(BigDecimal standard) {
+		this.standard = standard;
 	}
 
 	@Override

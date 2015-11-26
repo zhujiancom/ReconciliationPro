@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -74,8 +73,6 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 		});
 		
 		mainPane = new JPanel();
-//		BoxLayout layout = new BoxLayout(mainPane, BoxLayout.X_AXIS);
-//		mainPane.setLayout(layout);
 		mainPane.setLayout(null);
 		mainPane.setPreferredSize(new Dimension(702,100));
 		mainPane.setBackground(Color.WHITE);
@@ -90,7 +87,8 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 			mainPane.add(btn);
 			final String seriesno = dsv.getSeriesno();
 			if(dishPane == null){
-				dishPane = new DisplayDishPanel(seriesno,selectListener);
+				dishPane = new DisplayDishPanel(selectListener);
+				dishPane.reflush(seriesno);
 				containerPane.add(dishPane,BorderLayout.CENTER);
 			}
 			btn.addActionListener(this);
@@ -162,23 +160,6 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		JButton btn = (JButton) event.getSource();
-		containerPane.remove(dishPane);
-		dishPane = new DisplayDishPanel(btn.getName(),selectListener);
-		containerPane.add(dishPane,BorderLayout.CENTER);
-		containerPane.updateUI();
-		containerPane.repaint();
-//		if(dishPane == null){
-//			dishPane = new DisplayDishPanel(btn.getName(),selectListener);
-//			containerPane.add(dishPane,BorderLayout.CENTER);
-//		}
-//		dishPane.setSeriesno(btn.getName());
-//		dishPane.repaint();
-//		Component[] components = containerPane.getComponents();
-//		for(int i=0;i<components.length;i++){
-//			System.out.println(components[i]);
-//		}
-//		dishPane = (DisplayDishPanel) containerPane.getComponent(1);
-//		dishPane.setSeriesno(btn.getName());
-//		dishPane.refresh();
+		dishPane.reflush(btn.getName());
 	}
 }

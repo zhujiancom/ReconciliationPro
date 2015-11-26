@@ -113,6 +113,18 @@ public class InventoryActionPolicy extends DishSelectListener{
 		};
 	}
 	
+	/**
+	 * 
+	 * Describle(描述)： 关联菜品
+	 *
+	 * 方法名称：doRelateDishAction
+	 *
+	 * 所在类名：InventoryActionPolicy
+	 *
+	 * Create Time:2015年11月25日 上午10:57:57
+	 *  
+	 * @return
+	 */
 	public ActionListener doRelateDishAction(){
 		final DishSelectListener listener = this;
 		return new ActionListener() {
@@ -124,6 +136,9 @@ public class InventoryActionPolicy extends DishSelectListener{
 					JOptionPane.showMessageDialog(null, "请选择一条要关联菜品的数据！");
 					return;
 				}
+				InventoryTabelModel itm = (InventoryTabelModel) table.getModel();
+				InventoryVO inventory = itm.getInventory(selectIndex);
+				listener.setOldDishes(inventory.getRelatedDishes());
 				win = new DishSelectWin(listener,900,600,"菜品选择");
 			}
 		};
@@ -185,6 +200,7 @@ public class InventoryActionPolicy extends DishSelectListener{
 		metaService.updateInventory(inventoryvo);
 		((InventoryTable)table).reflush();
 		win.close();
+		selectDishes.clear();
 	}
 
 	public JTextField getKeywordInput() {
