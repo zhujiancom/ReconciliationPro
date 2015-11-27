@@ -1,5 +1,6 @@
 package com.rci.ui.swing.model;
 
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import javax.swing.table.TableColumnModel;
 
 import com.rci.ui.swing.vos.InventoryVO;
 
-public class InventoryTable extends BaseTable {
+public class InventoryTable extends BaseTable<InventoryVO> {
 	
 	/**
 	 * 
@@ -90,11 +91,11 @@ public class InventoryTable extends BaseTable {
 			case 1:
 				return vo.getIno();
 			case 2:
-				return vo.getTotalAmount();
+				return vo.getTotalAmount().divide(vo.getCardinal(), 1, RoundingMode.HALF_EVEN);
 			case 3:
-				return vo.getBalanceAmount();
+				return vo.getBalanceAmount().divide(vo.getCardinal(), 1, RoundingMode.HALF_EVEN);
 			case 4:
-				return vo.getConsumeAmount();
+				return "<html><font color='red'>"+vo.getConsumeAmount().divide(vo.getCardinal(), 1, RoundingMode.HALF_EVEN)+"</font></html>";
 			case 5:
 				return vo.getCardinal();
 			case 6:

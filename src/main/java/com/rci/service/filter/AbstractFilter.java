@@ -28,7 +28,6 @@ import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.ActivityType;
 import com.rci.enums.BusinessEnums.Vendor;
-import com.rci.enums.CommonEnums.YOrN;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.metadata.service.IDataTransformService;
@@ -37,6 +36,7 @@ import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.ISchemeService;
+import com.rci.service.ISchemeTypeDishRefService;
 import com.rci.service.ISchemeTypeService;
 import com.rci.service.ITicketInfoService;
 import com.rci.service.ITicketStatisticService;
@@ -72,6 +72,9 @@ public abstract class AbstractFilter implements CalculateFilter {
 	
 	@Resource(name="SchemeTypeService")
 	protected ISchemeTypeService schemeTypeService;
+	
+	@Resource(name="SchemeTypeDishRefService")
+	protected ISchemeTypeDishRefService sdrefService;
 	
 	
 	@Override

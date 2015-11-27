@@ -14,7 +14,6 @@ import javax.swing.SwingConstants;
 
 import org.springframework.util.CollectionUtils;
 
-import com.rci.tools.StringUtils;
 import com.rci.ui.swing.listeners.DishSelectListener;
 import com.rci.ui.swing.listeners.SelectedDishPanelListener;
 import com.rci.ui.swing.model.ButtonFactory;
@@ -31,7 +30,7 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 	
 	private List<DishVO> selectedDishes = new ArrayList<DishVO>();
 	
-	private String selectedDishNames;
+	private List<DishVO> oldDishes;
 	
 	private JLabel displayLabel = new JLabel();
 	
@@ -41,8 +40,8 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 		initComponent();
 	}
 	
-	public SelectedDishPanel(String selectedDishNames){
-		this.selectedDishNames = selectedDishNames;
+	public SelectedDishPanel(List<DishVO> oldDishes){
+		this.oldDishes = oldDishes;
 		initComponent();
 	}
 
@@ -52,8 +51,15 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 		addBtn = ButtonFactory.createImageButton("菜品选择", "skin/gray/images/btn_orange.png", null);
 		addBtn.setToolTipText("菜品选择");
 		addBtn.setHorizontalTextPosition(SwingConstants.CENTER);
-		if(StringUtils.hasText(selectedDishNames)){
-			displayLabel.setText(selectedDishNames);
+//		if(StringUtils.hasText(selectedDishNames)){
+//			displayLabel.setText(selectedDishNames);
+//		}
+		if(!CollectionUtils.isEmpty(oldDishes)){
+			StringBuffer sb = new StringBuffer();
+			for(DishVO dish:oldDishes){
+				sb.append(",").append(dish.getDishName());
+			}
+			displayLabel.setText(sb.substring(1));
 		}
 		this.add(addBtn);
 		this.add(Box.createVerticalStrut(10));
@@ -102,6 +108,9 @@ public class SelectedDishPanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		DishSelectListener selectListener = new SelectedDishPanelListener(this);
+		if(oldDishes != null){
+			selectListener.setOldDishes(oldDishes);
+		}
 		win = new DishSelectWin(selectListener,900,600,"菜品选择");
 	}
 

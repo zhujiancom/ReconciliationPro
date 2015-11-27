@@ -1,6 +1,7 @@
 package com.rci.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.StockOpLog;
 import com.rci.bean.entity.TableInfo;
+import com.rci.bean.entity.inventory.Inventory;
+import com.rci.bean.entity.inventory.InventoryDishRef;
+import com.rci.bean.entity.inventory.InventorySellLog;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.enums.BusinessEnums.PaymodeCode;
@@ -28,6 +31,9 @@ import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.core.IMetadataService;
 import com.rci.service.core.StatisticCenterFacade;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
+import com.rci.service.inventory.IInventoryDishRefService;
+import com.rci.service.inventory.IInventorySellLogService;
+import com.rci.service.inventory.IInventoryService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.vos.DishVO;
@@ -70,8 +76,14 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	private IStockService stockService;
 	@Resource(name="DishSeriesService")
 	private IDishSeriesService dishseriesService;
-	@Resource(name="SchemeTypeService")
+	@Resource(name="SchemeTypeDishRefService")
 	private ISchemeTypeDishRefService sdrefService;
+	@Resource(name="InventoryService")
+	private IInventoryService inventoryService;
+	@Resource(name="InventorySellLogService")
+	private IInventorySellLogService sellLogService;
+	@Resource(name="InventoryDishRefService")
+	private IInventoryDishRefService idrservice;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -100,10 +112,16 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void testBigDecimalDivide(){
-		BigDecimal a = new BigDecimal("161");
-		BigDecimal b = new BigDecimal("100");
-		System.out.println(a.divideToIntegralValue(b));
+//		BigDecimal a = new BigDecimal("161");
+//		BigDecimal b = new BigDecimal("100");
+//		System.out.println(a.divideToIntegralValue(b));
+		//测试银行家算法
+		BigDecimal b = new BigDecimal("10.525");
+		System.out.println(b);
+		b = b.setScale(1, RoundingMode.HALF_EVEN);
+		System.out.println(b);
 	}
+	
 	
 	@Test
 	public void testPropertiesUtils(){
@@ -264,7 +282,21 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	}
 	
 	@Test
-	public void testDeleteSchemeTypeWithDishRef(){
+	public void testInventoryConsume(){
+		Inventory inventory = inventoryService.consume("002", new BigDecimal(9));
+		InventorySellLog sellLog = new InventorySellLog();
+		sellLog.setDay("20151127");
+		sellLog.setCheckoutTime(DateUtil.getCurrentDate());
+		sellLog.setDishno("362");
+		sellLog.setConsumeAmount(new BigDecimal(9));
+		sellLog.setIname(inventory.getIname());
+		sellLog.setPayno("552255545552");
+		sellLogService.rwCreate(sellLog);
+	}
+	
+	@Test
+	public void testInventoryDishRef(){
+		List<InventoryDishRef> result =idrservice.queryByDishNo("544");
 	}
 	
 }

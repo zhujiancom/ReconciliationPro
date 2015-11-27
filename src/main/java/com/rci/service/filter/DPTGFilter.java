@@ -23,6 +23,7 @@ import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
+import com.rci.exceptions.ExceptionManage;
 import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
 import com.rci.tools.StringUtils;
@@ -71,8 +72,11 @@ public class DPTGFilter extends AbstractFilter {
 				if (!suitFlag) {
 					suitFlag = true;
 				}
-				Dish dish = dishService.findDishByNo(dishNo);
-				SchemeType type = null;//dish.getSchemeType();
+				SchemeType type = sdrefService.querySchemeTypeByDishno(dishNo);
+				if(type == null){
+					logger.warn("没有找到套餐对应的活动类型");
+					continue;
+				}
 				Integer suitCount = suitMap.get(type);
 				Integer itemCount = count.subtract(countBack).intValue();
 				if (suitCount != null) {

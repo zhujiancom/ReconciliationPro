@@ -11,7 +11,7 @@ import com.rci.bean.dto.SaleLogQueryDTO;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.vos.SaleLogVO;
 
-public class SaleLogTable extends BaseTable {
+public class SaleLogTable extends BaseTable<SaleLogVO> {
 
 	/**
 	 * 
@@ -26,8 +26,8 @@ public class SaleLogTable extends BaseTable {
 	@Override
 	protected void setModel() {
 		SaleLogTableModel dm = new SaleLogTableModel(columnNum);
-		List<SaleLogVO> salelogvos = metaservice.displaySaleLogs();
-		dm.setItems(salelogvos);
+		dataList = metaservice.displaySaleLogs();
+		dm.setItems(dataList);
 		super.setModel(dm);
 	}
 
@@ -56,11 +56,19 @@ public class SaleLogTable extends BaseTable {
 	 */
 	public void reflushTableData(SaleLogQueryDTO queryDTO){
 		SaleLogTableModel dm = (SaleLogTableModel) this.getModel();
-		List<SaleLogVO> salelogvos = metaservice.querySaleLog(queryDTO);
-		dm.setItems(salelogvos);
+		dataList = metaservice.querySaleLog(queryDTO);
+		dm.setItems(dataList);
 		dm.fireTableDataChanged();
 	}
-	
+
+	public List<SaleLogVO> getDataList() {
+		return dataList;
+	}
+
+	public void setDataList(List<SaleLogVO> dataList) {
+		this.dataList = dataList;
+	}
+
 	public static class SaleLogTableModel extends AbstractTableModel{
 		/**
 		 * 

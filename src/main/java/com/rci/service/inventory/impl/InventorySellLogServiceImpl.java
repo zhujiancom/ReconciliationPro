@@ -22,6 +22,7 @@ import com.rci.dao.impl.SafeRestrictions;
 import com.rci.service.IDishService;
 import com.rci.service.base.BaseServiceImpl;
 import com.rci.service.inventory.IInventorySellLogService;
+import com.rci.service.inventory.IInventoryService;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.vos.SaleLogDetailVO;
 import com.rci.ui.swing.vos.SaleLogVO;
@@ -32,6 +33,9 @@ public class InventorySellLogServiceImpl extends
 		IInventorySellLogService {
 	@Resource(name="DishService")
 	private IDishService dishService;
+	
+	@Resource(name="InventoryService")
+	private IInventoryService inventoryService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -96,4 +100,22 @@ public class InventorySellLogServiceImpl extends
 		}
 		return details;
 	}
+
+	@Override
+	public void rollbackLog(SaleLogQueryDTO queryDTO) {
+		List<SaleLogVO> logs = querySumSaleLog(queryDTO);
+		if(!CollectionUtils.isEmpty(logs)){
+			for(SaleLogVO log:logs){
+				inventoryService.rollback(log.getIno(), log.getSaleAmount());
+			}
+			deleteLogByDay(queryDTO.getDay());
+		}
+	}
+
+	@Override
+	public void deleteLogByDay(String day) {
+		String hql = "delete from InventorySellLog log where log.day='"+day+"'";
+		baseDAO.executeHQL(hql);
+	}
+
 }

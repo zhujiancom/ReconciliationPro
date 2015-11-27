@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -31,6 +32,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.dto.PurchaseRecordQueryDTO;
 import com.rci.bean.dto.SaleLogQueryDTO;
@@ -453,7 +456,9 @@ public class InventoryManagementWin extends PopWindow {
 				subTable = new SaleLogDetailTable(new SaleLogDetailTableModel(4));
 				//默认选中第一行，确保subTable已被初始化
 				mainTable.setRowSelectionAllowed(true);
-				mainTable.setRowSelectionInterval(0,0);
+				if(!CollectionUtils.isEmpty(mainTable.getDataList())){
+					mainTable.setRowSelectionInterval(0,0);
+				}
 				rTopScrollPane.setViewportView(subTable);
 				
 				this.add(mainScrollPane);
@@ -464,14 +469,16 @@ public class InventoryManagementWin extends PopWindow {
 				if(event.getSource() == mainTable.getSelectionModel()
 						&& mainTable.getRowSelectionAllowed()){
 					int row = mainTable.getSelectedRow();
+					SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
+					String queryDay = DateUtil.date2Str(DateUtil.getCurrentDate(),"yyyyMMdd");
 					if(row != -1){
 						SaleLogTableModel dm = (SaleLogTableModel) mainTable.getModel();
 						SaleLogVO salelogvo = dm.getItem(row);
-						SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
+						queryDay = DateUtil.date2Str(salelogvo.getSaleDate(), "yyyyMMdd");
 						queryDTO.setIno(salelogvo.getIno());
-						queryDTO.setDay(DateUtil.date2Str(salelogvo.getSaleDate(), "yyyyMMdd"));
-						subTable.reflushTableData(queryDTO);
 					}
+					queryDTO.setDay(queryDay);
+					subTable.reflushTableData(queryDTO);
 				}
 			}
 			public SaleLogTable getMainTable() {
@@ -510,7 +517,9 @@ public class InventoryManagementWin extends PopWindow {
 			SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
 			queryDTO.setDay(DateUtil.date2Str(DateUtil.getCurrentDate(),"yyyyMMdd"));
 			contentPane.getMainTable().reflushTableData(queryDTO);
-			contentPane.getMainTable().setRowSelectionInterval(0,0);
+			if(!CollectionUtils.isEmpty(contentPane.getMainTable().getDataList())){
+				contentPane.getMainTable().setRowSelectionInterval(0,0);
+			}
 		}
 		
 		@Override
@@ -521,9 +530,12 @@ public class InventoryManagementWin extends PopWindow {
 			queryDTO.setDay(day);
 			queryDTO.setKeyword(keyword);
 			contentPane.getMainTable().reflushTableData(queryDTO);
+			List<SaleLogVO> dataList = contentPane.getMainTable().getDataList();
+			if(CollectionUtils.isEmpty(dataList)){
+				return;
+			}
 			contentPane.getMainTable().setRowSelectionInterval(0,0);
-			SaleLogTableModel dm = (SaleLogTableModel) contentPane.getMainTable().getModel();
-			SaleLogVO salelogvo = dm.getItem(0);
+			SaleLogVO salelogvo = dataList.get(0);
 			if(salelogvo != null){
 				queryDTO.setIno(salelogvo.getIno());
 				queryDTO.setDay(DateUtil.date2Str(salelogvo.getSaleDate(), "yyyyMMdd"));

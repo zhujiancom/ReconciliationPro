@@ -7,11 +7,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
@@ -21,17 +18,13 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
-import com.rci.bean.entity.Stock;
-import com.rci.bean.entity.StockOpLog;
 import com.rci.bean.entity.account.AccFlow;
 import com.rci.bean.entity.account.Account;
+import com.rci.bean.entity.inventory.Inventory;
 import com.rci.bean.entity.inventory.InventoryDishRef;
+import com.rci.bean.entity.inventory.InventorySellLog;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.enums.BusinessEnums.FlowType;
-import com.rci.enums.BusinessEnums.StockOpType;
-import com.rci.enums.CommonEnums.YOrN;
-import com.rci.exceptions.ExceptionConstant.SERVICE;
-import com.rci.exceptions.ServiceException;
 import com.rci.service.IAccFlowService;
 import com.rci.service.IAccountService;
 import com.rci.service.IDataLoaderService;
@@ -43,6 +36,8 @@ import com.rci.service.filter.FilterChain;
 import com.rci.service.filter.FreeFilter;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.service.inventory.IInventoryDishRefService;
+import com.rci.service.inventory.IInventorySellLogService;
+import com.rci.service.inventory.IInventoryService;
 
 /**
  * remark (备注):
@@ -77,15 +72,21 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 	@Resource(name="DishService")
 	private IDishService dishService;
 	
-	@Resource(name="InventoryDishRef")
+	@Resource(name="InventoryDishRefService")
 	private IInventoryDishRefService idrservice;
+	
+	@Resource(name="InventoryService")
+	private IInventoryService inventoryService;
+	
+	@Resource(name="InventorySellLogService")
+	private IInventorySellLogService sellLogService;
 	
 	protected void updateRelativeInfo(List<Order> orders){
 		if(CollectionUtils.isEmpty(orders)){
 			return ;
 		}
 		// 解析订单各种账户收入的金额，判断订单使用的方案
-		Map<String, BigDecimal> stockMap = new HashMap<String, BigDecimal>();
+//		Map<String, BigDecimal> stockMap = new HashMap<String, BigDecimal>();
 		for (Order order : orders) {
 			parseOrder(order);
 			addInventoryConsumeLog(order);
@@ -239,8 +240,26 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 		for(OrderItem item:items){
 			String dishNo = item.getDishNo();
 			List<InventoryDishRef> idrs = idrservice.queryByDishNo(dishNo);
+			if(CollectionUtils.isEmpty(idrs)){
+				continue;
+			}
+			BigDecimal count = item.getCount().subtract(item.getCountback());
+			if(count.compareTo(BigDecimal.ZERO) == 0){
+				continue;
+			}
 			for(InventoryDishRef idr:idrs){
-				
+				BigDecimal standard = idr.getStandard(); //产品规格
+				BigDecimal consumeAmount = count.multiply(standard);
+				Inventory inventory = inventoryService.consume(idr.getIno(), consumeAmount);
+				InventorySellLog sellLog = new InventorySellLog();
+				sellLog.setDay(order.getDay());
+				sellLog.setCheckoutTime(item.getConsumeTime());
+				sellLog.setDishno(dishNo);
+				sellLog.setConsumeAmount(consumeAmount);
+				sellLog.setIname(inventory.getIname());
+				sellLog.setPayno(order.getPayNo());
+				sellLog.setIno(inventory.getIno());
+				sellLogService.rwCreate(sellLog);
 			}
 		}
 	}

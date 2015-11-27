@@ -61,8 +61,11 @@ public class MTFilter extends AbstractFilter {
 				if (!suitFlag) {
 					suitFlag = true;
 				}
-				Dish dish = dishService.findDishByNo(dishNo);
-				SchemeType type = null;//dish.getSchemeType();
+				SchemeType type = sdrefService.querySchemeTypeByDishno(dishNo);
+				if(type == null){
+					logger.warn("没有找到套餐对应的活动类型");
+					continue;
+				}
 				if(type == null){
 					logger.error("活动类型未找到，对应菜品编号："+dishNo);
 					ExceptionManage.throwServiceException("活动类型未找到，对应菜品编号："+dishNo);

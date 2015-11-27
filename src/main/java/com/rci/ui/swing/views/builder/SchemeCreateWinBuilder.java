@@ -84,7 +84,9 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 			BigDecimal price = new BigDecimal(priceInput.getText().trim());
 			newScheme.setPrice(price);
 			SchemeType stypeSelected = (SchemeType) schemeTypeInput.getSelectedItem();
-			newScheme.setTypeno(stypeSelected.getTypeNo());
+			if(stypeSelected != null){
+				newScheme.setTypeno(stypeSelected.getTypeNo());
+			}
 			newScheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
 			newScheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
 			newScheme.setStartDate(DateUtil.parseDate(startInput.getText().trim(), "yyyyMMdd"));

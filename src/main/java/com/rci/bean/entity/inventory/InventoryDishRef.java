@@ -31,7 +31,7 @@ public class InventoryDishRef extends BaseEntity {
 	private String dishname;
 	
 	/* 菜品规格 年糕火锅里年糕8个 */
-	private BigDecimal standard;
+	private BigDecimal standard = BigDecimal.ONE;
 	
 	public InventoryDishRef(){}
 	

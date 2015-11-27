@@ -46,11 +46,11 @@ public class Inventory extends BaseEntity {
 	
 	private String iname;
 	
-	private BigDecimal totalAmount;
+	private BigDecimal totalAmount = BigDecimal.ZERO;
 	
-	private BigDecimal balanceAmount;
+	private BigDecimal balanceAmount = BigDecimal.ZERO;
 	
-	private BigDecimal consumeAmount;
+	private BigDecimal consumeAmount = BigDecimal.ZERO;
 	
 	/* 是否在库存管理 */
 	private YOrN status;

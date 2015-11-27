@@ -49,7 +49,6 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 	private JScrollPane sPane;
 	private JTextField nameInput;
 	private JTextField typenoInput;
-//	private JComboBox<DishVO> dishInput;
 	private SelectedDishPanel selectedDishPanel;
 	private JComboBox<LabelValueBean<String>> activityTypeInput;
 	private JTextField discountInput;
@@ -141,7 +140,7 @@ public class SchemeTypeModifyWinBuilder implements PopWindowBuilder,
 		mainPane.add(eightPane);
 		JPanel secondPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,0));
 		secondPane.add(dish);
-		selectedDishPanel = new SelectedDishPanel(schemeType.getDishName());
+		selectedDishPanel = new SelectedDishPanel(schemeType.getDishes());
 		secondPane.add(selectedDishPanel);
 		mainPane.add(secondPane);
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));

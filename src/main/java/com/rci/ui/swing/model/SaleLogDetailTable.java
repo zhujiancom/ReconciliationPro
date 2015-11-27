@@ -11,7 +11,7 @@ import com.rci.bean.dto.SaleLogQueryDTO;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.vos.SaleLogDetailVO;
 
-public class SaleLogDetailTable extends BaseTable {
+public class SaleLogDetailTable extends BaseTable<SaleLogDetailVO> {
 
 	/**
 	 * 
@@ -24,10 +24,6 @@ public class SaleLogDetailTable extends BaseTable {
 	}
 	@Override
 	protected void setModel() {
-//		SaleLogDetailTableModel dm = new SaleLogDetailTableModel(columnNum);
-//		List<SaleLogDetailVO> salelogdetailvos = metaservice.displaySaleLogDetails(ino);
-//		dm.setItems(salelogdetailvos);
-//		super.setModel(dm);
 	}
 
 	@Override

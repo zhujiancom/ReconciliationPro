@@ -110,4 +110,6 @@ public interface DataCleanFacade {
 	 * @param time
 	 */
 	public void cleanAllOfOneDay(String time);
+	
+	public void deleteInventoryInfo(String time);
 }

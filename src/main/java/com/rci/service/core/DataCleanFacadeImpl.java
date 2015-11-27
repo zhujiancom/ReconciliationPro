@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.rci.bean.dto.SaleLogQueryDTO;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.service.IAccFlowService;
 import com.rci.service.IELESDStatisticService;
@@ -14,6 +15,7 @@ import com.rci.service.IOrderService;
 import com.rci.service.IStockService;
 import com.rci.service.ITicketInfoService;
 import com.rci.service.ITicketStatisticService;
+import com.rci.service.inventory.IInventorySellLogService;
 import com.rci.tools.DateUtil;
 
 @Service("DataCleanFacade")
@@ -36,6 +38,10 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 	private IAccFlowService accFlowService;
 	@Resource(name="FetchMarkService")
 	private IFetchMarkService markService;
+	
+	@Resource(name="InventorySellLogService")
+	private IInventorySellLogService saleLogService;
+	
 
 	@Override
 	public void deleteOrders(String time) {
@@ -80,12 +86,20 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 //		deleteTicketStatistic(time);
 		deleteTicketInfo(time);
 		deleteELESDInfo(time);
-		deleteStockInfo(time);
+//		deleteStockInfo(time);
+		deleteInventoryInfo(time);
 	}
 
 	@Override
 	public void deleteTicketInfo(String time) {
 		ticketService.deleteTicketStatistic(time);
+	}
+
+	@Override
+	public void deleteInventoryInfo(String time) {
+		SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
+		queryDTO.setDay(time);
+		saleLogService.rollbackLog(queryDTO);
 	}
 
 }

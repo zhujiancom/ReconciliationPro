@@ -13,4 +13,8 @@ public interface IInventorySellLogService extends
 	List<SaleLogVO> querySumSaleLog(SaleLogQueryDTO queryDTO);
 	
 	List<SaleLogDetailVO> querySaleLogDetail(SaleLogQueryDTO queryDTO);
+	
+	void rollbackLog(SaleLogQueryDTO queryDTO);
+	
+	void deleteLogByDay(String day);
 }

@@ -65,8 +65,11 @@ public class BDNMFilter extends AbstractFilter {
 				if (!suitFlag) {
 					suitFlag = true;
 				}
-				Dish dish = dishService.findDishByNo(dishNo);
-				SchemeType type = null;//dish.getSchemeType();
+				SchemeType type = sdrefService.querySchemeTypeByDishno(dishNo);
+				if(type == null){
+					logger.warn("没有找到套餐对应的活动类型");
+					continue;
+				}
 				Integer suitCount = suitMap.get(type);
 				Integer itemCount = count.subtract(countBack).intValue();
 				if (suitCount != null) {

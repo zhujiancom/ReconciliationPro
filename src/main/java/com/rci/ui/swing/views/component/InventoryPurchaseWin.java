@@ -137,5 +137,9 @@ public class InventoryPurchaseWin extends PopWindow implements ActionListener{
 		if(!StringUtils.hasText(purchaseAmountInput.getText())){
 			ExceptionManage.throwServiceException("请填写进货数量!");
 		}
+		BigDecimal purchaseAmount = new BigDecimal(purchaseAmountInput.getText().toString());
+		if(purchaseAmount.compareTo(BigDecimal.ZERO) <= 0){
+			ExceptionManage.throwServiceException("进货数量必须大于0!");
+		}
 	}
 }

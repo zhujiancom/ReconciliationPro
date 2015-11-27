@@ -81,7 +81,7 @@ public class MetadataServiceImpl implements IMetadataService {
 	private ISchemeTypeDishRefService sdrefService;
 	@Resource(name="InventoryService")
 	private IInventoryService inventoryService;
-	@Resource(name="InventoryDishRef")
+	@Resource(name="InventoryDishRefService")
 	private IInventoryDishRefService idrService;
 	@Resource(name="PurchaseRecordService")
 	private IPurchaseRecordService purchaseService;
@@ -377,17 +377,20 @@ public class MetadataServiceImpl implements IMetadataService {
 	public void purchaseInventory(InventoryVO inventoryvo,
 			BigDecimal purchaseAmount) {
 		Inventory inventory = inventoryService.get(inventoryvo.getIid());
+		BigDecimal cardinal = inventory.getCardinal();
+		BigDecimal switchedPurAmount = purchaseAmount.multiply(cardinal);
+		
 		BigDecimal totalAmount = inventory.getTotalAmount() == null?BigDecimal.ZERO:inventory.getTotalAmount();
 		BigDecimal balanceAmount = inventory.getBalanceAmount() == null?BigDecimal.ZERO:inventory.getBalanceAmount();
-		inventory.setTotalAmount(totalAmount.add(purchaseAmount));
-		inventory.setBalanceAmount(balanceAmount.add(purchaseAmount));
+		inventory.setTotalAmount(totalAmount.add(switchedPurAmount));
+		inventory.setBalanceAmount(balanceAmount.add(switchedPurAmount));
 		inventoryService.rwUpdate(inventory);
 		
 		PurchaseRecord record = new PurchaseRecord(inventory.getIno());
 		record.setIname(inventory.getIname());
 		record.setPreBalanceAmount(balanceAmount);
-		record.setAfterBalanceAmount(balanceAmount.add(purchaseAmount));
-		record.setPurAmount(purchaseAmount);
+		record.setAfterBalanceAmount(balanceAmount.add(switchedPurAmount));
+		record.setPurAmount(switchedPurAmount);
 		record.setPurDate(DateUtil.getCurrentDate());
 		purchaseService.rwCreate(record);
 	}

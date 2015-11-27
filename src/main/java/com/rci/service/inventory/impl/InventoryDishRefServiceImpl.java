@@ -16,8 +16,8 @@ import com.rci.service.IDishService;
 import com.rci.service.base.BaseServiceImpl;
 import com.rci.service.inventory.IInventoryDishRefService;
 
-@Service("InventoryDishRef")
-public class InventoryDishRefImpl extends
+@Service("InventoryDishRefService")
+public class InventoryDishRefServiceImpl extends
 		BaseServiceImpl<InventoryDishRef, Long> implements
 		IInventoryDishRefService {
 	@Resource(name="DishService")
