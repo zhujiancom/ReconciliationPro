@@ -36,15 +36,15 @@ public class InventoryVO {
 	}
 
 	public BigDecimal getTotalAmount() {
-		return totalAmount;
+		return totalAmount == null ? BigDecimal.ZERO:totalAmount;
 	}
 
 	public BigDecimal getBalanceAmount() {
-		return balanceAmount;
+		return balanceAmount == null ? BigDecimal.ZERO:balanceAmount;
 	}
 
 	public BigDecimal getConsumeAmount() {
-		return consumeAmount;
+		return consumeAmount == null ? BigDecimal.ZERO:consumeAmount;
 	}
 
 	public void setIid(Long iid) {

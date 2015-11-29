@@ -17,7 +17,6 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Dish;
-import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.Scheme;
@@ -28,6 +27,7 @@ import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.ActivityType;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.metadata.service.IDataTransformService;
@@ -97,10 +97,9 @@ public abstract class AbstractFilter implements CalculateFilter {
 		if(dish ==null){
 			dish = transformService.transformDishInfo(dishNo);
 		}
-		DishType type = dish.getDishType();
-//		if(type != null && YOrN.isY(type.getNotDiscount())){
-//			return true;
-//		}
+		if(!YOrN.isY(dish.getDiscountFlag())){
+			return true;
+		}
 		return false;
 	}
 	

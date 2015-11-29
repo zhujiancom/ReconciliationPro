@@ -129,7 +129,7 @@ public class DisplayDishPanel extends JPanel {
 				DishJCheckBox c = new DishJCheckBox(dish.getDishName()+"-"+dish.getDishPrice(),dish);
 				c.setBackground(Color.WHITE);
 				c.addItemListener(selectListener);
-				if(selectedDishes.contains(dish)){
+				if(selectedDishes != null && selectedDishes.contains(dish)){
 					c.setSelected(true);
 				}
 				this.add(c);
