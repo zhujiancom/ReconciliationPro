@@ -42,7 +42,7 @@ public class MainEntry {
 //			frame.setUndecorated(true);
 			frame.setVisible(true);
 		}catch(Exception ex){
-			logger.error(ex);
+			logger.error("系统启动错误！",ex);
 		}
 	}
 
