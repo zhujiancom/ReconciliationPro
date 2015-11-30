@@ -335,7 +335,9 @@ public class ConculsionPanel extends JPanel {
 		getFreeValue().setText(free);
 		getTotalValue().setText(total);
 		getTgRemark().setText(tgremark);
+		getTgRemark().setToolTipText(tgremark);
 		getMtRemark().setText(mtremark);
+		getMtRemark().setToolTipText(mtremark);
 		getEleRemark().setText(eleremark);
 		getMtwmRemark().setText(mtwmremark);
 		getWmcrValue().setText(wmcr);

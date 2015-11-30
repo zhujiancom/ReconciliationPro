@@ -1,5 +1,6 @@
 package com.rci.ui.swing.model;
 
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -41,7 +42,20 @@ public abstract class BaseTable<T> extends JTable {
 		this.setRowHeight(30);
 	}
 	
-	
+	@Override
+	public String getToolTipText(MouseEvent event) {
+		int row = this.rowAtPoint(event.getPoint());
+		int col = this.columnAtPoint(event.getPoint());
+		if(row > -1 && col > -1){
+			Object value = this.getValueAt(row, col);
+			if(null != value && !"".equals(value)){
+				this.setToolTipText(value.toString());
+			}else{
+				this.setToolTipText(null);
+			}
+		}
+		return super.getToolTipText(event);
+	}
 	
 	/**
 	 * 

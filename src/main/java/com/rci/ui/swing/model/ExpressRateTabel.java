@@ -11,7 +11,7 @@ import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.vos.ExpressRateVO;
 
-public class ExpressRateTabel extends BaseTable {
+public class ExpressRateTabel extends BaseTable<ExpressRateVO> {
 
 	/**
 	 * 

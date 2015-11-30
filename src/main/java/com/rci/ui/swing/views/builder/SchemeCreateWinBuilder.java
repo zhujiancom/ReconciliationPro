@@ -181,6 +181,7 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 		mainPane.add(tenthPane);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void validation() throws ServiceException{
 		if(vendorInput.getSelectedItem() == null){
 			ExceptionManage.throwServiceException("请选择活动平台!");

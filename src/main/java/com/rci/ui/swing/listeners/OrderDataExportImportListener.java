@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -22,9 +25,9 @@ import javax.swing.filechooser.FileFilter;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
-import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
 import com.rci.metadata.service.IDataFetchService;
@@ -152,6 +155,10 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 				
 				@Override
 				public void run() {
+					URL loadingIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/loading.gif");
+					final Icon loadingIcon = new ImageIcon(loadingIconUrl);
+					URL doneIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/done.png");
+					final Icon doneIcon = new ImageIcon(doneIconUrl);
 					String fileName = chooser.getSelectedFile().getName();
 					String day = fileName.substring(0,fileName.indexOf("."));
 					try {
@@ -159,6 +166,7 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 							
 							@Override
 							public void run() {
+								queryPanel.getActionLabel().setIcon(loadingIcon);
 								queryPanel.getActionLabel().setText("正在导入订单数据，请稍后。。。");
 							}
 						});
@@ -185,11 +193,11 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 						//2. 根据订单数据统计今日收入明细
 						loadSumData(date);
 						conclusionPane.refreshUI();
-//						JOptionPane.showMessageDialog(null, "导入成功");
 						SwingUtilities.invokeLater(new Runnable() {
 							
 							@Override
 							public void run() {
+								queryPanel.getActionLabel().setIcon(doneIcon);
 								queryPanel.getActionLabel().setText("导入成功！");
 							}
 						});

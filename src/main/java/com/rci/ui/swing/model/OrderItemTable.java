@@ -13,20 +13,20 @@ import com.rci.tools.DateUtil;
 import com.rci.ui.swing.renderers.AbstractLineColorMarkRenderer;
 import com.rci.ui.swing.vos.OrderItemVO;
 
-public class OrderItemTable extends JTable {
+public class OrderItemTable extends BaseTable<OrderItemVO> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3873201330957234091L;
 
-	public OrderItemTable(){
-		super(new OrderItemTableModel(7));
-		setHeaderLabel();
-		this.setRowHeight(20);
+	public OrderItemTable(int columnNum){
+		super(columnNum);
+		this.setRowHeight(25);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 	
-	public void setHeaderLabel(){
+	@Override
+	protected void setHeaderLabel(){
 		TableColumnModel cm = this.getColumnModel();
 		BackDishRenderer backDishRenderer = new BackDishRenderer();
 		cm.getColumn(0).setHeaderValue("菜品名称");
@@ -135,5 +135,10 @@ public class OrderItemTable extends JTable {
 			}
 			return false;
 		}
+	}
+
+	@Override
+	protected void setModel() {
+		this.setModel(new OrderItemTableModel(columnNum));
 	}
 }

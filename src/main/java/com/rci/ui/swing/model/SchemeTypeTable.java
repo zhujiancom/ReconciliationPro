@@ -12,7 +12,7 @@ import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.tools.EnumUtils;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 
-public class SchemeTypeTable extends BaseTable {
+public class SchemeTypeTable extends BaseTable<SchemeTypeVO> {
 
 	/**
 	 * 
@@ -46,9 +46,9 @@ public class SchemeTypeTable extends BaseTable {
 		cm.getColumn(3).setPreferredWidth(150);
 		cm.getColumn(4).setHeaderValue("适用菜品");
 		cm.getColumn(4).setPreferredWidth(150);
-		cm.getColumn(5).setHeaderValue("不可打折金额");
-		cm.getColumn(5).setPreferredWidth(150);
-		cm.getColumn(6).setHeaderValue("活动形式");
+//		cm.getColumn(5).setHeaderValue("不可打折金额");
+//		cm.getColumn(5).setPreferredWidth(150);
+		cm.getColumn(5).setHeaderValue("活动形式");
 		cm.getColumn(5).setPreferredWidth(150);
 	}
 	
@@ -98,9 +98,9 @@ public class SchemeTypeTable extends BaseTable {
 				return vo.getCeilAmount();
 			case 4:
 				return vo.getDishName();
+//			case 5:
+//				return vo.getDiscountAmount();
 			case 5:
-				return vo.getDiscountAmount();
-			case 6:
 				return EnumUtils.getEnumMessage(vo.getActivity());
 			}
 			return null;

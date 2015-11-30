@@ -146,7 +146,7 @@ public class MainFrame extends JFrame {
 		menubar.add(rightP);
 		frameListener.setMaximizeBtn(maximizeBtn);
 		
-		JMenuItem sysInit = ButtonFactory.createMenuItem("系统初始化");
+		JMenuItem sysInit = ButtonFactory.createMenuItem("系统初始化","skin/gray/images/16x16/initBtn.png");
 		JMenuItem baseReset = ButtonFactory.createMenuItem("基础数据重置", "skin/gray/images/16x16/basereset.png");
 		JMenuItem dataExport = ButtonFactory.createMenuItem("订单数据导出", "skin/gray/images/16x16/export_0.png");
 		JMenuItem dataImport = ButtonFactory.createMenuItem("订单数据导入", "skin/gray/images/16x16/import_0.png");
@@ -165,8 +165,10 @@ public class MainFrame extends JFrame {
 
 		JMenuItem expressRate = ButtonFactory.createMenuItem("外送率统计", "skin/gray/images/16x16/takeout.png");
 		JMenuItem earning = ButtonFactory.createMenuItem("营业额统计", "skin/gray/images/16x16/statistic.png");
+		JMenuItem costControl = ButtonFactory.createMenuItem("成本控制", "skin/gray/images/16x16/cost.png");
 		statistic.add(expressRate);
 		statistic.add(earning);
+		statistic.add(costControl);
 		
 		JMenuItem dishManage = ButtonFactory.createMenuItem("菜品管理", "skin/gray/images/16x16/dish.png");
 		JMenuItem inventoryManage = ButtonFactory.createMenuItem("库存管理", "skin/gray/images/16x16/stockmanage.png");
@@ -286,13 +288,7 @@ public class MainFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Thread(new Runnable() {
-					
-					@Override
-					public void run() {
-						WindowBuilderFactory.createInventoryManagementWindow();
-					}
-				}).start();
+				WindowBuilderFactory.createInventoryManagementWindow();
 			}
 		});
 		return menubar;

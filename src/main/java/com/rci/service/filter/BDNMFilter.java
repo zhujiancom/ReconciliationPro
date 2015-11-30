@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.SchemeWrapper;
-import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.SchemeType;
@@ -67,17 +66,17 @@ public class BDNMFilter extends AbstractFilter {
 				}
 				SchemeType type = sdrefService.querySchemeTypeByDishno(dishNo);
 				if(type == null){
-					logger.warn("没有找到套餐对应的活动类型");
-					continue;
+					logger.warn("套餐["+dishNo+"]不参与活动！");
+				}else{
+					Integer suitCount = suitMap.get(type);
+					Integer itemCount = count.subtract(countBack).intValue();
+					if (suitCount != null) {
+						suitCount += itemCount;
+					} else {
+						suitCount = itemCount;
+					}
+					suitMap.put(type, suitCount);
 				}
-				Integer suitCount = suitMap.get(type);
-				Integer itemCount = count.subtract(countBack).intValue();
-				if (suitCount != null) {
-					suitCount += itemCount;
-				} else {
-					suitCount = itemCount;
-				}
-				suitMap.put(type, suitCount);
 			}
 			BigDecimal singlePrice = item.getPrice();
 			BigDecimal singleRate = item.getDiscountRate();
@@ -98,15 +97,15 @@ public class BDNMFilter extends AbstractFilter {
 			
 		}
 		//将套餐中的饮料从不可打折金额中除去
-		for(Iterator<Entry<SchemeType,Integer>> it=suitMap.entrySet().iterator();it.hasNext();){
-			Entry<SchemeType,Integer> entry = it.next();
-			SchemeType stype = entry.getKey();
-			Integer count = entry.getValue();
-			if(stype.getBeverageAmount() != null){
-				BigDecimal beverageAmount = DigitUtil.mutiplyDown(stype.getBeverageAmount(), new BigDecimal(count));
-				nodiscountAmount = nodiscountAmount.subtract(beverageAmount);
-			}
-		}
+//		for(Iterator<Entry<SchemeType,Integer>> it=suitMap.entrySet().iterator();it.hasNext();){
+//			Entry<SchemeType,Integer> entry = it.next();
+//			SchemeType stype = entry.getKey();
+//			Integer count = entry.getValue();
+//			if(stype.getBeverageAmount() != null){
+//				BigDecimal beverageAmount = DigitUtil.mutiplyDown(stype.getBeverageAmount(), new BigDecimal(count));
+//				nodiscountAmount = nodiscountAmount.subtract(beverageAmount);
+//			}
+//		}
 		//设置订单中不可打折金额
 		if(nodiscountAmount.intValue() != 0 && order.getNodiscountAmount() == null){
 			order.setNodiscountAmount(nodiscountAmount);

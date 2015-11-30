@@ -75,6 +75,9 @@ public class Dish extends BaseEntity{
 	/* 是否可打折 */
 	private CommonEnums.YOrN discountFlag;
 	
+	/* 菜品成本单价 （原料成本） */
+	private BigDecimal cost;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
 	@Column(name="did", nullable=false,updatable=false)
@@ -187,6 +190,15 @@ public class Dish extends BaseEntity{
 	 */
 	public void setDiscountFlag(CommonEnums.YOrN discountFlag) {
 		this.discountFlag = discountFlag;
+	}
+
+	@Column(name="cost")
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
 	}
 
 	@Override

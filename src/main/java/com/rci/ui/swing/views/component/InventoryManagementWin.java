@@ -185,7 +185,7 @@ public class InventoryManagementWin extends PopWindow {
 		private void initComponent() {
 			setLayout(new BorderLayout());
 			
-			table = new InventoryTable(7);
+			table = new InventoryTable(8);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			
 			scrollPane = new JScrollPane();
@@ -442,12 +442,12 @@ public class InventoryManagementWin extends PopWindow {
 			}
 			private void buildPane() {
 				this.setDividerSize(3);
-				this.setDividerLocation(0.4);
-				this.setResizeWeight(0.4);
+				this.setDividerLocation(0.45);
+				this.setResizeWeight(0.45);
 				JScrollPane mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 				mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
 				mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-				mainTable = new SaleLogTable(3);
+				mainTable = new SaleLogTable(4);
 				mainScrollPane.setViewportView(mainTable);
 				mainTable.getSelectionModel().addListSelectionListener(this);
 				JScrollPane rTopScrollPane = new JScrollPane(); //将表格加入到滚动条组件中

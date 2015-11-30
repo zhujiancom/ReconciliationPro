@@ -71,7 +71,6 @@ public class TurnOverWin extends PopWindow {
 	public void createContentPane() {
 		table = new TurnoverTable(20);
 		((TurnoverTable)table).makeStatisticRowFace();
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		JScrollPane contentPane = new JScrollPane(table);
 		contentPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		contentPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);

@@ -69,7 +69,9 @@ public class InventoryDetailWin extends PopWindow {
 		
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		thirdPane.add(relatedDish);
-		thirdPane.add(new JLabel(inventory.getRelatedDishNames()));
+		JLabel displayRelatedDishes = new JLabel(inventory.getRelatedDishNames());
+		displayRelatedDishes.setToolTipText(inventory.getRelatedDishNames());
+		thirdPane.add(displayRelatedDishes);
 		mainPane.add(thirdPane);
 	}
 }

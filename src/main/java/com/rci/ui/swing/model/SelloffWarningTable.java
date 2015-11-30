@@ -11,7 +11,7 @@ import com.rci.tools.DateUtil;
 import com.rci.tools.EnumUtils;
 import com.rci.ui.swing.vos.SellOffWarningVO;
 
-public class SelloffWarningTable extends BaseTable {
+public class SelloffWarningTable extends BaseTable<SellOffWarningVO> {
 
 	/**
 	 * 

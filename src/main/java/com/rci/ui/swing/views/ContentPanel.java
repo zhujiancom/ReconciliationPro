@@ -43,7 +43,7 @@ public class ContentPanel extends JSplitPane {
 		JScrollPane mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		mainTable = new OrderTable();
+		mainTable = new OrderTable(24);
 		mainScrollPane.setViewportView(mainTable);
 		
 		JPanel rightPane = new JPanel();
@@ -51,7 +51,7 @@ public class ContentPanel extends JSplitPane {
 		JScrollPane rTopScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		rTopScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		rTopScrollPane.setBorder(BorderFactory.createEmptyBorder());
-		itemTable = new OrderItemTable();
+		itemTable = new OrderItemTable(7);
 		rTopScrollPane.setViewportView(itemTable);
 		
 		textArea = new JTextArea(10,0);
@@ -70,6 +70,12 @@ public class ContentPanel extends JSplitPane {
 	}
 	
 	public void clearData(String time){
+		if(!StringUtils.hasText(time)){
+			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "请填写日期");
+		}
+		if(!DateUtil.isDateFormat(time,"yyyyMMdd")){
+			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "日期格式错误");
+		}
 		textArea.setText("");
 		if(mainTable.getModel() instanceof OrderTableModel){
 			OrderTableModel orderModel = (OrderTableModel) mainTable.getModel();
@@ -78,12 +84,6 @@ public class ContentPanel extends JSplitPane {
 		if(itemTable.getModel() instanceof OrderItemTableModel){
 			OrderItemTableModel itemModel = (OrderItemTableModel) itemTable.getModel();
 			itemModel.setRowCount(0);
-		}
-		if(!StringUtils.hasText(time)){
-			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "请填写日期");
-		}
-		if(!DateUtil.isDateFormat(time,"yyyyMMdd")){
-			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "日期格式错误");
 		}
 		DataCleanFacade datacleaner = (DataCleanFacade) SpringUtils.getBean("DataCleanFacade");
 //		datacleaner.deleteOrders(time);

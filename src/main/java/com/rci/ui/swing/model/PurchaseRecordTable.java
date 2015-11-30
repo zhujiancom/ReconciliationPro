@@ -11,7 +11,7 @@ import com.rci.bean.dto.PurchaseRecordQueryDTO;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.vos.PurchaseRecordVO;
 
-public class PurchaseRecordTable extends BaseTable {
+public class PurchaseRecordTable extends BaseTable<PurchaseRecordVO> {
 
 	/**
 	 * 

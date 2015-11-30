@@ -11,16 +11,15 @@ import javax.swing.table.TableColumnModel;
 import com.rci.ui.swing.renderers.AbstractLineColorMarkRenderer;
 import com.rci.ui.swing.vos.TurnoverVO;
 
-public class TurnoverTable extends JTable {
+public class TurnoverTable extends BaseTable<TurnoverVO> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8950690637325143110L;
 
 	public TurnoverTable(int columnNum){
-		super(new TurnoverTableModel(columnNum));
-		setHeaderLabel();
-		this.setRowHeight(30);
+		super(columnNum);
+		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 	
 	public void setHeaderLabel(){
@@ -238,6 +237,11 @@ public class TurnoverTable extends JTable {
 			this.turnovers = turnovers;
 		}
 		
+	}
+
+	@Override
+	protected void setModel() {
+		this.setModel(new TurnoverTableModel(columnNum));
 	}
 	
 }

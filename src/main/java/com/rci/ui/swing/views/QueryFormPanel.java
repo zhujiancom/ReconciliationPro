@@ -80,17 +80,6 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 //		JLabel elePerAllowanceLabel = new JLabel("每单优惠金额");
 //		elePerAllowanceAmount = new JTextField(5);
 		
-		//测试代码
-//		JButton btn = new JButton("选择菜品");
-//		btn.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				DishSelectListener selectListener = new DishSelectListener();
-//				DishSelectWin win = new DishSelectWin(selectListener,900,600,"菜品选择");
-//			}
-//		});
-//		queryPane.add(btn, new FlowLayout(FlowLayout.LEFT));
 		
 		JLabel rciTime = new JLabel("日期");
 		timeInput = new JTextField(10);

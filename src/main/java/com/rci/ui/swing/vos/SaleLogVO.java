@@ -15,6 +15,9 @@ public class SaleLogVO {
 	/* 销售日期 */
 	private Date saleDate;
 	
+	/* 原料成本 */
+	private BigDecimal costAmount;
+	
 	public SaleLogVO(String ino,String iname,BigDecimal saleAmount){
 		this.ino = ino;
 		this.iname = iname;
@@ -51,6 +54,14 @@ public class SaleLogVO {
 
 	public void setSaleDate(Date saleDate) {
 		this.saleDate = saleDate;
+	}
+
+	public BigDecimal getCostAmount() {
+		return costAmount;
+	}
+
+	public void setCostAmount(BigDecimal costAmount) {
+		this.costAmount = costAmount;
 	}
 
 }

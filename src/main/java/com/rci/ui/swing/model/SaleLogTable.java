@@ -37,9 +37,11 @@ public class SaleLogTable extends BaseTable<SaleLogVO> {
 		cm.getColumn(0).setHeaderValue("品种名称");
 		cm.getColumn(0).setPreferredWidth(100);
 		cm.getColumn(1).setHeaderValue("销售日期");
-		cm.getColumn(1).setPreferredWidth(155);
+		cm.getColumn(1).setPreferredWidth(100);
 		cm.getColumn(2).setHeaderValue("销售数量");
 		cm.getColumn(2).setPreferredWidth(100);
+		cm.getColumn(3).setHeaderValue("原料成本");
+		cm.getColumn(3).setPreferredWidth(100);
 	}
 	
 	/**
@@ -101,6 +103,8 @@ public class SaleLogTable extends BaseTable<SaleLogVO> {
 				return DateUtil.date2Str(vo.getSaleDate());
 			case 2:
 				return vo.getSaleAmount();
+			case 3:
+				return vo.getCostAmount();
 			}
 			return null;
 		}

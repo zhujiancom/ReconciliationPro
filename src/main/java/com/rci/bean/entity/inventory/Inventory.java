@@ -52,11 +52,14 @@ public class Inventory extends BaseEntity {
 	
 	private BigDecimal consumeAmount = BigDecimal.ZERO;
 	
-	/* 是否在库存管理 */
+	/* 是否停用库存管理 */
 	private YOrN status;
 	
 	/* 基数， 芝士年糕基数是40 */
 	private BigDecimal cardinal;
+	
+	/* 成本单价 */
+	private BigDecimal cost;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -131,6 +134,15 @@ public class Inventory extends BaseEntity {
 
 	public void setCardinal(BigDecimal cardinal) {
 		this.cardinal = cardinal;
+	}
+
+	@Column(name="cost")
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
 	}
 
 	@Override

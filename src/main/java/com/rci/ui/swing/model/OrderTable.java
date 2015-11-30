@@ -18,27 +18,27 @@ import com.rci.tools.DateUtil;
 import com.rci.ui.swing.renderers.AbstractLineColorMarkRenderer;
 import com.rci.ui.swing.vos.OrderVO;
 
-public class OrderTable extends JTable {
+public class OrderTable extends BaseTable<OrderVO> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4935140318205918006L;
 	
-	public OrderTable(){
-		super(new OrderTableModel(24));
-		setHeaderLabel();
-		this.setRowHeight(20);
+	public OrderTable(int columnNum){
+		super(columnNum);
+		this.setRowHeight(25);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 	
-	public void setHeaderLabel(){
+	@Override
+	protected void setHeaderLabel(){
 		OrderTableRedMarkRenderer redmarkRenderer = new OrderTableRedMarkRenderer();
 		OrderTableZeroMarkRenderer zeromarkRenderer = new OrderTableZeroMarkRenderer();
 		TableColumnModel cm = this.getColumnModel();
 		cm.getColumn(0).setHeaderValue("序号");
-//		cm.getColumn(0).setPreferredWidth(50);
-		cm.getColumn(0).setMinWidth(50);
+		cm.getColumn(0).setPreferredWidth(40);
+		cm.getColumn(0).setMinWidth(30);
 		cm.getColumn(0).setCellRenderer(redmarkRenderer);
 		cm.getColumn(1).setHeaderValue("桌号");
 //		cm.getColumn(1).setPreferredWidth(75);
@@ -294,5 +294,10 @@ public class OrderTable extends JTable {
 			this.orders = orders;
 		}
 
+	}
+
+	@Override
+	protected void setModel() {
+		this.setModel(new OrderTableModel(columnNum));
 	}
 }

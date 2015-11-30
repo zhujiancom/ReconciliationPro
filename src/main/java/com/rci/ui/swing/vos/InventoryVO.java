@@ -22,6 +22,8 @@ public class InventoryVO {
 	
 	/* 基数， 芝士年糕基数是40 */
 	private BigDecimal cardinal;
+	
+	private BigDecimal cost;
 
 	public Long getIid() {
 		return iid;
@@ -93,6 +95,14 @@ public class InventoryVO {
 
 	public void setCardinal(BigDecimal cardinal) {
 		this.cardinal = cardinal;
+	}
+
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
 	}
 
 	@Override

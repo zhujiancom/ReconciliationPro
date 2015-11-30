@@ -42,14 +42,14 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 	private JTextField typenoInput = new JTextField(30);
 	private SelectedDishPanel selectedDishPanel;
 	private JComboBox<LabelValueBean<String>> activityTypeInput;
-	private JTextField discountInput = new JTextField(30);
+//	private JTextField discountInput = new JTextField(30);
 	private JTextField realAmountInput = new JTextField(30);
 	private JTextField floorInput = new JTextField(30);
 	private JTextField ceilInput = new JTextField(30);
 	private JLabel name = new JLabel("活动类型名称");
 	private JLabel typeno = new JLabel("活动类型编号");
 	private JLabel dish = new JLabel("适用菜品");
-	private JLabel discount = new JLabel("不可打折金额");
+//	private JLabel discount = new JLabel("不可打折金额");
 	private JLabel realAmount = new JLabel("可抵扣金额");
 	private JLabel floor = new JLabel("最低消费金额");
 	private JLabel ceil = new JLabel("最高消费金额");
@@ -79,10 +79,10 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 			newSchemeType.setDishes(selectDishes);
 			newSchemeType.setTypeName(nameInput.getText());
 			newSchemeType.setTypeNo(typenoInput.getText());
-			if(StringUtils.hasText(discountInput.getText())){
-				BigDecimal discountAmount = new BigDecimal(discountInput.getText().trim());
-				newSchemeType.setDiscountAmount(discountAmount);
-			}
+//			if(StringUtils.hasText(discountInput.getText())){
+//				BigDecimal discountAmount = new BigDecimal(discountInput.getText().trim());
+//				newSchemeType.setDiscountAmount(discountAmount);
+//			}
 			newSchemeType.setRealAmount(new BigDecimal(realAmountInput.getText().trim()));
 			if(StringUtils.hasText(floorInput.getText())){
 				newSchemeType.setFloorAmount(new BigDecimal(floorInput.getText().trim()));
@@ -127,11 +127,11 @@ public class SchemeTypeCreateWinBuilder implements PopWindowBuilder,ActionListen
 		selectedDishPanel = new SelectedDishPanel();
 		secondPane.add(selectedDishPanel);
 		mainPane.add(secondPane);
-		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
-		thirdPane.add(discount);
-		thirdPane.add(discountInput);
-		mainPane.add(thirdPane);
-		JPanel ninthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+//		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+//		thirdPane.add(discount);
+//		thirdPane.add(discountInput);
+//		mainPane.add(thirdPane);
+		JPanel ninthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,25,2));
 		ninthPane.add(realAmount);
 		ninthPane.add(realAmountInput);
 		mainPane.add(ninthPane);

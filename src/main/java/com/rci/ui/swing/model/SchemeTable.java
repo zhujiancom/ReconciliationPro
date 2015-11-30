@@ -12,7 +12,7 @@ import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.vos.SchemeVO;
 
-public class SchemeTable extends BaseTable {
+public class SchemeTable extends BaseTable<SchemeVO> {
 
 	/**
 	 * 
@@ -38,25 +38,25 @@ public class SchemeTable extends BaseTable {
 	public void setHeaderLabel(){
 		TableColumnModel cm = this.getColumnModel();
 		cm.getColumn(0).setHeaderValue("活动名称");
-		cm.getColumn(0).setPreferredWidth(250);
+		cm.getColumn(0).setPreferredWidth(200);
 		cm.getColumn(1).setHeaderValue("活动平台");
-		cm.getColumn(1).setPreferredWidth(150);
-		cm.getColumn(2).setHeaderValue("活动状态");
-		cm.getColumn(2).setPreferredWidth(150);
-		cm.getColumn(3).setHeaderValue("优惠金额");
-		cm.getColumn(3).setPreferredWidth(150);
-		cm.getColumn(4).setHeaderValue("餐厅补贴");
-		cm.getColumn(4).setPreferredWidth(150);
-		cm.getColumn(5).setHeaderValue("平台补贴");
-		cm.getColumn(5).setPreferredWidth(150);
-		cm.getColumn(6).setHeaderValue("开始时间");
-		cm.getColumn(6).setPreferredWidth(140);
-		cm.getColumn(7).setHeaderValue("结束时间");
-		cm.getColumn(7).setPreferredWidth(140);
-		cm.getColumn(8).setHeaderValue("最低消费金额");
-		cm.getColumn(8).setPreferredWidth(200);
-		cm.getColumn(9).setHeaderValue("最高消费金额");
-		cm.getColumn(9).setPreferredWidth(200);
+		cm.getColumn(1).setPreferredWidth(100);
+		cm.getColumn(2).setHeaderValue("开始时间");
+		cm.getColumn(2).setPreferredWidth(140);
+		cm.getColumn(3).setHeaderValue("结束时间");
+		cm.getColumn(3).setPreferredWidth(140);
+		cm.getColumn(4).setHeaderValue("优惠金额");
+		cm.getColumn(4).setPreferredWidth(100);
+		cm.getColumn(5).setHeaderValue("餐厅补贴");
+		cm.getColumn(5).setPreferredWidth(100);
+		cm.getColumn(6).setHeaderValue("平台补贴");
+		cm.getColumn(6).setPreferredWidth(100);
+		cm.getColumn(7).setHeaderValue("最低消费金额");
+		cm.getColumn(7).setPreferredWidth(150);
+		cm.getColumn(8).setHeaderValue("最高消费金额");
+		cm.getColumn(8).setPreferredWidth(150);
+		cm.getColumn(9).setHeaderValue("活动状态");
+		cm.getColumn(9).setPreferredWidth(100);
 	}
 
 	@Override
@@ -109,21 +109,21 @@ public class SchemeTable extends BaseTable {
 			case 1:
 				return scheme.getDishplayVendor();
 			case 2:
-				return scheme.getStatus();
-			case 3:
-				return scheme.getPrice();
-			case 4:
-				return scheme.getSpread();
-			case 5:
-				return scheme.getPostPrice();
-			case 6:
 				return DateUtil.date2Str(scheme.getStartDate());
-			case 7:
+			case 3:
 				return DateUtil.date2Str(scheme.getEndDate());
-			case 8:
+			case 4:
+				return scheme.getPrice();
+			case 5:
+				return scheme.getSpread();
+			case 6:
+				return scheme.getPostPrice();
+			case 7:
 				return scheme.getFloorAmount();
-			case 9:
+			case 8:
 				return scheme.getCeilAmount();
+			case 9:
+				return scheme.getStatus();
 			default:break;
 			}
 			return null;

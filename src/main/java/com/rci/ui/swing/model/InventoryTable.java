@@ -44,8 +44,10 @@ public class InventoryTable extends BaseTable<InventoryVO> {
 		cm.getColumn(4).setPreferredWidth(80);
 		cm.getColumn(5).setHeaderValue("基数");
 		cm.getColumn(5).setPreferredWidth(80);
-		cm.getColumn(6).setHeaderValue("已关联菜品");
-		cm.getColumn(6).setPreferredWidth(350);
+		cm.getColumn(6).setHeaderValue("成本价");
+		cm.getColumn(6).setPreferredWidth(80);
+		cm.getColumn(7).setHeaderValue("已关联菜品");
+		cm.getColumn(7).setPreferredWidth(350);
 	}
 	
 	public void reflush(){
@@ -99,6 +101,8 @@ public class InventoryTable extends BaseTable<InventoryVO> {
 			case 5:
 				return vo.getCardinal();
 			case 6:
+				return vo.getCost();
+			case 7:
 				return vo.getRelatedDishNames();
 			}
 			return null;

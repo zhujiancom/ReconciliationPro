@@ -46,9 +46,6 @@ public class Scheme extends AccessoryEntity {
 	/* 手动差价 */
 	private BigDecimal spread;
 
-	/* 支付方式 */
-	private String paymodeno;
-
 	/* 方案单位， 代金券： 张， 套餐： 份 */
 	private String unitCode;
 
@@ -126,15 +123,6 @@ public class Scheme extends AccessoryEntity {
 
 	public void setSpread(BigDecimal spread) {
 		this.spread = spread;
-	}
-
-	@Column(name = "paymode_no")
-	public String getPaymodeno() {
-		return paymodeno;
-	}
-
-	public void setPaymodeno(String paymodeno) {
-		this.paymodeno = paymodeno;
 	}
 
 	public String getUnitCode() {

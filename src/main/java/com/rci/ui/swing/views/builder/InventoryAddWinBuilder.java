@@ -55,9 +55,11 @@ public class InventoryAddWinBuilder implements PopWindowBuilder,ActionListener {
 	private JLabel ino = new JLabel("库存编号");
 	private JLabel relatedDish = new JLabel("关联菜品");
 	private JLabel cardinal = new JLabel("基数");
+	private JLabel cost = new JLabel("成本单价");
 	private JTextField nameInput = new JTextField(30);
 	private JTextField noInput = new JTextField(10);
 	private JTextField cardinalInput = new JTextField(10);
+	private JTextField costInput = new JTextField(10);
 	private SelectedDishPanel selectedDishPanel;;
 	private JButton confirmBtn;
 	private IMetadataService metaService;
@@ -91,10 +93,15 @@ public class InventoryAddWinBuilder implements PopWindowBuilder,ActionListener {
 		secondPane.add(noInput);
 		mainPane.add(secondPane);
 		
-		JPanel fifthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,2));
+		JPanel fifthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,32,2));
 		fifthPane.add(cardinal);
 		fifthPane.add(cardinalInput);
 		mainPane.add(fifthPane);
+		
+		JPanel sixthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+		sixthPane.add(cost);
+		sixthPane.add(costInput);
+		mainPane.add(sixthPane);
 		
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		thirdPane.add(relatedDish);
@@ -122,6 +129,9 @@ public class InventoryAddWinBuilder implements PopWindowBuilder,ActionListener {
 			inventoryvo.setIname(nameInput.getText());
 			inventoryvo.setIno(noInput.getText());
 			inventoryvo.setCardinal(new BigDecimal(cardinalInput.getText().trim()));
+			if(StringUtils.hasText(costInput.getText())){
+				inventoryvo.setCost(new BigDecimal(costInput.getText().trim()));
+			}
 			List<DishVO> selectedDishes = selectedDishPanel.getSelectedDishes();
 			inventoryvo.setRelatedDishes(selectedDishes);
 			metaService.createInventory(inventoryvo);

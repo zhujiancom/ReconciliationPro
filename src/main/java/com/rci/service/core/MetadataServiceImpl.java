@@ -439,7 +439,16 @@ public class MetadataServiceImpl implements IMetadataService {
 		String queryDay = DateUtil.date2Str(DateUtil.getCurrentDate(), "yyyyMMdd");
 		SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
 		queryDTO.setDay(queryDay);
-		return sellLogService.querySumSaleLog(queryDTO);
+		List<SaleLogVO> logs = sellLogService.querySumSaleLog(queryDTO);
+		if(!CollectionUtils.isEmpty(logs)){
+			for(SaleLogVO log:logs){
+				Inventory inv = inventoryService.queryInventoryByNo(log.getIno());
+				if(inv.getCost() != null){
+					log.setCostAmount(inv.getCost().multiply(log.getSaleAmount()));
+				}
+			}
+		}
+		return logs;
 	}
 
 	@Override
@@ -453,7 +462,16 @@ public class MetadataServiceImpl implements IMetadataService {
 
 	@Override
 	public List<SaleLogVO> querySaleLog(SaleLogQueryDTO queryDTO) {
-		return sellLogService.querySumSaleLog(queryDTO);
+		List<SaleLogVO> logs = sellLogService.querySumSaleLog(queryDTO);
+		if(!CollectionUtils.isEmpty(logs)){
+			for(SaleLogVO log:logs){
+				Inventory inv = inventoryService.queryInventoryByNo(log.getIno());
+				if(inv.getCost() != null){
+					log.setCostAmount(inv.getCost().multiply(log.getSaleAmount()));
+				}
+			}
+		}
+		return logs;
 	}
 	
 	@Override

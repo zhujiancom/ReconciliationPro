@@ -60,7 +60,7 @@ public class SchemeTypeMainWin extends PopWindow {
 		operaPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		operaPane.setBackground(Color.WHITE);
 		
-		table = new SchemeTypeTable(7);
+		table = new SchemeTypeTable(6);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		ActivityTypeCheckListener checkListener = new ActivityTypeCheckListener(table);
