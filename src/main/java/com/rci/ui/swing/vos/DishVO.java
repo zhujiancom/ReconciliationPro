@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.rci.enums.CommonEnums;
 import com.rci.enums.CommonEnums.YOrN;
 
 public class DishVO {
@@ -17,8 +18,11 @@ public class DishVO {
 	
 	private BigDecimal dishPrice;
 	
-	/* 是否受库存管理  */
-	private YOrN stockFlag;
+	private YOrN stopFlag;
+	
+	private YOrN suitFlag;
+	
+	private CommonEnums.YOrN discountFlag;
 	
 	public DishVO(){}
 	
@@ -51,14 +55,6 @@ public class DishVO {
 		this.dishName = dishName;
 	}
 
-	public YOrN getStockFlag() {
-		return stockFlag;
-	}
-
-	public void setStockFlag(YOrN stockFlag) {
-		this.stockFlag = stockFlag;
-	}
-
 	public BigDecimal getDishPrice() {
 		return dishPrice;
 	}
@@ -80,6 +76,30 @@ public class DishVO {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,37).append(this.dishNo).toHashCode();
+	}
+
+	public YOrN getStopFlag() {
+		return stopFlag;
+	}
+
+	public YOrN getSuitFlag() {
+		return suitFlag;
+	}
+
+	public CommonEnums.YOrN getDiscountFlag() {
+		return discountFlag;
+	}
+
+	public void setStopFlag(YOrN stopFlag) {
+		this.stopFlag = stopFlag;
+	}
+
+	public void setSuitFlag(YOrN suitFlag) {
+		this.suitFlag = suitFlag;
+	}
+
+	public void setDiscountFlag(CommonEnums.YOrN discountFlag) {
+		this.discountFlag = discountFlag;
 	}
 
 	@Override

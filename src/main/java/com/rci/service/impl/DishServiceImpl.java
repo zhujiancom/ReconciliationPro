@@ -9,6 +9,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rci.bean.dto.QueryDishDTO;
 import com.rci.bean.entity.Dish;
 import com.rci.dao.impl.SafeDetachedCriteria;
 import com.rci.dao.impl.SafeRestrictions;
@@ -83,6 +84,13 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 		sdc.add(SafeRestrictions.eq("type.dtNo", typeno)).add(SafeRestrictions.eq("stopFlag", YOrN.N));
 		return baseDAO.queryListByCriteria(sdc);
 	}
+	
+	@Override
+	public List<Dish> queryAllValidDishes(){
+		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(Dish.class);
+		sdc.add(SafeRestrictions.eq("stopFlag", YOrN.N));
+		return baseDAO.queryListByCriteria(sdc);
+	}
 
 
 
@@ -90,6 +98,19 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 	public List<Dish> queryDishesByNos(String[] dishnos) {
 		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(Dish.class);
 		sdc.add(SafeRestrictions.in("dishNo", dishnos));
+		return baseDAO.queryListByCriteria(sdc);
+	}
+
+
+
+	@Override
+	public List<Dish> queryDishes(QueryDishDTO queryDTO) {
+		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(Dish.class);
+		sdc.createAlias("dishType", "type");
+		sdc.createAlias("dishSeries", "series");
+		sdc.add(SafeRestrictions.eq("type.dtNo", queryDTO.getTno()))
+			.add(SafeRestrictions.eq("stopFlag", YOrN.N))
+			.add(SafeRestrictions.eq("series.seriesno", queryDTO.getSno()));
 		return baseDAO.queryListByCriteria(sdc);
 	}
 

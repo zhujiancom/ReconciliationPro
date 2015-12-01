@@ -4,15 +4,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
+import com.rci.ui.swing.views.QueryFormPanel;
 
 /**
  * 
@@ -36,9 +41,18 @@ public class ActionHandler extends JFrame {
 	 */
 	private static final long serialVersionUID = -4393899033664657099L;
 	private IMetadataService metadataService;
+	private QueryFormPanel infoPanel;
+	private Icon loadingIcon;
 	
-	public ActionHandler(){
+	private Icon doneIcon;
+	
+	public ActionHandler(QueryFormPanel infoPanel){
+		this.infoPanel = infoPanel;
 		metadataService = (IMetadataService)SpringUtils.getBean("MetadataService");
+		URL loadingIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/loading.gif");
+		loadingIcon = new ImageIcon(loadingIconUrl);
+		URL doneIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/done.png");
+		doneIcon = new ImageIcon(doneIconUrl);
 	}
 //
 //	
@@ -71,10 +85,31 @@ public class ActionHandler extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(JOptionPane.showConfirmDialog(null, "确定重置基础数据吗？","警告",JOptionPane.YES_NO_OPTION) == 0){
-					metadataService.resetMetadata();
-					JOptionPane.showMessageDialog(null, "基础数据重置成功！");
-				}
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						if(JOptionPane.showConfirmDialog(null, "确定重置基础数据吗？","警告",JOptionPane.YES_NO_OPTION) == 0){
+							SwingUtilities.invokeLater(new Runnable() {
+								
+								@Override
+								public void run() {
+									infoPanel.getActionLabel().setIcon(loadingIcon);
+									infoPanel.getActionLabel().setText("基础数据正在重置，请稍后。。。");
+								}
+							});
+							metadataService.resetMetadata();
+							SwingUtilities.invokeLater(new Runnable() {
+								
+								@Override
+								public void run() {
+									infoPanel.getActionLabel().setIcon(doneIcon);
+									infoPanel.getActionLabel().setText("基础数据重置成功");
+								}
+							});
+						}
+					}
+				}).start();
 			}
 		};
 	}

@@ -90,4 +90,8 @@ public class WindowBuilderFactory {
 		return InventoryManagementWinBuilder.getInstance().retrieveWindow();
 	}
 	
+	public static PopWindow createDishManagementWindow(){
+		return DishManagementWinBuilder.getInstance().retrieveWindow();
+	}
+	
 }

@@ -21,7 +21,7 @@ import com.rci.ui.swing.views.component.InventoryManagementWin;
  * Create Time: 2015年11月21日 下午3:45:01
  *
  */
-public class InventoryManagementWinBuilder implements PopWindowBuilder {
+public class InventoryManagementWinBuilder extends AbstractWinBuilder {
 	private InventoryManagementWinBuilder(){}
 	
 	private static class InventoryManagementWinBuilderHolder{
@@ -32,11 +32,8 @@ public class InventoryManagementWinBuilder implements PopWindowBuilder {
 		return InventoryManagementWinBuilderHolder.instance;
 	}
 
-	/* 
-	 * @see com.rci.ui.swing.views.builder.PopWindowBuilder#retrieveWindow()
-	 */
 	@Override
-	public PopWindow retrieveWindow() {
+	protected PopWindow createWindow() {
 		return new InventoryManagementWin(900,600,"库存管理");
 	}
 

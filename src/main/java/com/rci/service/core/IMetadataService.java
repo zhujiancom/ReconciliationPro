@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.rci.bean.dto.PurchaseRecordQueryDTO;
+import com.rci.bean.dto.QueryDishDTO;
 import com.rci.bean.dto.SaleLogQueryDTO;
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.dto.SchemeTypeQueryDTO;
@@ -99,6 +100,10 @@ public interface IMetadataService {
 	
 	List<DishVO> getAllDishByTypeNo(String typeno);
 	
+	List<DishVO> getAllDishes();
+	
+	List<DishVO> queryDishes(QueryDishDTO queryDTO);
+	
 	///////////////////////////////////////////////  Inventory  库存管理模块   /////////////////////////////////////////////
 	@Deprecated
 	List<StockVO> displayStocks();
@@ -123,4 +128,6 @@ public interface IMetadataService {
 	List<SaleLogDetailVO> querySaleLogDetail(SaleLogQueryDTO queryDTO);
 	//沽清列表
 	List<SellOffWarningVO> displayAllSellOffWarning();
+	void costSetting(String ino,BigDecimal cost);
+	
 }

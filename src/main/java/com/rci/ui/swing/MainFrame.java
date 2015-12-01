@@ -177,7 +177,7 @@ public class MainFrame extends JFrame {
 		management.add(inventoryManage);
 		management.add(activityManage);
 
-		ActionHandler handler = new ActionHandler();
+		ActionHandler handler = new ActionHandler(queryPanel);
 		sysInit.addActionListener(handler.dataInit());
 		baseReset.addActionListener(handler.baseReset());
 //		// 库存查看事件
@@ -289,6 +289,15 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				WindowBuilderFactory.createInventoryManagementWindow();
+			}
+		});
+		
+		//菜品管理
+		dishManage.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent paramActionEvent) {
+				WindowBuilderFactory.createDishManagementWindow();
 			}
 		});
 		return menubar;

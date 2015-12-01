@@ -30,4 +30,9 @@ public class DishSeriesVO {
 	public void setSeriesname(String seriesname) {
 		this.seriesname = seriesname;
 	}
+
+	@Override
+	public String toString() {
+		return seriesname;
+	}
 }

@@ -1,13 +1,17 @@
 package com.rci.ui.swing.model;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
+import com.rci.tools.StringUtils;
+import com.rci.ui.swing.renderers.InventoryCostCellRender;
 import com.rci.ui.swing.vos.InventoryVO;
 
 public class InventoryTable extends BaseTable<InventoryVO> {
@@ -16,6 +20,7 @@ public class InventoryTable extends BaseTable<InventoryVO> {
 	 * 
 	 */
 	private static final long serialVersionUID = -3691238529428574569L;
+	
 	public InventoryTable(int columnNum){
 		super(columnNum);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -46,6 +51,9 @@ public class InventoryTable extends BaseTable<InventoryVO> {
 		cm.getColumn(5).setPreferredWidth(80);
 		cm.getColumn(6).setHeaderValue("成本价");
 		cm.getColumn(6).setPreferredWidth(80);
+		InventoryCostCellRender render = new InventoryCostCellRender(new JTextField());
+		cm.getColumn(6).setCellEditor(render);
+//		cm.getColumn(6).setCellRenderer(render);
 		cm.getColumn(7).setHeaderValue("已关联菜品");
 		cm.getColumn(7).setPreferredWidth(350);
 	}
@@ -106,6 +114,28 @@ public class InventoryTable extends BaseTable<InventoryVO> {
 				return vo.getRelatedDishNames();
 			}
 			return null;
+		}
+
+		@Override
+		public void setValueAt(Object paramObject, int rowIndex, int columnIndex) {
+			InventoryVO vo = items.get(rowIndex);
+			if(StringUtils.hasText(paramObject.toString())){
+				try{
+					vo.setCost(new BigDecimal(paramObject.toString()));
+					this.fireTableCellUpdated(rowIndex, columnIndex);
+				}
+				catch(Exception ex){
+					logger.warn("数据格式错误", ex);
+				}
+			}
+		}
+
+		@Override
+		public boolean isCellEditable(int rowIndex, int columnIndex) {
+			if(columnIndex == 6){
+				return true;
+			}
+			return super.isCellEditable(rowIndex, columnIndex);
 		}
 
 		public List<InventoryVO> getItems() {

@@ -1,7 +1,6 @@
 package com.rci.ui.swing.views.component.tab;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -22,7 +21,6 @@ public class TabbedPane extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 871686191220726691L;
-	private static final String NAME="TabbedPane";
 	
 	private List<TabbedPaneListener> listeners = new ArrayList<TabbedPaneListener>();
 	
@@ -196,9 +194,9 @@ public class TabbedPane extends JPanel {
 //				add(tabCloseButton, BorderLayout.EAST);
 //			}	
 		}
-		public Font getDefaultFont() {
-			return defaultFont;
-		}
+//		public Font getDefaultFont() {
+//			return defaultFont;
+//		}
 
 		public void setIcon(Icon icon) {
 			iconLabel.setIcon(icon);
@@ -207,10 +205,10 @@ public class TabbedPane extends JPanel {
 		public void setTitle(String title) {
 			titleLabel.setText(title);
 		}
-		public void setTitleColor(Color color) {
-			titleLabel.setForeground(color);
-			titleLabel.validate();
-			titleLabel.repaint();
-		}
+//		public void setTitleColor(Color color) {
+//			titleLabel.setForeground(color);
+//			titleLabel.validate();
+//			titleLabel.repaint();
+//		}
 	}
 }

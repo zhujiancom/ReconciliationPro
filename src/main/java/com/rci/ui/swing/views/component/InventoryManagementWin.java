@@ -10,8 +10,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
@@ -42,7 +40,6 @@ import com.rci.tools.StringUtils;
 import com.rci.ui.swing.handler.InventoryActionPolicy;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.InventoryTable;
-import com.rci.ui.swing.model.InventoryTable.InventoryTabelModel;
 import com.rci.ui.swing.model.PurchaseRecordTable;
 import com.rci.ui.swing.model.SaleLogDetailTable;
 import com.rci.ui.swing.model.SaleLogDetailTable.SaleLogDetailTableModel;
@@ -53,7 +50,6 @@ import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.views.component.tab.Tab;
 import com.rci.ui.swing.views.component.tab.TabbedPane;
 import com.rci.ui.swing.views.component.tab.TabbedPaneListener;
-import com.rci.ui.swing.vos.InventoryVO;
 import com.rci.ui.swing.vos.SaleLogVO;
 
 /**
@@ -231,19 +227,19 @@ public class InventoryManagementWin extends PopWindow {
 			policy.setKeywordInput(keywordInput);
 			searchBtn.addActionListener(policy.doQueryAction());
 			
-			table.addMouseListener(new MouseAdapter() {
-
-				@Override
-				public void mouseClicked(MouseEvent event) {
-					if(event.getClickCount() == 2){
-						int selectIndex = table.getSelectedRow();
-						InventoryTabelModel model = (InventoryTabelModel) table.getModel();
-						InventoryVO inventoryvo = model.getInventory(selectIndex);
-						new InventoryDetailWin(inventoryvo,300,350);
-					}
-				}
-				
-			});
+//			table.addMouseListener(new MouseAdapter() {
+//
+//				@Override
+//				public void mouseClicked(MouseEvent event) {
+//					if(event.getClickCount() == 2){
+//						int selectIndex = table.getSelectedRow();
+//						InventoryTabelModel model = (InventoryTabelModel) table.getModel();
+//						InventoryVO inventoryvo = model.getInventory(selectIndex);
+//						new InventoryDetailWin(inventoryvo,300,350);
+//					}
+//				}
+//				
+//			});
 			
 			actionBar.add(addBtn);
 			actionBar.add(delBtn);

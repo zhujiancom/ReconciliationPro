@@ -31,4 +31,11 @@ public class DishTypeVO {
 	public void setDtName(String dtName) {
 		this.dtName = dtName;
 	}
+
+	@Override
+	public String toString() {
+		return dtName;
+	}
+	
+	
 }

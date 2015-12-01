@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.dto.PurchaseRecordQueryDTO;
+import com.rci.bean.dto.QueryDishDTO;
 import com.rci.bean.dto.SaleLogQueryDTO;
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.dto.SchemeTypeQueryDTO;
@@ -300,6 +301,30 @@ public class MetadataServiceImpl implements IMetadataService {
 		}
 		return vos;
 	}
+	
+	@Override
+	public List<DishVO> getAllDishes() {
+		List<Dish> dishes = dishService.queryAllValidDishes();
+		List<DishVO> vos = new ArrayList<DishVO>();
+		if(!CollectionUtils.isEmpty(dishes)){
+			for(Dish dish:dishes){
+				vos.add(beanMapper.map(dish, DishVO.class));
+			}
+		}
+		return vos;
+	}
+	
+	@Override
+	public List<DishVO> queryDishes(QueryDishDTO queryDTO) {
+		List<Dish> dishes = dishService.queryDishes(queryDTO);
+		List<DishVO> vos = new ArrayList<DishVO>();
+		if(!CollectionUtils.isEmpty(dishes)){
+			for(Dish dish:dishes){
+				vos.add(beanMapper.map(dish, DishVO.class));
+			}
+		}
+		return vos;
+	}
 
 	@Override
 	public List<InventoryVO> displayAllInventory() {
@@ -489,6 +514,13 @@ public class MetadataServiceImpl implements IMetadataService {
 			}
 		}
 		return warningvos;
+	}
+
+	@Override
+	public void costSetting(String ino, BigDecimal cost) {
+		Inventory inventory = inventoryService.queryInventoryByNo(ino);
+		inventory.setCost(cost);
+		inventoryService.rwUpdate(inventory);
 	}
 
 }

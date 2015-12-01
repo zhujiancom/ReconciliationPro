@@ -6,6 +6,9 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
 
@@ -14,6 +17,8 @@ public abstract class BaseTable<T> extends JTable {
 	 * 
 	 */
 	private static final long serialVersionUID = -7637179254128694436L;
+	
+	protected static final Log logger = LogFactory.getLog(BaseTable.class);
 	
 	protected int columnNum;
 	
