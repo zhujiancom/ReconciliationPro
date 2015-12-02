@@ -24,6 +24,8 @@ public class DishVO {
 	
 	private CommonEnums.YOrN discountFlag;
 	
+	private BigDecimal cost;
+	
 	public DishVO(){}
 	
 	public DishVO(String dishNo,String dishName){
@@ -100,6 +102,14 @@ public class DishVO {
 
 	public void setDiscountFlag(CommonEnums.YOrN discountFlag) {
 		this.discountFlag = discountFlag;
+	}
+
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
 	}
 
 	@Override

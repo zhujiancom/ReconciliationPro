@@ -20,6 +20,8 @@ import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.model.DishTable;
 import com.rci.ui.swing.views.PopWindow;
+import com.rci.ui.swing.views.builder.DishModifyWinBuilder;
+import com.rci.ui.swing.views.builder.PopWindowBuilder;
 import com.rci.ui.swing.vos.DishSeriesVO;
 import com.rci.ui.swing.vos.DishTypeVO;
 
@@ -80,6 +82,18 @@ public class DishManagementWin extends PopWindow {
 		pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		table = new DishTable(6);
 		pane.setViewportView(table);
+		table.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				if(event.getClickCount() == 2){
+//					int selectedIndex = table.getSelectedRow();
+					PopWindowBuilder winBuilder = new DishModifyWinBuilder(table);
+					winBuilder.retrieveWindow();
+				}
+			}
+			
+		});
 		return pane;
 	}
 	

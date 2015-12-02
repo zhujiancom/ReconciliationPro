@@ -11,6 +11,7 @@ import com.rci.bean.dto.SchemeTypeQueryDTO;
 import com.rci.ui.swing.vos.DishSeriesVO;
 import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
+import com.rci.ui.swing.vos.InventoryDishRefVO;
 import com.rci.ui.swing.vos.InventoryVO;
 import com.rci.ui.swing.vos.PurchaseRecordVO;
 import com.rci.ui.swing.vos.SaleLogDetailVO;
@@ -104,12 +105,15 @@ public interface IMetadataService {
 	
 	List<DishVO> queryDishes(QueryDishDTO queryDTO);
 	
+	void updateDishCost(DishVO dishvo);
+	
 	///////////////////////////////////////////////  Inventory  库存管理模块   /////////////////////////////////////////////
 	@Deprecated
 	List<StockVO> displayStocks();
 	
 	List<InventoryVO> displayAllInventory();
 	List<InventoryVO> queryInventory(String iname);
+	List<InventoryDishRefVO> queryInventoryDishRefByDish(String dishno);
 	
 	boolean checkInventoryNoExist(String ino);
 	
@@ -129,5 +133,8 @@ public interface IMetadataService {
 	//沽清列表
 	List<SellOffWarningVO> displayAllSellOffWarning();
 	void costSetting(String ino,BigDecimal cost);
+	
+	
+	
 	
 }

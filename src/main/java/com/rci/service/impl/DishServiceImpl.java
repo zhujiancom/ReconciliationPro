@@ -6,6 +6,7 @@ import java.util.List;
 import org.dozer.Mapper;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +63,8 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 
 	@Override
 	public void rwupdateDishInfo(Dish dish) {
-		baseDAO.update(dish);
+//		baseDAO.update(dish);
+		((IDishService)AopContext.currentProxy()).rwUpdate(dish);
 	}
 
 

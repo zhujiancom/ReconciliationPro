@@ -79,7 +79,7 @@ public class SaleLogDetailTable extends BaseTable<SaleLogDetailVO> {
 			case 2:
 				return DateUtil.time2Str(vo.getCheckoutTime());
 			case 3:
-				return vo.getConsumeAmount();
+				return vo.getSaleAmount();
 			}
 			return null;
 		}

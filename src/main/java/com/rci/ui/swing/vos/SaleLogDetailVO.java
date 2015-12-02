@@ -25,7 +25,7 @@ public class SaleLogDetailVO {
 	
 	private Date checkoutTime;
 	
-	private BigDecimal consumeAmount;
+	private BigDecimal saleAmount;
 	
 	public String getPayno() {
 		return payno;
@@ -43,10 +43,6 @@ public class SaleLogDetailVO {
 		return checkoutTime;
 	}
 
-	public BigDecimal getConsumeAmount() {
-		return consumeAmount;
-	}
-
 	public void setDishname(String dishname) {
 		this.dishname = dishname;
 	}
@@ -55,7 +51,11 @@ public class SaleLogDetailVO {
 		this.checkoutTime = checkoutTime;
 	}
 
-	public void setConsumeAmount(BigDecimal consumeAmount) {
-		this.consumeAmount = consumeAmount;
+	public BigDecimal getSaleAmount() {
+		return saleAmount;
+	}
+
+	public void setSaleAmount(BigDecimal saleAmount) {
+		this.saleAmount = saleAmount;
 	}
 }

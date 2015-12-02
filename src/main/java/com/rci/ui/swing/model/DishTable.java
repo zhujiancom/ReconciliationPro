@@ -103,6 +103,10 @@ public class DishTable extends BaseTable<DishVO> {
 			this.items = items;
 		}
 		
+		public DishVO getItem(int rowIndex){
+			return items.get(rowIndex);
+		}
+		
 	}
 
 }

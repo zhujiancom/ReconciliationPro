@@ -49,6 +49,7 @@ import com.rci.tools.EnumUtils;
 import com.rci.ui.swing.vos.DishSeriesVO;
 import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
+import com.rci.ui.swing.vos.InventoryDishRefVO;
 import com.rci.ui.swing.vos.InventoryVO;
 import com.rci.ui.swing.vos.PurchaseRecordVO;
 import com.rci.ui.swing.vos.SaleLogDetailVO;
@@ -521,6 +522,29 @@ public class MetadataServiceImpl implements IMetadataService {
 		Inventory inventory = inventoryService.queryInventoryByNo(ino);
 		inventory.setCost(cost);
 		inventoryService.rwUpdate(inventory);
+	}
+
+	@Override
+	public List<InventoryDishRefVO> queryInventoryDishRefByDish(String dishno) {
+		List<InventoryDishRefVO> refvos = new ArrayList<InventoryDishRefVO>();
+		List<InventoryDishRef> refs = idrService.queryByDishNo(dishno);
+		if(!CollectionUtils.isEmpty(refs)){
+			for(InventoryDishRef ref:refs){
+				InventoryDishRefVO refvo = beanMapper.map(ref, InventoryDishRefVO.class);
+				Inventory inventory = inventoryService.queryInventoryByNo(ref.getIno());
+				refvo.setIname(inventory.getIname());
+				refvos.add(refvo);
+			}
+		}
+		return refvos;
+	}
+
+	@Override
+	public void updateDishCost(DishVO dishvo) {
+//		Dish dish = dishService.get(dishvo.getDid());
+		Dish dish = dishService.findDishByNo(dishvo.getDishNo());
+		dish.setCost(dishvo.getCost());
+		dishService.rwUpdate(dish);
 	}
 
 }

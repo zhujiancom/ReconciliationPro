@@ -109,7 +109,7 @@ public final class BusinessEnums {
 	}
 	
 	public static enum Vendor{
-		ELE,DZDP,MTWM,MT,LS,TDD,WMCR,SH,MTSUPER,BDNM;
+		ELE,DZDP,MTWM,MT,LS,TDD,WMCR,SH,MTSUPER,BDNM,PLQ;
 	}
 	
 	public static enum StockOpType{

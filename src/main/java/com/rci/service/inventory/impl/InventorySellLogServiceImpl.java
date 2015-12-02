@@ -16,11 +16,13 @@ import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.dto.SaleLogQueryDTO;
 import com.rci.bean.entity.Dish;
+import com.rci.bean.entity.inventory.InventoryDishRef;
 import com.rci.bean.entity.inventory.InventorySellLog;
 import com.rci.dao.impl.SafeDetachedCriteria;
 import com.rci.dao.impl.SafeRestrictions;
 import com.rci.service.IDishService;
 import com.rci.service.base.BaseServiceImpl;
+import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventorySellLogService;
 import com.rci.service.inventory.IInventoryService;
 import com.rci.tools.DateUtil;
@@ -36,6 +38,9 @@ public class InventorySellLogServiceImpl extends
 	
 	@Resource(name="InventoryService")
 	private IInventoryService inventoryService;
+	
+	@Resource(name="InventoryDishRefService")
+	private IInventoryDishRefService idrService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -93,6 +98,10 @@ public class InventorySellLogServiceImpl extends
 		if(!CollectionUtils.isEmpty(logs)){
 			for(InventorySellLog log:logs){
 				SaleLogDetailVO detail = beanMapper.map(log, SaleLogDetailVO.class);
+				InventoryDishRef idr = idrService.queryUniqueRelationship(log.getIno(),log.getDishno());
+				if(idr != null){
+					detail.setSaleAmount(log.getConsumeAmount().divideToIntegralValue(idr.getStandard()));
+				}
 				Dish dish = dishService.findDishByNo(log.getDishno());
 				detail.setDishname(dish.getDishName());
 				details.add(detail);

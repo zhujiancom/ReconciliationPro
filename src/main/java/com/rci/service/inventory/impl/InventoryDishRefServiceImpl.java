@@ -70,4 +70,12 @@ public class InventoryDishRefServiceImpl extends
 		return baseDAO.queryListByCriteria(sdc);
 	}
 
+	@Override
+	public InventoryDishRef queryUniqueRelationship(String ino, String dishno) {
+		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(InventoryDishRef.class);
+		sdc.add(SafeRestrictions.eq("dishno", dishno))
+			.add(SafeRestrictions.eq("ino", ino));
+		return baseDAO.queryUniqueByCriteria(sdc);
+	}
+
 }

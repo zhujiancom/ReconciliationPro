@@ -15,4 +15,6 @@ public interface IInventoryDishRefService extends
 	void deleteRelatedInfo(String ino);
 	
 	List<InventoryDishRef> queryByDishNo(String dishno);
+	
+	InventoryDishRef queryUniqueRelationship(String ino,String dishno);
 }
