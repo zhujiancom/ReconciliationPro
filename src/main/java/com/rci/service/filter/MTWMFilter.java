@@ -94,7 +94,7 @@ public class MTWMFilter extends AbstractFilter {
 							if(freeMap.get(order.getPayNo()) == null){
 								freeMap.put(order.getPayNo(), allowanceAmount);
 							}
-							schemeName = ","+schemeName+scheme.getName();
+							schemeName = schemeName+","+scheme.getName();
 							//保存美团外卖补贴金额
 							preserveOAR(allowanceAmount,AccountCode.FREE_MTWM,order);
 							preserveOAR(scheme.getSpread(),AccountCode.FREE_ONLINE,order);

@@ -1,7 +1,6 @@
 package com.rci.ui.swing.handler;
 
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.springframework.util.CollectionUtils;
@@ -49,17 +46,17 @@ public class OrderDataLoader implements Runnable {
 	
 	private Map<AccountCode,BigDecimal> sumMap;
 	
-	private Icon loadingIcon;
-	
-	private Icon doneIcon;
+//	private Icon loadingIcon;
+//	
+//	private Icon doneIcon;
 	
 	public OrderDataLoader(Date queryDate,Set<PaymodeCode> paymodes){
 		this.queryDate = queryDate;
 		this.paymodes = paymodes;
-		URL loadingIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/loading.gif");
-		loadingIcon = new ImageIcon(loadingIconUrl);
-		URL doneIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/done.png");
-		doneIcon = new ImageIcon(doneIconUrl);
+//		URL loadingIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/loading.gif");
+//		loadingIcon = new ImageIcon(loadingIconUrl);
+//		URL doneIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/done.png");
+//		doneIcon = new ImageIcon(doneIconUrl);
 	}
 	
 	@Override
@@ -68,8 +65,9 @@ public class OrderDataLoader implements Runnable {
 			
 			@Override
 			public void run() {
-				queryPane.getActionLabel().setIcon(loadingIcon);
-				queryPane.getActionLabel().setText("正在查询，请稍后。。。");
+//				queryPane.getActionLabel().setIcon(loadingIcon);
+//				queryPane.getActionLabel().setText("正在查询，请稍后。。。");
+				queryPane.displayInfoLoading("正在查询，请稍后。。。");
 			}
 		});
 		//1.加载 order 数据
@@ -117,8 +115,9 @@ public class OrderDataLoader implements Runnable {
 				
 				@Override
 				public void run() {
-					queryPane.getActionLabel().setIcon(doneIcon);
-					queryPane.getActionLabel().setText("查询完毕！");
+//					queryPane.getActionLabel().setIcon(doneIcon);
+//					queryPane.getActionLabel().setText("查询完毕！");
+					queryPane.displayInfoDone("查询完毕");
 				}
 			});
 		}else{

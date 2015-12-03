@@ -60,6 +60,12 @@ public class DisplayLabel<K,V> extends JLabel {
 		}
 	}
 	
+	public void displayToolTips(boolean display){
+		if(display){
+			this.setToolTipText(toString());
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return key + ":" + value + " "+StringUtils.trimToEmpty(unit);

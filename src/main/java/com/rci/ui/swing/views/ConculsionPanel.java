@@ -53,6 +53,10 @@ public class ConculsionPanel extends JPanel {
 	private JLabel totalValue;
 	private JLabel wmcrValue;
 	private JLabel wmcrbtValue;
+	private DisplayLabel<String,Long> wmcrRemark;
+	private JLabel plqValue;
+	private JLabel plqbtValue;
+	private DisplayLabel<String,Long> plqRemark;
 	
 //	private JLabel expRateValue; //外送率
 	private Map<AccountCode,BigDecimal> sumMap;
@@ -97,6 +101,8 @@ public class ConculsionPanel extends JPanel {
 		eightGroup.setLayout(new BoxLayout(eightGroup, BoxLayout.X_AXIS));
 		JPanel nineGroup = new JPanel();
 		nineGroup.setLayout(new BoxLayout(nineGroup, BoxLayout.X_AXIS));
+		JPanel tenGroup = new JPanel();
+		tenGroup.setLayout(new BoxLayout(tenGroup, BoxLayout.X_AXIS));
 		/* 现金统计  */
 		JLabel cash = new JLabel("收银机现金入账总额：");
 		cashValue = new JLabel();
@@ -160,7 +166,7 @@ public class ConculsionPanel extends JPanel {
 		elePanel.add(eleValue);
 		elePanel.add(eleRemark);
 		
-		/* 淘点点统计  */
+		/* 淘点点&支付宝统计  */
 		JLabel tdd = new JLabel("支付宝入账总额：");
 		tddValue = new JLabel();
 		tddValue.setForeground(Color.RED);
@@ -210,9 +216,12 @@ public class ConculsionPanel extends JPanel {
 		JLabel wmcrLabel = new JLabel("外卖超人入账总额：");
 		wmcrValue = new JLabel();
 		wmcrValue.setForeground(Color.RED);
+		wmcrRemark = new DisplayLabel<String,Long>("有效订单","单");
+		wmcrRemark.setForeground(Color.BLUE);
 		JPanel wmcrPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		wmcrPanel.add(wmcrLabel);
 		wmcrPanel.add(wmcrValue);
+		wmcrPanel.add(wmcrRemark);
 		
 		/* 外卖超人补贴 */
 		JLabel wmcrbtLabel = new JLabel("外卖超人补贴总额：");
@@ -229,6 +238,24 @@ public class ConculsionPanel extends JPanel {
 		JPanel freePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		freePanel.add(freeLabel);
 		freePanel.add(freeValue);
+		
+		/* 派乐趣 */
+		JLabel plqLabel = new JLabel("派乐趣入账总额:");
+		plqValue = new JLabel();
+		plqValue.setForeground(Color.RED);
+		plqRemark = new DisplayLabel<String,Long>("有效订单","单");
+		plqRemark.setForeground(Color.BLUE);
+		JPanel plqPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		plqPanel.add(plqLabel);
+		plqPanel.add(plqValue);
+		plqPanel.add(plqRemark);
+		
+		JLabel plqbtLabel = new JLabel("派乐趣补贴总额：");
+		plqbtValue = new JLabel();
+		plqbtValue.setForeground(Color.RED);
+		JPanel plqbtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		plqbtPanel.add(plqbtLabel);
+		plqbtPanel.add(plqbtValue);
 		/* 外送率统计  */
 //		JLabel expRateLabel = new JLabel("外送率：");
 //		expRateValue = new JLabel();
@@ -260,6 +287,8 @@ public class ConculsionPanel extends JPanel {
 		sevenGroup.add(wmcrbtPanel);
 		eightGroup.add(tddPanel);
 		eightGroup.add(freePanel);
+		tenGroup.add(plqPanel);
+		tenGroup.add(plqbtPanel);
 		nineGroup.add(totalPanel);
 		
 		this.add(firstGroup);
@@ -270,6 +299,7 @@ public class ConculsionPanel extends JPanel {
 		this.add(sixthGroup);
 		this.add(sevenGroup);
 		this.add(eightGroup);
+		this.add(tenGroup);
 		this.add(nineGroup);
 	}
 	
@@ -297,6 +327,10 @@ public class ConculsionPanel extends JPanel {
 //		expRateValue.setText("");
 		wmcrValue.setText("");
 		wmcrbtValue.setText("");
+		wmcrRemark.setText("");
+		plqValue.setText("");
+		plqbtValue.setText("");
+		plqRemark.setText("");
 	}
 	
 	public void refreshUI() {
@@ -316,32 +350,44 @@ public class ConculsionPanel extends JPanel {
 		String total = getTotalDayAmount(queryDate).toString();
 		String tgremark = getTicketStatistic(queryDate,Vendor.DZDP);
 		String mtremark = getTicketStatistic(queryDate,Vendor.MT);
-		Long eleremark = getValidCount(queryDate, Vendor.ELE);
-		Long mtwmremark = getValidCount(queryDate,Vendor.MTWM);
+		Long eleOrderNum = getValidCount(queryDate, Vendor.ELE);
+		Long mtwmOrderNum = getValidCount(queryDate,Vendor.MTWM);
 		String wmcr = getTotalAmount(AccountCode.WMCR).toString();
 		String freewmcr = getTotalAmount(AccountCode.FREE_WMCR).toString();
+		Long wmcrOrderNum = getValidCount(queryDate,Vendor.WMCR);
+		String plq = getTotalAmount(AccountCode.PLQ).toString();
+		String plqbt = getTotalAmount(AccountCode.FREE_PLQ).toString();
+		Long plqOrderNum = getValidCount(queryDate,Vendor.PLQ);
 		getCashValue().setText(cashmachine);
 		getPosValue().setText(pos);
 		getMtValue().setText(mt);
 		getTgValue().setText(dptg);
 		getShValue().setText(sh);
 		getEleValue().setText(ele);
+		getEleRemark().setText(eleOrderNum);
+		getEleRemark().displayToolTips(true);
 		getEleFreeValue().setText(elefree);
 		getEleSdRemark().setText(elesdremark);
 		getTddValue().setText(tdd);
 		getMtSuperValue().setText(mtsuper);
 		getMtwmValue().setText(mtwm);
 		getMtwmFreeValue().setText(freemtwm);
+		getMtwmRemark().setText(mtwmOrderNum);
+		getMtwmRemark().displayToolTips(true);
 		getFreeValue().setText(free);
 		getTotalValue().setText(total);
 		getTgRemark().setText(tgremark);
 		getTgRemark().setToolTipText(tgremark);
 		getMtRemark().setText(mtremark);
 		getMtRemark().setToolTipText(mtremark);
-		getEleRemark().setText(eleremark);
-		getMtwmRemark().setText(mtwmremark);
 		getWmcrValue().setText(wmcr);
 		getWmcrbtValue().setText(freewmcr);
+		getWmcrRemark().setText(wmcrOrderNum);
+		getWmcrRemark().displayToolTips(true);
+		getPlqValue().setText(plq);
+		getPlqbtValue().setText(plqbt);
+		getPlqRemark().setText(plqOrderNum);
+		getPlqRemark().displayToolTips(true);
 	}
 	
 	/**
@@ -602,6 +648,38 @@ public class ConculsionPanel extends JPanel {
 
 	public void setMtwmRemark(DisplayLabel<String, Long> mtwmRemark) {
 		this.mtwmRemark = mtwmRemark;
+	}
+
+	public DisplayLabel<String, Long> getWmcrRemark() {
+		return wmcrRemark;
+	}
+
+	public DisplayLabel<String, Long> getPlqRemark() {
+		return plqRemark;
+	}
+
+	public void setWmcrRemark(DisplayLabel<String, Long> wmcrRemark) {
+		this.wmcrRemark = wmcrRemark;
+	}
+
+	public void setPlqRemark(DisplayLabel<String, Long> plqRemark) {
+		this.plqRemark = plqRemark;
+	}
+
+	public JLabel getPlqValue() {
+		return plqValue;
+	}
+
+	public JLabel getPlqbtValue() {
+		return plqbtValue;
+	}
+
+	public void setPlqValue(JLabel plqValue) {
+		this.plqValue = plqValue;
+	}
+
+	public void setPlqbtValue(JLabel plqbtValue) {
+		this.plqbtValue = plqbtValue;
 	}
 
 }

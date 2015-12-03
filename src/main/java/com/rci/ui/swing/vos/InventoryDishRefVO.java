@@ -3,6 +3,8 @@ package com.rci.ui.swing.vos;
 import java.math.BigDecimal;
 
 public class InventoryDishRefVO {
+	private Long idrid;
+	
 	private String dishno;
 	
 	private String ino;
@@ -10,6 +12,14 @@ public class InventoryDishRefVO {
 	private BigDecimal standard;
 	
 	private String iname;
+
+	public Long getIdrid() {
+		return idrid;
+	}
+
+	public void setIdrid(Long idrid) {
+		this.idrid = idrid;
+	}
 
 	public String getDishno() {
 		return dishno;

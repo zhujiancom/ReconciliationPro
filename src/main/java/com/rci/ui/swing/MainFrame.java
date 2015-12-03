@@ -26,7 +26,7 @@ import javax.swing.UIManager;
 
 import com.rci.config.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
-import com.rci.ui.swing.listeners.ActionHandler;
+import com.rci.ui.swing.handler.MenuItemActionHandler;
 import com.rci.ui.swing.listeners.CleanListener;
 import com.rci.ui.swing.listeners.DataExportImportListener;
 import com.rci.ui.swing.listeners.FrameListener;
@@ -36,7 +36,6 @@ import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
 import com.rci.ui.swing.views.QueryFormPanel;
-import com.rci.ui.swing.views.builder.WindowBuilderFactory;
 
 public class MainFrame extends JFrame {
 	/**
@@ -84,6 +83,7 @@ public class MainFrame extends JFrame {
 		containerPanel.setLayout(layout);
 		
 		/* 绑定查询form */
+		queryPanel.setName("");
 		containerPanel.add(queryPanel, BorderLayout.NORTH);
 		/* 绑定订单内容和警告日志展示列表 */
 		contentPane = new ContentPanel(JSplitPane.HORIZONTAL_SPLIT,this.getWidth(),this.getHeight());
@@ -114,10 +114,6 @@ public class MainFrame extends JFrame {
 		system.setForeground(Color.WHITE);
 		JMenu operation = new JMenu("操作");
 		operation.setForeground(Color.WHITE);
-//		JMenu view = new JMenu("查看");
-//		view.setForeground(Color.WHITE);
-//		JMenu setting = new JMenu("设置");
-//		setting.setForeground(Color.WHITE);
 		JMenu statistic = new JMenu("统计");
 		statistic.setForeground(Color.WHITE);
 		JMenu management = new JMenu("管理");
@@ -127,8 +123,6 @@ public class MainFrame extends JFrame {
 		menubar.add(Box.createHorizontalStrut(10));
 		menubar.add(system);
 		menubar.add(operation);
-//		menubar.add(view);
-//		menubar.add(setting);
 		menubar.add(statistic);
 		menubar.add(management);
 		
@@ -146,97 +140,46 @@ public class MainFrame extends JFrame {
 		menubar.add(rightP);
 		frameListener.setMaximizeBtn(maximizeBtn);
 		
-		JMenuItem sysInit = ButtonFactory.createMenuItem("系统初始化","skin/gray/images/16x16/initBtn.png");
-		JMenuItem baseReset = ButtonFactory.createMenuItem("基础数据重置", "skin/gray/images/16x16/basereset.png");
-		JMenuItem dataExport = ButtonFactory.createMenuItem("订单数据导出", "skin/gray/images/16x16/export_0.png");
-		JMenuItem dataImport = ButtonFactory.createMenuItem("订单数据导入", "skin/gray/images/16x16/import_0.png");
-//		JMenuItem viewStock = ButtonFactory.createMenuItem("库存查看", "skin/gray/images/16x16/stock.png");
-//		JMenuItem setStock = ButtonFactory.createMenuItem("库存进货", "skin/gray/images/16x16/restock.png");
-//		JMenuItem stockManagement = ButtonFactory.createMenuItem("库存管理", "skin/gray/images/16x16/stockmanage.png");
-//		JMenuItem schemeManagement = ButtonFactory.createMenuItem("在线活动管理", "skin/gray/images/16x16/activity.png");
+		JMenuItem sysInit = ButtonFactory.createMenuItem("系统初始化","skin/gray/images/24x24/initBtn.png");
+		JMenuItem baseReset = ButtonFactory.createMenuItem("基础数据重置", "skin/gray/images/24x24/basereset.png");
+		JMenuItem dataExport = ButtonFactory.createMenuItem("订单数据导出", "skin/gray/images/24x24/export_0.png");
+		JMenuItem dataImport = ButtonFactory.createMenuItem("订单数据导入", "skin/gray/images/24x24/import_0.png");
 		system.add(sysInit);
 		system.add(baseReset);
 		operation.add(dataExport);
 		operation.add(dataImport);
-//		view.add(viewStock);
-//		setting.add(setStock);
-//		setting.add(stockManagement);
-//		setting.add(schemeManagement);
 
-		JMenuItem expressRate = ButtonFactory.createMenuItem("外送率统计", "skin/gray/images/16x16/takeout.png");
-		JMenuItem earning = ButtonFactory.createMenuItem("营业额统计", "skin/gray/images/16x16/statistic.png");
-		JMenuItem costControl = ButtonFactory.createMenuItem("成本控制", "skin/gray/images/16x16/cost.png");
+		JMenuItem expressRate = ButtonFactory.createMenuItem("外送率统计", "skin/gray/images/24x24/takeout.png");
+		JMenuItem earning = ButtonFactory.createMenuItem("营业额统计", "skin/gray/images/24x24/statistic.png");
+		JMenuItem costControl = ButtonFactory.createMenuItem("成本统计", "skin/gray/images/24x24/cost.png");
+		JMenuItem saleStatistic = ButtonFactory.createMenuItem("菜品销量统计", "skin/gray/images/24x24/dish_1.png");
 		statistic.add(expressRate);
 		statistic.add(earning);
 		statistic.add(costControl);
+		statistic.add(saleStatistic);
 		
-		JMenuItem dishManage = ButtonFactory.createMenuItem("菜品管理", "skin/gray/images/16x16/dish.png");
-		JMenuItem inventoryManage = ButtonFactory.createMenuItem("库存管理", "skin/gray/images/16x16/stockmanage.png");
-		JMenuItem activityManage = ButtonFactory.createMenuItem("活动管理", "skin/gray/images/16x16/activity.png");
+		JMenuItem dishManage = ButtonFactory.createMenuItem("菜品管理", "skin/gray/images/24x24/dish.png");
+		JMenuItem inventoryManage = ButtonFactory.createMenuItem("库存管理", "skin/gray/images/24x24/stockmanage.png");
+		JMenuItem activityManage = ButtonFactory.createMenuItem("活动管理", "skin/gray/images/24x24/activity.png");
 		management.add(dishManage);
 		management.add(inventoryManage);
 		management.add(activityManage);
 
-		ActionHandler handler = new ActionHandler(queryPanel);
-		sysInit.addActionListener(handler.dataInit());
-		baseReset.addActionListener(handler.baseReset());
-//		// 库存查看事件
-//		viewStock.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				WindowBuilderFactory.createViewStockWindow();
-//			}
-//		});
-//		// 库存进货时间
-//		setStock.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				WindowBuilderFactory.createReStockWindow();
-//			}
-//		});
+		MenuItemActionHandler mhandler = new MenuItemActionHandler();
+		mhandler.setQueryPanel(queryPanel);
+		baseReset.addActionListener(mhandler.doBaseInfoResetAction());
 		// 外送率统计事件
-		expressRate.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				WindowBuilderFactory.createExpressReateWindow();				
-			}
-		});
+		expressRate.addActionListener(mhandler.doExpressRateStatisticAction());
 		// 营业额统计事件
-		earning.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				WindowBuilderFactory.createTurnoverWindow();
-			}
-		});
-		// 库存管理事件
-//		stockManagement.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				WindowBuilderFactory.createStockManagementWindow();
-//			}
-//		});
-		
+		earning.addActionListener(mhandler.doEarningStatisticAction());
 		// 活动设置
-		activityManage.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				WindowBuilderFactory.createSchemeManagementWindow();
-			}
-		});
+		activityManage.addActionListener(mhandler.doActivitySettingAction());
 
 		// 数据导出
-//		DataIOListener dataExportListener = new DataIOListener(DataIOListener.EXPORT);
 		DataExportImportListener dataExportListener = new OrderDataExportImportListener(DataExportImportListener.EXPORT);
 		dataExport.addActionListener(dataExportListener);
 		
 		//数据导入
-//		DataIOListener dataImportListener = new DataIOListener(DataIOListener.IMPORT);
 		OrderDataExportImportListener dataImportListener = new OrderDataExportImportListener(DataExportImportListener.IMPORT);
 		dataImportListener.setConclusionPane(conclusionPane);
 		dataImportListener.setContentPane(contentPane);
@@ -284,22 +227,10 @@ public class MainFrame extends JFrame {
 		});
 		
 		//库存管理
-		inventoryManage.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				WindowBuilderFactory.createInventoryManagementWindow();
-			}
-		});
+		inventoryManage.addActionListener(mhandler.doInventoryManagmentAction());
 		
 		//菜品管理
-		dishManage.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent paramActionEvent) {
-				WindowBuilderFactory.createDishManagementWindow();
-			}
-		});
+		dishManage.addActionListener(mhandler.doDishManagmentAction());
 		return menubar;
 	}
 }

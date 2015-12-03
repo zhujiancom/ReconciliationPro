@@ -105,6 +105,9 @@ public class DataTransformServiceImpl implements IDataTransformService {
 				continue;
 			}
 			DishType type = beanMapper.map(typeDTO, DishType.class);
+			DishSeries series = seriesMap.get(typeDTO.getSeriesno());
+			type.setDishSeries(series);
+			dishTypeService.rwCreate(type);
 			typesMap.put(typeDTO.getTypeno(), type);
 		}
 		List<DishDTO> dishDTOs = fetchService.fetchAllDish();
@@ -118,8 +121,6 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			if(type == null || series == null){
 				continue;
 			}
-			type.setDishSeries(series);
-			type.setSeriesno(series.getSeriesno());
 			dish.setDishType(type);
 			dish.setDishSeries(series);
 			dishService.rwCreate(dish);

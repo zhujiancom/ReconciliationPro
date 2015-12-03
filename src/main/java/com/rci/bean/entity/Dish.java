@@ -116,7 +116,7 @@ public class Dish extends BaseEntity{
 		this.dishPrice = dishPrice;
 	}
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name="dish_type_id")
 	public DishType getDishType() {
 		return dishType;
@@ -126,7 +126,7 @@ public class Dish extends BaseEntity{
 		this.dishType = dishType;
 	}
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name="dish_series_id")
 	public DishSeries getDishSeries() {
 		return dishSeries;

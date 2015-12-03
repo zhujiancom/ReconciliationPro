@@ -8,7 +8,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,9 +22,12 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import org.springframework.util.CollectionUtils;
+
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
+import com.rci.tools.StringUtils;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.DishTable.DishTableModel;
 import com.rci.ui.swing.views.PopWindow;
@@ -36,6 +43,7 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 	private JCheckBox discountFlag;
 	private JCheckBox suitFlag;
 	private InputPanel costPane;
+	private Map<InventoryDishRefVO,InputPanel> standardMap;
 	
 	public DishModifyWinBuilder(JTable table){
 		this.table = table;
@@ -54,6 +62,7 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 	}
 
 	private void initComponent() {
+		standardMap = new HashMap<InventoryDishRefVO,InputPanel>();
 		JPanel containerPanel = modifyForm.getContainerPanel();
 		JPanel mainPane = new JPanel();
 		BoxLayout mainLayout = new BoxLayout(mainPane, BoxLayout.Y_AXIS);
@@ -101,7 +110,9 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 		thirdPane.add(new JLabel("规格设置："));
 		List<InventoryDishRefVO> refs = metaService.queryInventoryDishRefByDish(dish.getDishNo());
 		for(InventoryDishRefVO ref:refs){
-			thirdPane.add(new InputPanel(ref.getIname(), ref.getStandard(),true).initComponet());
+			InputPanel p = new InputPanel(ref.getIname(), ref.getStandard(),true); 
+			standardMap.put(ref,p);
+			thirdPane.add(p.initComponet());
 		}
 		mainPane.add(thirdPane);
 		
@@ -156,22 +167,40 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 			return this;
 		}
 
-		public Object getValue() {
-			return field.getText();
+		public String getInputResult(){
+			String result = field.getText();
+			if(StringUtils.hasText(result)){
+				return result;
+			}
+			return null;
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
-		System.out.println(costPane.getValue());
-		if(costPane.getValue() != null){
-			BigDecimal cost = new BigDecimal(costPane.getValue().toString());
-			dish.setCost(cost);
-			metaService.updateDishCost(dish);
+		BigDecimal cost = null;
+		if(costPane.getInputResult() != null){
+			cost = new BigDecimal(costPane.getInputResult());
+		}
+		dish.setCost(cost);
+		metaService.updateDishCost(dish);
+		if(!CollectionUtils.isEmpty(standardMap)){
+			for(Iterator<Entry<InventoryDishRefVO,InputPanel>> it = standardMap.entrySet().iterator();it.hasNext();){
+				Entry<InventoryDishRefVO,InputPanel> entry = it.next();
+				InventoryDishRefVO refvo = entry.getKey();
+				InputPanel inputPanel = entry.getValue();
+				BigDecimal standardAmount = null;
+				if(inputPanel.getInputResult() != null ){
+					standardAmount = new BigDecimal(inputPanel.getInputResult());
+				}
+				refvo.setStandard(standardAmount);
+				metaService.standardSetting(refvo);
+			}
 		}
 		modifyForm.close();
 	}
 
+	@Deprecated
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		Object source = e.getItemSelectable();

@@ -7,10 +7,13 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -53,9 +56,15 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private JCheckBox alipayCheck;
 	private JCheckBox bdnmCheck;
 	private Set<PaymodeCode> paymodes = new HashSet<PaymodeCode>();
-
+	private Icon loadingIcon;
+	private Icon doneIcon;
+	
 	public QueryFormPanel() {
 		buildPane();
+		URL loadingIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/loading.gif");
+		loadingIcon = new ImageIcon(loadingIconUrl);
+		URL doneIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/done.png");
+		doneIcon = new ImageIcon(doneIconUrl);
 	}
 
 	/**
@@ -341,5 +350,15 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 
 	public void setActionLabel(JLabel actionLabel) {
 		this.actionLabel = actionLabel;
+	}
+	
+	public void displayInfoLoading(String diplayInfo){
+		actionLabel.setText(diplayInfo);
+		actionLabel.setIcon(loadingIcon);
+	}
+	
+	public void displayInfoDone(String diplayInfo){
+		actionLabel.setText(diplayInfo);
+		actionLabel.setIcon(doneIcon);
 	}
 }

@@ -22,7 +22,7 @@ import com.rci.tools.StringUtils;
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class FreeFilter extends AbstractFilter {
-	private String[] freeOnlinePaymodes = new String[]{"11","12","14","96"};
+//	private String[] freeOnlinePaymodes = new String[]{"11","12","14","96"};
 
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
@@ -31,23 +31,24 @@ public class FreeFilter extends AbstractFilter {
 
 	@Override
 	protected void generateScheme(Order order,FilterChain chain) {
-		boolean onlineFree = false;
+//		boolean onlineFree = false;
 		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
 		BigDecimal normalAmount = freeAmount;
-		Map<String,BigDecimal> freeMap = chain.getFreeOnlineMap();
-		BigDecimal freeOnlineAmount = freeMap.get(order.getPayNo());
+		Map<String,BigDecimal> onlineFreeMap = chain.getFreeOnlineMap();
+		BigDecimal freeOnlineAmount = onlineFreeMap.get(order.getPayNo());
 		if(freeOnlineAmount != null){
-			for(String payno:freeOnlinePaymodes){
-				PaymodeCode paymode = PaymodeCode.paymodeCode(payno);
-				if(order.getPaymodeMapping().containsKey(paymode)){
-					onlineFree = true;
-					break;
-				}
-			}
-		}
-		if(onlineFree){
+//			for(String payno:freeOnlinePaymodes){
+//				PaymodeCode paymode = PaymodeCode.paymodeCode(payno);
+//				if(order.getPaymodeMapping().containsKey(paymode)){
+//					onlineFree = true;
+//					break;
+//				}
+//			}
 			return;
 		}
+//		if(onlineFree){
+//			return;
+//		}
 		String schemeName = order.getSchemeName();
 		if(normalAmount.compareTo(BigDecimal.ZERO) > 0){
 			if(StringUtils.hasText(schemeName)){

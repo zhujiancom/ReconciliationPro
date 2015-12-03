@@ -40,12 +40,12 @@ public class DishTable extends BaseTable<DishVO> {
 		cm.getColumn(1).setPreferredWidth(150);
 		cm.getColumn(2).setHeaderValue("价格");
 		cm.getColumn(2).setPreferredWidth(80);
-		cm.getColumn(3).setHeaderValue("状态");
+		cm.getColumn(3).setHeaderValue("是否停用");
 		cm.getColumn(3).setPreferredWidth(80);
 		cm.getColumn(4).setHeaderValue("是否套餐");
 		cm.getColumn(4).setPreferredWidth(80);
-		cm.getColumn(5).setHeaderValue("不可打折");
-		cm.getColumn(5).setPreferredWidth(80);
+		cm.getColumn(5).setHeaderValue("是否可打折");
+		cm.getColumn(5).setPreferredWidth(100);
 	}
 	
 	public void reflushTableData(QueryDishDTO queryDTO){

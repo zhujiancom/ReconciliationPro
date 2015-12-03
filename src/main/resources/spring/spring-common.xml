@@ -48,6 +48,7 @@
 		<bean class="com.rci.service.filter.DPSHFilter"></bean>
 		<bean class="com.rci.service.filter.AliPayFilter"></bean>
 		<bean class="com.rci.service.filter.WMCRFilter"></bean>
+		<bean class="com.rci.service.filter.PLQFilter"></bean>
 	</util:list>
 	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>

@@ -133,8 +133,6 @@ public interface IMetadataService {
 	//沽清列表
 	List<SellOffWarningVO> displayAllSellOffWarning();
 	void costSetting(String ino,BigDecimal cost);
-	
-	
-	
+	void standardSetting(InventoryDishRefVO refvo);
 	
 }

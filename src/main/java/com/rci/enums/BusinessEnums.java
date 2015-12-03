@@ -138,14 +138,14 @@ public final class BusinessEnums {
 	public static enum AccountCode{
 		MT,MTWM,MT_SUPER,FREE_MT_SUPER,DPTG,DPSH,
 		ELE,ALIPAY,FREE,FREE_ONLINE,FREE_MTWM,FREE_ELE,
-		CASH_MACHINE,POS,WMCR,FREE_WMCR,BDNM;
+		CASH_MACHINE,POS,WMCR,FREE_WMCR,BDNM,PLQ,FREE_PLQ;
 	}
 	
 	public static enum PaymodeCode{
 		CASH_MACHINE("00"),ELE("11"),MTWM("14"),WMCR("12"),
 		TDD("96"),DPTG("98"),DPSH("13"),
 		MT("99"),FREE("YY"),MTSUPER("87"),POS("03"),
-		UNKNOW(""),ZFB("86"),BDNM("04");
+		UNKNOW(""),ZFB("86"),BDNM("04"),PLQ("08");
 		
 		private String paymodeno;
 		private PaymodeCode(String paymodeno){
@@ -183,6 +183,6 @@ public final class BusinessEnums {
 	 *
 	 */
 	public static enum OrderFramework{
-		ELE,MTWM,TS,TDD,WMCR,DJ,LS
+		ELE,MTWM,TS,TDD,WMCR,DJ,LS,PLQ
 	}
 }
