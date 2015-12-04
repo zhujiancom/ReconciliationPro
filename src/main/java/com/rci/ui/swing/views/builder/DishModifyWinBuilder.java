@@ -43,6 +43,7 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 	private JCheckBox discountFlag;
 	private JCheckBox suitFlag;
 	private InputPanel costPane;
+	private InputPanel pricePane;
 	private Map<InventoryDishRefVO,InputPanel> standardMap;
 	
 	public DishModifyWinBuilder(JTable table){
@@ -73,7 +74,8 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 		baseInfoPane.setPreferredSize(new Dimension(modifyForm.getWidth(), 80));
 		baseInfoPane.add(new InputPanel("菜品编号",dish.getDishNo()).initComponet());
 		baseInfoPane.add(new InputPanel("菜品名称",dish.getDishName()).initComponet());
-		baseInfoPane.add(new InputPanel("菜品价格",dish.getDishPrice()).initComponet());
+		pricePane = new InputPanel("菜品价格",dish.getDishPrice(),true);
+		baseInfoPane.add(pricePane.initComponet());
 		costPane = new InputPanel("成本单价",dish.getCost(),true);
 		baseInfoPane.add(costPane.initComponet());
 		mainPane.add(baseInfoPane);
@@ -81,21 +83,18 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 		JPanel secondPane = new JPanel();
 		secondPane.setLayout(null);
 		stopFlag = new JCheckBox("停用");
-		stopFlag.setEnabled(false);
 		stopFlag.addItemListener(this);
 		if(YOrN.Y.equals(dish.getStopFlag())){
 			stopFlag.setSelected(true);
 		}
 		stopFlag.setBounds(0, 0, 100, 20);
-		discountFlag = new JCheckBox("不可打折");
-		discountFlag.setEnabled(false);
+		discountFlag = new JCheckBox("可打折");
 		discountFlag.addItemListener(this);
-		if(YOrN.N.equals(dish.getDiscountFlag())){
+		if(YOrN.Y.equals(dish.getDiscountFlag())){
 			discountFlag.setSelected(true);
 		}
 		discountFlag.setBounds(100, 0, 100, 20);
 		suitFlag = new JCheckBox("套餐");
-		suitFlag.setEnabled(false);
 		suitFlag.addItemListener(this);
 		if(YOrN.Y.equals(dish.getSuitFlag())){
 			suitFlag.setSelected(true);
@@ -119,6 +118,7 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 		JPanel actionPane = new JPanel();
 		JButton confirmBtn = ButtonFactory.createImageButton("确定","skin/gray/images/btn_green.png",null);
 		confirmBtn.addActionListener(this);
+		confirmBtn.setMultiClickThreshhold(3);
 		actionPane.add(confirmBtn);
 		mainPane.add(actionPane);
 		
@@ -183,7 +183,12 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 			cost = new BigDecimal(costPane.getInputResult());
 		}
 		dish.setCost(cost);
-		metaService.updateDishCost(dish);
+		BigDecimal price = null;
+		if(pricePane.getInputResult() != null){
+			price = new BigDecimal(pricePane.getInputResult());
+		}
+		dish.setDishPrice(price);
+		metaService.updateDishInfo(dish);
 		if(!CollectionUtils.isEmpty(standardMap)){
 			for(Iterator<Entry<InventoryDishRefVO,InputPanel>> it = standardMap.entrySet().iterator();it.hasNext();){
 				Entry<InventoryDishRefVO,InputPanel> entry = it.next();
@@ -200,7 +205,6 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 		modifyForm.close();
 	}
 
-	@Deprecated
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		Object source = e.getItemSelectable();

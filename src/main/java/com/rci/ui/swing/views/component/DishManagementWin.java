@@ -87,7 +87,6 @@ public class DishManagementWin extends PopWindow {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				if(event.getClickCount() == 2){
-//					int selectedIndex = table.getSelectedRow();
 					PopWindowBuilder winBuilder = new DishModifyWinBuilder(table);
 					winBuilder.retrieveWindow();
 				}

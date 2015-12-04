@@ -540,10 +540,13 @@ public class MetadataServiceImpl implements IMetadataService {
 	}
 
 	@Override
-	public void updateDishCost(DishVO dishvo) {
+	public void updateDishInfo(DishVO dishvo) {
 		Dish dish = dishService.get(dishvo.getDid());
-//		Dish dish = dishService.findDishByNo(dishvo.getDishNo());
 		dish.setCost(dishvo.getCost());
+		dish.setDiscountFlag(dishvo.getDiscountFlag());
+		dish.setSuitFlag(dishvo.getSuitFlag());
+		dish.setStopFlag(dishvo.getStopFlag());
+		dish.setDishPrice(dishvo.getDishPrice());
 		dishService.rwUpdate(dish);
 	}
 

@@ -105,7 +105,7 @@ public interface IMetadataService {
 	
 	List<DishVO> queryDishes(QueryDishDTO queryDTO);
 	
-	void updateDishCost(DishVO dishvo);
+	void updateDishInfo(DishVO dishvo);
 	
 	///////////////////////////////////////////////  Inventory  库存管理模块   /////////////////////////////////////////////
 	@Deprecated

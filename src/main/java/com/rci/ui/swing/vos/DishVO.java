@@ -22,7 +22,7 @@ public class DishVO {
 	
 	private YOrN suitFlag;
 	
-	private CommonEnums.YOrN discountFlag;
+	private YOrN discountFlag;
 	
 	private BigDecimal cost;
 	
