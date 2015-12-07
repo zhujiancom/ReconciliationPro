@@ -22,7 +22,6 @@ import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.SchemeTypeDishRef;
-import com.rci.bean.entity.Stock;
 import com.rci.bean.entity.inventory.Inventory;
 import com.rci.bean.entity.inventory.InventoryDishRef;
 import com.rci.bean.entity.inventory.PurchaseRecord;
@@ -37,7 +36,6 @@ import com.rci.service.IPayModeService;
 import com.rci.service.ISchemeService;
 import com.rci.service.ISchemeTypeDishRefService;
 import com.rci.service.ISchemeTypeService;
-import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
 import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventorySellLogService;
@@ -57,7 +55,6 @@ import com.rci.ui.swing.vos.SaleLogVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
 import com.rci.ui.swing.vos.SellOffWarningVO;
-import com.rci.ui.swing.vos.StockVO;
 
 @Service("MetadataService")
 public class MetadataServiceImpl implements IMetadataService {
@@ -73,8 +70,6 @@ public class MetadataServiceImpl implements IMetadataService {
 	private ITableInfoService tableService;
 	@Resource(name="DataTransformService")
 	private IDataTransformService transformService;
-	@Resource(name="StockService")
-	private IStockService stockService;
 	@Resource(name="SchemeService")
 	private ISchemeService schemeService;
 	@Resource(name="SchemeTypeService")
@@ -116,22 +111,6 @@ public class MetadataServiceImpl implements IMetadataService {
 		
 		/* 清除桌号  */
 		tableService.deleteAll();
-	}
-
-	@Override
-	public List<StockVO> displayStocks() {
-		List<Stock> stocks = stockService.getAll();
-		if(!CollectionUtils.isEmpty(stocks)){
-			List<StockVO> stockVOs = new ArrayList<StockVO>();
-			for(Stock stock:stocks){
-				if(stock.getLevel() == 1){
-					StockVO vo = beanMapper.map(stock, StockVO.class);
-					stockVOs.add(vo);
-				}
-			}
-			return stockVOs;
-		}
-		return null;
 	}
 
 	@Override

@@ -79,20 +79,6 @@ public interface DataCleanFacade {
 	
 	/**
 	 * 
-	 * Describle(描述)：删除库存信息
-	 *
-	 * 方法名称：deleteStockInfo
-	 *
-	 * 所在类名：DataCleanFacade
-	 *
-	 * Create Time:2015年7月29日 下午5:15:49
-	 *  
-	 * @param time
-	 */
-	public void deleteStockInfo(String time);
-	
-	/**
-	 * 
 	 * Describle(描述)：删除一整天所有相关信息
 	 * 1.删除所有订单信息
 	 * 2.删除所有标记信息

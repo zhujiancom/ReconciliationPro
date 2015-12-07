@@ -16,7 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.rci.bean.entity.Scheme;
-import com.rci.bean.entity.StockOpLog;
 import com.rci.bean.entity.TableInfo;
 import com.rci.bean.entity.inventory.Inventory;
 import com.rci.bean.entity.inventory.InventoryDishRef;
@@ -24,7 +23,6 @@ import com.rci.bean.entity.inventory.InventorySellLog;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.enums.BusinessEnums.PaymodeCode;
-import com.rci.enums.BusinessEnums.StockOpType;
 import com.rci.metadata.dto.TableDTO;
 import com.rci.metadata.service.IDataFetchService;
 import com.rci.metadata.service.IDataTransformService;
@@ -72,8 +70,6 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	private ITicketStatisticService ticketService;
 	@Resource(name="MetadataService")
 	private IMetadataService metadataService;
-	@Resource(name="StockService")
-	private IStockService stockService;
 	@Resource(name="DishSeriesService")
 	private IDishSeriesService dishseriesService;
 	@Resource(name="SchemeTypeDishRefService")
@@ -116,10 +112,15 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 //		BigDecimal b = new BigDecimal("100");
 //		System.out.println(a.divideToIntegralValue(b));
 		//测试银行家算法
-		BigDecimal b = new BigDecimal("10.525");
-		System.out.println(b);
-		b = b.setScale(1, RoundingMode.HALF_EVEN);
-		System.out.println(b);
+//		BigDecimal b = new BigDecimal("10.525");
+//		System.out.println(b);
+//		b = b.setScale(0, RoundingMode.HALF_EVEN);
+//		System.out.println(b);
+		BigDecimal a = new BigDecimal("26");
+		BigDecimal b = new BigDecimal("3000");
+		BigDecimal c = new BigDecimal("22");
+		BigDecimal d = a.divide(b).multiply(c);
+		System.out.println(d.setScale(0, RoundingMode.HALF_EVEN));
 	}
 	
 	
@@ -217,7 +218,8 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void testTransformDish(){
-		transformSevice.transformDishInfo();
+		String dishno="763";
+		transformSevice.transformDishInfo(dishno);
 	}
 	
 	@Test
@@ -244,22 +246,6 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testClearMetadata(){
 		metadataService.clearMetadata();
-	}
-	
-	@Test
-	public void testInsertStockLog(){
-		StockOpLog sol = new StockOpLog();
-		sol.setDay("20150711");
-		sol.setConsumeTime(DateUtil.getCurrentDate());
-		sol.setDishName("雪碧");
-		sol.setConsumeAmount(new BigDecimal(2));
-		sol.setType(StockOpType.CONSUME);
-		stockService.insertStockOpLog(sol);
-	}
-	
-	@Test
-	public void testCleanStock(){
-		stockService.clearStockByDay("20150715");
 	}
 	
 	@Test

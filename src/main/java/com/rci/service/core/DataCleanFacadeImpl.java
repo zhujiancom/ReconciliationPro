@@ -12,7 +12,6 @@ import com.rci.service.IAccFlowService;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderService;
-import com.rci.service.IStockService;
 import com.rci.service.ITicketInfoService;
 import com.rci.service.ITicketStatisticService;
 import com.rci.service.inventory.IInventorySellLogService;
@@ -31,9 +30,6 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 	
 	@Resource(name="TicketInfoService")
 	private ITicketInfoService ticketService;
-	
-	@Resource(name="StockService")
-	private IStockService stockService;
 	@Resource(name="AccFlowService")
 	private IAccFlowService accFlowService;
 	@Resource(name="FetchMarkService")
@@ -71,11 +67,6 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void deleteStockInfo(String time) {
-		stockService.clearStockByDay(time);
 	}
 
 	@Override

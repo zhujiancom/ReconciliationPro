@@ -172,8 +172,8 @@ public class MainFrame extends JFrame {
 		expressRate.addActionListener(mhandler.doExpressRateStatisticAction());
 		// 营业额统计事件
 		earning.addActionListener(mhandler.doEarningStatisticAction());
-		// 活动设置
-		activityManage.addActionListener(mhandler.doActivitySettingAction());
+		//菜品销量统计
+		saleStatistic.addActionListener(mhandler.doSaleStatisticAction());
 
 		// 数据导出
 		DataExportImportListener dataExportListener = new OrderDataExportImportListener(DataExportImportListener.EXPORT);
@@ -231,6 +231,9 @@ public class MainFrame extends JFrame {
 		
 		//菜品管理
 		dishManage.addActionListener(mhandler.doDishManagmentAction());
+		
+		// 活动设置
+		activityManage.addActionListener(mhandler.doActivitySettingAction());
 		return menubar;
 	}
 }

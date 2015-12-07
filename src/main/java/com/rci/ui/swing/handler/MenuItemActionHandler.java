@@ -117,6 +117,28 @@ public class MenuItemActionHandler {
 	
 	/**
 	 * 
+	 * Describle(描述)： 菜品销量统计
+	 *
+	 * 方法名称：doSaleStatisticAction
+	 *
+	 * 所在类名：MenuItemActionHandler
+	 *
+	 * Create Time:2015年12月7日 下午4:31:11
+	 *  
+	 * @return
+	 */
+	public ActionListener doSaleStatisticAction(){
+		return new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				WindowBuilderFactory.createSaleStatisticWindow();
+			}
+		};
+	}
+	
+	/**
+	 * 
 	 * Describle(描述)： 活动设置
 	 *
 	 * 方法名称：doActivitySettingAction

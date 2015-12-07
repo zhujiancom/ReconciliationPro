@@ -30,7 +30,6 @@ import com.rci.service.IAccountService;
 import com.rci.service.IDataLoaderService;
 import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
-import com.rci.service.IStockService;
 import com.rci.service.filter.CalculateFilter;
 import com.rci.service.filter.FilterChain;
 import com.rci.service.filter.FreeFilter;
@@ -65,9 +64,6 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 	
 	@Resource(name="AccFlowService")
 	private IAccFlowService accFlowService;
-	
-	@Resource(name="StockService")
-	private IStockService stockService;
 	
 	@Resource(name="DishService")
 	private IDishService dishService;

@@ -19,7 +19,6 @@ import com.rci.ui.swing.vos.SaleLogVO;
 import com.rci.ui.swing.vos.SchemeTypeVO;
 import com.rci.ui.swing.vos.SchemeVO;
 import com.rci.ui.swing.vos.SellOffWarningVO;
-import com.rci.ui.swing.vos.StockVO;
 
 
 /**
@@ -108,9 +107,6 @@ public interface IMetadataService {
 	void updateDishInfo(DishVO dishvo);
 	
 	///////////////////////////////////////////////  Inventory  库存管理模块   /////////////////////////////////////////////
-	@Deprecated
-	List<StockVO> displayStocks();
-	
 	List<InventoryVO> displayAllInventory();
 	List<InventoryVO> queryInventory(String iname);
 	List<InventoryDishRefVO> queryInventoryDishRefByDish(String dishno);

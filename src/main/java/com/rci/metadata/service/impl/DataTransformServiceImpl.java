@@ -39,7 +39,6 @@ import com.rci.service.IDishService;
 import com.rci.service.IDishTypeService;
 import com.rci.service.IOrderService;
 import com.rci.service.IPayModeService;
-import com.rci.service.IStockService;
 import com.rci.service.ITableInfoService;
 import com.rci.tools.DateUtil;
 
@@ -60,8 +59,6 @@ public class DataTransformServiceImpl implements IDataTransformService {
 	private IOrderService orderService;
 	@Resource(name="TableInfoService")
 	private ITableInfoService tableService;
-	@Resource(name="StockService")
-	private IStockService stockService;
 	@Override
 	public List<Order> transformOrderInfo(Date sdate) {
 		Date edate = DateUtil.getEndTimeOfDay(sdate);
@@ -136,6 +133,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 		}
 		Dish dish = beanMapper.map(dishDTO, Dish.class);
 		dish.setDishType(dType);
+		dish.setDishSeries(dType.getDishSeries());
 		dishService.rwCreate(dish);
 		return dish;
 	}
