@@ -3,7 +3,12 @@
  */
 package com.rci.ui.swing.views.component.switcher;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
+
 import javax.swing.JPanel;
+
+import com.rci.ui.swing.handler.AbstractSwitcherHandler;
 
 /**
  * remark (备注):
@@ -20,5 +25,24 @@ import javax.swing.JPanel;
  *
  */
 public class SwitcherBar extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7074881270541561933L;
+	private AbstractSwitcherHandler elementActionHandler; 
+	
+	public SwitcherBar(AbstractSwitcherHandler elementActionHandler){
+		this.elementActionHandler = elementActionHandler;
+		initComponent();
+	}
+	
+	private void initComponent() {
+		setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
+		setBackground(Color.WHITE);
+	}
 
+	public void addElement(SwitcherElement element){
+		elementActionHandler.addElement(element);
+		add(element);
+	}
 }

@@ -26,6 +26,7 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.Paymode;
 import com.rci.bean.entity.TableInfo;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.dto.DishDTO;
 import com.rci.metadata.dto.DishSeriesDTO;
 import com.rci.metadata.dto.DishTypeDTO;
@@ -120,6 +121,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			}
 			dish.setDishType(type);
 			dish.setDishSeries(series);
+			dish.setStatisticFlag(YOrN.Y);
 			dishService.rwCreate(dish);
 		}
 	}
@@ -134,6 +136,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 		Dish dish = beanMapper.map(dishDTO, Dish.class);
 		dish.setDishType(dType);
 		dish.setDishSeries(dType.getDishSeries());
+		dish.setStatisticFlag(YOrN.Y);
 		dishService.rwCreate(dish);
 		return dish;
 	}

@@ -1,12 +1,18 @@
 package com.rci.service.core;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -15,19 +21,19 @@ import com.rci.bean.entity.TicketInfo;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.metadata.NativeSQLBuilder;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.ITicketInfoService;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
+import com.rci.ui.swing.vos.DishStatisticVO;
 import com.rci.ui.swing.vos.ExpressRateVO;
 import com.rci.ui.swing.vos.TurnoverVO;
 
 @Service("StatisticCenterFacade")
 public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
-//	@Resource(name="TicketStatisticService")
-//	private ITicketStatisticService ticketService;
 	@Resource(name="TicketInfoService")
 	private ITicketInfoService ticketService;
 	@Resource(name="OrderService")
@@ -36,6 +42,9 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 	private IELESDStatisticService elesdService;
 	@Resource(name="OrderAccountRefService")
 	private IOrderAccountRefService oarService;
+	
+	@Resource(name="jdbcTemplate")
+	private JdbcTemplate jdbcTemplate;
 	
 	@Override
 	public String getTicketStatistic(Date date, Vendor vendor) {
@@ -241,6 +250,36 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 			return vo;
 		}
 		return null;
+	}
+
+	@Override
+	public List<DishStatisticVO> getDishSaleStatisticInfo(Date sdate, Date edate) {
+		return jdbcTemplate.query(NativeSQLBuilder.DISHSALE_STATISTIC, new Object[]{sdate,edate}, new RowMapper<DishStatisticVO>(){
+
+			@Override
+			public DishStatisticVO mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				DishStatisticVO vo = new DishStatisticVO();
+				vo.setDishNo(rs.getString("dishno"));
+				vo.setDishName(rs.getString("dishname"));
+				vo.setDishPrice(rs.getBigDecimal("dishprice"));
+				vo.setSaleAmount(rs.getBigDecimal("amount"));
+				return vo;
+			}
+			
+		});
+	}
+
+	@Override
+	public BigDecimal getSaleroom(Date sdate, Date edate) {
+		return jdbcTemplate.query(NativeSQLBuilder.DISHSALE_STATISTIC_AMUONT, new Object[]{sdate,edate},new ResultSetExtractor<BigDecimal>() {
+
+			@Override
+			public BigDecimal extractData(ResultSet rs) throws SQLException,
+					DataAccessException {
+				return rs.getBigDecimal("amount");
+			}
+		});
 	}
 	
 	

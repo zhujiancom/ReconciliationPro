@@ -51,4 +51,20 @@ public class NativeSQLBuilder {
 			+ "and oar.accno=? \n"
 			+ "and o.framework=?";
 	
+	public static final String DISHSALE_STATISTIC="select oi.dish_no 'dishno',d.dish_name 'dishname',d.dish_price 'dishprice',sum(oi.count)-sum(oi.count_back) 'amount' \n"
+			+ "from bus_tb_order_item oi,bus_tb_dish d \n"
+			+ "where oi.dish_no=d.dish_no \n"
+			+ "and d.statistic_flag='Y' \n"
+			+ "and oi.suit_flag in ('P','N') \n"
+			+ "and oi.consume_time >= ? and oi.consume_time < ? \n"
+			+ "group by (oi.dish_no) order by amount desc";
+	
+	public static final String DISHSALE_STATISTIC_AMUONT="select sum(count)-sum(count_back) 'amount' \n"
+			+ "from bus_tb_order_item oi,,bus_tb_dish d \n"
+			+ "where oi.dish_no=d.dish_no \n"
+			+ "and d.statistic_flag='Y' \n"
+			+ "and oi.suit_flag in ('P','N') \n"
+			+ "and oi.consume_time >= ? and oi.consume_time < ? \n"
+			+ "order by amount desc";
+	
 }

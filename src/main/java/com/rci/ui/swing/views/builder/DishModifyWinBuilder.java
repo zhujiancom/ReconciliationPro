@@ -42,6 +42,7 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 	private JCheckBox stopFlag;
 	private JCheckBox discountFlag;
 	private JCheckBox suitFlag;
+	private JCheckBox statisticFlag;
 	private InputPanel costPane;
 	private InputPanel pricePane;
 	private Map<InventoryDishRefVO,InputPanel> standardMap;
@@ -100,9 +101,16 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 			suitFlag.setSelected(true);
 		}
 		suitFlag.setBounds(200, 0, 100, 20);
+		statisticFlag = new JCheckBox("纳入统计中");
+		statisticFlag.addItemListener(this);
+		if(YOrN.Y.equals(dish.getStatisticFlag())){
+			statisticFlag.setSelected(true);
+		}
+		statisticFlag.setBounds(300, 0, 100, 20);
 		secondPane.add(stopFlag);
 		secondPane.add(discountFlag);
 		secondPane.add(suitFlag);
+		secondPane.add(statisticFlag);
 		mainPane.add(secondPane);
 		
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -227,6 +235,13 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 				dish.setSuitFlag(YOrN.Y);
 			}else{
 				dish.setSuitFlag(YOrN.N);
+			}
+		}
+		if(source == statisticFlag){
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				dish.setStatisticFlag(YOrN.Y);
+			}else{
+				dish.setStatisticFlag(YOrN.N);
 			}
 		}
 	}

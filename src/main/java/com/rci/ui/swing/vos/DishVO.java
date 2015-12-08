@@ -24,6 +24,8 @@ public class DishVO {
 	
 	private YOrN discountFlag;
 	
+	private YOrN statisticFlag;
+	
 	private BigDecimal cost;
 	
 	public DishVO(){}
@@ -110,6 +112,14 @@ public class DishVO {
 
 	public void setCost(BigDecimal cost) {
 		this.cost = cost;
+	}
+
+	public YOrN getStatisticFlag() {
+		return statisticFlag;
+	}
+
+	public void setStatisticFlag(YOrN statisticFlag) {
+		this.statisticFlag = statisticFlag;
 	}
 
 	@Override

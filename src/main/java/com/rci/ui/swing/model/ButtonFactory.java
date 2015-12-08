@@ -1,5 +1,6 @@
 package com.rci.ui.swing.model;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Insets;
 import java.net.URL;

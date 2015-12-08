@@ -78,6 +78,9 @@ public class Dish extends BaseEntity{
 	/* 菜品成本单价 （原料成本） */
 	private BigDecimal cost;
 	
+	/* 是否参与统计 */
+	private YOrN statisticFlag;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
 	@Column(name="did", nullable=false,updatable=false)
@@ -190,6 +193,16 @@ public class Dish extends BaseEntity{
 	 */
 	public void setDiscountFlag(CommonEnums.YOrN discountFlag) {
 		this.discountFlag = discountFlag;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="statistic_flag")
+	public YOrN getStatisticFlag() {
+		return statisticFlag;
+	}
+
+	public void setStatisticFlag(YOrN statisticFlag) {
+		this.statisticFlag = statisticFlag;
 	}
 
 	@Column(name="cost")
