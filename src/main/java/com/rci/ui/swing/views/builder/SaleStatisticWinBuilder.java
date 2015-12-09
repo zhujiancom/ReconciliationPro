@@ -1,9 +1,9 @@
 package com.rci.ui.swing.views.builder;
 
 import com.rci.ui.swing.views.PopWindow;
-import com.rci.ui.swing.views.component.SaleStatisticWin;
+import com.rci.ui.swing.views.component.statistic.SaleStatisticWin;
 
-public class SaleStatisticWinBuilder implements PopWindowBuilder {
+public class SaleStatisticWinBuilder extends AbstractWinBuilder {
 	private SaleStatisticWinBuilder(){};
 	private static class SaleStatisticWinBuilderHolder{
 		private static SaleStatisticWinBuilder instance = new SaleStatisticWinBuilder();
@@ -14,7 +14,7 @@ public class SaleStatisticWinBuilder implements PopWindowBuilder {
 	}
 	
 	@Override
-	public PopWindow retrieveWindow() {
+	protected PopWindow createWindow() {
 		return new SaleStatisticWin("菜品销售统计");
 	}
 

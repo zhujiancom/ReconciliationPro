@@ -183,6 +183,6 @@ public final class BusinessEnums {
 	 *
 	 */
 	public static enum OrderFramework{
-		ELE,MTWM,TS,TDD,WMCR,DJ,LS,PLQ
+		ELE,MTWM,TS,TDD,WMCR,LS,PLQ
 	}
 }

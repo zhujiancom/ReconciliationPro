@@ -32,6 +32,7 @@ import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishSeriesService;
 import com.rci.service.IDishService;
 import com.rci.service.IDishTypeService;
+import com.rci.service.IOrderService;
 import com.rci.service.IPayModeService;
 import com.rci.service.ISchemeService;
 import com.rci.service.ISchemeTypeDishRefService;
@@ -49,6 +50,7 @@ import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.InventoryDishRefVO;
 import com.rci.ui.swing.vos.InventoryVO;
+import com.rci.ui.swing.vos.OrderItemVO;
 import com.rci.ui.swing.vos.PurchaseRecordVO;
 import com.rci.ui.swing.vos.SaleLogDetailVO;
 import com.rci.ui.swing.vos.SaleLogVO;
@@ -86,6 +88,8 @@ public class MetadataServiceImpl implements IMetadataService {
 	private IInventorySellLogService sellLogService;
 	@Resource(name="SellOffWarningService")
 	private ISellOffWarningService sowarningService;
+	@Resource(name="OrderService")
+	private IOrderService orderService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -535,6 +539,11 @@ public class MetadataServiceImpl implements IMetadataService {
 		InventoryDishRef idr = idrService.get(refvo.getIdrid());
 		idr.setStandard(refvo.getStandard());
 		idrService.rwUpdate(idr);
+	}
+
+	@Override
+	public List<OrderItemVO> queryOrderItemsByPayno(String payno) {
+		return orderService.queryOrderItemVOsByPayno(payno);
 	}
 
 }

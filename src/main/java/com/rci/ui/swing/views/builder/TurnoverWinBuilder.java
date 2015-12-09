@@ -2,6 +2,7 @@ package com.rci.ui.swing.views.builder;
 
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.views.component.TurnOverWin;
+import com.rci.ui.swing.views.component.statistic.TurnoverStatisticWin;
 
 public class TurnoverWinBuilder extends AbstractWinBuilder {
 	private TurnoverWinBuilder(){}
@@ -16,6 +17,7 @@ public class TurnoverWinBuilder extends AbstractWinBuilder {
 	
 	@Override
 	protected PopWindow createWindow() {
-		return new TurnOverWin("营业额统计");
+//		return new TurnOverWin("营业额统计");
+		return new TurnoverStatisticWin("营业额统计");
 	}
 }

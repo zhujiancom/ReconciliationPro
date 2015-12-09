@@ -1,9 +1,12 @@
 package com.rci.ui.swing.model;
 
 import java.awt.event.MouseEvent;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JTable;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 import org.apache.commons.logging.Log;
@@ -87,4 +90,37 @@ public abstract class BaseTable<T> extends JTable {
 	 *
 	 */
 	protected abstract void setHeaderLabel();
+
+	/**
+	 * Describle(描述)：自适应表格列宽度
+	 *
+	 * 方法名称：adaptiveColumns
+	 *
+	 * 所在类名：BaseTable
+	 *
+	 * Create Time:2015年12月9日 上午11:07:17
+	 *  
+	 * @param table
+	 */
+	protected void adaptiveColumns(JTable table){
+		JTableHeader header = table.getTableHeader();
+		int rowcount = table.getRowCount();
+		Enumeration<TableColumn> columns = table.getColumnModel().getColumns();
+		while(columns.hasMoreElements()){
+			TableColumn column = columns.nextElement();
+			int col = header.getColumnModel().getColumnIndex(column.getIdentifier());
+			int width = (int) header.getDefaultRenderer()
+						.getTableCellRendererComponent(table, column.getIdentifier(), false, false, -1, col)
+						.getPreferredSize()
+						.getWidth();
+			for(int row=0;row < rowcount;row++){
+				int preferedWidth = (int) table.getCellRenderer(row, col)
+									.getTableCellRendererComponent(table, table.getValueAt(row, col), false, false, row, col)
+									.getPreferredSize().getWidth();
+				width = Math.max(width, preferedWidth);
+			}
+			header.setResizingColumn(column);
+			column.setWidth(width+table.getIntercellSpacing().width);
+		}
+	}
 }

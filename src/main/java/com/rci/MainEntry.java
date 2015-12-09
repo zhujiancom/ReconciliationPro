@@ -1,5 +1,6 @@
 package com.rci;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
@@ -25,6 +26,7 @@ public class MainEntry {
 			frame.setIconImage(frameIcon);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setLocationRelativeTo(null); // 相对居中, 在frame设置size之后
+			frame.getContentPane().setBackground(Color.WHITE);
 			/* 全屏设置1 */
 //			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
 //	                .getDefaultScreenDevice();
@@ -45,5 +47,4 @@ public class MainEntry {
 			logger.error("系统启动错误！",ex);
 		}
 	}
-
 }

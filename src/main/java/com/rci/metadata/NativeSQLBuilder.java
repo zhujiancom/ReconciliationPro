@@ -56,7 +56,7 @@ public class NativeSQLBuilder {
 			+ "where oi.dish_no=d.dish_no \n"
 			+ "and d.statistic_flag='Y' \n"
 			+ "and oi.suit_flag in ('P','N') \n"
-			+ "and oi.consume_time >= ? and oi.consume_time < ? \n"
+			+ "and oi.consume_time >= ? and oi.consume_time <= ? \n"
 			+ "group by (oi.dish_no) order by amount desc";
 	
 	public static final String DISHSALE_STATISTIC_AMUONT="select sum(count)-sum(count_back) 'amount' \n"
@@ -64,7 +64,11 @@ public class NativeSQLBuilder {
 			+ "where oi.dish_no=d.dish_no \n"
 			+ "and d.statistic_flag='Y' \n"
 			+ "and oi.suit_flag in ('P','N') \n"
-			+ "and oi.consume_time >= ? and oi.consume_time < ? \n"
+			+ "and oi.consume_time >= ? and oi.consume_time <= ? \n"
 			+ "order by amount desc";
 	
+	public static final String TURNOVER_STATISTIC="select sum(oar.real_amount) 'amount',acc.name 'name',oar.framework 'framework' \n"
+			+ "from bus_tb_order_account_ref oar,bus_tb_account acc \n"
+			+ "where oar.accno=acc.acc_no and oar.post_time >= ? and oar.post_time <= ?\n"
+			+ "group by (oar.accno,oar.framework)";
 }

@@ -13,6 +13,7 @@ import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
 import com.rci.ui.swing.vos.InventoryDishRefVO;
 import com.rci.ui.swing.vos.InventoryVO;
+import com.rci.ui.swing.vos.OrderItemVO;
 import com.rci.ui.swing.vos.PurchaseRecordVO;
 import com.rci.ui.swing.vos.SaleLogDetailVO;
 import com.rci.ui.swing.vos.SaleLogVO;
@@ -130,5 +131,8 @@ public interface IMetadataService {
 	List<SellOffWarningVO> displayAllSellOffWarning();
 	void costSetting(String ino,BigDecimal cost);
 	void standardSetting(InventoryDishRefVO refvo);
+	
+	///////////////////////////////////////////////  Order  订单管理模块   /////////////////////////////////////////////
+	List<OrderItemVO> queryOrderItemsByPayno(String payno);
 	
 }

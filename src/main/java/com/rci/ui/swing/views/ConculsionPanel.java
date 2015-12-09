@@ -57,6 +57,8 @@ public class ConculsionPanel extends JPanel {
 	private JLabel plqValue;
 	private JLabel plqbtValue;
 	private DisplayLabel<String,Long> plqRemark;
+	private JLabel bdnmValue;
+	private JLabel bdnmRemark;
 	
 //	private JLabel expRateValue; //外送率
 	private Map<AccountCode,BigDecimal> sumMap;
@@ -103,6 +105,8 @@ public class ConculsionPanel extends JPanel {
 		nineGroup.setLayout(new BoxLayout(nineGroup, BoxLayout.X_AXIS));
 		JPanel tenGroup = new JPanel();
 		tenGroup.setLayout(new BoxLayout(tenGroup, BoxLayout.X_AXIS));
+		JPanel elevenGroup = new JPanel();
+		elevenGroup.setLayout(new BoxLayout(elevenGroup, BoxLayout.X_AXIS));
 		/* 现金统计  */
 		JLabel cash = new JLabel("收银机现金入账总额：");
 		cashValue = new JLabel();
@@ -129,7 +133,6 @@ public class ConculsionPanel extends JPanel {
 		mtPanel.add(mtRemark);
 		/* 大众点评团购在线支付统计  */
 		JLabel tg = new JLabel("大众点评团购入账总额：");
-//		JLabel tgRemark = new JLabel("50代金券 1 张，100代金券 0 张，套餐A 0 张，套餐B 2 张，套餐C 2 张");
 		tgValue = new JLabel();
 		tgRemark = new JLabel();
 		tgValue.setForeground(Color.RED);
@@ -256,6 +259,18 @@ public class ConculsionPanel extends JPanel {
 		JPanel plqbtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		plqbtPanel.add(plqbtLabel);
 		plqbtPanel.add(plqbtValue);
+		
+		/* 百度糯米代金券使用统计 */
+		JLabel bdnmLabel = new JLabel("百度糯米入账总额：");
+		bdnmValue = new JLabel();
+		bdnmRemark = new JLabel();
+		bdnmValue.setForeground(Color.RED);
+		bdnmRemark.setForeground(Color.BLUE);
+		JPanel bdnmPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		bdnmPanel.add(bdnmLabel);
+		bdnmPanel.add(bdnmValue);
+		bdnmPanel.add(bdnmRemark);
+		
 		/* 外送率统计  */
 //		JLabel expRateLabel = new JLabel("外送率：");
 //		expRateValue = new JLabel();
@@ -289,6 +304,7 @@ public class ConculsionPanel extends JPanel {
 		eightGroup.add(freePanel);
 		tenGroup.add(plqPanel);
 		tenGroup.add(plqbtPanel);
+		elevenGroup.add(bdnmPanel);
 		nineGroup.add(totalPanel);
 		
 		this.add(firstGroup);
@@ -300,6 +316,7 @@ public class ConculsionPanel extends JPanel {
 		this.add(sevenGroup);
 		this.add(eightGroup);
 		this.add(tenGroup);
+		this.add(elevenGroup);
 		this.add(nineGroup);
 	}
 	
@@ -331,6 +348,8 @@ public class ConculsionPanel extends JPanel {
 		plqValue.setText("");
 		plqbtValue.setText("");
 		plqRemark.setText("");
+		bdnmValue.setText("");
+		bdnmRemark.setText("");
 	}
 	
 	public void refreshUI() {
@@ -358,6 +377,8 @@ public class ConculsionPanel extends JPanel {
 		String plq = getTotalAmount(AccountCode.PLQ).toString();
 		String plqbt = getTotalAmount(AccountCode.FREE_PLQ).toString();
 		Long plqOrderNum = getValidCount(queryDate,Vendor.PLQ);
+		String bdnm = getTotalAmount(AccountCode.BDNM).toString();
+		String bdnmRemark = getTicketStatistic(queryDate,Vendor.BDNM);
 		getCashValue().setText(cashmachine);
 		getPosValue().setText(pos);
 		getMtValue().setText(mt);
@@ -388,6 +409,9 @@ public class ConculsionPanel extends JPanel {
 		getPlqbtValue().setText(plqbt);
 		getPlqRemark().setText(plqOrderNum);
 		getPlqRemark().displayToolTips(true);
+		getBdnmValue().setText(bdnm);
+		getBdnmRemark().setText(bdnmRemark);
+		getBdnmRemark().setToolTipText(bdnmRemark);
 	}
 	
 	/**
@@ -680,6 +704,22 @@ public class ConculsionPanel extends JPanel {
 
 	public void setPlqbtValue(JLabel plqbtValue) {
 		this.plqbtValue = plqbtValue;
+	}
+
+	public JLabel getBdnmValue() {
+		return bdnmValue;
+	}
+
+	public JLabel getBdnmRemark() {
+		return bdnmRemark;
+	}
+
+	public void setBdnmValue(JLabel bdnmValue) {
+		this.bdnmValue = bdnmValue;
+	}
+
+	public void setBdnmRemark(JLabel bdnmRemark) {
+		this.bdnmRemark = bdnmRemark;
 	}
 
 }

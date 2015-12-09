@@ -34,6 +34,9 @@ public class FrameListener extends MouseAdapter {
 		
 		double width = frame.getWidth();
 		double height = frame.getHeight();
+		if(e.getClickCount() == 2){
+			return;
+		}
 		if(width - e.getPoint().getX() <= 10 && height - e.getPoint().getY() <= 10){
 			frame.setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
 			action = ACTION_SE_RESIZE;

@@ -103,6 +103,8 @@ public interface StatisticCenterFacade {
 	 */
 	List<TurnoverVO> getTurnoverList(Date sdate,Date edate);
 	
+	TurnoverVO getTurnoverSum(Date sdate,Date edate);
+	
 	/**
 	 * 
 	 * Describle(描述)：统计各账户的收入的总额

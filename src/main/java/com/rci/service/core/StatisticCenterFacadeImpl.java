@@ -30,6 +30,7 @@ import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.vos.DishStatisticVO;
 import com.rci.ui.swing.vos.ExpressRateVO;
+import com.rci.ui.swing.vos.TurnoverStatisticVO;
 import com.rci.ui.swing.vos.TurnoverVO;
 
 @Service("StatisticCenterFacade")
@@ -140,29 +141,50 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 	@Override
 	public List<TurnoverVO> getTurnoverList(Date sdate, Date edate) {
 		List<TurnoverVO> resultList = new ArrayList<TurnoverVO>();
-		TurnoverVO sum = new TurnoverVO("总计");
+//		TurnoverVO sum = new TurnoverVO("总计");
 		if(edate == null){
 			edate = DateUtil.getCurrentDate();
 		}
 		Date position = edate;
 		while(position.after(sdate)){
-			TurnoverVO vo = buildTurnoverVO(position);
+			List<AccountSumResult> results = oarService.querySumAmount(position);
+			TurnoverVO vo = buildTurnoverVO(position,results);
 			if(vo != null){
 				resultList.add(vo);
-				buildTurnoverSum(sum,vo);
+//				buildTurnoverSum(sum,vo);
 			}
 			position = DateUtil.addDays(position, -1);
 		}
 		
 		if(DateUtil.isSameDay(position, sdate)){
-			TurnoverVO vo = buildTurnoverVO(position);
+			List<AccountSumResult> results = oarService.querySumAmount(position);
+			TurnoverVO vo = buildTurnoverVO(position,results);
 			if(vo != null){
 				resultList.add(vo);
-				buildTurnoverSum(sum,vo);
+//				buildTurnoverSum(sum,vo);
 			}
 		}
-		resultList.add(sum);
+//		resultList.add(sum);
 		return resultList;
+	}
+	
+	@Override
+	public TurnoverVO getTurnoverSum(Date sdate,Date edate){
+		List<AccountSumResult> results = oarService.queryDateRangeSumAmount(sdate,edate);
+		return buildTurnoverVO(null,results);
+	}
+	
+	public List<TurnoverStatisticVO> getTurnoverStatisticInfo(Date sdate,Date edate){
+		return jdbcTemplate.query(NativeSQLBuilder.TURNOVER_STATISTIC,new Object[]{sdate,edate},new RowMapper<TurnoverStatisticVO>(){
+
+			@Override
+			public TurnoverStatisticVO mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				
+				return null;
+			}
+			
+		});
 	}
 	
 	private TurnoverVO buildTurnoverSum(TurnoverVO sum,TurnoverVO item){
@@ -191,10 +213,14 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 		return sum;
 	}
 	
-	private TurnoverVO buildTurnoverVO(Date position){
-		List<AccountSumResult> results = oarService.querySumAmount(position);
+//	private TurnoverVO buildTurnoverVO(Date position){
+	private TurnoverVO buildTurnoverVO(Date position,List<AccountSumResult> results){
+//		List<AccountSumResult> results = oarService.querySumAmount(position);
 		if(!CollectionUtils.isEmpty(results)){
-			TurnoverVO vo = new TurnoverVO(DateUtil.date2Str(position));
+			TurnoverVO vo = new TurnoverVO();
+			if(position != null){
+				vo.setDisplayTitle(DateUtil.date2Str(position));
+			}
 			BigDecimal totalAmount = BigDecimal.ZERO;
 			for(AccountSumResult sumResult:results){
 				AccountCode accountNo = sumResult.getAccNo();

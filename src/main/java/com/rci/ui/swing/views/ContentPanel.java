@@ -45,14 +45,16 @@ public class ContentPanel extends JSplitPane {
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mainTable = new OrderTable(24);
 		mainScrollPane.setViewportView(mainTable);
+		mainScrollPane.getViewport().setBackground(Color.WHITE);
 		
 		JPanel rightPane = new JPanel();
 		rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));
 		JScrollPane rTopScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		rTopScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		rTopScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		rTopScrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
 		itemTable = new OrderItemTable(7);
 		rTopScrollPane.setViewportView(itemTable);
+		rTopScrollPane.getViewport().setBackground(Color.WHITE);
 		
 		textArea = new JTextArea(10,0);
 		textArea.setEditable(false);
@@ -60,6 +62,7 @@ public class ContentPanel extends JSplitPane {
 		textArea.setWrapStyleWord(true);
 		textArea.setForeground(Color.RED);
 		JScrollPane rBottomScrollPane = new JScrollPane(textArea); //将表格加入到滚动条组件中
+		rBottomScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		rBottomScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		rBottomScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		rightPane.add(rTopScrollPane);

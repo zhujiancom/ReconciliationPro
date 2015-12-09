@@ -79,11 +79,10 @@ public class MainFrame extends JFrame {
 		this.setTitle((String) PropertyUtils
 				.getProperties(PropertyConstants.SYSNAME));
 		Container containerPanel = this.getContentPane();
-		BorderLayout layout = new BorderLayout(0, 10);
+		BorderLayout layout = new BorderLayout(0, 0);
 		containerPanel.setLayout(layout);
 		
 		/* 绑定查询form */
-		queryPanel.setName("");
 		containerPanel.add(queryPanel, BorderLayout.NORTH);
 		/* 绑定订单内容和警告日志展示列表 */
 		contentPane = new ContentPanel(JSplitPane.HORIZONTAL_SPLIT,this.getWidth(),this.getHeight());

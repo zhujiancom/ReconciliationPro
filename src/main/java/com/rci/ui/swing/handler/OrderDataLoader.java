@@ -20,8 +20,9 @@ import com.rci.service.IOrderService;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
-import com.rci.tools.StringUtils;
+import com.rci.ui.swing.model.OrderItemTable;
 import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
+import com.rci.ui.swing.model.OrderTable;
 import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
@@ -46,17 +47,9 @@ public class OrderDataLoader implements Runnable {
 	
 	private Map<AccountCode,BigDecimal> sumMap;
 	
-//	private Icon loadingIcon;
-//	
-//	private Icon doneIcon;
-	
 	public OrderDataLoader(Date queryDate,Set<PaymodeCode> paymodes){
 		this.queryDate = queryDate;
 		this.paymodes = paymodes;
-//		URL loadingIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/loading.gif");
-//		loadingIcon = new ImageIcon(loadingIconUrl);
-//		URL doneIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/done.png");
-//		doneIcon = new ImageIcon(doneIconUrl);
 	}
 	
 	@Override
@@ -65,8 +58,6 @@ public class OrderDataLoader implements Runnable {
 			
 			@Override
 			public void run() {
-//				queryPane.getActionLabel().setIcon(loadingIcon);
-//				queryPane.getActionLabel().setText("正在查询，请稍后。。。");
 				queryPane.displayInfoLoading("正在查询，请稍后。。。");
 			}
 		});
@@ -94,20 +85,46 @@ public class OrderDataLoader implements Runnable {
 		
 		OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
 		OrderItemTableModel ottm = (OrderItemTableModel) contentPane.getItemTable().getModel();
+//		if(!CollectionUtils.isEmpty(displayOrders)){
+//			otm.setOrders(displayOrders);
+//			otm.fireTableDataChanged();
+//			
+//			OrderVO order = otm.getOrderAt(0);
+//			//设置表格默认第一行选中
+//			contentPane.getMainTable().setRowSelectionAllowed(true);
+//			contentPane.getMainTable().setRowSelectionInterval(0, 0);
+//			loadItemData(order.getPayNo());
+//			for(OrderVO ov:displayOrders){
+//				if(StringUtils.hasText(ov.getWarningInfo())){
+//					contentPane.getTextArea().append("【"+ov.getPayNo()+"】"+ov.getWarningInfo()+"\n");
+//				}
+//			}
+//			//2. 根据订单数据统计今日收入明细
+//			loadSumData(queryDate);
+//			conclusionPane.refreshUI();
+//			SwingUtilities.invokeLater(new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					queryPane.displayInfoDone("查询完毕");
+//				}
+//			});
+//		}else{
+//			otm.setRowCount(0);
+//			ottm.setRowCount(0);
+//			SwingUtilities.invokeLater(new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					conclusionPane.clearData();
+//					queryPane.getActionLabel().setText("没有记录！");
+//				}
+//			});
+//		}
 		if(!CollectionUtils.isEmpty(displayOrders)){
-			otm.setOrders(displayOrders);
-			otm.fireTableDataChanged();
-			
-			OrderVO order = otm.getOrderAt(0);
-			//设置表格默认第一行选中
-			contentPane.getMainTable().setRowSelectionAllowed(true);
-			contentPane.getMainTable().setRowSelectionInterval(0, 0);
-			loadItemData(order.getPayNo());
-			for(OrderVO ov:displayOrders){
-				if(StringUtils.hasText(ov.getWarningInfo())){
-					contentPane.getTextArea().append("【"+ov.getPayNo()+"】"+ov.getWarningInfo()+"\n");
-				}
-			}
+			((OrderTable)contentPane.getMainTable()).reflushTable(displayOrders);
+			OrderVO order = otm.getOrderAt(0); 
+			((OrderItemTable)contentPane.getItemTable()).reflushTable(order.getPayNo());
 			//2. 根据订单数据统计今日收入明细
 			loadSumData(queryDate);
 			conclusionPane.refreshUI();
@@ -115,8 +132,6 @@ public class OrderDataLoader implements Runnable {
 				
 				@Override
 				public void run() {
-//					queryPane.getActionLabel().setIcon(doneIcon);
-//					queryPane.getActionLabel().setText("查询完毕！");
 					queryPane.displayInfoDone("查询完毕");
 				}
 			});
@@ -124,7 +139,7 @@ public class OrderDataLoader implements Runnable {
 			otm.setRowCount(0);
 			ottm.setRowCount(0);
 			SwingUtilities.invokeLater(new Runnable() {
-				
+			
 				@Override
 				public void run() {
 					conclusionPane.clearData();

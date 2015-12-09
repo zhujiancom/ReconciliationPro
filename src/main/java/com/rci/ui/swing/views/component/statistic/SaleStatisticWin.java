@@ -1,16 +1,24 @@
-package com.rci.ui.swing.views.component;
+package com.rci.ui.swing.views.component.statistic;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import com.rci.exceptions.ExceptionManage;
+import com.rci.tools.DateUtil;
+import com.rci.tools.StringUtils;
+import com.rci.ui.swing.handler.DishSaleTimeSwitcherHandler;
 import com.rci.ui.swing.handler.TimeSwitcherHandler;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.PopWindow;
@@ -32,7 +40,9 @@ public class SaleStatisticWin extends PopWindow {
 
 	private void initComponent() {
 		JPanel containerPanel = this.getContainerPanel();
-		handler = new TimeSwitcherHandler();
+		BorderLayout layout = (BorderLayout) containerPanel.getLayout();
+		layout.setVgap(0);
+		handler = new DishSaleTimeSwitcherHandler();
 		JPanel queryBar = createQueryBar();
 		JPanel mainPanel = createMainPanel();
 		handler.setDisplayPanel(mainPanel);
@@ -61,29 +71,66 @@ public class SaleStatisticWin extends PopWindow {
 		SwitcherElement today = new SwitcherElement("今天", true);
 		today.setActionCommand("0");
 		SwitcherElement lastWeek = new SwitcherElement("近7天");
-		lastWeek.setActionCommand("-7");
+		lastWeek.setActionCommand("-6");
 		SwitcherElement lastMonth = new SwitcherElement("近30天");
-		lastMonth.setActionCommand("-30");
+		lastMonth.setActionCommand("-29");
 		timeSwitcherBar.addElement(today);
 		timeSwitcherBar.addElement(lastWeek);
 		timeSwitcherBar.addElement(lastMonth);
-		JTextField startDate = new JTextField(20);
+		final JTextField startDate = new JTextField(20);
 		JLabel l = new JLabel("到");
-		JTextField endDate = new JTextField(20);
-		JButton btn = ButtonFactory.createButton("确定");
+		final JTextField endDate = new JTextField(20);
+		JButton queryBtn = ButtonFactory.createImageButton("查询", "skin/gray/images/24x24/search.png", null);
 		
 		panel.add(time);
 		panel.add(timeSwitcherBar);
 		panel.add(startDate);
 		panel.add(l);
 		panel.add(endDate);
-		panel.add(btn);
+		panel.add(queryBtn);
+		
+		queryBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Thread(new Runnable(){
+
+					@Override
+					public void run() {
+						try{
+							String sdateStr = startDate.getText();
+							String edateStr = endDate.getText();
+							Date sdate = null;
+							Date edate = null;
+							if(!StringUtils.hasText(sdateStr)){
+								ExceptionManage.throwServiceException("开始时间必须填写");
+							}else{
+								sdate = DateUtil.parseDate(sdateStr.trim(), "yyyyMMdd");
+							}
+							if(StringUtils.hasText(edateStr)){
+								edate = DateUtil.parseDate(edateStr.trim(), "yyyyMMdd");
+							}else{
+								edate = DateUtil.getStartTimeOfDay(DateUtil.getCurrentDate());
+							}
+							if(sdate.after(edate)){
+								ExceptionManage.throwServiceException("开始时间不能晚于结束时间或今天");
+							}
+							handler.doQueryAction(sdate, edate);
+						}catch(Exception ex){
+							JOptionPane.showMessageDialog(null, ex.getMessage());
+						}
+					}
+				}).start();
+			}
+		});
 		return panel;
 	}
 	
 	private JPanel createMainPanel(){
 		JPanel mainPanel = new JPanel();
-		JScrollPane spane = new JScrollPane();
+		BoxLayout layout = new BoxLayout(mainPanel, BoxLayout.Y_AXIS);
+		mainPanel.setLayout(layout);
+		mainPanel.setBackground(Color.WHITE);
 		return mainPanel;
 	}
 }

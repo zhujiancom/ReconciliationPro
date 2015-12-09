@@ -79,8 +79,10 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	 *
 	 */
 	public void buildPane() {
+		setBackground(Color.WHITE);
 		this.setLayout(new GridLayout(0, 1));
 		JPanel queryPane = new JPanel();
+		queryPane.setBackground(Color.WHITE);
 		// 饿了么刷单金额设置
 //		JLabel eleOnlinePayLabel = new JLabel("饿了么刷单在线支付总金额");
 //		eleOnlinePayAmount = new JTextField(5);
@@ -101,6 +103,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 //		queryPane.add(elePerAllowanceLabel);
 //		queryPane.add(elePerAllowanceAmount);
 		JPanel actionPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		actionPane.setBackground(Color.WHITE);
 		actionPane.setPreferredSize(new Dimension(300,30));
 		actionLabel = new JLabel();
 //		font-family: "Arial Rounded MT Bold","Helvetica Rounded",Arial,sans-serif
@@ -128,42 +131,55 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	
 	public JPanel createCheckPane(){
 		JPanel checkPane = new JPanel();
+		checkPane.setBackground(Color.WHITE);
 		allCheck = new JCheckBox("全部");
+		allCheck.setBackground(Color.WHITE);
 		allCheck.setSelected(true);
 		allCheck.addItemListener(this);
 		
 		cashCheck = new JCheckBox("现金支付");
 		cashCheck.addItemListener(this);
+		cashCheck.setBackground(Color.WHITE);
 		
 		eleCheck = new JCheckBox("饿了么");
 		eleCheck.addItemListener(this);
+		eleCheck.setBackground(Color.WHITE);
 		
 		dptgCheck = new JCheckBox("点评团购");
 		dptgCheck.addItemListener(this);
+		dptgCheck.setBackground(Color.WHITE);
 		
 		dpshCheck = new JCheckBox("点评闪惠");
 		dpshCheck.addItemListener(this);
+		dpshCheck.setBackground(Color.WHITE);
 		
 		mttgCheck = new JCheckBox("美团团购");
 		mttgCheck.addItemListener(this);
+		mttgCheck.setBackground(Color.WHITE);
 		
 		mtsuperCheck = new JCheckBox("美团超券");
 		mtsuperCheck.addItemListener(this);
+		mtsuperCheck.setBackground(Color.WHITE);
 		
 		mtwmCheck = new JCheckBox("美团外卖");
 		mtwmCheck.addItemListener(this);
+		mtwmCheck.setBackground(Color.WHITE);
 		
 		tddCheck = new JCheckBox("淘点点");
 		tddCheck.addItemListener(this);
+		tddCheck.setBackground(Color.WHITE);
 		
 		alipayCheck = new JCheckBox("支付宝");
 		alipayCheck.addItemListener(this);
+		alipayCheck.setBackground(Color.WHITE);
 		
 		posCheck = new JCheckBox("银联支付");
 		posCheck.addItemListener(this);
+		posCheck.setBackground(Color.WHITE);
 		
 		bdnmCheck = new JCheckBox("百度糯米");
 		bdnmCheck.addItemListener(this);
+		bdnmCheck.setBackground(Color.WHITE);
 		
 		checkPane.add(allCheck);
 		checkPane.add(cashCheck);

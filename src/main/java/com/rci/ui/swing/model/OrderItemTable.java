@@ -45,6 +45,13 @@ public class OrderItemTable extends BaseTable<OrderItemVO> {
 		cm.getColumn(6).setHeaderValue("消费时间");
 		cm.getColumn(6).setPreferredWidth(140);
 	}
+	
+	public void reflushTable(String payno){
+		List<OrderItemVO> orderItems = metaservice.queryOrderItemsByPayno(payno);
+		OrderItemTableModel oitm = (OrderItemTableModel) this.getModel();
+		oitm.setItems(orderItems);
+		oitm.fireTableDataChanged();
+	}
 
 	public static class OrderItemTableModel extends AbstractTableModel {
 		/**

@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.CommonEnums;
+import com.rci.enums.CommonEnums.Symbol;
 
 /**
  * 
@@ -74,6 +75,8 @@ public class Account extends BaseEntity {
 	
 	/* 是否父账户 */
 	private CommonEnums.YOrN isParent;
+	
+	private Symbol symbol;
 	
 	public Account(){}
 	
@@ -184,6 +187,16 @@ public class Account extends BaseEntity {
 
 	public void setIsParent(CommonEnums.YOrN isParent) {
 		this.isParent = isParent;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="symbol")
+	public Symbol getSymbol() {
+		return symbol;
+	}
+
+	public void setSymbol(Symbol symbol) {
+		this.symbol = symbol;
 	}
 
 	@Override

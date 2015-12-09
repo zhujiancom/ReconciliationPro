@@ -66,6 +66,12 @@ public class TurnoverTable extends BaseTable<TurnoverVO> {
 		cm.getColumn(19).setMinWidth(205);
 	}
 	
+	public void reflushTable(List<TurnoverVO> turnovers){
+		TurnoverTableModel dm = (TurnoverTableModel) this.getModel();
+		dm.setTurnovers(turnovers);
+		dm.fireTableDataChanged();
+	}
+	
 	public void makeStatisticRowFace(){
 		TurnoverTableStatisticColorMarkRenderer redmarkRenderer = new TurnoverTableStatisticColorMarkRenderer();
 		redmarkRenderer.setColor(Color.blue);
@@ -118,94 +124,48 @@ public class TurnoverTable extends BaseTable<TurnoverVO> {
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			TurnoverVO turnover = turnovers.get(rowIndex);
-			if(rowIndex == getRowCount()-1){
-				switch(columnIndex){
-				case 0:
-					return turnover.getDisplayTitle();
-				case 1:
-					return turnover.getCashMachineAmount();
-				case 2:
-					return turnover.getPosAmount();
-				case 3:
-					return turnover.getEleAmount();
-				case 4:
-					return turnover.getElebtAmount();
-				case 5:
-					return turnover.getElesdAmount();
-				case 6:
-					return turnover.getMtwmAmount();
-				case 7:
-					return turnover.getMtwmbtAmount();
-				case 8:
-					return turnover.getWmcrAmount();
-				case 9:
-					return turnover.getWmcrbtAmount();
-				case 10:
-					return turnover.getDptgAmount();
-				case 11:
-					return turnover.getDpshAmount();
-				case 12:
-					return turnover.getMtAmount();
-				case 13:
-					return turnover.getMtSuperAmount();
-				case 14:
-					return turnover.getAliPayAmount();
-				case 15:
-					return turnover.getTsFreeAmount();
-				case 16:
-					return turnover.getOnlineFreeAmount();
-				case 17:
-					return turnover.getEleOnlineFreeAmount();
-				case 18:
-					return turnover.getMtwmOnlineFreeAmount();
-				case 19:
-					return turnover.getTotalAmount();
-				}
-			}else{
-				switch(columnIndex){
-				case 0:
-					return turnover.getDisplayTitle();
-				case 1:
-					return "<html><font color='red'>"+turnover.getCashMachineAmount()+"</font></html>";
-				case 2:
-					return "<html><font color='red'>"+turnover.getPosAmount()+"</font></html>";
-				case 3:
-					return "<html><font color='red'>"+turnover.getEleAmount()+"</font></html>";
-				case 4:
-					return "<html><font color='red'>"+turnover.getElebtAmount()+"</font></html>";
-				case 5:
-					return "<html><font color='red'>"+turnover.getElesdAmount()+"</font></html>";
-				case 6:
-					return "<html><font color='red'>"+turnover.getMtwmAmount()+"</font></html>";
-				case 7:
-					return "<html><font color='red'>"+turnover.getMtwmbtAmount()+"</font></html>";
-				case 8:
-					return "<html><font color='red'>"+turnover.getWmcrAmount()+"</font></html>";
-				case 9:
-					return "<html><font color='red'>"+turnover.getWmcrbtAmount()+"</font></html>";
-				case 10:
-					return "<html><font color='red'>"+turnover.getDptgAmount()+"</font></html>";
-				case 11:
-					return "<html><font color='red'>"+turnover.getDpshAmount()+"</font></html>";
-				case 12:
-					return "<html><font color='red'>"+turnover.getMtAmount()+"</font></html>";
-				case 13:
-					return "<html><font color='red'>"+turnover.getMtSuperAmount()+"</font></html>";
-				case 14:
-					return "<html><font color='red'>"+turnover.getAliPayAmount()+"</font></html>";
-				case 15:
-					return "<html><font color='green'>"+turnover.getTsFreeAmount()+"</font></html>";
-				case 16:
-					return "<html><font color='green'>"+turnover.getOnlineFreeAmount()+"</font></html>";
-				case 17:
-					return "<html><font color='green'>"+turnover.getEleOnlineFreeAmount()+"</font></html>";
-				case 18:
-					return "<html><font color='green'>"+turnover.getMtwmOnlineFreeAmount()+"</font></html>";
-				case 19:
-					return turnover.getTotalAmount();
-				}
+			switch(columnIndex){
+			case 0:
+				return turnover.getDisplayTitle();
+			case 1:
+				return "<html><font color='red'>"+turnover.getCashMachineAmount()+"</font></html>";
+			case 2:
+				return "<html><font color='red'>"+turnover.getPosAmount()+"</font></html>";
+			case 3:
+				return "<html><font color='red'>"+turnover.getEleAmount()+"</font></html>";
+			case 4:
+				return "<html><font color='red'>"+turnover.getElebtAmount()+"</font></html>";
+			case 5:
+				return "<html><font color='red'>"+turnover.getElesdAmount()+"</font></html>";
+			case 6:
+				return "<html><font color='red'>"+turnover.getMtwmAmount()+"</font></html>";
+			case 7:
+				return "<html><font color='red'>"+turnover.getMtwmbtAmount()+"</font></html>";
+			case 8:
+				return "<html><font color='red'>"+turnover.getWmcrAmount()+"</font></html>";
+			case 9:
+				return "<html><font color='red'>"+turnover.getWmcrbtAmount()+"</font></html>";
+			case 10:
+				return "<html><font color='red'>"+turnover.getDptgAmount()+"</font></html>";
+			case 11:
+				return "<html><font color='red'>"+turnover.getDpshAmount()+"</font></html>";
+			case 12:
+				return "<html><font color='red'>"+turnover.getMtAmount()+"</font></html>";
+			case 13:
+				return "<html><font color='red'>"+turnover.getMtSuperAmount()+"</font></html>";
+			case 14:
+				return "<html><font color='red'>"+turnover.getAliPayAmount()+"</font></html>";
+			case 15:
+				return "<html><font color='green'>"+turnover.getTsFreeAmount()+"</font></html>";
+			case 16:
+				return "<html><font color='green'>"+turnover.getOnlineFreeAmount()+"</font></html>";
+			case 17:
+				return "<html><font color='green'>"+turnover.getEleOnlineFreeAmount()+"</font></html>";
+			case 18:
+				return "<html><font color='green'>"+turnover.getMtwmOnlineFreeAmount()+"</font></html>";
+			case 19:
+				return turnover.getTotalAmount();
 			}
-			
 			return null;
 		}
 

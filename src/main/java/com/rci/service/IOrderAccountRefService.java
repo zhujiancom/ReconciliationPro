@@ -17,6 +17,8 @@ public interface IOrderAccountRefService extends IBaseService<OrderAccountRef, L
 	
 	List<AccountSumResult> querySumAmount(Date postTime);
 	
+	List<AccountSumResult> queryDateRangeSumAmount(Date sdate,Date edate);
+	
 	Long getValidOrderCount(Date postTime,AccountCode account);
 	
 	BigDecimal querySumAmount(AccountCode account,Date postTime,OrderFramework framework);

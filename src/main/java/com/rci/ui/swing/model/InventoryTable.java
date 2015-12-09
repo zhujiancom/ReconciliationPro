@@ -53,7 +53,6 @@ public class InventoryTable extends BaseTable<InventoryVO> {
 		cm.getColumn(6).setPreferredWidth(80);
 		InventoryCostCellRender render = new InventoryCostCellRender(new JTextField());
 		cm.getColumn(6).setCellEditor(render);
-//		cm.getColumn(6).setCellRenderer(render);
 		cm.getColumn(7).setHeaderValue("已关联菜品");
 		cm.getColumn(7).setPreferredWidth(350);
 	}

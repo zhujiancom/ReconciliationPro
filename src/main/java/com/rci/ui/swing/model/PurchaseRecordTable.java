@@ -1,10 +1,12 @@
 package com.rci.ui.swing.model;
 
+import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 import com.rci.bean.dto.PurchaseRecordQueryDTO;
@@ -35,15 +37,17 @@ public class PurchaseRecordTable extends BaseTable<PurchaseRecordVO> {
 	protected void setHeaderLabel() {
 		TableColumnModel cm = this.getColumnModel();
 		cm.getColumn(0).setHeaderValue("品种名称");
-		cm.getColumn(0).setPreferredWidth(100);
+		cm.getColumn(0).setPreferredWidth(250);
 		cm.getColumn(1).setHeaderValue("进货日期");
-		cm.getColumn(1).setPreferredWidth(80);
+		cm.getColumn(1).setPreferredWidth(150);
 		cm.getColumn(2).setHeaderValue("本次进货数量");
 		cm.getColumn(2).setPreferredWidth(150);
 		cm.getColumn(3).setHeaderValue("进货前数量");
-		cm.getColumn(3).setPreferredWidth(100);
+		cm.getColumn(3).setPreferredWidth(150);
 		cm.getColumn(4).setHeaderValue("进货后数量");
-		cm.getColumn(4).setPreferredWidth(100);
+		cm.getColumn(4).setPreferredWidth(150);
+		JTableHeader header = this.getTableHeader();
+		header.setBackground(Color.WHITE);
 	}
 	
 	public void query(PurchaseRecordQueryDTO queryDTO){

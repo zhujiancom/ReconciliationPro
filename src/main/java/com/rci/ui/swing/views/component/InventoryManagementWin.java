@@ -90,6 +90,7 @@ public class InventoryManagementWin extends PopWindow {
 	 */
 	private void createContent() {
 		JPanel containerPanel = this.getContainerPanel();
+		containerPanel.setBackground(Color.WHITE);
 		JPanel dishlistPanel = new ProductionPanel();
 		JPanel purchasePanel = new PurchasePanel();
 		JPanel salePanel = new SalePanel(this.getWidth(),this.getHeight());
@@ -97,6 +98,7 @@ public class InventoryManagementWin extends PopWindow {
 		URL iconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/warning.png");
 		ImageIcon icon = new ImageIcon(iconUrl);
 		TabbedPane tabbedPane = new TabbedPane();
+		tabbedPane.setBackground(Color.WHITE);
 		tabbedPane.addTabbedPaneListener(new TabbedPaneListener() {
 			
 			@Override
@@ -196,7 +198,7 @@ public class InventoryManagementWin extends PopWindow {
 		private JPanel createActionBar(){
 			actionBar = new JPanel();
 			actionBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-			actionBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+			actionBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 			actionBar.setBackground(Color.WHITE);
 			InventoryActionPolicy policy = new InventoryActionPolicy(table);
 			
@@ -310,7 +312,7 @@ public class InventoryManagementWin extends PopWindow {
 		private JPanel createActionBar(){
 			actionBar = new JPanel();
 			actionBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-			actionBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+			actionBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 			actionBar.setBackground(Color.WHITE);
 			
 			JLabel dateLabel = new JLabel("日期");
@@ -351,6 +353,7 @@ public class InventoryManagementWin extends PopWindow {
 			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setViewportView(table);
+			scrollPane.getViewport().setBackground(Color.WHITE);
 			add(createActionBar(),BorderLayout.NORTH);
 			add(scrollPane,BorderLayout.CENTER);
 		}
@@ -403,7 +406,7 @@ public class InventoryManagementWin extends PopWindow {
 		private JPanel createActionBar(){
 			actionBar = new JPanel();
 			actionBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-			actionBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+			actionBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 			actionBar.setBackground(Color.WHITE);
 			
 			JLabel dateLabel = new JLabel("日期");
@@ -440,11 +443,13 @@ public class InventoryManagementWin extends PopWindow {
 				this.setDividerSize(3);
 				this.setDividerLocation(0.45);
 				this.setResizeWeight(0.45);
+				this.setBorder(BorderFactory.createEmptyBorder());
 				JScrollPane mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 				mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
 				mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 				mainTable = new SaleLogTable(4);
 				mainScrollPane.setViewportView(mainTable);
+				mainScrollPane.getViewport().setBackground(Color.WHITE);
 				mainTable.getSelectionModel().addListSelectionListener(this);
 				JScrollPane rTopScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 				rTopScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -456,6 +461,7 @@ public class InventoryManagementWin extends PopWindow {
 					mainTable.setRowSelectionInterval(0,0);
 				}
 				rTopScrollPane.setViewportView(subTable);
+				rTopScrollPane.getViewport().setBackground(Color.WHITE);
 				
 				this.add(mainScrollPane);
 				this.add(rTopScrollPane);
@@ -577,7 +583,7 @@ public class InventoryManagementWin extends PopWindow {
 			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setViewportView(table);
-//			add(scrollPane,BorderLayout.WEST);
+			scrollPane.getViewport().setBackground(Color.WHITE);
 			add(scrollPane);
 		}
 		

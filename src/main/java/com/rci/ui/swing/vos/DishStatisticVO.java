@@ -2,6 +2,8 @@ package com.rci.ui.swing.vos;
 
 import java.math.BigDecimal;
 
+import com.rci.tools.DigitUtil;
+
 public class DishStatisticVO {
 	private String dishNo;
 	
@@ -35,6 +37,7 @@ public class DishStatisticVO {
 	}
 
 	public BigDecimal getSaleroom() {
+		saleroom = DigitUtil.mutiplyDown(dishPrice, saleAmount);
 		return saleroom;
 	}
 

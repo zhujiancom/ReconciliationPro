@@ -52,6 +52,8 @@ public class TurnoverVO {
 	
 	private BigDecimal totalAmount;
 	
+	public TurnoverVO(){}
+	
 	public TurnoverVO(String displayTitle){
 		this.displayTitle = displayTitle;
 	}

@@ -27,6 +27,7 @@ import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
 import com.rci.ui.swing.handler.OrderDataLoader;
+import com.rci.ui.swing.model.OrderItemTable;
 import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
@@ -115,7 +116,8 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 			int row = contentPane.getMainTable().getSelectedRow();
 			if(row != -1){
 				String payno = (String) contentPane.getMainTable().getValueAt(row, 2);
-				loadItemData(payno);
+//				loadItemData(payno);
+				((OrderItemTable)contentPane.getItemTable()).reflushTable(payno);
 			}
 		}
 	}

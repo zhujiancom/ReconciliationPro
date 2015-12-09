@@ -70,6 +70,34 @@ public class OrderAccountRefServiceImpl extends
 	}
 	
 	@Override
+	public List<AccountSumResult> queryDateRangeSumAmount(Date sdate,Date edate) {
+		DetachedCriteria dc = DetachedCriteria.forClass(OrderAccountRef.class);
+		dc.setProjection(Projections.projectionList().add(Projections.sum("realAmount")).add(Projections.groupProperty("accNo")).add(Projections.groupProperty("accId"))).
+		   add(Restrictions.ge("postTime", sdate)).add(Restrictions.lt("postTime", edate))
+		   .setResultTransformer(new ResultTransformer() {
+			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -1878026106020737560L;
+
+			@Override
+			public Object transformTuple(Object[] tuple, String[] aliases) {
+				String accountNo = tuple[1].toString();
+				AccountCode accCode = AccountCode.valueOf(accountNo);
+				return new AccountSumResult((Long)tuple[2],accCode,(BigDecimal)tuple[0]);
+			}
+			
+			@SuppressWarnings("rawtypes")
+			@Override
+			public List transformList(List collection) {
+				return collection;
+			}
+		}) ;
+		return baseDAO.queryListByCriteria(dc);
+	}
+	
+	@Override
 	public BigDecimal querySumAmount(AccountCode account,Date postTime,OrderFramework framework) {
 //		String queryDate = DateUtil.date2Str(postTime, "yyyyMMdd");
 //		String nativeSql = "select sum(oar.real_amount) 'amount' from bus_tb_order_account_ref oar \n"

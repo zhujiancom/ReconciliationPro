@@ -30,13 +30,13 @@ public class SaleLogDetailTable extends BaseTable<SaleLogDetailVO> {
 	protected void setHeaderLabel() {
 		TableColumnModel cm = this.getColumnModel();
 		cm.getColumn(0).setHeaderValue("付款编号");
-		cm.getColumn(0).setPreferredWidth(160);
+		cm.getColumn(0).setPreferredWidth(120);
 		cm.getColumn(1).setHeaderValue("菜品名称");
-		cm.getColumn(1).setPreferredWidth(100);
+		cm.getColumn(1).setPreferredWidth(120);
 		cm.getColumn(2).setHeaderValue("消费日期");
 		cm.getColumn(2).setPreferredWidth(150);
 		cm.getColumn(3).setHeaderValue("销售数量");
-		cm.getColumn(3).setPreferredWidth(100);
+		cm.getColumn(3).setPreferredWidth(83);
 	}
 	
 	public void reflushTableData(SaleLogQueryDTO queryDTO){
