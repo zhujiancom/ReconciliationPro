@@ -1,6 +1,7 @@
 package com.rci.ui.swing.views.component;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -27,6 +28,7 @@ public class DishSelectWin extends PopWindow {
 
 	private void createContentPane() {
 		JPanel containerPanel = this.getContainerPanel();
+		containerPanel.setBackground(Color.WHITE);
 		containerPanel.add(new SeriesTypePanel(containerPanel,selectListener),BorderLayout.NORTH);
 		containerPanel.add(buildOperatePane(),BorderLayout.SOUTH);
 	}
@@ -34,6 +36,7 @@ public class DishSelectWin extends PopWindow {
 	
 	private JPanel buildOperatePane(){
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER,20,0));
+		panel.setBackground(Color.WHITE);
 		JButton confirmBtn = ButtonFactory.createImageButton("确定","skin/gray/images/btn_green.png",null);
 		JButton cancelBtn = ButtonFactory.createImageButton("取消","skin/gray/images/btn_purple.png",null);
 		panel.add(confirmBtn);

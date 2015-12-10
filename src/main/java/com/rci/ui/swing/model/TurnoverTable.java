@@ -22,6 +22,11 @@ public class TurnoverTable extends BaseTable<TurnoverVO> {
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 	
+	@Override
+	protected void setModel() {
+		this.setModel(new TurnoverTableModel(columnNum));
+	}
+	
 	public void setHeaderLabel(){
 		TableColumnModel cm = this.getColumnModel();
 		cm.getColumn(0).setHeaderValue("日期");
@@ -198,10 +203,4 @@ public class TurnoverTable extends BaseTable<TurnoverVO> {
 		}
 		
 	}
-
-	@Override
-	protected void setModel() {
-		this.setModel(new TurnoverTableModel(columnNum));
-	}
-	
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.ui.swing.vos.DishStatisticVO;
 import com.rci.ui.swing.vos.ExpressRateVO;
+import com.rci.ui.swing.vos.TurnoverStatisticVO;
 import com.rci.ui.swing.vos.TurnoverVO;
 
 public interface StatisticCenterFacade {
@@ -103,8 +104,6 @@ public interface StatisticCenterFacade {
 	 */
 	List<TurnoverVO> getTurnoverList(Date sdate,Date edate);
 	
-	TurnoverVO getTurnoverSum(Date sdate,Date edate);
-	
 	/**
 	 * 
 	 * Describle(描述)：统计各账户的收入的总额
@@ -137,4 +136,20 @@ public interface StatisticCenterFacade {
 	 * @return
 	 */
 	BigDecimal getSaleroom(Date sdate,Date edate);
+	
+	/**
+	 * 
+	 * Describle(描述)： 营业额统计
+	 *
+	 * 方法名称：getTurnoverStatisticInfo
+	 *
+	 * 所在类名：StatisticCenterFacade
+	 *
+	 * Create Time:2015年12月10日 上午9:26:31
+	 *  
+	 * @param sdate
+	 * @param edate
+	 * @return
+	 */
+	public List<TurnoverStatisticVO> getTurnoverStatisticInfo(Date sdate,Date edate);
 }

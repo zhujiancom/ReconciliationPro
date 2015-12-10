@@ -21,52 +21,39 @@ import javax.swing.KeyStroke;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.tools.DateUtil;
 import com.rci.tools.StringUtils;
-import com.rci.ui.swing.handler.DishSaleTimeSwitcherHandler;
+import com.rci.ui.swing.handler.ExpressRateTimeSwitcherHandler;
 import com.rci.ui.swing.handler.TimeSwitcherHandler;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.views.component.switcher.SwitcherBar;
 import com.rci.ui.swing.views.component.switcher.SwitcherElement;
 
-public class SaleStatisticWin extends PopWindow implements ActionListener{
-
+public class ExpressRateStatisticWin extends PopWindow implements ActionListener{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5270961465345282597L;
+	private static final long serialVersionUID = 3014079663966213368L;
 	private TimeSwitcherHandler handler;
 	private JTextField startDate;
 	private JTextField endDate;
-
-	public SaleStatisticWin(String title){
+	
+	public ExpressRateStatisticWin(String title){
 		super(title);
 		initComponent();
 	}
-
+	
 	private void initComponent() {
 		JPanel containerPanel = this.getContainerPanel();
 		BorderLayout layout = (BorderLayout) containerPanel.getLayout();
 		layout.setVgap(0);
-		handler = new DishSaleTimeSwitcherHandler();
+		handler = new ExpressRateTimeSwitcherHandler();
 		JPanel queryBar = createQueryBar();
 		JPanel mainPanel = createMainPanel();
 		handler.setDisplayPanel(mainPanel);
 		containerPanel.add(queryBar,BorderLayout.NORTH);
 		containerPanel.add(mainPanel,BorderLayout.CENTER);
 	}
-
-	/**
-	 * 
-	 * Describle(描述)：创建查询工具栏
-	 *
-	 * 方法名称：createQueryBar
-	 *
-	 * 所在类名：SaleStatisticWin
-	 *
-	 * Create Time:2015年12月7日 下午4:38:07
-	 *  
-	 * @return
-	 */
+	
 	private JPanel createQueryBar() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		panel.setBackground(Color.WHITE);

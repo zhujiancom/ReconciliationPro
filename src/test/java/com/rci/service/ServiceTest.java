@@ -117,10 +117,11 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 //		b = b.setScale(0, RoundingMode.HALF_EVEN);
 //		System.out.println(b);
 		BigDecimal a = new BigDecimal("26");
-		BigDecimal b = new BigDecimal("3000");
-		BigDecimal c = new BigDecimal("22");
-		BigDecimal d = a.divide(b).multiply(c);
-		System.out.println(d.setScale(0, RoundingMode.HALF_EVEN));
+//		BigDecimal b = new BigDecimal("3000");
+//		BigDecimal c = new BigDecimal("22");
+//		BigDecimal d = a.divide(b).multiply(c);
+//		System.out.println(d.setScale(0, RoundingMode.HALF_EVEN));
+		System.out.println(a.negate());
 	}
 	
 	

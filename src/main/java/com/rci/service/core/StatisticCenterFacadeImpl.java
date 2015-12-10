@@ -169,53 +169,29 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 	}
 	
 	@Override
-	public TurnoverVO getTurnoverSum(Date sdate,Date edate){
-		List<AccountSumResult> results = oarService.queryDateRangeSumAmount(sdate,edate);
-		return buildTurnoverVO(null,results);
-	}
-	
 	public List<TurnoverStatisticVO> getTurnoverStatisticInfo(Date sdate,Date edate){
 		return jdbcTemplate.query(NativeSQLBuilder.TURNOVER_STATISTIC,new Object[]{sdate,edate},new RowMapper<TurnoverStatisticVO>(){
 
 			@Override
 			public TurnoverStatisticVO mapRow(ResultSet rs, int rowNum)
 					throws SQLException {
-				
-				return null;
+				TurnoverStatisticVO result = new TurnoverStatisticVO();
+				result.setAccountName(rs.getString("name"));
+				String symbol = rs.getString("symbol");
+				result.setAmount(rs.getBigDecimal("amount"));
+				if("N".equals(symbol)){
+					result.setAmount(rs.getBigDecimal("amount").negate());					
+				}
+				if(rs.getString("framework") != null){
+					result.setFramework(OrderFramework.valueOf(rs.getString("framework")));
+				}
+				return result;
 			}
 			
 		});
 	}
 	
-	private TurnoverVO buildTurnoverSum(TurnoverVO sum,TurnoverVO item){
-		if(sum == null){
-			sum = new TurnoverVO("总计");
-		}
-		sum.setCashMachineAmount(sum.getCashMachineAmount().add(item.getCashMachineAmount()));
-		sum.setDpshAmount(sum.getDpshAmount().add(item.getDpshAmount()));
-		sum.setDptgAmount(sum.getDptgAmount().add(item.getDptgAmount()));
-		sum.setEleAmount(sum.getEleAmount().add(item.getEleAmount()));
-		sum.setElebtAmount(sum.getElebtAmount().add(item.getElebtAmount()));
-		sum.setElesdAmount(sum.getElesdAmount().add(item.getElesdAmount()));
-		sum.setEleOnlineFreeAmount(sum.getEleOnlineFreeAmount().add(item.getEleOnlineFreeAmount()));
-		sum.setMtwmAmount(sum.getMtwmAmount().add(item.getMtwmAmount()));
-		sum.setMtwmbtAmount(sum.getMtwmbtAmount().add(item.getMtwmbtAmount()));
-		sum.setMtwmOnlineFreeAmount(sum.getMtwmOnlineFreeAmount().add(item.getMtwmOnlineFreeAmount()));
-		sum.setMtAmount(sum.getMtAmount().add(item.getMtAmount()));
-		sum.setMtSuperAmount(sum.getMtSuperAmount().add(item.getMtSuperAmount()));
-		sum.setOnlineFreeAmount(sum.getOnlineFreeAmount().add(item.getOnlineFreeAmount()));
-		sum.setPosAmount(sum.getPosAmount().add(item.getPosAmount()));
-		sum.setAliPayAmount(sum.getAliPayAmount().add(item.getAliPayAmount()));
-		sum.setTsFreeAmount(sum.getTsFreeAmount().add(item.getTsFreeAmount()));
-		sum.setWmcrAmount(sum.getWmcrAmount().add(item.getWmcrAmount()));
-		sum.setWmcrbtAmount(sum.getWmcrbtAmount().add(sum.getWmcrbtAmount()));
-		sum.setTotalAmount(sum.getTotalAmount().add(item.getTotalAmount()));
-		return sum;
-	}
-	
-//	private TurnoverVO buildTurnoverVO(Date position){
 	private TurnoverVO buildTurnoverVO(Date position,List<AccountSumResult> results){
-//		List<AccountSumResult> results = oarService.querySumAmount(position);
 		if(!CollectionUtils.isEmpty(results)){
 			TurnoverVO vo = new TurnoverVO();
 			if(position != null){

@@ -57,9 +57,9 @@ public class DisplayDishPanel extends JPanel {
 		rightContentPane = new JPanel();
 		BoxLayout rightLayout = new BoxLayout(rightContentPane, BoxLayout.Y_AXIS);
 		rightContentPane.setLayout(rightLayout);
-//		List<DishTypeVO> dishtypes = metadataService.getAllDishTypeBySeriesNo(seriesno);
-//		addContent(dishtypes);
+		rightContentPane.setBackground(Color.WHITE);
 		rightPane = new JScrollPane(rightContentPane); 
+		rightPane.getViewport().setBackground(Color.WHITE);
 		rightPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		rightPane.setBorder(BorderFactory.createEmptyBorder());
 		

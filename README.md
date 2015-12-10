@@ -18,4 +18,5 @@ ch_kind 各值代表含义： 0 ： 已结账， ch_billno=null
 					2 : 被转台
 					3 : 被并台
 					9 : 消台
+可从这张表：cybr_u_tmp_table 获取消费金额， 开桌时间
 

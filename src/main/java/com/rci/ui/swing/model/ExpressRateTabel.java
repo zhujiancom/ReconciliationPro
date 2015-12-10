@@ -6,9 +6,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
-import com.rci.service.core.StatisticCenterFacade;
 import com.rci.tools.DateUtil;
-import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.vos.ExpressRateVO;
 
 public class ExpressRateTabel extends BaseTable<ExpressRateVO> {
@@ -25,13 +23,13 @@ public class ExpressRateTabel extends BaseTable<ExpressRateVO> {
 	
 	@Override
 	protected void setModel() {
-		StatisticCenterFacade scf = (StatisticCenterFacade) SpringUtils.getBean("StatisticCenterFacade");
-		List<ExpressRateVO> rates = scf.getExpressRateList();
-		ExpressRateTabelModel dm = new ExpressRateTabelModel(columnNum);
-		dm.setItems(rates);
-		super.setModel(dm);
+//		StatisticCenterFacade scf = (StatisticCenterFacade) SpringUtils.getBean("StatisticCenterFacade");
+//		List<ExpressRateVO> rates = scf.getExpressRateList();
+//		ExpressRateTabelModel dm = new ExpressRateTabelModel(columnNum);
+//		dm.setItems(rates);
+//		super.setModel(dm);
+		this.setModel(new ExpressRateTabelModel(columnNum));
 	}
-
 
 	@Override
 	protected void setHeaderLabel() {
@@ -42,6 +40,13 @@ public class ExpressRateTabel extends BaseTable<ExpressRateVO> {
 		cm.getColumn(1).setPreferredWidth(275);
 		cm.getColumn(2).setHeaderValue("外送率");
 		cm.getColumn(2).setPreferredWidth(105);
+	}
+	
+
+	public void reflushTable(List<ExpressRateVO> rates){
+		ExpressRateTabelModel dm = (ExpressRateTabelModel) this.getModel();
+		dm.setItems(rates);
+		dm.fireTableDataChanged();
 	}
 
 	public static class ExpressRateTabelModel extends AbstractTableModel {

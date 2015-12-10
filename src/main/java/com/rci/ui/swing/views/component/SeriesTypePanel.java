@@ -56,7 +56,8 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 	private void initComponent() {
 		GridBagLayout gblayout = new GridBagLayout();
 		this.setLayout(gblayout);
-		leftBtn = ButtonFactory.createImageButton("skin/gray/images/64x64/leftBtn.png", null);
+		this.setBackground(Color.WHITE);
+		leftBtn = ButtonFactory.createImageButton("skin/gray/images/64x64/arrow-left.png", "skin/gray/images/64x64/arrow-left-pressed.png");
 		GridBagConstraints gb1 = new GridBagConstraints();
 		gb1.insets = new Insets(0,0,5,0);//设置控件的空白 , 上、左、下、右
 		gb1.fill = GridBagConstraints.HORIZONTAL;// 设置填充方式
@@ -98,17 +99,17 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 		GridBagConstraints gb2 = new GridBagConstraints();
 		gb2.insets = new Insets(0,0,5,0);//设置控件的空白 , 上、左、下、右
 		gb2.fill = GridBagConstraints.HORIZONTAL;// 设置填充方式
-		gb2.weightx=80.0;// 第二列的分布方式为80%
+		gb2.weightx=50.0;// 第二列的分布方式为80%
 		gb2.gridx=1; //起始点为第2列
 		gb2.gridy=0;	//起始点为第1行
 		this.add(mainPane,gb2);
 		
-		rightBtn = ButtonFactory.createImageButton("skin/gray/images/64x64/rightBtn.png", null);
+		rightBtn = ButtonFactory.createImageButton("skin/gray/images/64x64/arrow-right.png", "skin/gray/images/64x64/arrow-right-pressed.png");
 		GridBagConstraints gb3 = new GridBagConstraints();
 		gb3.insets = new Insets(0,5,5,5);//设置控件的空白 , 上、左、下、右
 		gb3.fill = GridBagConstraints.HORIZONTAL;// 设置填充方式
-		gb3.weightx=10.0;// 第二列的分布方式为80%
-		gb3.gridx=3; //起始点为第3列
+		gb3.weightx=40.0;// 第二列的分布方式为80%
+		gb3.gridx=2; //起始点为第3列
 		gb3.gridy=0;	//起始点为第1行
 		this.add(rightBtn,gb3);
 		rightBtn.addActionListener(new ActionListener() {

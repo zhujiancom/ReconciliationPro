@@ -67,8 +67,8 @@ public class NativeSQLBuilder {
 			+ "and oi.consume_time >= ? and oi.consume_time <= ? \n"
 			+ "order by amount desc";
 	
-	public static final String TURNOVER_STATISTIC="select sum(oar.real_amount) 'amount',acc.name 'name',oar.framework 'framework' \n"
+	public static final String TURNOVER_STATISTIC="select sum(oar.real_amount) 'amount',acc.name 'name',oar.framework 'framework',acc.symbol 'symbol' \n"
 			+ "from bus_tb_order_account_ref oar,bus_tb_account acc \n"
 			+ "where oar.accno=acc.acc_no and oar.post_time >= ? and oar.post_time <= ?\n"
-			+ "group by (oar.accno,oar.framework)";
+			+ "group by oar.accno,oar.framework";
 }

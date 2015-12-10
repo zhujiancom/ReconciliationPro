@@ -1,7 +1,7 @@
 package com.rci.ui.swing.views.builder;
 
 import com.rci.ui.swing.views.PopWindow;
-import com.rci.ui.swing.views.component.ExpressRateWin;
+import com.rci.ui.swing.views.component.statistic.ExpressRateStatisticWin;
 
 public class ExpressRateWinBuilder extends AbstractWinBuilder {
 	private ExpressRateWinBuilder(){}
@@ -16,6 +16,7 @@ public class ExpressRateWinBuilder extends AbstractWinBuilder {
 	
 	@Override
 	protected PopWindow createWindow() {
-		return new ExpressRateWin("外送率统计");
+//		return new ExpressRateWin("外送率统计");
+		return new ExpressRateStatisticWin("外送率统计");
 	}
 }

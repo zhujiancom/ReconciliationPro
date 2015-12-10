@@ -5,15 +5,18 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 import com.rci.exceptions.ExceptionManage;
 import com.rci.tools.DateUtil;
@@ -25,15 +28,17 @@ import com.rci.ui.swing.views.PopWindow;
 import com.rci.ui.swing.views.component.switcher.SwitcherBar;
 import com.rci.ui.swing.views.component.switcher.SwitcherElement;
 
-public class TurnoverStatisticWin extends PopWindow {
+public class TurnoverStatisticWin extends PopWindow implements ActionListener{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4248430815448148456L;
 	private TimeSwitcherHandler handler;
+	private JTextField startDate;
+	private JTextField endDate;
 	
 	public TurnoverStatisticWin(String title){
-		super(title);
+		super(1000,600,title);
 		initComponent();
 	}
 	
@@ -76,9 +81,9 @@ public class TurnoverStatisticWin extends PopWindow {
 		timeSwitcherBar.addElement(today);
 		timeSwitcherBar.addElement(lastWeek);
 		timeSwitcherBar.addElement(lastMonth);
-		final JTextField startDate = new JTextField(20);
+		startDate = new JTextField(20);
 		JLabel l = new JLabel("到");
-		final JTextField endDate = new JTextField(20);
+		endDate = new JTextField(20);
 		JButton queryBtn = ButtonFactory.createImageButton("查询", "skin/gray/images/24x24/search.png", null);
 		
 		panel.add(time);
@@ -88,40 +93,8 @@ public class TurnoverStatisticWin extends PopWindow {
 		panel.add(endDate);
 		panel.add(queryBtn);
 		
-		queryBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new Thread(new Runnable(){
-
-					@Override
-					public void run() {
-						try{
-							String sdateStr = startDate.getText();
-							String edateStr = endDate.getText();
-							Date sdate = null;
-							Date edate = null;
-							if(!StringUtils.hasText(sdateStr)){
-								ExceptionManage.throwServiceException("开始时间必须填写");
-							}else{
-								sdate = DateUtil.parseDate(sdateStr.trim(), "yyyyMMdd");
-							}
-							if(StringUtils.hasText(edateStr)){
-								edate = DateUtil.parseDate(edateStr.trim(), "yyyyMMdd");
-							}else{
-								edate = DateUtil.getStartTimeOfDay(DateUtil.getCurrentDate());
-							}
-							if(sdate.after(edate)){
-								ExceptionManage.throwServiceException("开始时间不能晚于结束时间或今天");
-							}
-							handler.doQueryAction(sdate, edate);
-						}catch(Exception ex){
-							JOptionPane.showMessageDialog(null, ex.getMessage());
-						}
-					}
-				}).start();
-			}
-		});
+		queryBtn.addActionListener(this);
+		queryBtn.registerKeyboardAction(this, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		return panel;
 	}
 	
@@ -131,5 +104,37 @@ public class TurnoverStatisticWin extends PopWindow {
 		mainPanel.setLayout(layout);
 		mainPanel.setBackground(Color.WHITE);
 		return mainPanel;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				try{
+					String sdateStr = startDate.getText();
+					String edateStr = endDate.getText();
+					Date sdate = null;
+					Date edate = null;
+					if(!StringUtils.hasText(sdateStr)){
+						ExceptionManage.throwServiceException("开始时间必须填写");
+					}else{
+						sdate = DateUtil.parseDate(sdateStr.trim(), "yyyyMMdd");
+					}
+					if(StringUtils.hasText(edateStr)){
+						edate = DateUtil.parseDate(edateStr.trim(), "yyyyMMdd");
+					}else{
+						edate = DateUtil.getStartTimeOfDay(DateUtil.getCurrentDate());
+					}
+					if(sdate.after(edate)){
+						ExceptionManage.throwServiceException("开始时间不能晚于结束时间或今天");
+					}
+					handler.doQueryAction(sdate, edate);
+				}catch(Exception ex){
+					JOptionPane.showMessageDialog(null, ex.getMessage());
+				}
+			}
+		}).start();
 	}
 }
