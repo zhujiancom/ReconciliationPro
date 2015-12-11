@@ -4,12 +4,10 @@
 package com.rci.ui.swing.views.component.switcher;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import java.awt.font.LineMetrics;
@@ -17,7 +15,6 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.border.Border;
 
 /**
  * remark (备注):
@@ -83,7 +80,6 @@ public class SwitcherElement extends JButton{
 		setPreferredSize(new Dimension(width, height));
 	}
 	
-
 	@Override
 	protected void paintComponent(Graphics paramGraphics) {
 		Graphics2D g2 = (Graphics2D) paramGraphics;

@@ -45,6 +45,12 @@ public class NativeSQLBuilder {
 			+ "left join dbo.cybr_bt_table_type tbt \n"
 			+ "on tb.ch_typeno = tbt.ch_typeno";
 	
+	/* 查询未结账的桌号信息 */
+	public static final String QUERY_HANGOUT_TABLES="select rtrim(tb.ch_billno) 'ch_billno', rtrim(tb.vch_tablename) 'table_name', ttb.num_cost 'num_cost', ttb.dt_service_begin 'opendesk_time' \n"
+			+ "from dbo.cybr_bt_table tb left join dbo.cybr_u_tmp_table ttb \n"
+			+ "on tb.ch_billno = ttb.ch_billno \n"
+			+ "where tb.ch_kind=1";
+	
 	public static final String QUERY_SUM="select sum(oar.real_amount) 'amount' from bus_tb_order_account_ref oar \n"
 			+ "left join bus_tb_order o on oar.order_no=o.order_no \n"
 			+ "where oar.post_time=? \n"

@@ -13,6 +13,7 @@ import com.rci.metadata.NativeSQLBuilder;
 import com.rci.metadata.dto.DishDTO;
 import com.rci.metadata.dto.DishSeriesDTO;
 import com.rci.metadata.dto.DishTypeDTO;
+import com.rci.metadata.dto.HangupTableDTO;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
 import com.rci.metadata.dto.PaymodeDTO;
@@ -109,6 +110,11 @@ public class DataFetchServiceImpl implements IDataFetchService {
 	public List<TableDTO> fetchTables() {
 		List<TableDTO> tables = sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_TABLES, new BeanRowMappers<TableDTO>(TableDTO.class));
 		return tables;
+	}
+
+	@Override
+	public List<HangupTableDTO> fetchHangupTables() {
+		return sqlServerJdbcTemplate.query(NativeSQLBuilder.QUERY_HANGOUT_TABLES, new BeanRowMappers<HangupTableDTO>(HangupTableDTO.class));
 	}
 
 }

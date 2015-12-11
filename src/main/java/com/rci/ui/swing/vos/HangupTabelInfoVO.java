@@ -1,50 +1,41 @@
-package com.rci.metadata.dto;
+package com.rci.ui.swing.vos;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-import com.rci.annotation.ColumnName;
-
-/**
- * 
- * remark (备注): 未结账订单桌号信息
- *
- * @author zj
- *	
- * 项目名称：ReconciliationPro
- *
- * 类名称：HangupTableDTO
- *
- * 包名称：com.rci.metadata.dto
- *
- * Create Time: 2015年12月10日 下午5:11:58
- *
- */
-public class HangupTableDTO {
+public class HangupTabelInfoVO {
 	private String billno;
 	
 	private String tableName;
 	
 	private BigDecimal consumAmount;
 	
+	private BigDecimal nodiscountAmount;
+	
+	private BigDecimal discountAmount;
+	
 	private Timestamp opendeskTime;
 
-	@ColumnName("ch_billno")
 	public String getBillno() {
 		return billno;
 	}
 
-	@ColumnName("table_name")
 	public String getTableName() {
 		return tableName;
 	}
 
-	@ColumnName("num_cost")
 	public BigDecimal getConsumAmount() {
 		return consumAmount;
 	}
 
-	@ColumnName("opendesk_time")
+	public BigDecimal getNodiscountAmount() {
+		return nodiscountAmount;
+	}
+
+	public BigDecimal getDiscountAmount() {
+		return discountAmount;
+	}
+
 	public Timestamp getOpendeskTime() {
 		return opendeskTime;
 	}
@@ -61,8 +52,15 @@ public class HangupTableDTO {
 		this.consumAmount = consumAmount;
 	}
 
+	public void setNodiscountAmount(BigDecimal nodiscountAmount) {
+		this.nodiscountAmount = nodiscountAmount;
+	}
+
+	public void setDiscountAmount(BigDecimal discountAmount) {
+		this.discountAmount = discountAmount;
+	}
+
 	public void setOpendeskTime(Timestamp opendeskTime) {
 		this.opendeskTime = opendeskTime;
 	}
-
 }

@@ -32,8 +32,6 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 		return dish;
 	}
 	
-	
-
 	@Override
 	public List<DishVO> queryDishes(boolean isStocked) {
 		DetachedCriteria dc = DetachedCriteria.forClass(Dish.class);

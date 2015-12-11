@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
+import com.rci.ui.swing.vos.HangupTabelInfoVO;
 
 public interface IDataTransformService {
 	/**
@@ -73,4 +74,6 @@ public interface IDataTransformService {
 	 * @return
 	 */
 	public Dish transformDishInfo(String dishno);
+	
+	List<HangupTabelInfoVO> transformHangupTableInfo();
 }

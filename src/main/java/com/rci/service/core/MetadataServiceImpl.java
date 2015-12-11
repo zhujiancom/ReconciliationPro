@@ -48,6 +48,7 @@ import com.rci.tools.EnumUtils;
 import com.rci.ui.swing.vos.DishSeriesVO;
 import com.rci.ui.swing.vos.DishTypeVO;
 import com.rci.ui.swing.vos.DishVO;
+import com.rci.ui.swing.vos.HangupTabelInfoVO;
 import com.rci.ui.swing.vos.InventoryDishRefVO;
 import com.rci.ui.swing.vos.InventoryVO;
 import com.rci.ui.swing.vos.OrderItemVO;
@@ -544,6 +545,11 @@ public class MetadataServiceImpl implements IMetadataService {
 	@Override
 	public List<OrderItemVO> queryOrderItemsByPayno(String payno) {
 		return orderService.queryOrderItemVOsByPayno(payno);
+	}
+
+	@Override
+	public List<HangupTabelInfoVO> getHangupTablesInfo() {
+		return transformService.transformHangupTableInfo();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import com.rci.metadata.dto.DishDTO;
 import com.rci.metadata.dto.DishSeriesDTO;
 import com.rci.metadata.dto.DishTypeDTO;
+import com.rci.metadata.dto.HangupTableDTO;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
 import com.rci.metadata.dto.PaymodeDTO;
@@ -176,4 +177,18 @@ public interface IDataFetchService {
 	 * @return
 	 */
 	List<TableDTO> fetchTables();
+	
+	/**
+	 * 
+	 * Describle(描述)：获取未结账桌号
+	 *
+	 * 方法名称：fetchHangupTables
+	 *
+	 * 所在类名：IDataFetchService
+	 *
+	 * Create Time:2015年12月11日 下午1:58:42
+	 *  
+	 * @return
+	 */
+	List<HangupTableDTO> fetchHangupTables();
 }

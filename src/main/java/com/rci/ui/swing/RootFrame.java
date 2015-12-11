@@ -80,7 +80,7 @@ public class RootFrame extends JFrame {
 		JPanel rightP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		rightP.setBackground(Color.BLACK);
 		
-		MainPaneSwitcherHandler handler = new MainPaneSwitcherHandler();
+		MainPaneSwitcherHandler handler = new MainPaneSwitcherHandler(this.getContentPane());
 		SwitcherBar mainPaneSwitcherBar = new SwitcherBar(handler);
 		SwitcherElement checkedout = new SwitcherElement("已结订单", true);
 		checkedout.setActionCommand("checked");

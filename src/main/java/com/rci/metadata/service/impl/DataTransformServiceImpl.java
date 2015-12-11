@@ -30,6 +30,7 @@ import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.dto.DishDTO;
 import com.rci.metadata.dto.DishSeriesDTO;
 import com.rci.metadata.dto.DishTypeDTO;
+import com.rci.metadata.dto.HangupTableDTO;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
 import com.rci.metadata.dto.PaymodeDTO;
@@ -42,6 +43,8 @@ import com.rci.service.IOrderService;
 import com.rci.service.IPayModeService;
 import com.rci.service.ITableInfoService;
 import com.rci.tools.DateUtil;
+import com.rci.tools.DigitUtil;
+import com.rci.ui.swing.vos.HangupTabelInfoVO;
 
 @Service("DataTransformService")
 public class DataTransformServiceImpl implements IDataTransformService {
@@ -205,4 +208,46 @@ public class DataTransformServiceImpl implements IDataTransformService {
 		tableService.rwCreate(tables.toArray(new TableInfo[0]));
 	}
 
+	@Override
+	public List<HangupTabelInfoVO> transformHangupTableInfo() {
+		List<HangupTabelInfoVO> results = new ArrayList<HangupTabelInfoVO>();
+		List<HangupTableDTO> hangupTables = fetchService.fetchHangupTables();
+		if(!CollectionUtils.isEmpty(hangupTables)){
+			for(HangupTableDTO table:hangupTables){
+				HangupTabelInfoVO vo = beanMapper.map(table, HangupTabelInfoVO.class);
+				List<OrderItemDTO> items = fetchService.fetchOrderItems(table.getBillno());
+				BigDecimal nodiscountAmount = BigDecimal.ZERO;
+				if(!CollectionUtils.isEmpty(items)){
+					for(OrderItemDTO item:items){
+						String dishno = item.getDishNo();
+						BigDecimal count = item.getCount();
+						BigDecimal countBack = item.getCountback();
+						BigDecimal singlePrice = item.getPrice();
+						BigDecimal singleRate = item.getDiscountRate();
+						BigDecimal rate = DigitUtil.precentDown(singleRate);
+						BigDecimal itemTotalAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countBack)),rate);
+						if(isDishDiscountable(dishno)){
+							nodiscountAmount = nodiscountAmount.add(itemTotalAmount);
+						}
+					}
+				}
+				BigDecimal discountAmount = table.getConsumAmount().subtract(nodiscountAmount);
+				vo.setDiscountAmount(discountAmount);
+				vo.setNodiscountAmount(nodiscountAmount);
+				results.add(vo);
+			}
+		}
+		return results;
+	}
+
+	private boolean isDishDiscountable(String dishno){
+		Dish dish = dishService.findDishByNo(dishno);
+		if(dish ==null){
+			dish = transformDishInfo(dishno);
+		}
+		if(!YOrN.isY(dish.getDiscountFlag())){
+			return true;
+		}
+		return false;
+	}
 }

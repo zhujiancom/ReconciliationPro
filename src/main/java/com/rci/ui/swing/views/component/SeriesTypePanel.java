@@ -60,7 +60,7 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 		leftBtn = ButtonFactory.createImageButton("skin/gray/images/64x64/arrow-left.png", "skin/gray/images/64x64/arrow-left-pressed.png");
 		GridBagConstraints gb1 = new GridBagConstraints();
 		gb1.insets = new Insets(0,0,5,0);//设置控件的空白 , 上、左、下、右
-		gb1.fill = GridBagConstraints.HORIZONTAL;// 设置填充方式
+		gb1.fill = GridBagConstraints.WEST;// 设置填充方式
 		gb1.weightx=10.0;// 第一列的分布方式为10%
 		gb1.gridx=0; //起始点为第1列
 		gb1.gridy=0;	//起始点为第1行
@@ -75,7 +75,7 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 		
 		mainPane = new JPanel();
 		mainPane.setLayout(null);
-		mainPane.setPreferredSize(new Dimension(702,100));
+		mainPane.setPreferredSize(new Dimension(672,100));
 		mainPane.setBackground(Color.WHITE);
 		List<DishSeriesVO> dishSeries = metadataService.getAllDishSeries();
 		int index = 1;
@@ -98,8 +98,8 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 		}
 		GridBagConstraints gb2 = new GridBagConstraints();
 		gb2.insets = new Insets(0,0,5,0);//设置控件的空白 , 上、左、下、右
-		gb2.fill = GridBagConstraints.HORIZONTAL;// 设置填充方式
-		gb2.weightx=50.0;// 第二列的分布方式为80%
+		gb2.fill = GridBagConstraints.NONE;// 设置填充方式
+		gb2.weightx=80.0;// 第二列的分布方式为80%
 		gb2.gridx=1; //起始点为第2列
 		gb2.gridy=0;	//起始点为第1行
 		this.add(mainPane,gb2);
@@ -107,8 +107,8 @@ public class SeriesTypePanel extends JPanel implements ActionListener{
 		rightBtn = ButtonFactory.createImageButton("skin/gray/images/64x64/arrow-right.png", "skin/gray/images/64x64/arrow-right-pressed.png");
 		GridBagConstraints gb3 = new GridBagConstraints();
 		gb3.insets = new Insets(0,5,5,5);//设置控件的空白 , 上、左、下、右
-		gb3.fill = GridBagConstraints.HORIZONTAL;// 设置填充方式
-		gb3.weightx=40.0;// 第二列的分布方式为80%
+		gb3.fill = GridBagConstraints.EAST;// 设置填充方式
+		gb3.weightx=10.0;// 第二列的分布方式为80%
 		gb3.gridx=2; //起始点为第3列
 		gb3.gridy=0;	//起始点为第1行
 		this.add(rightBtn,gb3);
