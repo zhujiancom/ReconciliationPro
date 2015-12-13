@@ -45,6 +45,7 @@ import com.rci.service.ITableInfoService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
 import com.rci.ui.swing.vos.HangupTabelInfoVO;
+import com.rci.ui.swing.vos.OrderItemVO;
 
 @Service("DataTransformService")
 public class DataTransformServiceImpl implements IDataTransformService {
@@ -218,7 +219,9 @@ public class DataTransformServiceImpl implements IDataTransformService {
 				List<OrderItemDTO> items = fetchService.fetchOrderItems(table.getBillno());
 				BigDecimal nodiscountAmount = BigDecimal.ZERO;
 				if(!CollectionUtils.isEmpty(items)){
+					List<OrderItemVO> itemvos = new ArrayList<OrderItemVO>();
 					for(OrderItemDTO item:items){
+						OrderItemVO itemvo = beanMapper.map(item, OrderItemVO.class);
 						String dishno = item.getDishNo();
 						BigDecimal count = item.getCount();
 						BigDecimal countBack = item.getCountback();
@@ -226,10 +229,17 @@ public class DataTransformServiceImpl implements IDataTransformService {
 						BigDecimal singleRate = item.getDiscountRate();
 						BigDecimal rate = DigitUtil.precentDown(singleRate);
 						BigDecimal itemTotalAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countBack)),rate);
-						if(isDishDiscountable(dishno)){
+						Dish dish = dishService.findDishByNo(dishno);
+						if(dish ==null){
+							dish = transformDishInfo(dishno);
+						}
+						itemvo.setDishName(dish.getDishName());
+						if(isDishDiscountable(dish)){
 							nodiscountAmount = nodiscountAmount.add(itemTotalAmount);
 						}
+						itemvos.add(itemvo);
 					}
+					vo.setOrderItems(itemvos);
 				}
 				BigDecimal discountAmount = table.getConsumAmount().subtract(nodiscountAmount);
 				vo.setDiscountAmount(discountAmount);
@@ -240,11 +250,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 		return results;
 	}
 
-	private boolean isDishDiscountable(String dishno){
-		Dish dish = dishService.findDishByNo(dishno);
-		if(dish ==null){
-			dish = transformDishInfo(dishno);
-		}
+	private boolean isDishDiscountable(Dish dish){
 		if(!YOrN.isY(dish.getDiscountFlag())){
 			return true;
 		}

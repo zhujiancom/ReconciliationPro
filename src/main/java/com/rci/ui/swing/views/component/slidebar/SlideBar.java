@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -19,7 +18,7 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.rci.ui.swing.model.ButtonFactory;
 
-public class SlideBar<T> extends JPanel {
+public class SlideBar extends JPanel {
 
 	/**
 	 * 
@@ -32,9 +31,9 @@ public class SlideBar<T> extends JPanel {
 	
 	private int offset = 0;
 	
-	private List<SlideElement<T>> elements;
+	private List<SlideElement> elements;
 	
-	public SlideBar(List<SlideElement<T>> elements){
+	public SlideBar(List<SlideElement> elements){
 		this.elements = elements;
 		initComponent();
 	}
@@ -53,10 +52,9 @@ public class SlideBar<T> extends JPanel {
 	
 	private void addMainSlide() {
 		mainSlidePanel = new JPanel();
-		mainSlidePanel.setPreferredSize(new Dimension(672,100));
-//		mainSlidePanel.setBackground(Color.WHITE);
+		mainSlidePanel.setPreferredSize(new Dimension(672,80));
+		mainSlidePanel.setBackground(Color.WHITE);
 		mainSlidePanel.setLayout(null);
-		mainSlidePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		GridBagConstraints gb = new GridBagConstraints();
 		gb.insets = new Insets(0,0,5,0);//设置控件的空白 , 上、左、下、右
 		gb.fill = GridBagConstraints.HORIZONTAL;// 设置填充方式
@@ -66,16 +64,13 @@ public class SlideBar<T> extends JPanel {
 		if(!CollectionUtils.isEmpty(elements)){
 			offset = elements.get(0).getWidth()+elements.get(0).getHgap();
 			int x = 0;
-			for(SlideElement<T> element:elements){
+			for(SlideElement element:elements){
 				element.setBounds(x, (mainSlidePanel.getPreferredSize().height-element.getHeight())/2, element.getWidth(), element.getHeight());
 				mainSlidePanel.add(element);
 				x += offset;
 			}
 			
 		}
-//		JButton btn = ButtonFactory.createImageButton("01","skin/gray/images/64x64/desk.png",null);
-//		btn.setBounds(0, 0, 64, 64);
-//		mainSlidePanel.add(btn);
 		add(mainSlidePanel,gb);
 	}
 

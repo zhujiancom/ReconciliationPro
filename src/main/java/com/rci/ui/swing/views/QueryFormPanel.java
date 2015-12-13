@@ -93,7 +93,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		
 		
 		JLabel rciTime = new JLabel("日期");
-		timeInput = new JTextField(10);
+		timeInput = new JTextField(20);
 		queryBtn = ButtonFactory.createImageButton("查询","skin/gray/images/24x24/search.png", null);
 		cleanBtn = ButtonFactory.createImageButton("清空","skin/gray/images/24x24/empty_trash.png", null);
 //		queryPane.add(eleOnlinePayLabel);

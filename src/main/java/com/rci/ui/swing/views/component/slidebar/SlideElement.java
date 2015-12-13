@@ -7,22 +7,19 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.font.LineMetrics;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class SlideElement<T> extends JButton {
+public class SlideElement extends JButton {
 	/**
 	 * 
 	 */
@@ -30,7 +27,7 @@ public class SlideElement<T> extends JButton {
 
 	private boolean isSelected;
 	
-	private T value;
+	private Object value;
 	
 	private URL selectedImageUrl;
 	
@@ -39,8 +36,6 @@ public class SlideElement<T> extends JButton {
 	private Image selectedImage;
 	
 	private Image unSelectedImage;
-	
-	private MediaTracker mtracker;
 	
 	private int index;
 	
@@ -52,25 +47,53 @@ public class SlideElement<T> extends JButton {
 	
 	private int vgap = 10;
 	
-	public SlideElement(String text,T value,boolean isSelected){
+	private SlideBarListener listener;
+	
+	public SlideElement(String text,Object value,boolean isSelected){
 		super(text);
 		this.value = value;
 		this.isSelected = isSelected;
+		initComponent();
+	}
+	
+	private void initComponent(){
 		selectedImageUrl = this.getClass().getClassLoader().getResource("skin/gray/images/64x64/desk2.png");
 		unSelectedImageUrl = this.getClass().getClassLoader().getResource("skin/gray/images/64x64/desk.png");
-		mtracker = new MediaTracker(this);
-//		selectedImage = Toolkit.getDefaultToolkit().getImage(selectedImageUrl);
 		selectedImage = new ImageIcon(selectedImageUrl).getImage();
-//		unSelectedImage = Toolkit.getDefaultToolkit().getImage(unSelectedImageUrl);
 		unSelectedImage = new ImageIcon(unSelectedImageUrl).getImage();
-//		mtracker.addImage(selectedImage, 1);
-//		mtracker.addImage(unSelectedImage, 2);
 		this.width = selectedImage.getWidth(this);
 		this.height = selectedImage.getWidth(this);
 		setPreferredSize(new Dimension(width, height));
+		final SlideElement currentElement = this;
+		this.addMouseListener(new MouseAdapter() {
+
+			/* 
+			 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
+			 */
+			@Override
+			public void mouseClicked(MouseEvent event ) {
+				if(event.getClickCount() == 1){
+					if(listener != null){
+						listener.fireUIUpdate(currentElement);
+					}
+				}
+			}
+		});
 	}
 	
-	public SlideElement(String text,T value){
+	
+	
+	/* 
+	 * @see javax.swing.AbstractButton#addActionListener(java.awt.event.ActionListener)
+	 */
+	@Override
+	public void addActionListener(ActionListener paramActionListener) {
+		super.addActionListener(paramActionListener);
+		listener = (SlideBarListener)paramActionListener;
+		listener.registerElement(this);
+	}
+
+	public SlideElement(String text,Object value){
 		this(text,value,false);
 	}
 	
@@ -80,7 +103,9 @@ public class SlideElement<T> extends JButton {
 	
 	@Override
 	protected void paintComponent(Graphics g) {
+		setContentAreaFilled(false);
 		setCursor(new Cursor(Cursor.HAND_CURSOR));
+		setBorder(BorderFactory.createEmptyBorder());
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		if(isSelected){
@@ -90,21 +115,13 @@ public class SlideElement<T> extends JButton {
 			g2.setPaint(Color.RED);
 			g2.drawImage(unSelectedImage, 0, 0, this);
 		}
-		Font defaultFont = new Font("微软雅黑", Font.BOLD, 20);
+		Font defaultFont = new Font("微软雅黑", Font.BOLD, 12);
 		Rectangle2D rect = defaultFont.getStringBounds(getText(),g2.getFontRenderContext()); 
 		LineMetrics lineMetrics = defaultFont.getLineMetrics(getText(),  
 	            g2.getFontRenderContext()); 
 		g2.drawString(getText(), (float) (width / 2 - rect.getWidth() / 2),  
 	            (float) ((height / 2) + ((lineMetrics.getAscent() + lineMetrics  
 	                    .getDescent()) / 2 - lineMetrics.getDescent())));
-	}
-
-	public T getValue() {
-		return value;
-	}
-
-	public void setValue(T value) {
-		this.value = value;
 	}
 
 	public boolean isSelected() {
@@ -153,5 +170,19 @@ public class SlideElement<T> extends JButton {
 
 	public void setVgap(int vgap) {
 		this.vgap = vgap;
+	}
+
+	/**
+	 * @return the value
+	 */
+	public Object getValue() {
+		return value;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(Object value) {
+		this.value = value;
 	}
 }

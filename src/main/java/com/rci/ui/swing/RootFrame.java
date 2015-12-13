@@ -47,7 +47,8 @@ public class RootFrame extends JFrame {
 		Container containerPanel = this.getContentPane();
 		BorderLayout layout = new BorderLayout(0, 0);
 		containerPanel.setLayout(layout);
-		containerPanel.add(new CheckedoutOrderPanel(this.getWidth(),this.getHeight()),BorderLayout.CENTER);
+//		containerPanel.add(new CheckedoutOrderPanel(this.getWidth(),this.getHeight()),BorderLayout.CENTER);
+		containerPanel.add(new HangupOrderPanel());
 		this.setJMenuBar(buildMenuBar());
 		this.addMouseListener(frameListener);
 		this.addMouseMotionListener(frameListener);
@@ -82,12 +83,12 @@ public class RootFrame extends JFrame {
 		
 		MainPaneSwitcherHandler handler = new MainPaneSwitcherHandler(this.getContentPane());
 		SwitcherBar mainPaneSwitcherBar = new SwitcherBar(handler);
-		SwitcherElement checkedout = new SwitcherElement("已结订单", true);
+		SwitcherElement checkedout = new SwitcherElement("已结订单");
 		checkedout.setActionCommand("checked");
-		SwitcherElement hangup = new SwitcherElement("未结订单");
+		SwitcherElement hangup = new SwitcherElement("未结订单",true);
 		hangup.setActionCommand("unchecked");
-		mainPaneSwitcherBar.addElement(checkedout);
 		mainPaneSwitcherBar.addElement(hangup);
+		mainPaneSwitcherBar.addElement(checkedout);
 		
 		JButton minimizeBtn = ButtonFactory.createImageButton("skin/gray/images/16x16/minimize_2.png",null);
 		final JButton maximizeBtn = ButtonFactory.createImageButton("skin/gray/images/16x16/maximize_2.png",null);

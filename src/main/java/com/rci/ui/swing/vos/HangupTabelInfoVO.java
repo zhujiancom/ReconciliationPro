@@ -2,6 +2,7 @@ package com.rci.ui.swing.vos;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class HangupTabelInfoVO {
 	private String billno;
@@ -15,6 +16,8 @@ public class HangupTabelInfoVO {
 	private BigDecimal discountAmount;
 	
 	private Timestamp opendeskTime;
+	
+	private List<OrderItemVO> orderItems; 
 
 	public String getBillno() {
 		return billno;
@@ -62,5 +65,19 @@ public class HangupTabelInfoVO {
 
 	public void setOpendeskTime(Timestamp opendeskTime) {
 		this.opendeskTime = opendeskTime;
+	}
+
+	/**
+	 * @return the orderItems
+	 */
+	public List<OrderItemVO> getOrderItems() {
+		return orderItems;
+	}
+
+	/**
+	 * @param orderItems the orderItems to set
+	 */
+	public void setOrderItems(List<OrderItemVO> orderItems) {
+		this.orderItems = orderItems;
 	}
 }
