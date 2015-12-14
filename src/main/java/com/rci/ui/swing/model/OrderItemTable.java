@@ -52,6 +52,12 @@ public class OrderItemTable extends BaseTable<OrderItemVO> {
 		oitm.setItems(orderItems);
 		oitm.fireTableDataChanged();
 	}
+	
+	public void reflushTable(List<OrderItemVO> items){
+		OrderItemTableModel oitm = (OrderItemTableModel) this.getModel();
+		oitm.setItems(items);
+		oitm.fireTableDataChanged();
+	}
 
 	public static class OrderItemTableModel extends AbstractTableModel {
 		/**

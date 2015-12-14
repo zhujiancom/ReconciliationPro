@@ -74,7 +74,7 @@ public class MainPaneSwitcherHandler extends AbstractSwitcherHandler {
 	}
 	
 	private JPanel createHangupOrderPanel(){
-		return new HangupOrderPanel();
+		return new HangupOrderPanel(displayPanel);
 	}
 
 }

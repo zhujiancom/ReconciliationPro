@@ -47,8 +47,8 @@ public class RootFrame extends JFrame {
 		Container containerPanel = this.getContentPane();
 		BorderLayout layout = new BorderLayout(0, 0);
 		containerPanel.setLayout(layout);
-//		containerPanel.add(new CheckedoutOrderPanel(this.getWidth(),this.getHeight()),BorderLayout.CENTER);
-		containerPanel.add(new HangupOrderPanel());
+		containerPanel.setBackground(Color.WHITE);
+		containerPanel.add(new HangupOrderPanel(containerPanel));
 		this.setJMenuBar(buildMenuBar());
 		this.addMouseListener(frameListener);
 		this.addMouseMotionListener(frameListener);

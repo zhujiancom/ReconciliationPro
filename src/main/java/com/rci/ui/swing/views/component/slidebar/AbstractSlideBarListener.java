@@ -6,6 +6,8 @@ package com.rci.ui.swing.views.component.slidebar;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rci.ui.swing.views.component.slidebar.SlideElement.State;
+
 /**
  * remark (备注):
  *
@@ -38,10 +40,10 @@ public abstract class AbstractSlideBarListener implements SlideBarListener {
 	@Override
 	public void fireUIUpdate(SlideElement currentElement) {
 		int curIndex = currentElement.getIndex();
-		currentElement.setSelected(true);
 		for(SlideElement element:elements){
 			if(element.getIndex() != curIndex){
-				element.setSelected(false);
+				element.setState(State.NORMAL);
+				element.setChecked(false);
 				element.repaint();
 			}
 		}

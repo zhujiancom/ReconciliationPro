@@ -1,8 +1,6 @@
 package com.rci;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
@@ -47,6 +45,7 @@ public class Entry {
 			frame.setVisible(true);
 		}catch(Exception ex){
 			logger.error("系统启动错误！",ex);
+			ex.printStackTrace();
 		}
 	}
 

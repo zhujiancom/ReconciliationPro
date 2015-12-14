@@ -5,6 +5,7 @@ package com.rci.ui.swing.views.component;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -70,6 +71,7 @@ public class TitleBar extends JPanel {
 	 *   
 	 */
 	private void initComponent() {
+		setLayout(new FlowLayout(FlowLayout.LEFT,10,5));
 		setPreferredSize(new Dimension(width,height));
 		add(title);
 		setBackground(Color.WHITE);
