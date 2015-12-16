@@ -19,6 +19,9 @@ public class CheckedoutOrderPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -1912248260264394907L;
+	
+	public static final String NAME="CheckedoutOrderPanel";
+	
 	private ConculsionPanel conclusionPane = new ConculsionPanel(); // 统计信息面板
 	private QueryFormPanel queryPanel = new QueryFormPanel(); // 查询面板
 	ContentPanel contentPane; // 订单数据内容展示面板
@@ -28,6 +31,7 @@ public class CheckedoutOrderPanel extends JPanel {
 	public CheckedoutOrderPanel(int width,int height){
 		this.width = width;
 		this.height = height;
+		setName(NAME);
 		initComponent();
 	}
 

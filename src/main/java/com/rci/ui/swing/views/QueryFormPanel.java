@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.ui.swing.model.ButtonFactory;
+import com.rci.ui.swing.views.component.encapsulation.DateTextField;
 
 public class QueryFormPanel extends JPanel implements ItemListener{
 
@@ -39,7 +40,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 
 	private JButton queryBtn;
 	private JButton cleanBtn;
-	private JTextField timeInput;
+	private DateTextField timeInput;
 	
 	private JLabel actionLabel;
 	
@@ -92,8 +93,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 //		elePerAllowanceAmount = new JTextField(5);
 		
 		
-		JLabel rciTime = new JLabel("日期");
-		timeInput = new JTextField(20);
+		timeInput = new DateTextField("查询日期");
 		queryBtn = ButtonFactory.createImageButton("查询","skin/gray/images/24x24/search.png", null);
 		cleanBtn = ButtonFactory.createImageButton("清空","skin/gray/images/24x24/empty_trash.png", null);
 //		queryPane.add(eleOnlinePayLabel);
@@ -116,7 +116,6 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		actionLabel.setForeground(Color.RED);
 		actionPane.add(actionLabel);
 		
-		queryPane.add(rciTime);
 		queryPane.add(timeInput);
 		queryPane.add(queryBtn);
 		queryPane.add(cleanBtn);
@@ -228,11 +227,11 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		this.cleanBtn = cleanBtn;
 	}
 
-	public JTextField getTimeInput() {
+	public DateTextField getTimeInput() {
 		return timeInput;
 	}
 
-	public void setTimeInput(JTextField timeInput) {
+	public void setTimeInput(DateTextField timeInput) {
 		this.timeInput = timeInput;
 	}
 

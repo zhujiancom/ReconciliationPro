@@ -3,6 +3,7 @@ package com.rci.ui.swing.handler;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -10,10 +11,12 @@ import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.views.QueryFormPanel;
 import com.rci.ui.swing.views.builder.WindowBuilderFactory;
+import com.rci.ui.swing.views.component.encapsulation.MaskDialog;
 
 public class MenuItemActionHandler {
 	private static IMetadataService metadataService;
 	private QueryFormPanel queryPanel;
+	private JFrame frame;
 	
 	static{
 		metadataService = (IMetadataService) SpringUtils.getBean("MetadataService");
@@ -27,6 +30,14 @@ public class MenuItemActionHandler {
 		this.queryPanel = queryPanel;
 	}
 	
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
+	}
+
 	/**
 	 * 
 	 * Describle(描述)： 基础数据重置
@@ -48,12 +59,13 @@ public class MenuItemActionHandler {
 					
 					@Override
 					public void run() {
-						if(JOptionPane.showConfirmDialog(null, "确定重置基础数据吗？","警告",JOptionPane.YES_NO_OPTION) == 0){
+						if(JOptionPane.showConfirmDialog(frame, "确定重置基础数据吗？","警告",JOptionPane.YES_NO_OPTION) == 0){
+							final MaskDialog dialog = new MaskDialog(frame);
 							SwingUtilities.invokeLater(new Runnable() {
 								
 								@Override
 								public void run() {
-									queryPanel.displayInfoLoading("基础数据正在重置，请稍后。。。");
+									dialog.loading("基础数据正在重置，请稍后。。。");
 								}
 							});
 							metadataService.resetMetadata();
@@ -61,7 +73,7 @@ public class MenuItemActionHandler {
 								
 								@Override
 								public void run() {
-									queryPanel.displayInfoDone("基础数据重置成功");
+									dialog.done("基础数据重置成功");
 								}
 							});
 						}

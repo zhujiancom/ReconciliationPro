@@ -96,6 +96,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 	public void transformDishInfo() {
 		List<DishSeriesDTO> seriesDTOs =fetchService.fetchAllDishSeries();
 		Map<String,DishSeries> seriesMap = new HashMap<String,DishSeries>();
+		List<Dish> dishes = new ArrayList<Dish>();
 		for(DishSeriesDTO seriesDTO:seriesDTOs){
 			DishSeries series = beanMapper.map(seriesDTO, DishSeries.class);
 			seriesMap.put(seriesDTO.getSeriesno(),series);
@@ -126,8 +127,10 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			dish.setDishType(type);
 			dish.setDishSeries(series);
 			dish.setStatisticFlag(YOrN.Y);
-			dishService.rwCreate(dish);
+			dishes.add(dish);
+//			dishService.rwCreate(dish);
 		}
+		dishService.rwCreate(dishes.toArray(new Dish[0]));
 	}
 	
 	public Dish transformDishInfo(String dishno){

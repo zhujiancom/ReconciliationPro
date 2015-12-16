@@ -28,15 +28,14 @@ import com.rci.config.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.handler.MenuItemActionHandler;
 import com.rci.ui.swing.listeners.CleanListener;
-import com.rci.ui.swing.listeners.DataExportImportListener;
 import com.rci.ui.swing.listeners.FrameListener;
-import com.rci.ui.swing.listeners.OrderDataExportImportListener;
 import com.rci.ui.swing.listeners.QueryListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
 import com.rci.ui.swing.views.QueryFormPanel;
 
+@Deprecated
 public class MainFrame extends JFrame {
 	/**
 	 * 
@@ -175,15 +174,15 @@ public class MainFrame extends JFrame {
 		saleStatistic.addActionListener(mhandler.doSaleStatisticAction());
 
 		// 数据导出
-		DataExportImportListener dataExportListener = new OrderDataExportImportListener(DataExportImportListener.EXPORT);
-		dataExport.addActionListener(dataExportListener);
-		
-		//数据导入
-		OrderDataExportImportListener dataImportListener = new OrderDataExportImportListener(DataExportImportListener.IMPORT);
-		dataImportListener.setConclusionPane(conclusionPane);
-		dataImportListener.setContentPane(contentPane);
-		dataImportListener.setQueryPanel(queryPanel);
-		dataImport.addActionListener(dataImportListener);
+//		DataExportImportListener dataExportListener = new OrderDataExportImportListener(DataExportImportListener.EXPORT);
+//		dataExport.addActionListener(dataExportListener);
+//		
+//		//数据导入
+//		OrderDataExportImportListener dataImportListener = new OrderDataExportImportListener(DataExportImportListener.IMPORT);
+//		dataImportListener.setConclusionPane(conclusionPane);
+//		dataImportListener.setContentPane(contentPane);
+//		dataImportListener.setQueryPanel(queryPanel);
+//		dataImport.addActionListener(dataImportListener);
 		
 		//系统退出
 		closeBtn.addActionListener(new ActionListener() {

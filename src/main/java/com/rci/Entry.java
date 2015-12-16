@@ -27,26 +27,24 @@ public class Entry {
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setLocationRelativeTo(null); // 相对居中, 在frame设置size之后
 			frame.getContentPane().setBackground(Color.WHITE);
-			/* 全屏设置1 */
-//			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
-//	                .getDefaultScreenDevice();
-//			frame.setUndecorated(true);
-//			gd.setFullScreenWindow(frame);
-			
-			/* 全屏设置 2*/
-//			Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-//			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//			frame.setBounds(0, 0, dimension.width, dimension.height);
-			
-			/* 指定窗口尺寸 */
-			
-			
-//			frame.setUndecorated(true);
 			frame.setVisible(true);
 		}catch(Exception ex){
 			logger.error("系统启动错误！",ex);
 			ex.printStackTrace();
 		}
+		
+//		DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+//			   @Override
+//			   public boolean dispatchKeyEvent(KeyEvent e) {
+//			      // KeyEvent.KEY_TYPED、KEY_PRESSED、KEY_RELEASED
+//			      System.out.println("e.getID() = " + e.getID());
+//			      System.out.println("e.isControlDown() = " + e.isControlDown());
+//			      System.out.println("e.isShiftDown() = " + e.isShiftDown());
+//			      System.out.println(" e.getKeyCode() = " + e.getKeyCode());
+//			      // e.consume();// 是否已经消费了此事件
+//			      return e.isConsumed();
+//			   }
+//			});
 	}
 
 }

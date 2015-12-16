@@ -6,13 +6,53 @@
   <name>ReconciliationPro</name>
   <description>对账系统</description>
   
-  <properties>
+  	<properties>
 		<spring.version>4.0.3.RELEASE</spring.version>
 		<hibernate.version>4.3.5.Final</hibernate.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
+	
+	<profiles>
+		<profile>
+			<id>ui</id>
+			<properties>
+				<common-log-url>logs/common.log</common-log-url>
+				<rci-log-url>logs/rci.log</rci-log-url>
+				<sql-log-url>logs/sql.log</sql-log-url>
+				<spring-log-url>logs/spring.log</spring-log-url>
+				<hibernate-log-url>logs/spring.log</hibernate-log-url>
+				<root-priority>ERROR</root-priority>
+				<main-class>com.rci.Entry</main-class>
+				<sqlserver-url>192.168.1.101</sqlserver-url>
+				<sqlserver-password>ab29176759ff</sqlserver-password>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>service</id>
+			<properties>
+				<common-log-url>../logs/common.log</common-log-url>
+				<rci-log-url>../logs/rci.log</rci-log-url>
+				<sql-log-url>../logs/sql.log</sql-log-url>
+				<spring-log-url>../logs/spring.log</spring-log-url>
+				<hibernate-log-url>../logs/spring.log</hibernate-log-url>
+				<root-priority>ERROR</root-priority>
+				<main-class>com.rci.MainServiceEntry</main-class>
+				<sqlserver-url>192.168.1.101</sqlserver-url>
+				<sqlserver-password>ab29176759ff</sqlserver-password>
+			</properties>
+		</profile>
+	</profiles>
+	
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<finalName>Reconciliation</finalName>
 		<plugins>
 			<plugin>
@@ -39,8 +79,7 @@
 							<!-- 生成的manifest中classpath的前缀，因为要把第三方jar放到lib目录下，所以classpath的前缀是lib/ -->
 							<classpathPrefix>lib/</classpathPrefix>
 							<!-- 应用的main class -->
-							<mainClass>com.rci.Entry</mainClass>
-<!-- 							<mainClass>com.rci.MainServiceEntry</mainClass> -->
+							<mainClass>${main-class}</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

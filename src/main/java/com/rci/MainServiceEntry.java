@@ -9,7 +9,7 @@ public class MainServiceEntry {
 
 	public static void main(String[] args) {
 		try{
-			new ClassPathXmlApplicationContext("spring/spring-common.xml","spring/spring-db.xml");
+			new ClassPathXmlApplicationContext("spring/spring-common.xml","spring/spring-db.xml","spring/spring-qutarz.xml");
 		}catch(Exception ex){
 			logger.error(ex);
 		}

@@ -15,7 +15,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
 import com.rci.exceptions.ExceptionManage;
@@ -25,6 +24,7 @@ import com.rci.ui.swing.handler.ExpressRateTimeSwitcherHandler;
 import com.rci.ui.swing.handler.TimeSwitcherHandler;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.PopWindow;
+import com.rci.ui.swing.views.component.encapsulation.DateTextField;
 import com.rci.ui.swing.views.component.switcher.SwitcherBar;
 import com.rci.ui.swing.views.component.switcher.SwitcherElement;
 
@@ -34,8 +34,8 @@ public class ExpressRateStatisticWin extends PopWindow implements ActionListener
 	 */
 	private static final long serialVersionUID = 3014079663966213368L;
 	private TimeSwitcherHandler handler;
-	private JTextField startDate;
-	private JTextField endDate;
+	private DateTextField startDate;
+	private DateTextField endDate;
 	
 	public ExpressRateStatisticWin(String title){
 		super(title);
@@ -69,9 +69,9 @@ public class ExpressRateStatisticWin extends PopWindow implements ActionListener
 		timeSwitcherBar.addElement(today);
 		timeSwitcherBar.addElement(lastWeek);
 		timeSwitcherBar.addElement(lastMonth);
-		startDate = new JTextField(20);
+		startDate = new DateTextField("开始时间");
 		JLabel l = new JLabel("到");
-		endDate = new JTextField(20);
+		endDate = new DateTextField("结束时间");
 		JButton queryBtn = ButtonFactory.createImageButton("查询", "skin/gray/images/24x24/search.png", null);
 		
 		panel.add(time);
@@ -101,23 +101,24 @@ public class ExpressRateStatisticWin extends PopWindow implements ActionListener
 			@Override
 			public void run() {
 				try{
-					String sdateStr = startDate.getText();
-					String edateStr = endDate.getText();
-					Date sdate = null;
-					Date edate = null;
-					if(!StringUtils.hasText(sdateStr)){
-						ExceptionManage.throwServiceException("开始时间必须填写");
-					}else{
-						sdate = DateUtil.parseDate(sdateStr.trim(), "yyyyMMdd");
+					Date sdate = startDate.getDate();
+					Date edate = endDate.getDate();
+					if(sdate == null){
+						if(StringUtils.hasText(startDate.getErrorMsg())){
+							ExceptionManage.throwServiceException(startDate.getErrorMsg());
+						}else{
+							ExceptionManage.throwServiceException("开始时间必须填写");
+						}
 					}
-					if(StringUtils.hasText(edateStr)){
-						edate = DateUtil.parseDate(edateStr.trim(), "yyyyMMdd");
-					}else{
+					if(edate == null && !StringUtils.hasText(endDate.getErrorMsg())){
 						edate = DateUtil.getStartTimeOfDay(DateUtil.getCurrentDate());
+					}else{
+						ExceptionManage.throwServiceException(endDate.getErrorMsg());
 					}
 					if(sdate.after(edate)){
 						ExceptionManage.throwServiceException("开始时间不能晚于结束时间或今天");
 					}
+					
 					handler.doQueryAction(sdate, edate);
 				}catch(Exception ex){
 					JOptionPane.showMessageDialog(null, ex.getMessage());

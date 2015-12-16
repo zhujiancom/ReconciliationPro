@@ -77,6 +77,9 @@ public class OrderItemTable extends BaseTable<OrderItemVO> {
 		
 		@Override
 		public int getRowCount() {
+			if(items == null){
+				return 0;
+			}
 			return items.size();
 		}
 

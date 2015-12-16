@@ -36,6 +36,10 @@ public class ExceptionManage{
 	public static void throwServiceException(String msg) throws ServiceException{
 		throw new ServiceException(msg);
 	}
+	
+	public static void throwServiceException(String msg,Throwable cause) throws ServiceException{
+		throw new ServiceException(msg,cause);
+	}
 
 	/**
 	 * 

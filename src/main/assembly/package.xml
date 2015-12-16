@@ -19,15 +19,15 @@
   
 	<fileSets>  
 		<!-- 把项目相关的说明文件，打包进zip文件的根目录 -->  
-		<fileSet>  
-			<directory>${project.basedir}</directory>  
-			<outputDirectory>/</outputDirectory>  
-			<includes>  
-				<include>README*</include>  
-				<include>LICENSE*</include>  
-				<include>NOTICE*</include>  
-			</includes>  
-		</fileSet>  
+<!-- 		<fileSet>   -->
+<!-- 			<directory>${project.basedir}</directory>   -->
+<!-- 			<outputDirectory>/</outputDirectory>   -->
+<!-- 			<includes>   -->
+<!-- 				<include>README*</include>   -->
+<!-- 				<include>LICENSE*</include>   -->
+<!-- 				<include>NOTICE*</include>   -->
+<!-- 			</includes>   -->
+<!-- 		</fileSet>   -->
 		  
 		<!-- 把项目的配置文件，打包进zip文件的config目录 -->  
 <!-- 		<fileSet>   -->

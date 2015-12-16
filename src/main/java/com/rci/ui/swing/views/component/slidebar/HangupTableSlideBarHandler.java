@@ -34,7 +34,6 @@ public class HangupTableSlideBarHandler extends AbstractSlideBarListener{
 		selectedElement = (SlideElement) event.getSource();
 		detailInfoPanel.setSelectedElement(selectedElement);
 		itemInfoPanel.setSelectedElement(selectedElement);
-		
 	}
 	public HangupTableDetailInfoPanel getDetailInfoPanel() {
 		return detailInfoPanel;

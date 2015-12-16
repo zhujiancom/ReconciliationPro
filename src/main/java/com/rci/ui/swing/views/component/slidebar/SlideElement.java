@@ -19,6 +19,9 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class SlideElement extends JButton {
 	/**
 	 * 
@@ -53,11 +56,21 @@ public class SlideElement extends JButton {
 	
 	private SlideBarListener listener;
 	
-	public SlideElement(String text,Object value,State state){
+	private Font defaultFont;
+	
+	public SlideElement(String text,Object value,Font font,State state){
 		super(text);
 		this.value = value;
 		this.state = state;
+		this.defaultFont = font;
 		initComponent();
+	}
+	public SlideElement(String text,Object value,State state){
+		this(text,value,new Font("微软雅黑", Font.BOLD, 12),state);
+	}
+	
+	public SlideElement(String text,Object value,Font font){
+		this(text,value,font,State.NORMAL);
 	}
 	
 	public SlideElement(String text,Object value){
@@ -92,10 +105,10 @@ public class SlideElement extends JButton {
 				}
 			}
 
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				setState(State.HOVER);
-			}
+//			@Override
+//			public void mouseEntered(MouseEvent e) {
+//				setState(State.HOVER);
+//			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
@@ -142,13 +155,13 @@ public class SlideElement extends JButton {
 			g2.drawImage(selectedImage, 0, 0, this);
 		}
 		
-		Font defaultFont = new Font("微软雅黑", Font.BOLD, 12);
-		Rectangle2D rect = defaultFont.getStringBounds(getText(),g2.getFontRenderContext()); 
-		LineMetrics lineMetrics = defaultFont.getLineMetrics(getText(),  
-	            g2.getFontRenderContext()); 
-		g2.drawString(getText(), (float) (width / 2 - rect.getWidth() / 2),  
-	            (float) ((height / 2) + ((lineMetrics.getAscent() + lineMetrics  
-	                    .getDescent()) / 2 - lineMetrics.getDescent())));
+		g2.setFont(getDefaultFont());
+		Rectangle2D rect = getDefaultFont().getStringBounds(getText(),g2.getFontRenderContext());
+		LineMetrics lineMetrics = getDefaultFont().getLineMetrics(getText(),  
+	            g2.getFontRenderContext());
+		float fx = (float) (width/2 - rect.getWidth()/2);
+		float fy = (height/2)+ ((lineMetrics.getAscent() + lineMetrics.getDescent()) / 2 - lineMetrics.getDescent());
+		g2.drawString(getText(), fx, fy);
 	}
 
 	public int getIndex() {
@@ -211,11 +224,6 @@ public class SlideElement extends JButton {
 
 	public void setState(State state) {
 		this.state = state;
-//		if(State.SELECTED.equals(state)){
-//			isChecked = true;
-//		}else{
-//			isChecked = false;
-//		}
 	}
 
 	public boolean isChecked() {
@@ -224,5 +232,28 @@ public class SlideElement extends JButton {
 
 	public void setChecked(boolean isChecked) {
 		this.isChecked = isChecked;
+	}
+
+	public Font getDefaultFont() {
+		return defaultFont;
+	}
+
+	public void setDefaultFont(Font defaultFont) {
+		this.defaultFont = defaultFont;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,37).append(this.value).toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		boolean isEqual = false;
+		if(obj != null && SlideElement.class.isAssignableFrom(obj.getClass())){
+			SlideElement o = (SlideElement) obj;
+			isEqual = new EqualsBuilder().append(this.value, o.value).isEquals();
+		}
+		return isEqual;
 	}
 }

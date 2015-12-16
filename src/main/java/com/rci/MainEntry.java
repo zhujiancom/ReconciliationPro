@@ -13,6 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.rci.ui.swing.MainFrame;
 
+@Deprecated
 public class MainEntry {
 	private static final Log logger = LogFactory.getLog(MainEntry.class);
 

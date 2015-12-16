@@ -41,7 +41,7 @@ public class HangupTableDTO {
 
 	@ColumnName("num_cost")
 	public BigDecimal getConsumAmount() {
-		return consumAmount;
+		return consumAmount == null ? BigDecimal.ZERO:consumAmount;
 	}
 
 	@ColumnName("opendesk_time")

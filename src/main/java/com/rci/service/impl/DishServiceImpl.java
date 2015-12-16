@@ -14,6 +14,8 @@ import com.rci.bean.entity.Dish;
 import com.rci.dao.impl.SafeDetachedCriteria;
 import com.rci.dao.impl.SafeRestrictions;
 import com.rci.enums.CommonEnums.YOrN;
+import com.rci.exceptions.ExceptionManage;
+import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.service.IDishService;
 import com.rci.service.base.BaseServiceImpl;
 import com.rci.ui.swing.vos.DishVO;
@@ -26,9 +28,15 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 	
 	@Override
 	public Dish findDishByNo(String no) {
-		DetachedCriteria dc = DetachedCriteria.forClass(Dish.class);
-		dc.add(Restrictions.eq("dishNo", no));
-		Dish dish = baseDAO.queryUniqueByCriteria(dc);
+		Dish dish = null;
+		try{
+			DetachedCriteria dc = DetachedCriteria.forClass(Dish.class);
+			dc.add(Restrictions.eq("dishNo", no));
+			dish = baseDAO.queryUniqueByCriteria(dc);
+		}catch(Exception e){
+			logger.error("菜品编号【"+no+"】重复", e);
+			ExceptionManage.throwServiceException(SERVICE.DATA_ERROR,"菜品编号【"+no+"】重复",e);
+		}
 		return dish;
 	}
 	

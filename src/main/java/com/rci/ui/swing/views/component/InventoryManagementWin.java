@@ -24,7 +24,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
@@ -47,6 +46,8 @@ import com.rci.ui.swing.model.SaleLogTable;
 import com.rci.ui.swing.model.SaleLogTable.SaleLogTableModel;
 import com.rci.ui.swing.model.SelloffWarningTable;
 import com.rci.ui.swing.views.PopWindow;
+import com.rci.ui.swing.views.component.encapsulation.BaseTextField;
+import com.rci.ui.swing.views.component.encapsulation.DateTextField;
 import com.rci.ui.swing.views.component.tab.Tab;
 import com.rci.ui.swing.views.component.tab.TabbedPane;
 import com.rci.ui.swing.views.component.tab.TabbedPaneListener;
@@ -160,7 +161,7 @@ public class InventoryManagementWin extends PopWindow {
 		private JButton delBtn;
 		private JButton relatedDishBtn;
 		private JButton purchaseBtn;
-		private JTextField keywordInput;
+		private BaseTextField keywordInput;
 		private JButton searchBtn;
 		private JButton refreshBtn;
 		private DishSelectWin win;
@@ -223,25 +224,11 @@ public class InventoryManagementWin extends PopWindow {
 			purchaseBtn.addActionListener(policy.doPurchaseAction());
 			
 			JLabel keywordLabel = new JLabel("关键字查询：");
-			keywordInput = new JTextField(25);
+			keywordInput = new BaseTextField("品种名称");
 			searchBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/search_1.png",null);
 			searchBtn.setToolTipText("搜索");
 			policy.setKeywordInput(keywordInput);
 			searchBtn.addActionListener(policy.doQueryAction());
-			
-//			table.addMouseListener(new MouseAdapter() {
-//
-//				@Override
-//				public void mouseClicked(MouseEvent event) {
-//					if(event.getClickCount() == 2){
-//						int selectIndex = table.getSelectedRow();
-//						InventoryTabelModel model = (InventoryTabelModel) table.getModel();
-//						InventoryVO inventoryvo = model.getInventory(selectIndex);
-//						new InventoryDetailWin(inventoryvo,300,350);
-//					}
-//				}
-//				
-//			});
 			
 			actionBar.add(addBtn);
 			actionBar.add(delBtn);
@@ -301,8 +288,8 @@ public class InventoryManagementWin extends PopWindow {
 		private JTable table;
 		private JScrollPane scrollPane;
 		private JPanel actionBar;
-		private JTextField keywordInput;
-		private JTextField timeInput;
+		private BaseTextField keywordInput;
+		private DateTextField timeInput;
 		private JButton searchBtn;
 		
 		public PurchasePanel(){
@@ -315,17 +302,17 @@ public class InventoryManagementWin extends PopWindow {
 			actionBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 			actionBar.setBackground(Color.WHITE);
 			
-			JLabel dateLabel = new JLabel("日期");
-			timeInput = new JTextField(25);
+//			JLabel dateLabel = new JLabel("日期");
+			timeInput = new DateTextField("查询日期");
 			JLabel keywordLabel = new JLabel("关键字查询：");
-			keywordInput = new JTextField(25);
+			keywordInput = new BaseTextField("品种名称");
 			searchBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/search_1.png",null);
 			searchBtn.setToolTipText("搜索");
 			searchBtn.addActionListener(this);
 			searchBtn.registerKeyboardAction(this,
 					KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
 					JComponent.WHEN_IN_FOCUSED_WINDOW);
-			actionBar.add(dateLabel);
+//			actionBar.add(dateLabel);
 			actionBar.add(timeInput);
 			actionBar.add(keywordLabel);
 			actionBar.add(keywordInput);
@@ -389,8 +376,8 @@ public class InventoryManagementWin extends PopWindow {
 		 */
 		private static final long serialVersionUID = -1498379543085914073L;
 		private JPanel actionBar;
-		private JTextField keywordInput;
-		private JTextField timeInput;
+		private BaseTextField keywordInput;
+		private DateTextField timeInput;
 		private JButton searchBtn;
 		private int width;
 		private int height;
@@ -409,17 +396,17 @@ public class InventoryManagementWin extends PopWindow {
 			actionBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 			actionBar.setBackground(Color.WHITE);
 			
-			JLabel dateLabel = new JLabel("日期");
-			timeInput = new JTextField(25);
+//			JLabel dateLabel = new JLabel("日期");
+			timeInput = new DateTextField("查询日期");
 			JLabel keywordLabel = new JLabel("关键字查询：");
-			keywordInput = new JTextField(25);
+			keywordInput = new BaseTextField("品种名称");
 			searchBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/search_1.png",null);
 			searchBtn.setToolTipText("搜索");
 			searchBtn.addActionListener(this);
 			searchBtn.registerKeyboardAction(this,
 					KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
 					JComponent.WHEN_IN_FOCUSED_WINDOW);
-			actionBar.add(dateLabel);
+//			actionBar.add(dateLabel);
 			actionBar.add(timeInput);
 			actionBar.add(keywordLabel);
 			actionBar.add(keywordInput);

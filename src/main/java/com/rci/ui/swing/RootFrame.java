@@ -24,9 +24,7 @@ import com.rci.config.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.handler.MainPaneSwitcherHandler;
 import com.rci.ui.swing.handler.MenuItemActionHandler;
-import com.rci.ui.swing.listeners.DataExportImportListener;
 import com.rci.ui.swing.listeners.FrameListener;
-import com.rci.ui.swing.listeners.OrderDataExportImportListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.component.switcher.SwitcherBar;
 import com.rci.ui.swing.views.component.switcher.SwitcherElement;
@@ -37,6 +35,7 @@ public class RootFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 2808931761923869238L;
 	private FrameListener frameListener;
+	private JMenuBar menubar;
 	
 	public RootFrame() throws Exception{
 		this.setUndecorated(true);
@@ -48,10 +47,9 @@ public class RootFrame extends JFrame {
 		BorderLayout layout = new BorderLayout(0, 0);
 		containerPanel.setLayout(layout);
 		containerPanel.setBackground(Color.WHITE);
-		containerPanel.add(new HangupOrderPanel(containerPanel));
+		HangupOrderPanel mainPanel = new HangupOrderPanel(this); 
+		containerPanel.add(mainPanel,BorderLayout.CENTER);
 		this.setJMenuBar(buildMenuBar());
-		this.addMouseListener(frameListener);
-		this.addMouseMotionListener(frameListener);
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
@@ -60,13 +58,13 @@ public class RootFrame extends JFrame {
 	}
 	
 	private JMenuBar buildMenuBar() {
-		JMenuBar menubar = new JMenuBar();
+		menubar = new JMenuBar();
 		menubar.setBackground(Color.BLACK);
 		JButton logoBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/logo.png", null);
 		JMenu system = new JMenu("系统");
 		system.setForeground(Color.WHITE);
-		JMenu operation = new JMenu("操作");
-		operation.setForeground(Color.WHITE);
+//		JMenu operation = new JMenu("操作");
+//		operation.setForeground(Color.WHITE);
 		JMenu statistic = new JMenu("统计");
 		statistic.setForeground(Color.WHITE);
 		JMenu management = new JMenu("管理");
@@ -75,13 +73,15 @@ public class RootFrame extends JFrame {
 		menubar.add(logoBtn);
 		menubar.add(Box.createHorizontalStrut(10));
 		menubar.add(system);
-		menubar.add(operation);
+//		menubar.add(operation);
 		menubar.add(statistic);
 		menubar.add(management);
 		JPanel rightP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		rightP.setBackground(Color.BLACK);
+		rightP.addMouseListener(frameListener);
+		rightP.addMouseMotionListener(frameListener);
 		
-		MainPaneSwitcherHandler handler = new MainPaneSwitcherHandler(this.getContentPane());
+		MainPaneSwitcherHandler handler = new MainPaneSwitcherHandler(this);
 		SwitcherBar mainPaneSwitcherBar = new SwitcherBar(handler);
 		SwitcherElement checkedout = new SwitcherElement("已结订单");
 		checkedout.setActionCommand("checked");
@@ -104,12 +104,12 @@ public class RootFrame extends JFrame {
 		frameListener.setMaximizeBtn(maximizeBtn);
 		JMenuItem sysInit = ButtonFactory.createMenuItem("系统初始化","skin/gray/images/24x24/initBtn.png");
 		JMenuItem baseReset = ButtonFactory.createMenuItem("基础数据重置", "skin/gray/images/24x24/basereset.png");
-		JMenuItem dataExport = ButtonFactory.createMenuItem("订单数据导出", "skin/gray/images/24x24/export_0.png");
-		JMenuItem dataImport = ButtonFactory.createMenuItem("订单数据导入", "skin/gray/images/24x24/import_0.png");
+//		JMenuItem dataExport = ButtonFactory.createMenuItem("订单数据导出", "skin/gray/images/24x24/export_0.png");
+//		JMenuItem dataImport = ButtonFactory.createMenuItem("订单数据导入", "skin/gray/images/24x24/import_0.png");
 		system.add(sysInit);
 		system.add(baseReset);
-		operation.add(dataExport);
-		operation.add(dataImport);
+//		operation.add(dataExport);
+//		operation.add(dataImport);
 
 		JMenuItem expressRate = ButtonFactory.createMenuItem("外送率统计", "skin/gray/images/24x24/takeout.png");
 		JMenuItem earning = ButtonFactory.createMenuItem("营业额统计", "skin/gray/images/24x24/statistic.png");
@@ -129,6 +129,7 @@ public class RootFrame extends JFrame {
 
 		MenuItemActionHandler mhandler = new MenuItemActionHandler();
 //		mhandler.setQueryPanel(queryPanel);
+		mhandler.setFrame(this);
 		baseReset.addActionListener(mhandler.doBaseInfoResetAction());
 		// 外送率统计事件
 		expressRate.addActionListener(mhandler.doExpressRateStatisticAction());
@@ -137,17 +138,6 @@ public class RootFrame extends JFrame {
 		//菜品销量统计
 		saleStatistic.addActionListener(mhandler.doSaleStatisticAction());
 
-		// 数据导出
-		DataExportImportListener dataExportListener = new OrderDataExportImportListener(DataExportImportListener.EXPORT);
-		dataExport.addActionListener(dataExportListener);
-		
-		//数据导入
-		OrderDataExportImportListener dataImportListener = new OrderDataExportImportListener(DataExportImportListener.IMPORT);
-//		dataImportListener.setConclusionPane(conclusionPane);
-//		dataImportListener.setContentPane(contentPane);
-//		dataImportListener.setQueryPanel(queryPanel);
-		dataImport.addActionListener(dataImportListener);
-		
 		//系统退出
 		closeBtn.addActionListener(new ActionListener() {
 			
@@ -164,15 +154,11 @@ public class RootFrame extends JFrame {
 				GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 				if(device.getFullScreenWindow() == null){
 					device.setFullScreenWindow(frame);
-					frame.removeMouseListener(frameListener);
-					frame.removeMouseMotionListener(frameListener);
 					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/normalize_2.png");
 					maximizeBtn.setIcon(new ImageIcon(btnUrl));
 					maximizeBtn.setToolTipText("向下还原");
 				}else{
 					device.setFullScreenWindow(null);
-					frame.addMouseListener(frameListener);
-					frame.addMouseMotionListener(frameListener);
 					URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/maximize_2.png");
 					maximizeBtn.setIcon(new ImageIcon(btnUrl));
 					maximizeBtn.setToolTipText("最大化");
@@ -196,6 +182,7 @@ public class RootFrame extends JFrame {
 		
 		// 活动设置
 		activityManage.addActionListener(mhandler.doActivitySettingAction());
+		
 		return menubar;
 	}
 }

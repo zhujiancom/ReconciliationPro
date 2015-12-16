@@ -22,6 +22,10 @@ public class ServiceException extends NestedRuntimeException{
 	public ServiceException(String msg){
 		super(msg);
 	}
+	
+	public ServiceException(String msg,Throwable cause){
+		super(msg,cause);
+	}
 
 	/**
 	 * @param msg

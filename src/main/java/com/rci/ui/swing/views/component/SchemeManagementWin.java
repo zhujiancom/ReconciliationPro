@@ -204,11 +204,9 @@ public class SchemeManagementWin extends PopWindow {
 		});
 		
 		//活动数据导出
-		DataExportImportListener dataExportListener = new SchemeDataExportImportListener(DataExportImportListener.EXPORT);
-		exportBtn.addActionListener(dataExportListener);
-		
-		DataExportImportListener dataImportListener = new SchemeDataExportImportListener(DataExportImportListener.IMPORT);
-		importBtn.addActionListener(dataImportListener);
+		DataExportImportListener dataIEListener = new SchemeDataExportImportListener(this);
+		exportBtn.addActionListener(dataIEListener.exportData());
+		importBtn.addActionListener(dataIEListener.importData());
 		
 		table.addMouseListener(new MouseAdapter() {
 			@Override

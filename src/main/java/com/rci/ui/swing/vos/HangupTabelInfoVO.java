@@ -4,6 +4,11 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.rci.tools.StringUtils;
+
 public class HangupTabelInfoVO {
 	private String billno;
 	
@@ -20,7 +25,7 @@ public class HangupTabelInfoVO {
 	private List<OrderItemVO> orderItems; 
 
 	public String getBillno() {
-		return billno;
+		return StringUtils.trimToEmpty(billno);
 	}
 
 	public String getTableName() {
@@ -79,5 +84,20 @@ public class HangupTabelInfoVO {
 	 */
 	public void setOrderItems(List<OrderItemVO> orderItems) {
 		this.orderItems = orderItems;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,37).append(this.opendeskTime).toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		boolean isEqual = false;
+		if(obj != null && HangupTabelInfoVO.class.isAssignableFrom(obj.getClass())){
+			HangupTabelInfoVO o = (HangupTabelInfoVO) obj;
+			isEqual = new EqualsBuilder().append(this.opendeskTime, o.opendeskTime).isEquals();
+		}
+		return isEqual;
 	}
 }

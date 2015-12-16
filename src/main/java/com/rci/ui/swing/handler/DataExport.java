@@ -15,24 +15,29 @@ import com.rci.service.utils.excel.ExcelSheet;
 import com.rci.ui.swing.views.PopWindow;
 
 public class DataExport implements Runnable{
-	private int amount;
-	
-	private int current;
+//	private int amount;
+//	
+//	private int current;
 	
 	private JFileChooser chooser;
 	
-	private PopWindow progressBarWin;
+//	private PopWindow progressBarWin;
 	
 	private IExImportService excelService;
 	
 	private List<ExcelSheet> sheets;
 	
+	public DataExport(JFileChooser chooser,IExImportService excelService){
+		this.chooser = chooser;
+		this.excelService = excelService;
+	}
+	
 	public DataExport(JFileChooser chooser,PopWindow progressBarWin ,IExImportService excelService){
 		this.chooser = chooser;
-		this.progressBarWin = progressBarWin;
+//		this.progressBarWin = progressBarWin;
 		this.excelService = excelService;
-		amount = 100;
-		current = 0;
+//		amount = 100;
+//		current = 0;
 	}
 	
 	@Override
@@ -41,16 +46,16 @@ public class DataExport implements Runnable{
 			excelService.setCustomSheet(sheets);
 			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(chooser.getSelectedFile().getAbsolutePath())));
 			excelService.exportTo(bos);
-			while(current < amount){
-				try{
-					Thread.sleep(50);
-				}catch(InterruptedException ie){
-					
-				}
-				current++;
-			}
-			progressBarWin.close();
-			JOptionPane.showMessageDialog(null, "导出成功");
+//			while(current < amount){
+//				try{
+//					Thread.sleep(50);
+//				}catch(InterruptedException ie){
+//					
+//				}
+//				current++;
+//			}
+//			progressBarWin.close();
+//			JOptionPane.showMessageDialog(null, "导出成功");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}catch (ServiceException se){
@@ -61,22 +66,22 @@ public class DataExport implements Runnable{
 		}
 	}
 
-	public int getAmount() {
-		return amount;
-	}
-
-	public void setAmount(int amount) {
-		this.amount = amount;
-	}
-
-	public int getCurrent() {
-		return current;
-	}
-
-	public void setCurrent(int current) {
-		this.current = current;
-	}
-
+//	public int getAmount() {
+//		return amount;
+//	}
+//
+//	public void setAmount(int amount) {
+//		this.amount = amount;
+//	}
+//
+//	public int getCurrent() {
+//		return current;
+//	}
+//
+//	public void setCurrent(int current) {
+//		this.current = current;
+//	}
+//
 	public JFileChooser getChooser() {
 		return chooser;
 	}
@@ -85,13 +90,13 @@ public class DataExport implements Runnable{
 		this.chooser = chooser;
 	}
 
-	public PopWindow getProgressBarWin() {
-		return progressBarWin;
-	}
-
-	public void setProgressBarWin(PopWindow progressBarWin) {
-		this.progressBarWin = progressBarWin;
-	}
+//	public PopWindow getProgressBarWin() {
+//		return progressBarWin;
+//	}
+//
+//	public void setProgressBarWin(PopWindow progressBarWin) {
+//		this.progressBarWin = progressBarWin;
+//	}
 
 	public List<ExcelSheet> getSheets() {
 		return sheets;

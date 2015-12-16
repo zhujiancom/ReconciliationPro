@@ -88,13 +88,13 @@ public class FrameListener extends MouseAdapter {
 			GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			if(device.getFullScreenWindow() == null){
 				device.setFullScreenWindow(frame);
-				frame.removeMouseMotionListener(this);
+//				frame.removeMouseMotionListener(this);
 				URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/normalize_2.png");
 				maximizeBtn.setIcon(new ImageIcon(btnUrl));
 				maximizeBtn.setToolTipText("向下还原");
 			}else{
 				device.setFullScreenWindow(null);
-				frame.addMouseMotionListener(this);
+//				frame.addMouseMotionListener(this);
 				URL btnUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/maximize_2.png");
 				maximizeBtn.setIcon(new ImageIcon(btnUrl));
 				maximizeBtn.setToolTipText("最大化");

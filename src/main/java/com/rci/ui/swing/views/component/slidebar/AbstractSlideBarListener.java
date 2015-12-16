@@ -48,6 +48,14 @@ public abstract class AbstractSlideBarListener implements SlideBarListener {
 			}
 		}
 	}
+
+	public SlideElement getSelectedElement() {
+		return selectedElement;
+	}
+
+	public void setSelectedElement(SlideElement selectedElement) {
+		this.selectedElement = selectedElement;
+	}
 	
 	
 
