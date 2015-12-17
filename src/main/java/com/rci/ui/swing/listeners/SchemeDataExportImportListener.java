@@ -70,6 +70,7 @@ public class SchemeDataExportImportListener extends DataExportImportListener {
 			sheet1.setDataset(schemes);
 			sheets.add(sheet1);
 			export.setSheets(sheets);
+			new Thread(export).start();
 		}catch(Exception e){
 			dialog.error(e.getMessage());
 			ExceptionManage.throwServiceException("没有活动数据，导出活动数据失败",e);

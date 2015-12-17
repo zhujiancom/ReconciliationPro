@@ -83,6 +83,7 @@ public class OrderDataExportImportListener extends DataExportImportListener {
 			sheets.add(sheet1);
 			sheets.add(sheet2);
 			export.setSheets(sheets);
+			new Thread(export).start();
 		}catch(Exception e){
 			dialog.error(e.getMessage());
 			ExceptionManage.throwServiceException(e.getMessage(),e);

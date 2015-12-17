@@ -47,9 +47,9 @@
 	<bean id="SQLServerDataSource" class="com.jolbox.bonecp.BoneCPDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="${sqlserver.jdbc.driver}" />
-		<property name="jdbcUrl" value="${sqlserver.jdbc.url}" />
-		<property name="username" value="${sqlserver.jdbc.username}" />
-		<property name="password" value="${sqlserver.jdbc.password}" />
+		<property name="jdbcUrl" value="${sqlserver-url}" />
+		<property name="username" value="${sqlserver-username}" />
+		<property name="password" value="${sqlserver-password}" />
 		<property name="partitionCount" value="3" />
 		<property name="acquireIncrement" value="5" />
 		<property name="maxConnectionsPerPartition" value="50" />
