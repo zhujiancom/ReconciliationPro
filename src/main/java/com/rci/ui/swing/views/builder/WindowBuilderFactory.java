@@ -49,4 +49,7 @@ public class WindowBuilderFactory {
 		return DishManagementWinBuilder.getInstance().retrieveWindow();
 	}
 	
+	public static PopWindow createCostStatisticWindow(){
+		return CostStatisticWinBuilder.getInstance().retrieveWindow();
+	}
 }

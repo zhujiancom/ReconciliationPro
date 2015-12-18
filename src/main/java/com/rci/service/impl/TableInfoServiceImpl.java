@@ -26,4 +26,12 @@ public class TableInfoServiceImpl extends BaseServiceImpl<TableInfo,Long>  imple
 		List<TableInfo> tables = super.getAll();
 		((ITableInfoService)AopContext.currentProxy()).rwDelete(tables.toArray(new TableInfo[0]));
 	}
+	
+	public boolean isExpressTable(String tableno){
+		TableInfo table = getTableInfoByNo(tableno);
+		if("03".equals(table.getTbType())){
+			return true;
+		}
+		return false;
+	}
 }

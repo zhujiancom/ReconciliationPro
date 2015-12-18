@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.dozer.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.EleSDStatistic;
+import com.rci.bean.entity.StatisticRecord;
 import com.rci.bean.entity.TicketInfo;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
@@ -25,9 +28,11 @@ import com.rci.metadata.NativeSQLBuilder;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
+import com.rci.service.IStatisticRecordService;
 import com.rci.service.ITicketInfoService;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
+import com.rci.ui.swing.vos.CostStatisticVO;
 import com.rci.ui.swing.vos.DishStatisticVO;
 import com.rci.ui.swing.vos.ExpressRateVO;
 import com.rci.ui.swing.vos.TurnoverStatisticVO;
@@ -43,6 +48,11 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 	private IELESDStatisticService elesdService;
 	@Resource(name="OrderAccountRefService")
 	private IOrderAccountRefService oarService;
+	@Resource(name="StatisticRecordService")
+	private IStatisticRecordService srService;
+	
+	@Autowired
+	private Mapper beanMapper;
 	
 	@Resource(name="jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
@@ -282,6 +292,19 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 				return rs.getBigDecimal("amount");
 			}
 		});
+	}
+
+	@Override
+	public List<CostStatisticVO> getCostStatisticList(Date sdate, Date edate) {
+		List<StatisticRecord> records = srService.queryRecords(sdate, edate);
+		List<CostStatisticVO> results = new ArrayList<CostStatisticVO>();
+		if(!CollectionUtils.isEmpty(records)){
+			for(StatisticRecord record:records){
+				CostStatisticVO costvo = beanMapper.map(record, CostStatisticVO.class);
+				results.add(costvo);
+			}
+		}
+		return results;
 	}
 	
 	

@@ -4,6 +4,7 @@
 package com.rci.service.impl;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -18,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
+import com.rci.bean.entity.StatisticRecord;
 import com.rci.bean.entity.account.AccFlow;
 import com.rci.bean.entity.account.Account;
 import com.rci.bean.entity.inventory.Inventory;
@@ -30,6 +32,8 @@ import com.rci.service.IAccountService;
 import com.rci.service.IDataLoaderService;
 import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
+import com.rci.service.IStatisticRecordService;
+import com.rci.service.ITableInfoService;
 import com.rci.service.filter.CalculateFilter;
 import com.rci.service.filter.FilterChain;
 import com.rci.service.filter.FreeFilter;
@@ -37,6 +41,7 @@ import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventorySellLogService;
 import com.rci.service.inventory.IInventoryService;
+import com.rci.tools.DateUtil;
 
 /**
  * remark (备注):
@@ -77,38 +82,90 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 	@Resource(name="InventorySellLogService")
 	private IInventorySellLogService sellLogService;
 	
+	@Resource(name="StatisticRecordService")
+	private IStatisticRecordService srService;
+	
+	@Resource(name="TableInfoService")
+	private ITableInfoService tableService;
+	
 	protected void updateRelativeInfo(List<Order> orders){
 		if(CollectionUtils.isEmpty(orders)){
 			return ;
 		}
 		// 解析订单各种账户收入的金额，判断订单使用的方案
-//		Map<String, BigDecimal> stockMap = new HashMap<String, BigDecimal>();
 		for (Order order : orders) {
 			parseOrder(order);
 			addInventoryConsumeLog(order);
-			// 插入库存变更记录
-//			addStockOpLog(order, stockMap);
+			updateCostConsumeLog(order);
+			updateExpressRecord(order);
 		}
-		// 更新库存表
-//		for (Iterator<Entry<String, BigDecimal>> it = stockMap.entrySet()
-//				.iterator(); it.hasNext();) {
-//			Entry<String, BigDecimal> entry = it.next();
-//			String sno = entry.getKey();
-//			BigDecimal amount = entry.getValue();
-//			// Stock stock = stockService.getStockByDishNo(dishNo);
-//			Stock stock = stockService.getStockBySno(sno);
-//			if (stock == null) {
-//				throw new ServiceException(SERVICE.DATA_ERROR, sno
-//						+ " - 该菜品不在库存控制范围内！");
-//			} else {
-//				BigDecimal balanceAmount = stock.getBalanceAmount().subtract(
-//						amount);
-//				BigDecimal consumeAmount = stock.getConsumeAmount().add(amount);
-//				stock.setBalanceAmount(balanceAmount);
-//				stock.setConsumeAmount(consumeAmount);
-//				stockService.rwUpdate(stock);
-//			}
-//		}
+	}
+
+	private void updateExpressRecord(Order order) {
+		try{
+			Date queryDate = DateUtil.parseDate(order.getDay(), "yyyyMMdd");
+			StatisticRecord record = srService.queryRecordByDate(queryDate);
+			if(record == null){
+				record = new StatisticRecord();
+				record.setDate(queryDate);
+				record.setTotalOrders(1);
+				record.setSavepoint(DateUtil.getCurrentDate());
+				if(tableService.isExpressTable(order.getTableNo())){
+					record.setExpressOrders(1);
+					record.setExpressRate(new BigDecimal(100));
+				}else{
+					record.setExpressRate(BigDecimal.ZERO);
+				}
+				srService.rwCreate(record);
+			}else{
+				record.setSavepoint(DateUtil.getCurrentDate());
+				record.setTotalOrders(record.getTotalOrders()+1);
+				if(tableService.isExpressTable(order.getTableNo())){
+					record.setExpressOrders(record.getExpressOrders()+1);
+				}
+				BigDecimal rate = new BigDecimal(record.getExpressOrders()).divide(new BigDecimal(record.getTotalOrders()), 4, BigDecimal.ROUND_HALF_EVEN).movePointRight(2);
+				record.setExpressRate(rate);
+				srService.rwUpdate(record);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void updateCostConsumeLog(Order order) {
+		try {
+			List<OrderItem> items = order.getItems();
+			BigDecimal costAmount = BigDecimal.ZERO;
+			for(OrderItem item:items){
+				String dishNo = item.getDishNo();
+				Dish dish = dishService.findDishByNo(dishNo);
+				costAmount = costAmount.add(dish.getCost());
+			}
+			BigDecimal postAmount = oaService.getPostAmountForOrder(order.getOrderNo());
+			Date queryDate = DateUtil.parseDate(order.getDay(), "yyyyMMdd");
+			StatisticRecord record = srService.queryRecordByDate(queryDate);
+			if(record == null){
+				record = new StatisticRecord();
+				record.setDate(queryDate);
+				record.setCostAmount(costAmount);
+				record.setTurnoverAmount(postAmount);
+				record.setSavepoint(DateUtil.getCurrentDate());
+				BigDecimal rate = costAmount.divide(postAmount, 4, BigDecimal.ROUND_HALF_EVEN).movePointRight(2);
+				record.setCostRate(rate);
+				srService.rwCreate(record);
+			}else{
+				costAmount = record.getCostAmount().add(costAmount);
+				BigDecimal turnoverAmount = record.getTurnoverAmount().add(postAmount);
+				record.setCostAmount(costAmount);
+				record.setTurnoverAmount(turnoverAmount);
+				record.setSavepoint(DateUtil.getCurrentDate());
+				BigDecimal rate = costAmount.divide(turnoverAmount, 4, BigDecimal.ROUND_HALF_EVEN).movePointRight(2);
+				record.setCostRate(rate);
+				srService.rwUpdate(record);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* 
@@ -231,6 +288,18 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 		accService.rwUpdate(account);
 	}
 
+	/**
+	 * 
+	 * Describle(描述)： 记录库存消费
+	 *
+	 * 方法名称：addInventoryConsumeLog
+	 *
+	 * 所在类名：BaseDataLoaderService
+	 *
+	 * Create Time:2015年12月18日 上午11:11:16
+	 *  
+	 * @param order
+	 */
 	private void addInventoryConsumeLog(Order order){
 		List<OrderItem> items = order.getItems();
 		for(OrderItem item:items){

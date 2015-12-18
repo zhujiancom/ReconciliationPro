@@ -1,4 +1,4 @@
-package com.rci.ui.swing.handler;
+package com.rci.ui.swing.handler.switcher;
 
 import java.awt.Color;
 import java.awt.Font;

@@ -89,6 +89,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 					case MT_SUPER:vo.setMtSuperAmount(amount);break;
 					case WMCR:vo.setWmcrAmount(amount);break;
 					case FREE_WMCR:vo.setWmcrbtAmount(amount);break;
+					//PLQ,BDNM 用于表格列展示，未实现，不影响运行
 					case FREE:
 						vo.setFreeAmount(amount);
 						totalAmount = totalAmount.subtract(amount);

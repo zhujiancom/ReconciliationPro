@@ -13,6 +13,21 @@ import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 public interface IOrderAccountRefService extends IBaseService<OrderAccountRef, Long>{
 	List<OrderAccountRef> getOARef(String billno);
 	
+	/**
+	 * 
+	 * Describle(描述)：计算订单实际入账金额，去除优惠后所得
+	 *
+	 * 方法名称：getPostAmountForOrder
+	 *
+	 * 所在类名：IOrderAccountRefService
+	 *
+	 * Create Time:2015年12月18日 下午2:07:02
+	 *  
+	 * @param billno
+	 * @return
+	 */
+	BigDecimal getPostAmountForOrder(String billno);
+	
 	void deleteOar(Date date);
 	
 	List<AccountSumResult> querySumAmount(Date postTime);

@@ -1,9 +1,7 @@
-package com.rci.ui.swing.handler;
+package com.rci.ui.swing.handler.switcher;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -26,24 +24,21 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
 
 import com.rci.tools.DateUtil;
-import com.rci.ui.swing.model.ExpressRateTabel;
-import com.rci.ui.swing.vos.ExpressRateVO;
+import com.rci.ui.swing.model.CostStatisticTable;
+import com.rci.ui.swing.vos.CostStatisticVO;
 
-public class ExpressRateTimeSwitcherHandler extends TimeSwitcherHandler {
+public class CostTimeSwitcherHandler extends TimeSwitcherHandler {
 	private ChartPanel chartPanel;
 	private JScrollPane scrollPanel;
 	
 	@Override
 	public void doQueryAction(Date sdate, Date edate) {
-		List<ExpressRateVO> rates = statisticService.getExpressRateList(sdate,edate);
-		List<ExpressRateVO> dest = Arrays.asList(new ExpressRateVO[rates.size()]);
-		Collections.copy(dest, rates);
-		Collections.reverse(rates);
+		List<CostStatisticVO> costs = statisticService.getCostStatisticList(sdate,edate);
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		for(ExpressRateVO rate:rates){
-			dataset.setValue(rate.getExpressRate(), "rate", DateUtil.date2Str(rate.getDate()));
+		for(CostStatisticVO vo:costs){
+			dataset.addValue(vo.getCostRate(), vo.getCostAmount(), DateUtil.date2Str(vo.getDate()));
 		}
-		generateTable(dest);
+		generateTable(costs);
 		generateLineChart(dataset);
 		SwingUtilities.invokeLater(new Runnable() {
 			
@@ -56,12 +51,12 @@ public class ExpressRateTimeSwitcherHandler extends TimeSwitcherHandler {
 			}
 		});
 	}
-	
+
 	public void generateLineChart(DefaultCategoryDataset dataset){
 		JFreeChart chart = ChartFactory.createLineChart(
-	            "外送率统计",   // chart title
+	            "成本控制",   // chart title
 	            "日期",                       // domain axis label
-	            "外送率",                   // range axis label
+	            "成本占比率",                   // range axis label
 	            dataset,                         // data
 	            PlotOrientation.VERTICAL,        // orientation
 	            false,                           // include legend
@@ -95,14 +90,14 @@ public class ExpressRateTimeSwitcherHandler extends TimeSwitcherHandler {
 		chartPanel = new ChartPanel(chart);
 	}
 	
-	public void generateTable(List<ExpressRateVO> rates){
+	public void generateTable(List<CostStatisticVO> costs){
 		scrollPanel = new JScrollPane();
-		ExpressRateTabel table = new ExpressRateTabel(3);
+		CostStatisticTable table = new CostStatisticTable(3);
 		scrollPanel.setViewportView(table);
 		scrollPanel.setBorder(BorderFactory.createEmptyBorder());
 		scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPanel.getViewport().setBackground(Color.WHITE);
-		table.reflushTable(rates);
+		table.reflushTable(costs);
 	}
-
+	
 }

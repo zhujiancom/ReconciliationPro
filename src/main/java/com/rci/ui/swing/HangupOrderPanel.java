@@ -8,6 +8,11 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -18,6 +23,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -36,7 +42,7 @@ import com.rci.ui.swing.views.component.slidebar.SlideElement;
 import com.rci.ui.swing.views.component.slidebar.SlideElement.State;
 import com.rci.ui.swing.vos.HangupTabelInfoVO;
 
-public class HangupOrderPanel extends JPanel {
+public class HangupOrderPanel extends JPanel{
 	
 	/**
 	 * 
@@ -72,23 +78,6 @@ public class HangupOrderPanel extends JPanel {
 				updateSlideBar();
 			}
 		}, 20, 20, TimeUnit.SECONDS);
-		
-//		((JFrame)parentContainer).addKeyListener(new KeyAdapter() {
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//				int k = e.getKeyCode();
-//				switch(k){
-//				case KeyEvent.VK_RIGHT:
-//					slideBar.nextPage();
-//					break;
-//				case KeyEvent.VK_LEFT:
-//					slideBar.prePage();
-//					break;
-//				}
-//			}
-//			
-//		});
 	}
 	
 	public void stopTimer(){
@@ -339,5 +328,4 @@ public class HangupOrderPanel extends JPanel {
 	public void setParentContainer(Container parentContainer) {
 		this.parentContainer = parentContainer;
 	}
-	
 }

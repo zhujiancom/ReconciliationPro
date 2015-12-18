@@ -7,4 +7,6 @@ public interface ITableInfoService extends IBaseService<TableInfo,Long>{
 	TableInfo getTableInfoByNo(String tableno);
 	
 	void deleteAll();
+	
+	boolean isExpressTable(String tableno);
 }

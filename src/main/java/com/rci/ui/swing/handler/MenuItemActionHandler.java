@@ -214,4 +214,26 @@ public class MenuItemActionHandler {
 			}
 		};
 	}
+
+	/**
+	 * 
+	 * Describle(描述)：成本控制
+	 *
+	 * 方法名称：doCostControlAction
+	 *
+	 * 所在类名：MenuItemActionHandler
+	 *
+	 * Create Time:2015年12月18日 上午10:23:47
+	 *  
+	 * @return
+	 */
+	public ActionListener doCostControlAction(){
+		return new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				WindowBuilderFactory.createCostStatisticWindow();
+			}
+		};
+	}
 }

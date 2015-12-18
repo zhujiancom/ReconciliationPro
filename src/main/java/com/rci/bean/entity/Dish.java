@@ -207,7 +207,7 @@ public class Dish extends BaseEntity{
 
 	@Column(name="cost")
 	public BigDecimal getCost() {
-		return cost;
+		return cost == null ? BigDecimal.ZERO:cost;
 	}
 
 	public void setCost(BigDecimal cost) {

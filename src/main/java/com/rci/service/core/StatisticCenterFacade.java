@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.ui.swing.vos.CostStatisticVO;
 import com.rci.ui.swing.vos.DishStatisticVO;
 import com.rci.ui.swing.vos.ExpressRateVO;
 import com.rci.ui.swing.vos.TurnoverStatisticVO;
@@ -152,4 +153,20 @@ public interface StatisticCenterFacade {
 	 * @return
 	 */
 	public List<TurnoverStatisticVO> getTurnoverStatisticInfo(Date sdate,Date edate);
+	
+	/**
+	 * 
+	 * Describle(描述)：成本控制
+	 *
+	 * 方法名称：getCostStatisticList
+	 *
+	 * 所在类名：StatisticCenterFacade
+	 *
+	 * Create Time:2015年12月18日 上午11:05:54
+	 *  
+	 * @param sdate
+	 * @param edate
+	 * @return
+	 */
+	List<CostStatisticVO> getCostStatisticList(Date sdate,Date edate);
 }

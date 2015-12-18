@@ -9,6 +9,10 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -18,7 +22,7 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.rci.ui.swing.model.ButtonFactory;
 
-public class SlideBar extends JPanel {
+public class SlideBar extends JPanel implements KeyListener,MouseMotionListener{
 
 	/**
 	 * 
@@ -48,6 +52,8 @@ public class SlideBar extends JPanel {
 		addMainSlide();
 		//右方向键
 		addRightArrow();
+		addKeyListener(this);
+		addMouseMotionListener(this);
 	}
 	
 	private void addMainSlide() {
@@ -139,5 +145,34 @@ public class SlideBar extends JPanel {
 		if(currentPoint.x < totalLength-offset){
 			currentPoint.x = currentPoint.x+offset;
 		}
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		this.requestFocusInWindow();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("key keyTyped code:" + e.getKeyCode());
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("key keyPressed code:" + e.getKeyCode());
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		System.out.println("key keyReleased code:" + e.getKeyCode());
+		
 	}
 }

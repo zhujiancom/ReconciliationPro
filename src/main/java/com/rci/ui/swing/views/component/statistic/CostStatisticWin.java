@@ -20,7 +20,7 @@ import javax.swing.KeyStroke;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.tools.DateUtil;
 import com.rci.tools.StringUtils;
-import com.rci.ui.swing.handler.switcher.ExpressRateTimeSwitcherHandler;
+import com.rci.ui.swing.handler.switcher.CostTimeSwitcherHandler;
 import com.rci.ui.swing.handler.switcher.TimeSwitcherHandler;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.PopWindow;
@@ -28,16 +28,17 @@ import com.rci.ui.swing.views.component.encapsulation.DateTextField;
 import com.rci.ui.swing.views.component.switcher.SwitcherBar;
 import com.rci.ui.swing.views.component.switcher.SwitcherElement;
 
-public class ExpressRateStatisticWin extends PopWindow implements ActionListener{
+public class CostStatisticWin extends PopWindow implements ActionListener{
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3014079663966213368L;
+	private static final long serialVersionUID = 3403553491811645787L;
 	private TimeSwitcherHandler handler;
 	private DateTextField startDate;
 	private DateTextField endDate;
 	
-	public ExpressRateStatisticWin(String title){
+	public CostStatisticWin(String title){
 		super(title);
 		initComponent();
 	}
@@ -46,7 +47,7 @@ public class ExpressRateStatisticWin extends PopWindow implements ActionListener
 		JPanel containerPanel = this.getContainerPanel();
 		BorderLayout layout = (BorderLayout) containerPanel.getLayout();
 		layout.setVgap(0);
-		handler = new ExpressRateTimeSwitcherHandler();
+		handler = new CostTimeSwitcherHandler();
 		JPanel queryBar = createQueryBar();
 		JPanel mainPanel = createMainPanel();
 		handler.setDisplayPanel(mainPanel);
@@ -96,8 +97,8 @@ public class ExpressRateStatisticWin extends PopWindow implements ActionListener
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new Thread(new Runnable(){
-
+		new Thread(new Runnable() {
+			
 			@Override
 			public void run() {
 				try{

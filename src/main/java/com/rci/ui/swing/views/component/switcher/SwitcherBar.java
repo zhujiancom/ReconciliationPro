@@ -8,7 +8,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JPanel;
 
-import com.rci.ui.swing.handler.AbstractSwitcherHandler;
+import com.rci.ui.swing.handler.switcher.AbstractSwitcherHandler;
 
 /**
  * remark (备注):

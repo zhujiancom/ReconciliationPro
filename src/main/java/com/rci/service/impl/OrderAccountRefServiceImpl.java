@@ -4,28 +4,50 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.OrderAccountRef;
+import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
+import com.rci.enums.CommonEnums.Symbol;
+import com.rci.service.IAccountService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.base.BaseServiceImpl;
 
 @Service("OrderAccountRefService")
 public class OrderAccountRefServiceImpl extends
 		BaseServiceImpl<OrderAccountRef, Long> implements IOrderAccountRefService{
+	@Resource(name="AccountService")
+	private IAccountService accountService;
 
 	@Override
 	public List<OrderAccountRef> getOARef(String billno) {
 		DetachedCriteria dc = DetachedCriteria.forClass(OrderAccountRef.class);
 		dc.add(Restrictions.eq("orderNo", billno));
 		return baseDAO.queryListByCriteria(dc);
+	}
+	
+	public BigDecimal getPostAmountForOrder(String billno){
+		BigDecimal postAmount = BigDecimal.ZERO;
+		List<OrderAccountRef> oars = getOARef(billno);
+		if(!CollectionUtils.isEmpty(oars)){
+			for(OrderAccountRef oar:oars){
+				Account account = accountService.getAccByNo(oar.getAccNo());
+				if(Symbol.P.equals(account.getSymbol())){
+					postAmount = postAmount.add(oar.getRealAmount());
+				}
+			}
+		}
+		return postAmount;
 	}
 
 

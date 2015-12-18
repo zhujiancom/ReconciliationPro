@@ -22,8 +22,8 @@ import javax.swing.UIManager;
 
 import com.rci.config.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
-import com.rci.ui.swing.handler.MainPaneSwitcherHandler;
 import com.rci.ui.swing.handler.MenuItemActionHandler;
+import com.rci.ui.swing.handler.switcher.MainPaneSwitcherHandler;
 import com.rci.ui.swing.listeners.FrameListener;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.views.component.switcher.SwitcherBar;
@@ -38,6 +38,23 @@ public class RootFrame extends JFrame {
 	private JMenuBar menubar;
 	
 	public RootFrame() throws Exception{
+//		addKeyListener(new KeyAdapter() {
+//
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//				int k = e.getKeyCode();
+//				System.out.println(k);
+//				switch(k){
+//				case KeyEvent.VK_RIGHT:
+//					System.out.println("right press");
+//					break;
+//				case KeyEvent.VK_LEFT:
+//					System.out.println("left press");
+//					break;
+//				}
+//			}
+//		});
+		
 		this.setUndecorated(true);
 		this.setSize(PropertyUtils.getIntegerValue("mainframe.width"), PropertyUtils.getIntegerValue("mainframe.height"));
 		frameListener = new FrameListener(this); 
@@ -128,7 +145,6 @@ public class RootFrame extends JFrame {
 		management.add(activityManage);
 
 		MenuItemActionHandler mhandler = new MenuItemActionHandler();
-//		mhandler.setQueryPanel(queryPanel);
 		mhandler.setFrame(this);
 		baseReset.addActionListener(mhandler.doBaseInfoResetAction());
 		// 外送率统计事件
@@ -137,6 +153,8 @@ public class RootFrame extends JFrame {
 		earning.addActionListener(mhandler.doEarningStatisticAction());
 		//菜品销量统计
 		saleStatistic.addActionListener(mhandler.doSaleStatisticAction());
+		//成本控制
+		costControl.addActionListener(mhandler.doCostControlAction());
 
 		//系统退出
 		closeBtn.addActionListener(new ActionListener() {

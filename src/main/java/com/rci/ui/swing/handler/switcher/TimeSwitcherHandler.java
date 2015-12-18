@@ -1,4 +1,4 @@
-package com.rci.ui.swing.handler;
+package com.rci.ui.swing.handler.switcher;
 
 import java.awt.event.ActionEvent;
 import java.util.Date;
