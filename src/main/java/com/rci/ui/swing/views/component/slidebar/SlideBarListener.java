@@ -23,4 +23,12 @@ public interface SlideBarListener extends ActionListener {
 	void registerElement(SlideElement element);
 	
 	void fireUIUpdate(SlideElement currentElement);
+	
+	void moveTo(SlideElement currentElement);
+	
+	void moveTo(int index);
+	
+	void cleanAllElements();
+	
+	Integer getElementCount();
 }

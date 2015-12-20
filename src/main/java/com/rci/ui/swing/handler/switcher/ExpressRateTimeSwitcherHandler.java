@@ -41,10 +41,10 @@ public class ExpressRateTimeSwitcherHandler extends TimeSwitcherHandler {
 		Collections.reverse(rates);
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		for(ExpressRateVO rate:rates){
-			dataset.setValue(rate.getExpressRate(), rate.getExpressNum(), DateUtil.date2Str(rate.getDate()));
+			dataset.addValue(rate.getExpressRate(), "rate", DateUtil.date2Str(rate.getDate()));
 		}
-		generateTable(dest);
 		generateLineChart(dataset);
+		generateTable(dest);
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override

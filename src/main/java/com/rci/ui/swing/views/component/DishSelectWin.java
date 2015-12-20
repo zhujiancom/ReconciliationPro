@@ -55,7 +55,7 @@ public class DishSelectWin extends PopWindow {
 			DishSeriesVO series = seriesList.get(i);
 			if(i == 0){
 				SlideElement element = new SlideElement(series.getSeriesname(),series,State.SELECTED);
-				element.setIndex(i+1);
+				element.setIndex(i);
 				element.addActionListener(handler);
 				elements.add(element);
 				DishChooserPanel contentPanel = new DishChooserPanel(selectListener,element);
@@ -63,7 +63,7 @@ public class DishSelectWin extends PopWindow {
 				add(contentPanel,BorderLayout.CENTER);
 			}else{
 				SlideElement element = new SlideElement(series.getSeriesname(),series);
-				element.setIndex(i+1);
+				element.setIndex(i);
 				element.addActionListener(handler);
 				elements.add(element);
 			}

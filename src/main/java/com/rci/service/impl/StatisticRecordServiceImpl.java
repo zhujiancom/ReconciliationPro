@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.criterion.Order;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.StatisticRecord;
@@ -31,6 +32,17 @@ public class StatisticRecordServiceImpl extends
 		.addOrder(Order.asc("date"));
 		
 		return baseDAO.queryListByCriteria(sdc);
+	}
+
+	/* 
+	 * @see com.rci.service.IStatisticRecordService#deleteByDate(java.util.Date)
+	 */
+	@Override
+	public void deleteByDate(Date date) {
+		StatisticRecord record = queryRecordByDate(date);
+		if(record != null){
+			((IStatisticRecordService)AopContext.currentProxy()).rwDelete(record);
+		}
 	}
 
 }

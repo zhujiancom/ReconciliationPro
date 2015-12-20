@@ -40,6 +40,7 @@ public abstract class AbstractSlideBarListener implements SlideBarListener {
 	@Override
 	public void fireUIUpdate(SlideElement currentElement) {
 		int curIndex = currentElement.getIndex();
+		selectedElement = currentElement;
 		for(SlideElement element:elements){
 			if(element.getIndex() != curIndex){
 				element.setState(State.NORMAL);
@@ -47,6 +48,9 @@ public abstract class AbstractSlideBarListener implements SlideBarListener {
 				element.repaint();
 			}
 		}
+		selectedElement.setState(State.SELECTED);
+		selectedElement.setChecked(true);
+		selectedElement.repaint();
 	}
 
 	public SlideElement getSelectedElement() {

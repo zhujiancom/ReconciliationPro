@@ -32,6 +32,24 @@
 			</activation>
 		</profile>
 		<profile>
+			<id>home</id>
+			<properties>
+				<common-log-url>logs/common.log</common-log-url>
+				<rci-log-url>logs/rci.log</rci-log-url>
+				<sql-log-url>logs/sql.log</sql-log-url>
+				<spring-log-url>logs/spring.log</spring-log-url>
+				<hibernate-log-url>logs/spring.log</hibernate-log-url>
+				<root-priority>ERROR</root-priority>
+				<main-class>com.rci.Entry</main-class>
+				<sqlserver-username>sa</sqlserver-username>
+				<sqlserver-url>jdbc:jtds:sqlserver://localhost:1433;DatabaseName=jdrestv5_branch</sqlserver-url>
+				<sqlserver-password>123456</sqlserver-password>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
 			<id>ui</id>
 			<properties>
 				<common-log-url>logs/common.log</common-log-url>

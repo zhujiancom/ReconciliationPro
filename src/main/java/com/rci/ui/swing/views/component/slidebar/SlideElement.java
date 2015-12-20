@@ -9,8 +9,10 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
 import java.net.URL;
@@ -22,7 +24,7 @@ import javax.swing.JButton;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class SlideElement extends JButton {
+public class SlideElement extends JButton implements KeyListener,MouseMotionListener{
 	/**
 	 * 
 	 */
@@ -91,34 +93,36 @@ public class SlideElement extends JButton {
 		this.width = selectedImage.getWidth(this);
 		this.height = selectedImage.getWidth(this);
 		setPreferredSize(new Dimension(width, height));
-		final SlideElement currentElement = this;
-		this.addMouseListener(new MouseAdapter() {
+//		final SlideElement currentElement = this;
+//		this.addMouseListener(new MouseAdapter() {
 				
-			@Override
-			public void mouseClicked(MouseEvent event ) {
-				if(event.getClickCount() == 1){
-					if(listener != null){
-						listener.fireUIUpdate(currentElement);
-						currentElement.setState(State.SELECTED);
-						currentElement.setChecked(true);
-					}
-				}
-			}
+//			@Override
+//			public void mouseClicked(MouseEvent event ) {
+//				if(event.getClickCount() == 1){
+//					if(listener != null){
+//						listener.fireUIUpdate(currentElement);
+//						currentElement.setState(State.SELECTED);
+//						currentElement.setChecked(true);
+//					}
+//				}
+//			}
 
 //			@Override
 //			public void mouseEntered(MouseEvent e) {
 //				setState(State.HOVER);
 //			}
 
-			@Override
-			public void mouseExited(MouseEvent e) {
-				if(isChecked){
-					setState(State.SELECTED);
-				}else{
-					setState(State.NORMAL);
-				}
-			}
-		});
+//			@Override
+//			public void mouseExited(MouseEvent e) {
+//				if(isChecked){
+//					setState(State.SELECTED);
+//				}else{
+//					setState(State.NORMAL);
+//				}
+//			}
+//		});
+		addKeyListener(this);
+		addMouseMotionListener(this);
 	}
 	
 	
@@ -255,5 +259,55 @@ public class SlideElement extends JButton {
 			isEqual = new EqualsBuilder().append(this.value, o.value).isEquals();
 		}
 		return isEqual;
+	}
+	/* 
+	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+	}
+	/* 
+	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		this.requestFocusInWindow();
+	}
+	/* 
+	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int keycode = e.getKeyCode();
+		int elementCount = listener.getElementCount();
+		int _idx = this.getIndex();
+		if(keycode == KeyEvent.VK_RIGHT){
+			_idx++;
+			if(_idx >= elementCount){
+				_idx = elementCount - 1;
+			}
+		}
+		if(keycode == KeyEvent.VK_LEFT){
+			_idx--;
+			if(_idx < 0){
+				_idx = 0;
+			}
+		}
+		listener.moveTo(_idx);
+	}
+	/* 
+	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+	/* 
+	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

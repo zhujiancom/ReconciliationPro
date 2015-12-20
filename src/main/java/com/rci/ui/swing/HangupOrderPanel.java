@@ -8,11 +8,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -23,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -105,6 +99,7 @@ public class HangupOrderPanel extends JPanel{
 	
 	public void updateSlideBar(){
 		this.removeAll();
+		handler.cleanAllElements();
 		List<HangupTabelInfoVO> tables = metaService.getHangupTablesInfo();
 		List<SlideElement> elements = new ArrayList<SlideElement>();
 		if(CollectionUtils.isEmpty(tables)){
@@ -114,7 +109,7 @@ public class HangupOrderPanel extends JPanel{
 		for(int i=0;i<tables.size();i++){
 			HangupTabelInfoVO table = tables.get(i);
 			SlideElement element =new SlideElement(table.getTableName(),table,new Font("微软雅黑", Font.BOLD, 32));
-			element.setIndex(i+1);
+			element.setIndex(i);
 			element.addActionListener(handler);
 			elements.add(element);
 			if(element.equals(handler.getSelectedElement())){
@@ -145,6 +140,7 @@ public class HangupOrderPanel extends JPanel{
 			add(itemInfoPanel,BorderLayout.EAST);
 		}
 		slideBar = new SlideBar(elements) ;
+//		slideBar = new SlideBar(handler,elements) ;
 		JPanel upPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));
 		upPanel.setName("upPanel");
 		upPanel.setBackground(Color.WHITE);
@@ -178,7 +174,7 @@ public class HangupOrderPanel extends JPanel{
 			HangupTabelInfoVO table = tables.get(i);
 			if(i == 0){
 				SlideElement element = new SlideElement(table.getTableName(),table,new Font("微软雅黑", Font.BOLD, 32),State.SELECTED);
-				element.setIndex(i+1);
+				element.setIndex(i);
 				element.addActionListener(handler);
 				elements.add(element);
 				HangupTableDetailInfoPanel detailInfoPanel = new HangupTableDetailInfoPanel(element);
@@ -189,12 +185,12 @@ public class HangupOrderPanel extends JPanel{
 				add(itemInfoPanel,BorderLayout.EAST);
 			}else{
 				SlideElement element =new SlideElement(table.getTableName(),table,new Font("微软雅黑", Font.BOLD, 32));
-				element.setIndex(i+1);
+				element.setIndex(i);
 				element.addActionListener(handler);
 				elements.add(element);
 			}
 		}
-		slideBar = new SlideBar(elements) ;
+		slideBar = new SlideBar(elements);
 		return slideBar;
 	}
 	
@@ -232,7 +228,7 @@ public class HangupOrderPanel extends JPanel{
 			super.paintComponent(g);
 			invalidate();
 			HangupTabelInfoVO tableInfo = (HangupTabelInfoVO) selectedElement.getValue();
-			add(new TitleBar(new JLabel("<html>订单编号：<font color='red' style='font-weight:bold'>"+tableInfo.getBillno()+"</font></html>"),500,30),BorderLayout.NORTH);
+			add(new TitleBar(new JLabel("<html>订单编号：<font color='red' style='font-weight:bold'>"+tableInfo.getBillno()+"</font><br/><font color='red' size='6'>桌号："+tableInfo.getTableName()+"</font></html>"),500,60),BorderLayout.NORTH);
 			JPanel content = new JPanel();
 			content.setBackground(Color.WHITE);
 			content.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));

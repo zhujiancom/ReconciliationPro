@@ -89,12 +89,6 @@ public class ContentPanel extends JSplitPane {
 			itemModel.setRowCount(0);
 		}
 		DataCleanFacade datacleaner = (DataCleanFacade) SpringUtils.getBean("DataCleanFacade");
-//		datacleaner.deleteOrders(time);
-//		datacleaner.deleteMark(time);
-//		datacleaner.deleteFlowInfo(time,DataGenerateType.AUTO);
-//		datacleaner.deleteTicketStatistic(time);
-//		datacleaner.deleteELESDInfo(time);
-//		datacleaner.deleteStockInfo(time);
 		datacleaner.cleanAllOfOneDay(time);
 	}
 

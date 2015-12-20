@@ -9,10 +9,6 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -22,13 +18,13 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.rci.ui.swing.model.ButtonFactory;
 
-public class SlideBar extends JPanel implements KeyListener,MouseMotionListener{
+public class SlideBar extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3296023438295974556L;
-
+	
 	private JPanel mainSlidePanel;
 	
 	private Point currentPoint = new Point(0,0);
@@ -37,7 +33,15 @@ public class SlideBar extends JPanel implements KeyListener,MouseMotionListener{
 	
 	private List<SlideElement> elements;
 	
+	private SlideBarListener listener;
+	
 	public SlideBar(List<SlideElement> elements){
+		this.elements = elements;
+		initComponent();
+	}
+	
+	public SlideBar(SlideBarListener listener,List<SlideElement> elements){
+		this.listener = listener;
 		this.elements = elements;
 		initComponent();
 	}
@@ -52,8 +56,8 @@ public class SlideBar extends JPanel implements KeyListener,MouseMotionListener{
 		addMainSlide();
 		//右方向键
 		addRightArrow();
-		addKeyListener(this);
-		addMouseMotionListener(this);
+//		addKeyListener(this);
+//		addMouseMotionListener(this);
 	}
 	
 	private void addMainSlide() {
@@ -72,10 +76,12 @@ public class SlideBar extends JPanel implements KeyListener,MouseMotionListener{
 			int x = 0;
 			for(SlideElement element:elements){
 				element.setBounds(x, (mainSlidePanel.getPreferredSize().height-element.getHeight())/2, element.getWidth(), element.getHeight());
+				if(listener != null){
+					element.addActionListener(listener);
+				}
 				mainSlidePanel.add(element);
 				x += offset;
 			}
-			
 		}
 		add(mainSlidePanel,gb);
 	}
@@ -147,32 +153,58 @@ public class SlideBar extends JPanel implements KeyListener,MouseMotionListener{
 		}
 	}
 
-	@Override
-	public void mouseDragged(MouseEvent e) {
+//	@Override
+//	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
-	}
+//	}
 
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		this.requestFocusInWindow();
-	}
+//	@Override
+//	public void mouseMoved(MouseEvent e) {
+//		this.requestFocusInWindow();
+//	}
 
-	@Override
-	public void keyTyped(KeyEvent e) {
+//	@Override
+//	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("key keyTyped code:" + e.getKeyCode());
-	}
+//		System.out.println("key keyTyped code:" + e.getKeyCode());
+//	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("key keyPressed code:" + e.getKeyCode());
-	}
+//	@Override
+//	public void keyPressed(KeyEvent e) {
+//		int keycode = e.getKeyCode();
+//		System.out.println("key keyPressed code:" + e.getKeyCode());
+//		int _idx = 0;
+//		SlideElement currentElement = null;
+//		SlideElement nextElement = null;
+//		if(CollectionUtils.isEmpty(elements)){
+//			return;
+//		}
+//		for(SlideElement element:elements){
+//			if(element.isChecked()){
+//				currentElement = element;
+//			}
+//		}
+//		if(keycode == KeyEvent.VK_RIGHT){
+//			_idx = currentElement.getIndex()+1;
+//			if(_idx >= elements.size()){
+//				_idx = elements.size()-1;
+//			}
+////			currentElement = elements.get(_idx);
+//		}
+//		if(keycode == KeyEvent.VK_LEFT){
+//			_idx = currentElement.getIndex()-1;
+//			if(_idx < 0){
+//				_idx = 0;
+//			}
+////			currentElement = elements.get(_idx-1);
+//		}
+//		nextElement = elements.get(_idx);
+//		listener.moveTo(nextElement);
+//	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		System.out.println("key keyReleased code:" + e.getKeyCode());
-		
-	}
+//	@Override
+//	public void keyReleased(KeyEvent e) {
+//		System.out.println("key keyReleased code:" + e.getKeyCode());
+//		
+//	}
 }

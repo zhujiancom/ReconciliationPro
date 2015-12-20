@@ -61,6 +61,7 @@ public class OrderExcelDataLoaderService extends BaseDataLoaderService {
 		if(mark == null){
 			excelService.importFrom(in);
 			markService.markOrder(day);
+			@SuppressWarnings("unchecked")
 			List<Order> orders = (List<Order>) excelService.getDataSet();
 			// 更新账单使用方案和库存数据
 			updateRelativeInfo(orders);

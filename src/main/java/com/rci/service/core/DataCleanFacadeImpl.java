@@ -1,6 +1,7 @@
 package com.rci.service.core;
 
 import java.text.ParseException;
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -12,6 +13,7 @@ import com.rci.service.IAccFlowService;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderService;
+import com.rci.service.IStatisticRecordService;
 import com.rci.service.ITicketInfoService;
 import com.rci.service.ITicketStatisticService;
 import com.rci.service.inventory.IInventorySellLogService;
@@ -37,6 +39,9 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 	
 	@Resource(name="InventorySellLogService")
 	private IInventorySellLogService saleLogService;
+	
+	@Resource(name="StatisticRecordService")
+	private IStatisticRecordService srService;
 	
 
 	@Override
@@ -79,6 +84,7 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 		deleteELESDInfo(time);
 //		deleteStockInfo(time);
 		deleteInventoryInfo(time);
+		deleteStatisticRecord(time);
 	}
 
 	@Override
@@ -91,6 +97,16 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 		SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
 		queryDTO.setDay(time);
 		saleLogService.rollbackLog(queryDTO);
+	}
+	
+	@Override
+	public void deleteStatisticRecord(String time){
+		try {
+			Date date = DateUtil.parseDate(time, "yyyyMMdd");
+			srService.deleteByDate(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

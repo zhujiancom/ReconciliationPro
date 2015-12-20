@@ -36,7 +36,7 @@ public class CostTimeSwitcherHandler extends TimeSwitcherHandler {
 		List<CostStatisticVO> costs = statisticService.getCostStatisticList(sdate,edate);
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		for(CostStatisticVO vo:costs){
-			dataset.addValue(vo.getCostRate(), vo.getCostAmount(), DateUtil.date2Str(vo.getDate()));
+			dataset.addValue(vo.getCostRate(), "rate", DateUtil.date2Str(vo.getDate()));
 		}
 		generateTable(costs);
 		generateLineChart(dataset);

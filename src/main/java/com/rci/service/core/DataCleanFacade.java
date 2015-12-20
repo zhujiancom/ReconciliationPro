@@ -98,4 +98,19 @@ public interface DataCleanFacade {
 	public void cleanAllOfOneDay(String time);
 	
 	public void deleteInventoryInfo(String time);
+	
+	/**
+	 * 
+	 *
+	 * Describle(描述)：删除成本控制记录
+	 *
+	 * 方法名称：deleteStatisticRecord
+	 *
+	 * 所在类名：DataCleanFacade
+	 *
+	 * Create Time:2015年12月19日 下午1:58:16
+	 *  
+	 * @param time
+	 */
+	void deleteStatisticRecord(String time);
 }

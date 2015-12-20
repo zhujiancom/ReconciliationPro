@@ -13,6 +13,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
@@ -27,6 +29,7 @@ import com.rci.bean.entity.inventory.InventoryDishRef;
 import com.rci.bean.entity.inventory.InventorySellLog;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.enums.BusinessEnums.FlowType;
+import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IAccFlowService;
 import com.rci.service.IAccountService;
 import com.rci.service.IDataLoaderService;
@@ -58,6 +61,8 @@ import com.rci.tools.DateUtil;
  *
  */
 public abstract class BaseDataLoaderService implements IDataLoaderService {
+	private static final Log logger = LogFactory.getLog(BaseDataLoaderService.class);
+	
 	@Autowired
 	private List<CalculateFilter> filters;
 	
@@ -87,6 +92,9 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 	
 	@Resource(name="TableInfoService")
 	private ITableInfoService tableService;
+	
+	@Resource(name="DataTransformService")
+	private IDataTransformService transformService;
 	
 	protected void updateRelativeInfo(List<Order> orders){
 		if(CollectionUtils.isEmpty(orders)){
@@ -139,6 +147,10 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 			for(OrderItem item:items){
 				String dishNo = item.getDishNo();
 				Dish dish = dishService.findDishByNo(dishNo);
+				if(dish == null){
+					dish = transformService.transformDishInfo(dishNo);
+					logger.warn("payno="+order.getPayNo()+",dishno ="+dishNo+" is not exist");
+				}
 				costAmount = costAmount.add(dish.getCost());
 			}
 			BigDecimal postAmount = oaService.getPostAmountForOrder(order.getOrderNo());

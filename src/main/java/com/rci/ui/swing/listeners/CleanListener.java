@@ -2,10 +2,7 @@ package com.rci.ui.swing.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -19,15 +16,9 @@ public class CleanListener implements ActionListener {
 	private ConculsionPanel conclusionPane;
 	private ContentPanel contentPane;
 	private QueryFormPanel queryPanel;
-	private Icon loadingIcon;
-	private Icon doneIcon;
 	
 	public CleanListener(ContentPanel contentPane){
 		this.contentPane = contentPane;
-		URL loadingIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/loading.gif");
-		loadingIcon = new ImageIcon(loadingIconUrl);
-		URL doneIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/done.png");
-		doneIcon = new ImageIcon(doneIconUrl);
 	}
 	
 	@Override
@@ -42,8 +33,7 @@ public class CleanListener implements ActionListener {
 
 						@Override
 						public void run() {
-							queryPanel.getActionLabel().setIcon(loadingIcon);
-							queryPanel.getActionLabel().setText("正在清除 "+ time +" 数据！");
+							queryPanel.displayInfoLoading("正在清除 "+ time +" 数据！");
 						}
 						
 					});
@@ -53,8 +43,7 @@ public class CleanListener implements ActionListener {
 
 						@Override
 						public void run() {
-							queryPanel.getActionLabel().setText("日期："+time+" 数据清除成功！");
-							queryPanel.getActionLabel().setIcon(doneIcon);
+							queryPanel.displayInfoDone("日期："+time+" 数据清除成功！");
 						}
 						
 					});
