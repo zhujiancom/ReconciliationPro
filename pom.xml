@@ -45,9 +45,6 @@
 				<sqlserver-url>jdbc:jtds:sqlserver://localhost:1433;DatabaseName=jdrestv5_branch</sqlserver-url>
 				<sqlserver-password>123456</sqlserver-password>
 			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 		</profile>
 		<profile>
 			<id>ui</id>
