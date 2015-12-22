@@ -85,42 +85,6 @@ public class OrderDataLoader implements Runnable {
 		
 		OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
 		OrderItemTableModel ottm = (OrderItemTableModel) contentPane.getItemTable().getModel();
-//		if(!CollectionUtils.isEmpty(displayOrders)){
-//			otm.setOrders(displayOrders);
-//			otm.fireTableDataChanged();
-//			
-//			OrderVO order = otm.getOrderAt(0);
-//			//设置表格默认第一行选中
-//			contentPane.getMainTable().setRowSelectionAllowed(true);
-//			contentPane.getMainTable().setRowSelectionInterval(0, 0);
-//			loadItemData(order.getPayNo());
-//			for(OrderVO ov:displayOrders){
-//				if(StringUtils.hasText(ov.getWarningInfo())){
-//					contentPane.getTextArea().append("【"+ov.getPayNo()+"】"+ov.getWarningInfo()+"\n");
-//				}
-//			}
-//			//2. 根据订单数据统计今日收入明细
-//			loadSumData(queryDate);
-//			conclusionPane.refreshUI();
-//			SwingUtilities.invokeLater(new Runnable() {
-//				
-//				@Override
-//				public void run() {
-//					queryPane.displayInfoDone("查询完毕");
-//				}
-//			});
-//		}else{
-//			otm.setRowCount(0);
-//			ottm.setRowCount(0);
-//			SwingUtilities.invokeLater(new Runnable() {
-//				
-//				@Override
-//				public void run() {
-//					conclusionPane.clearData();
-//					queryPane.getActionLabel().setText("没有记录！");
-//				}
-//			});
-//		}
 		if(!CollectionUtils.isEmpty(displayOrders)){
 			((OrderTable)contentPane.getMainTable()).reflushTable(displayOrders);
 			OrderVO order = otm.getOrderAt(0); 
@@ -143,7 +107,7 @@ public class OrderDataLoader implements Runnable {
 				@Override
 				public void run() {
 					conclusionPane.clearData();
-					queryPane.getActionLabel().setText("没有记录！");
+					queryPane.displayInfoDone("没有记录！");
 				}
 			});
 		}

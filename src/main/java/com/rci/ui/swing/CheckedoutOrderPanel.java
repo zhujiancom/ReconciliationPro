@@ -63,4 +63,28 @@ public class CheckedoutOrderPanel extends JPanel {
 		clistener.setQueryPanel(queryPanel);
 		queryPanel.getCleanBtn().addActionListener(clistener);
 	}
+
+	public ConculsionPanel getConclusionPane() {
+		return conclusionPane;
+	}
+
+	public ContentPanel getContentPane() {
+		return contentPane;
+	}
+
+	public void setConclusionPane(ConculsionPanel conclusionPane) {
+		this.conclusionPane = conclusionPane;
+	}
+
+	public void setContentPane(ContentPanel contentPane) {
+		this.contentPane = contentPane;
+	}
+
+	public QueryFormPanel getQueryPanel() {
+		return queryPanel;
+	}
+
+	public void setQueryPanel(QueryFormPanel queryPanel) {
+		this.queryPanel = queryPanel;
+	}
 }

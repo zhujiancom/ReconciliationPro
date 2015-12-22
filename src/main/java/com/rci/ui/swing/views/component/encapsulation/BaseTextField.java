@@ -77,6 +77,12 @@ public class BaseTextField extends JTextField{
 	
 	protected void doMouseEnterAction(){}
 
+	@Override
+	public void setText(String paramString) {
+		super.setText(paramString);
+		setForeground(Color.BLACK);
+	}
+
 	public String getPlaceholder() {
 		return placeholder;
 	}

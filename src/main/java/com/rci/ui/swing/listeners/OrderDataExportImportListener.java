@@ -6,19 +6,25 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.springframework.util.CollectionUtils;
 
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
@@ -26,16 +32,32 @@ import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
 import com.rci.metadata.service.IDataFetchService;
 import com.rci.service.IDataLoaderService;
+import com.rci.service.IOrderAccountRefService;
+import com.rci.service.IOrderService;
+import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.service.utils.IExImportService;
 import com.rci.service.utils.excel.ExcelSheet;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
+import com.rci.ui.swing.CheckedoutOrderPanel;
 import com.rci.ui.swing.handler.DataExport;
+import com.rci.ui.swing.model.OrderItemTable;
+import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
+import com.rci.ui.swing.model.OrderTable;
+import com.rci.ui.swing.model.OrderTable.OrderTableModel;
+import com.rci.ui.swing.views.ConculsionPanel;
+import com.rci.ui.swing.views.ContentPanel;
+import com.rci.ui.swing.views.QueryFormPanel;
 import com.rci.ui.swing.views.component.encapsulation.MaskDialog;
+import com.rci.ui.swing.vos.OrderVO;
 
-public class OrderDataExportImportListener extends DataExportImportListener {
-	
+public class OrderDataExportImportListener extends DataExportImportListener implements ListSelectionListener {
 	private JFrame frame;
+	
+	private ConculsionPanel conclusionPane; // 统计信息面板
+	private QueryFormPanel queryPane; // 查询面板
+	ContentPanel contentPane;
+	private Map<AccountCode,BigDecimal> sumMap;
 	
 	public OrderDataExportImportListener(JFrame frame){
 		this.frame = frame;
@@ -99,6 +121,7 @@ public class OrderDataExportImportListener extends DataExportImportListener {
 
 	@Override
 	public ActionListener importData() {
+		final OrderDataExportImportListener loadItemListener = this;
 		return new ActionListener() {
 			
 			@Override
@@ -151,7 +174,7 @@ public class OrderDataExportImportListener extends DataExportImportListener {
 								@Override
 								public void run() {
 									String fileName = chooser.getSelectedFile().getName();
-									String day = fileName.substring(0,fileName.indexOf("."));
+									final String day = fileName.substring(0,fileName.indexOf("."));
 									final MaskDialog dialog = new MaskDialog(frame);
 									try {
 										SwingUtilities.invokeLater(new Runnable() {
@@ -165,6 +188,46 @@ public class OrderDataExportImportListener extends DataExportImportListener {
 										BufferedInputStream bin = new BufferedInputStream(new FileInputStream(new File(chooser.getSelectedFile().getAbsolutePath())));
 										IDataLoaderService loaderService = (IDataLoaderService) SpringUtils.getBean("OrderExcelDataLoaderService");
 										loaderService.load(bin, date);
+										
+										CheckedoutOrderPanel rootPanel = (CheckedoutOrderPanel) frame.getContentPane().getComponent(0);
+										conclusionPane = rootPanel.getConclusionPane();
+										contentPane = rootPanel.getContentPane();
+										queryPane = rootPanel.getQueryPanel();
+										contentPane.getMainTable().getSelectionModel().addListSelectionListener(loadItemListener);
+										
+										IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
+										List<OrderVO> ordervos = orderService.accquireOrderVOsByDay(day);
+										
+										OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
+										OrderItemTableModel ottm = (OrderItemTableModel) contentPane.getItemTable().getModel();
+										if(!CollectionUtils.isEmpty(ordervos)){
+											((OrderTable)contentPane.getMainTable()).reflushTable(ordervos);
+											OrderVO order = otm.getOrderAt(0); 
+											((OrderItemTable)contentPane.getItemTable()).reflushTable(order.getPayNo());
+											//2. 根据订单数据统计今日收入明细
+											loadSumData(date);
+											conclusionPane.refreshUI();
+											SwingUtilities.invokeLater(new Runnable() {
+												
+												@Override
+												public void run() {
+													queryPane.getTimeInput().setText(day);
+													queryPane.displayInfoDone("查询完毕");
+												}
+											});
+										}else{
+											otm.setRowCount(0);
+											ottm.setRowCount(0);
+											SwingUtilities.invokeLater(new Runnable() {
+											
+												@Override
+												public void run() {
+													conclusionPane.clearData();
+													queryPane.displayInfoDone("没有记录！");
+												}
+											});
+										}
+										
 										SwingUtilities.invokeLater(new Runnable() {
 											
 											@Override
@@ -242,50 +305,18 @@ public class OrderDataExportImportListener extends DataExportImportListener {
 	 *  
 	 * @param date
 	 */
-//	private void loadSumData(Date date){
-//		sumMap = new HashMap<AccountCode,BigDecimal>();
-//		IOrderAccountRefService oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
-//		List<AccountSumResult> sumRes = oaService.querySumAmount(date);
-//		for(AccountSumResult res:sumRes){
-//			AccountCode accNo = res.getAccNo();
-//			BigDecimal amount = res.getSumAmount();
-//			sumMap.put(accNo, amount);
-//		}
-//		conclusionPane.setQueryDate(date);
-//		conclusionPane.setSumMap(sumMap);
-//	}
-
-//	public ContentPanel getContentPane() {
-//		return contentPane;
-//	}
-//
-//	public void setContentPane(ContentPanel contentPane) {
-//		this.contentPane = contentPane;
-//	}
-//
-//	public ConculsionPanel getConclusionPane() {
-//		return conclusionPane;
-//	}
-//
-//	public void setConclusionPane(ConculsionPanel conclusionPane) {
-//		this.conclusionPane = conclusionPane;
-//	}
-
-//	public Map<AccountCode, BigDecimal> getSumMap() {
-//		return sumMap;
-//	}
-//
-//	public void setSumMap(Map<AccountCode, BigDecimal> sumMap) {
-//		this.sumMap = sumMap;
-//	}
-//
-//	public QueryFormPanel getQueryPanel() {
-//		return queryPanel;
-//	}
-//
-//	public void setQueryPanel(QueryFormPanel queryPanel) {
-//		this.queryPanel = queryPanel;
-//	}
+	private void loadSumData(Date date){
+		sumMap = new HashMap<AccountCode,BigDecimal>();
+		IOrderAccountRefService oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
+		List<AccountSumResult> sumRes = oaService.querySumAmount(date);
+		for(AccountSumResult res:sumRes){
+			AccountCode accNo = res.getAccNo();
+			BigDecimal amount = res.getSumAmount();
+			sumMap.put(accNo, amount);
+		}
+		conclusionPane.setQueryDate(date);
+		conclusionPane.setSumMap(sumMap);
+	}
 
 	public JFrame getFrame() {
 		return frame;
@@ -293,5 +324,17 @@ public class OrderDataExportImportListener extends DataExportImportListener {
 
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent event) {
+		if(event.getSource() == contentPane.getMainTable().getSelectionModel()
+				&& contentPane.getMainTable().getRowSelectionAllowed()){
+			int row = contentPane.getMainTable().getSelectedRow();
+			if(row != -1){
+				String payno = (String) contentPane.getMainTable().getValueAt(row, 2);
+				((OrderItemTable)contentPane.getItemTable()).reflushTable(payno);
+			}
+		}
 	}
 }
