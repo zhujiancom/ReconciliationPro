@@ -38,23 +38,6 @@ public class RootFrame extends JFrame {
 	private JMenuBar menubar;
 	
 	public RootFrame() throws Exception{
-//		addKeyListener(new KeyAdapter() {
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//				int k = e.getKeyCode();
-//				System.out.println(k);
-//				switch(k){
-//				case KeyEvent.VK_RIGHT:
-//					System.out.println("right press");
-//					break;
-//				case KeyEvent.VK_LEFT:
-//					System.out.println("left press");
-//					break;
-//				}
-//			}
-//		});
-		
 		this.setUndecorated(true);
 		this.setSize(PropertyUtils.getIntegerValue("mainframe.width"), PropertyUtils.getIntegerValue("mainframe.height"));
 		frameListener = new FrameListener(this); 
@@ -80,8 +63,6 @@ public class RootFrame extends JFrame {
 		JButton logoBtn = ButtonFactory.createImageButton("skin/gray/images/24x24/logo.png", null);
 		JMenu system = new JMenu("系统");
 		system.setForeground(Color.WHITE);
-//		JMenu operation = new JMenu("操作");
-//		operation.setForeground(Color.WHITE);
 		JMenu statistic = new JMenu("统计");
 		statistic.setForeground(Color.WHITE);
 		JMenu management = new JMenu("管理");
@@ -90,7 +71,6 @@ public class RootFrame extends JFrame {
 		menubar.add(logoBtn);
 		menubar.add(Box.createHorizontalStrut(10));
 		menubar.add(system);
-//		menubar.add(operation);
 		menubar.add(statistic);
 		menubar.add(management);
 		JPanel rightP = new JPanel(new FlowLayout(FlowLayout.RIGHT));

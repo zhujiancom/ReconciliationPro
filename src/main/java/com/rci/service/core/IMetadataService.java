@@ -139,4 +139,6 @@ public interface IMetadataService {
 	//////////////////////////////////////////////   其他模块		 /////////////////////////////////////////////
 	List<HangupTabelInfoVO> getHangupTablesInfo();
 	
+	
+	boolean hasSellOffWarningInfo();
 }

@@ -1,6 +1,7 @@
 package com.rci.bean.entity.inventory;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -51,6 +52,14 @@ public class SellOffWarning extends BaseEntity {
 	private Date soDate;
 
 	private State state;
+	
+	private BigDecimal balanceAmount;
+	
+	/* 最近进货时间 */
+	private Date pDate;
+	
+	/* 最近进货数量 */
+	private BigDecimal purchaseAmount;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -99,6 +108,34 @@ public class SellOffWarning extends BaseEntity {
 
 	public void setState(State state) {
 		this.state = state;
+	}
+
+	@Column(name="balance_amount")
+	public BigDecimal getBalanceAmount() {
+		return balanceAmount == null ? BigDecimal.ZERO:balanceAmount;
+	}
+
+	public void setBalanceAmount(BigDecimal balanceAmount) {
+		this.balanceAmount = balanceAmount;
+	}
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="p_date")
+	public Date getpDate() {
+		return pDate;
+	}
+
+	@Column(name="p_amount")
+	public BigDecimal getPurchaseAmount() {
+		return purchaseAmount;
+	}
+
+	public void setpDate(Date pDate) {
+		this.pDate = pDate;
+	}
+
+	public void setPurchaseAmount(BigDecimal purchaseAmount) {
+		this.purchaseAmount = purchaseAmount;
 	}
 
 	@Override

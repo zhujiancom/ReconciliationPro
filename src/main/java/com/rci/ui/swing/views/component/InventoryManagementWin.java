@@ -563,15 +563,16 @@ public class InventoryManagementWin extends PopWindow {
 			initComponent();
 		}
 		private void initComponent() {
-			setLayout(new FlowLayout(FlowLayout.LEFT));
-			table = new SelloffWarningTable(3);
+			setLayout(new BorderLayout(0,0));
+			setBackground(Color.WHITE);
+			table = new SelloffWarningTable(6);
 			scrollPane = new JScrollPane();
 			scrollPane.setBorder(BorderFactory.createEmptyBorder());
 			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setViewportView(table);
 			scrollPane.getViewport().setBackground(Color.WHITE);
-			add(scrollPane);
+			add(scrollPane,BorderLayout.CENTER);
 		}
 		
 		public void refresh(){

@@ -43,6 +43,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private DateTextField timeInput;
 	
 	private JLabel actionLabel;
+	private JLabel warningLabel;
 	
 	private JCheckBox allCheck;
 	private JCheckBox eleCheck;
@@ -59,6 +60,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private Set<PaymodeCode> paymodes = new HashSet<PaymodeCode>();
 	private Icon loadingIcon;
 	private Icon doneIcon;
+	private Icon warningIcon;
 	
 	public QueryFormPanel() {
 		buildPane();
@@ -66,6 +68,8 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		loadingIcon = new ImageIcon(loadingIconUrl);
 		URL doneIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/done.png");
 		doneIcon = new ImageIcon(doneIconUrl);
+		URL warningIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/warning.png");
+		warningIcon = new ImageIcon(warningIconUrl);
 	}
 
 	/**
@@ -116,10 +120,18 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		actionLabel.setForeground(Color.RED);
 		actionPane.add(actionLabel);
 		
+		JPanel inventoryWarningPane = new JPanel();
+		inventoryWarningPane.setBackground(Color.WHITE);
+		warningLabel = new JLabel();
+		warningLabel.setFont(new Font("微软雅黑", Font.PLAIN, 16));
+		warningLabel.setForeground(Color.RED);
+		inventoryWarningPane.add(warningLabel);
+		
 		queryPane.add(timeInput);
 		queryPane.add(queryBtn);
 		queryPane.add(cleanBtn);
 		queryPane.add(actionPane);
+		queryPane.add(inventoryWarningPane);
 		
 		this.add(queryPane);
 		this.add(createCheckPane()); //添加复选框
@@ -375,5 +387,10 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	public void displayInfoDone(String diplayInfo){
 		actionLabel.setText(diplayInfo);
 		actionLabel.setIcon(doneIcon);
+	}
+	
+	public void displayWarningInfo(){
+		warningLabel.setText("有库存被沽清，请尽快进货！");
+		warningLabel.setIcon(warningIcon);
 	}
 }

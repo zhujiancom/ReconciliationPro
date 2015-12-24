@@ -1,12 +1,15 @@
 package com.rci.ui.swing.model;
 
+import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
+import com.rci.enums.BusinessEnums.State;
 import com.rci.tools.DateUtil;
 import com.rci.tools.EnumUtils;
 import com.rci.ui.swing.vos.SellOffWarningVO;
@@ -38,8 +41,16 @@ public class SelloffWarningTable extends BaseTable<SellOffWarningVO> {
 		cm.getColumn(0).setPreferredWidth(100);
 		cm.getColumn(1).setHeaderValue("沽清日期");
 		cm.getColumn(1).setPreferredWidth(155);
-		cm.getColumn(2).setHeaderValue("沽清状态");
+		cm.getColumn(2).setHeaderValue("库存数量");
 		cm.getColumn(2).setPreferredWidth(100);
+		cm.getColumn(3).setHeaderValue("最近进货日期");
+		cm.getColumn(3).setPreferredWidth(150);
+		cm.getColumn(4).setHeaderValue("进货数量");
+		cm.getColumn(4).setPreferredWidth(100);
+		cm.getColumn(5).setHeaderValue("沽清状态");
+		cm.getColumn(5).setPreferredWidth(100);
+		JTableHeader header = this.getTableHeader();
+		header.setBackground(Color.WHITE);
 	}
 	
 	public void reflushTableData(){
@@ -82,7 +93,17 @@ public class SelloffWarningTable extends BaseTable<SellOffWarningVO> {
 			case 1:
 				return DateUtil.date2Str(vo.getSoDate());
 			case 2:
-				return EnumUtils.getEnumMessage(vo.getState());
+				return vo.getBalanceAmount();
+			case 3:
+				return DateUtil.date2Str(vo.getpDate());
+			case 4:
+				return vo.getPurchaseAmount();
+			case 5:
+				if(State.VALID.equals(vo.getState())){
+					return "<html><font color='red'>"+EnumUtils.getEnumMessage(vo.getState())+"</font></html>";
+				}else{
+					return "<html><font color='#DCDCDC'>"+EnumUtils.getEnumMessage(vo.getState())+"</font></html>";
+				}
 			}
 			return null;
 		}
@@ -94,7 +115,5 @@ public class SelloffWarningTable extends BaseTable<SellOffWarningVO> {
 		public void setItems(List<SellOffWarningVO> items) {
 			this.items = items;
 		}
-		
 	}
-
 }

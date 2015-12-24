@@ -45,14 +45,13 @@ public class CheckedoutOrderPanel extends JPanel {
 		add(contentPane, BorderLayout.CENTER);
 		/* 绑定 总结页脚 */
 		add(conclusionPane, BorderLayout.SOUTH);
-		/* 绑定时间 */
+		/* 绑定事件 */
 		bindListeners();
 	}
 
 	private void bindListeners() {
-		QueryListener listener = new QueryListener(contentPane);
+		QueryListener listener = new QueryListener(queryPanel,contentPane);
 		listener.setConclusionPane(conclusionPane);
-		listener.setQueryPanel(queryPanel);
 		queryPanel.getQueryBtn().registerKeyboardAction(listener,
 				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);

@@ -27,8 +27,10 @@ import com.rci.bean.entity.account.Account;
 import com.rci.bean.entity.inventory.Inventory;
 import com.rci.bean.entity.inventory.InventoryDishRef;
 import com.rci.bean.entity.inventory.InventorySellLog;
+import com.rci.bean.entity.inventory.SellOffWarning;
 import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.enums.BusinessEnums.FlowType;
+import com.rci.enums.BusinessEnums.State;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IAccFlowService;
 import com.rci.service.IAccountService;
@@ -44,6 +46,7 @@ import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventorySellLogService;
 import com.rci.service.inventory.IInventoryService;
+import com.rci.service.inventory.ISellOffWarningService;
 import com.rci.tools.DateUtil;
 
 /**
@@ -95,6 +98,9 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 	
 	@Resource(name="DataTransformService")
 	private IDataTransformService transformService;
+	
+	@Resource(name="SellOffWarningService")
+	private ISellOffWarningService inventoryWarningService;
 	
 	protected void updateRelativeInfo(List<Order> orders){
 		if(CollectionUtils.isEmpty(orders)){
@@ -337,7 +343,31 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 				sellLog.setPayno(order.getPayNo());
 				sellLog.setIno(inventory.getIno());
 				sellLogService.rwCreate(sellLog);
+				//检查库存是否有货
+				checkInventory(order.getDay(),inventory);
 			}
+		}
+	}
+
+	private void checkInventory(String day,Inventory inventory) {
+		try{
+			SellOffWarning warningInfo = inventoryWarningService.queryValidWarningInfo(inventory.getIno());
+			if(inventory.getBalanceAmount().compareTo(BigDecimal.ZERO) <= 0){
+				if(warningInfo == null){
+					warningInfo = new SellOffWarning();
+					warningInfo.setIno(inventory.getIno());
+					warningInfo.setIname(inventory.getIname());
+					warningInfo.setSoDate(DateUtil.parseDate(day, "yyyyMMdd"));
+					warningInfo.setState(State.VALID);
+					warningInfo.setBalanceAmount(inventory.getBalanceAmount());
+					inventoryWarningService.rwCreate(warningInfo);
+				}else{
+					warningInfo.setBalanceAmount(inventory.getBalanceAmount());
+					inventoryWarningService.rwUpdate(warningInfo);
+				}
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
 	}
 }

@@ -27,6 +27,7 @@ import com.rci.bean.entity.inventory.InventoryDishRef;
 import com.rci.bean.entity.inventory.PurchaseRecord;
 import com.rci.bean.entity.inventory.SellOffWarning;
 import com.rci.enums.BusinessEnums.ActivityStatus;
+import com.rci.enums.BusinessEnums.State;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishSeriesService;
@@ -91,6 +92,9 @@ public class MetadataServiceImpl implements IMetadataService {
 	private ISellOffWarningService sowarningService;
 	@Resource(name="OrderService")
 	private IOrderService orderService;
+	
+	@Resource(name="SellOffWarningService")
+	private ISellOffWarningService inventoryWarningService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -403,6 +407,18 @@ public class MetadataServiceImpl implements IMetadataService {
 		record.setPurAmount(switchedPurAmount);
 		record.setPurDate(DateUtil.getCurrentDate());
 		purchaseService.rwCreate(record);
+		
+		SellOffWarning warningInfo = inventoryWarningService.queryValidWarningInfo(inventoryvo.getIno());
+		if(warningInfo!=null){
+			BigDecimal amount = warningInfo.getBalanceAmount().add(purchaseAmount);
+			warningInfo.setBalanceAmount(amount);
+			warningInfo.setpDate(DateUtil.getCurrentDate());
+			warningInfo.setPurchaseAmount(purchaseAmount);
+			if(amount.compareTo(BigDecimal.ZERO) > 0){
+				warningInfo.setState(State.OVERDUE);
+			}
+			inventoryWarningService.rwUpdate(warningInfo);
+		}
 	}
 
 	@Override
@@ -550,6 +566,15 @@ public class MetadataServiceImpl implements IMetadataService {
 	@Override
 	public List<HangupTabelInfoVO> getHangupTablesInfo() {
 		return transformService.transformHangupTableInfo();
+	}
+
+	@Override
+	public boolean hasSellOffWarningInfo() {
+		List<SellOffWarning> warnings = inventoryWarningService.queryAllValidWarningInfo();
+		if(!CollectionUtils.isEmpty(warnings)){
+			return true;
+		}
+		return false;
 	}
 
 }
