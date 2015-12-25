@@ -130,8 +130,9 @@ public interface IMetadataService {
 	List<SaleLogDetailVO> querySaleLogDetail(SaleLogQueryDTO queryDTO);
 	//沽清列表
 	List<SellOffWarningVO> displayAllSellOffWarning();
-	void costSetting(String ino,BigDecimal cost);
-	void standardSetting(InventoryDishRefVO refvo);
+	void costSetting(String ino,BigDecimal cost); //成本金额设置
+	void standardSetting(InventoryDishRefVO refvo); //规格设置
+	void warningLineSetting(String ino,BigDecimal warningLine);// 警戒线设置
 	
 	///////////////////////////////////////////////  Order  订单管理模块   /////////////////////////////////////////////
 	List<OrderItemVO> queryOrderItemsByPayno(String payno);

@@ -184,7 +184,7 @@ public class InventoryManagementWin extends PopWindow {
 		private void initComponent() {
 			setLayout(new BorderLayout());
 			
-			table = new InventoryTable(8);
+			table = new InventoryTable(9);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			
 			scrollPane = new JScrollPane();

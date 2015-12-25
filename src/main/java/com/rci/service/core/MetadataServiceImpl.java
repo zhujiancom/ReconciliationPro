@@ -577,4 +577,13 @@ public class MetadataServiceImpl implements IMetadataService {
 		return false;
 	}
 
+	@Override
+	public void warningLineSetting(String ino, BigDecimal warningLine) {
+		Inventory inventory = inventoryService.queryInventoryByNo(ino);
+		BigDecimal cardinal = inventory.getCardinal();
+		warningLine = warningLine.multiply(cardinal);
+		inventory.setWarningLine(warningLine);
+		inventoryService.rwUpdate(inventory);
+	}
+
 }

@@ -44,6 +44,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	
 	private JLabel actionLabel;
 	private JLabel warningLabel;
+	private boolean warningShowing;
 	
 	private JCheckBox allCheck;
 	private JCheckBox eleCheck;
@@ -390,7 +391,22 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	}
 	
 	public void displayWarningInfo(){
-		warningLabel.setText("有库存被沽清，请尽快进货！");
+		warningLabel.setText("有库存将被沽清，请尽快进货！");
 		warningLabel.setIcon(warningIcon);
+		warningShowing = true;
+	}
+	
+	public void removeWarningInfo(){
+		warningLabel.setText(null);
+		warningLabel.setIcon(null);
+		warningShowing = false;
+	}
+
+	public boolean isWarningShowing() {
+		return warningShowing;
+	}
+
+	public void setWarningShowing(boolean warningShowing) {
+		this.warningShowing = warningShowing;
 	}
 }

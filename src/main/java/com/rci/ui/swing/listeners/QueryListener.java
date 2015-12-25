@@ -23,10 +23,10 @@ import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IOrderService;
-import com.rci.service.core.IMetadataService;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
+import com.rci.ui.swing.handler.InventoryWarningHandler;
 import com.rci.ui.swing.handler.OrderDataLoader;
 import com.rci.ui.swing.model.OrderItemTable;
 import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
@@ -42,13 +42,11 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 	private String time;
 	private QueryFormPanel queryPanel;
 	private Set<PaymodeCode> paymodes;
-	IMetadataService metaService;
 	
 	public QueryListener(QueryFormPanel queryPanel,ContentPanel contentPane){
 		this.queryPanel =queryPanel;
 		this.contentPane = contentPane;
-		metaService = (IMetadataService) SpringUtils.getBean("MetadataService");
-		fireWarningInfoDisplay();
+		InventoryWarningHandler.getInstance().displayWarningInfo();
 	}
 	
 	@Override
@@ -59,7 +57,7 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 			loadOrderData(time);
 //			saveEleSDInfo();
 			contentPane.getMainTable().getSelectionModel().addListSelectionListener(this);
-			fireWarningInfoDisplay();
+			InventoryWarningHandler.getInstance().displayWarningInfo();
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, new JLabel("<html><font color='red'>"+se.getMessage()+"</font></html>"));
 		}catch (ParseException pe) {
@@ -193,11 +191,5 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 
 	public void setContentPane(ContentPanel contentPane) {
 		this.contentPane = contentPane;
-	}
-	
-	public void fireWarningInfoDisplay(){
-		if(metaService.hasSellOffWarningInfo()){
-			queryPanel.displayWarningInfo();
-		}
 	}
 }

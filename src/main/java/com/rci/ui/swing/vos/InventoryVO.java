@@ -24,6 +24,8 @@ public class InventoryVO {
 	private BigDecimal cardinal;
 	
 	private BigDecimal cost;
+	
+	private BigDecimal warningLine;
 
 	public Long getIid() {
 		return iid;
@@ -90,7 +92,7 @@ public class InventoryVO {
 	}
 
 	public BigDecimal getCardinal() {
-		return cardinal;
+		return cardinal == null?BigDecimal.ONE:cardinal;
 	}
 
 	public void setCardinal(BigDecimal cardinal) {
@@ -103,6 +105,14 @@ public class InventoryVO {
 
 	public void setCost(BigDecimal cost) {
 		this.cost = cost;
+	}
+
+	public BigDecimal getWarningLine() {
+		return warningLine;
+	}
+
+	public void setWarningLine(BigDecimal warningLine) {
+		this.warningLine = warningLine;
 	}
 
 	@Override

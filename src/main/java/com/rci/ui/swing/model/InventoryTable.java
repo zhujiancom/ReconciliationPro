@@ -12,6 +12,7 @@ import javax.swing.table.TableColumnModel;
 
 import com.rci.tools.StringUtils;
 import com.rci.ui.swing.renderers.InventoryCostCellRender;
+import com.rci.ui.swing.renderers.InventoryWarningLineCellRender;
 import com.rci.ui.swing.vos.InventoryVO;
 
 public class InventoryTable extends BaseTable<InventoryVO> {
@@ -53,8 +54,12 @@ public class InventoryTable extends BaseTable<InventoryVO> {
 		cm.getColumn(6).setPreferredWidth(80);
 		InventoryCostCellRender render = new InventoryCostCellRender(new JTextField());
 		cm.getColumn(6).setCellEditor(render);
-		cm.getColumn(7).setHeaderValue("已关联菜品");
-		cm.getColumn(7).setPreferredWidth(350);
+		cm.getColumn(7).setHeaderValue("警戒线");
+		cm.getColumn(7).setPreferredWidth(80);
+		InventoryWarningLineCellRender warningLineRender = new InventoryWarningLineCellRender(new JTextField());
+		cm.getColumn(7).setCellEditor(warningLineRender);
+		cm.getColumn(8).setHeaderValue("已关联菜品");
+		cm.getColumn(8).setPreferredWidth(350);
 	}
 	
 	public void reflush(){
@@ -102,14 +107,29 @@ public class InventoryTable extends BaseTable<InventoryVO> {
 			case 2:
 				return vo.getTotalAmount().divide(vo.getCardinal(), 1, RoundingMode.HALF_EVEN);
 			case 3:
-				return vo.getBalanceAmount().divide(vo.getCardinal(), 1, RoundingMode.HALF_EVEN);
+				BigDecimal balance = vo.getBalanceAmount().divide(vo.getCardinal(), 1, RoundingMode.HALF_EVEN);
+				if(balance.compareTo(BigDecimal.ZERO) <= 0){
+					return "<html><font color='red'>"+balance+"</font></html>";
+				}
+				if(vo.getWarningLine() != null){
+					BigDecimal warningLine = vo.getWarningLine().divide(vo.getCardinal(), 1, RoundingMode.HALF_EVEN);
+					if(balance.compareTo(warningLine) <= 0){
+						return "<html><font color='red'>"+balance+"</font></html>";
+					}
+				}
+				return balance;
 			case 4:
-				return "<html><font color='red'>"+vo.getConsumeAmount().divide(vo.getCardinal(), 1, RoundingMode.HALF_EVEN)+"</font></html>";
+				return "<html><font color='blue'>"+vo.getConsumeAmount().divide(vo.getCardinal(), 1, RoundingMode.HALF_EVEN)+"</font></html>";
 			case 5:
 				return vo.getCardinal();
 			case 6:
 				return vo.getCost();
 			case 7:
+				if(vo.getWarningLine() == null){
+					return null;
+				}
+				return vo.getWarningLine().divide(vo.getCardinal(), 1, RoundingMode.HALF_EVEN);
+			case 8:
 				return vo.getRelatedDishNames();
 			}
 			return null;
@@ -120,7 +140,13 @@ public class InventoryTable extends BaseTable<InventoryVO> {
 			InventoryVO vo = items.get(rowIndex);
 			if(StringUtils.hasText(paramObject.toString())){
 				try{
-					vo.setCost(new BigDecimal(paramObject.toString()));
+					if(columnIndex == 6){
+						vo.setCost(new BigDecimal(paramObject.toString()));
+					}
+					if(columnIndex == 7){
+						BigDecimal warningLine = new BigDecimal(paramObject.toString());
+						vo.setWarningLine(warningLine.multiply(vo.getCardinal()));
+					}
 					this.fireTableCellUpdated(rowIndex, columnIndex);
 				}
 				catch(Exception ex){
@@ -131,7 +157,7 @@ public class InventoryTable extends BaseTable<InventoryVO> {
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			if(columnIndex == 6){
+			if(columnIndex == 6 || columnIndex == 7){
 				return true;
 			}
 			return super.isCellEditable(rowIndex, columnIndex);

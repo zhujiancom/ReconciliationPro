@@ -24,6 +24,7 @@ import com.rci.exceptions.ServiceException;
 import com.rci.service.core.IMetadataService;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
+import com.rci.ui.swing.handler.InventoryWarningHandler;
 import com.rci.ui.swing.model.ButtonFactory;
 import com.rci.ui.swing.model.InventoryTable;
 import com.rci.ui.swing.model.InventoryTable.InventoryTabelModel;
@@ -125,6 +126,7 @@ public class InventoryPurchaseWin extends PopWindow implements ActionListener{
 			JOptionPane.showMessageDialog(null, "进货成功！");
 			this.close();
 			((InventoryTable)table).reflush();
+			InventoryWarningHandler.getInstance().displayWarningInfo();
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, new JLabel("<html><h4 color='red'>"+se.getMessage()+"</h3></html>"));
 		}catch (Exception ex){

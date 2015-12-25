@@ -41,6 +41,7 @@ import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.swing.CheckedoutOrderPanel;
 import com.rci.ui.swing.handler.DataExport;
+import com.rci.ui.swing.handler.InventoryWarningHandler;
 import com.rci.ui.swing.model.OrderItemTable;
 import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
 import com.rci.ui.swing.model.OrderTable;
@@ -207,12 +208,14 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 											//2. 根据订单数据统计今日收入明细
 											loadSumData(date);
 											conclusionPane.refreshUI();
+											InventoryWarningHandler.getInstance().displayWarningInfo();
 											SwingUtilities.invokeLater(new Runnable() {
 												
 												@Override
 												public void run() {
 													queryPane.getTimeInput().setText(day);
 													queryPane.displayInfoDone("查询完毕");
+//													InventoryWarningHandler.getInstance().displayWarningInfo();
 												}
 											});
 										}else{

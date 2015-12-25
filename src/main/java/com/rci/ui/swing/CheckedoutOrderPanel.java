@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 
+import com.rci.ui.swing.handler.InventoryWarningHandler;
 import com.rci.ui.swing.listeners.CleanListener;
 import com.rci.ui.swing.listeners.QueryListener;
 import com.rci.ui.swing.views.ConculsionPanel;
@@ -50,6 +51,7 @@ public class CheckedoutOrderPanel extends JPanel {
 	}
 
 	private void bindListeners() {
+		InventoryWarningHandler.getInstance().setDisplayPanel(queryPanel);
 		QueryListener listener = new QueryListener(queryPanel,contentPane);
 		listener.setConclusionPane(conclusionPane);
 		queryPanel.getQueryBtn().registerKeyboardAction(listener,

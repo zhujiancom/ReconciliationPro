@@ -352,7 +352,11 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 	private void checkInventory(String day,Inventory inventory) {
 		try{
 			SellOffWarning warningInfo = inventoryWarningService.queryValidWarningInfo(inventory.getIno());
-			if(inventory.getBalanceAmount().compareTo(BigDecimal.ZERO) <= 0){
+			BigDecimal warningLine = inventory.getWarningLine();
+			if(warningLine == null){
+				warningLine = BigDecimal.ZERO;
+			}
+			if(inventory.getBalanceAmount().compareTo(warningLine) <= 0){
 				if(warningInfo == null){
 					warningInfo = new SellOffWarning();
 					warningInfo.setIno(inventory.getIno());

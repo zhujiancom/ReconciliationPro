@@ -61,6 +61,9 @@ public class Inventory extends BaseEntity {
 	/* 成本单价 */
 	private BigDecimal cost;
 	
+	/* 库存提醒警戒线 */
+	private BigDecimal warningLine = BigDecimal.ZERO;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "iid", nullable = false, updatable = false)
@@ -143,6 +146,15 @@ public class Inventory extends BaseEntity {
 
 	public void setCost(BigDecimal cost) {
 		this.cost = cost;
+	}
+
+	@Column(name="warning_line")
+	public BigDecimal getWarningLine() {
+		return warningLine;
+	}
+
+	public void setWarningLine(BigDecimal warningLine) {
+		this.warningLine = warningLine;
 	}
 
 	@Override
