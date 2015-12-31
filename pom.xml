@@ -54,7 +54,7 @@
 				<sql-log-url>logs/sql.log</sql-log-url>
 				<spring-log-url>logs/spring.log</spring-log-url>
 				<hibernate-log-url>logs/spring.log</hibernate-log-url>
-				<root-priority>ERROR</root-priority>
+				<root-priority>WARN</root-priority>
 				<main-class>com.rci.Entry</main-class>
 				<sqlserver-username>sa</sqlserver-username>
 				<sqlserver-url>jdbc:jtds:sqlserver://192.168.1.101:1433;DatabaseName=jdrestv5_branch</sqlserver-url>
@@ -69,7 +69,7 @@
 				<sql-log-url>../logs/sql.log</sql-log-url>
 				<spring-log-url>../logs/spring.log</spring-log-url>
 				<hibernate-log-url>../logs/spring.log</hibernate-log-url>
-				<root-priority>ERROR</root-priority>
+				<root-priority>WARN</root-priority>
 				<sqlserver-username>sa</sqlserver-username>
 				<main-class>com.rci.MainServiceEntry</main-class>
 				<sqlserver-url>jdbc:jtds:sqlserver://192.168.1.101:1433;DatabaseName=jdrestv5_branch</sqlserver-url>
