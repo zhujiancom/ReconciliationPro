@@ -31,6 +31,7 @@ public class Entry {
 		}catch(Exception ex){
 			logger.error("系统启动错误！",ex);
 			ex.printStackTrace();
+		}finally{
 		}
 		
 //		DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {

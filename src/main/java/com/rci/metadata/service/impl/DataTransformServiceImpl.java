@@ -37,6 +37,7 @@ import com.rci.metadata.dto.PaymodeDTO;
 import com.rci.metadata.dto.TableDTO;
 import com.rci.metadata.service.IDataFetchService;
 import com.rci.metadata.service.IDataTransformService;
+import com.rci.service.IDishSeriesService;
 import com.rci.service.IDishService;
 import com.rci.service.IDishTypeService;
 import com.rci.service.IOrderService;
@@ -58,6 +59,8 @@ public class DataTransformServiceImpl implements IDataTransformService {
 	private IDishService dishService;
 	@Resource(name="DishTypeService")
 	private IDishTypeService dishTypeService;
+	@Resource(name="DishSeriesService")
+	private IDishSeriesService dishSeriesService;
 	@Resource(name="PayModeService")
 	private IPayModeService paymodeService;
 	@Resource(name="OrderService")
@@ -139,6 +142,13 @@ public class DataTransformServiceImpl implements IDataTransformService {
 		if(dType == null){
 			DishTypeDTO dTypeDTO = fetchService.fetchDishTypeByNo(dishDTO.getDishType());
 			dType = beanMapper.map(dTypeDTO, DishType.class);
+			DishSeries series = dishSeriesService.querySeriesByNo(dType.getSeriesno());
+			if(series == null){
+				DishSeriesDTO seriesDTO = fetchService.fetchDishSeriesByno(dType.getSeriesno());
+				series = beanMapper.map(seriesDTO, DishSeries.class);
+			}
+			dType.setDishSeries(series);
+			dishTypeService.rwCreate(dType);
 		}
 		Dish dish = beanMapper.map(dishDTO, Dish.class);
 		dish.setDishType(dType);

@@ -85,6 +85,20 @@ public interface IDataFetchService {
 	 * @return
 	 */
 	List<DishSeriesDTO> fetchAllDishSeries();
+	/**
+	 * 
+	 * Describle(描述)：根据菜品大类编号查找名称
+	 *
+	 * 方法名称：fetchDishSeriesByno
+	 *
+	 * 所在类名：IDataFetchService
+	 *
+	 * Create Time:2015年12月31日 上午11:02:11
+	 *  
+	 * @param sno
+	 * @return
+	 */
+	DishSeriesDTO fetchDishSeriesByno(String sno);
 	
 	DishSeriesDTO fetchDishSeriesByNo(String seriesno);
 	

@@ -5,7 +5,7 @@ public class NativeSQLBuilder {
 	/* 查询单个菜品 */
 	public static final String QUERY_DISH_BY_NO="select rtrim(ch_dishno) 'ch_dishno',vch_dishname,rtrim(ch_typeno) 'ch_typeno',rtrim(ch_seriesno) 'ch_seriesno',num_price1,ch_stopflag,ch_suitflag,ch_discount from dbo.v_bt_dish where ch_dishno=?";
 	/* 查询单个菜品类型 */
-	public static final String QUERY_DISH_TYPE_BY_NO="select rtrim(ch_typeno) 'ch_typeno',vch_typename from dbo.cybr_bt_dish_type where ch_typeno=?";
+	public static final String QUERY_DISH_TYPE_BY_NO="select rtrim(ch_typeno) 'ch_typeno',vch_typename,ch_seriesno from dbo.cybr_bt_dish_type where ch_typeno=?";
 	/* 查询某个菜品大类下的小类 */
 	public static final String QUERY_DISH_TYPE_BY_SERIES_NO="select rtrim(ch_typeno) 'ch_typeno',vch_typename,ch_seriesno from dbo.cybr_bt_dish_type where ch_seriesno=?";
 	/* 查询所有菜品 */
@@ -14,6 +14,9 @@ public class NativeSQLBuilder {
 	public static final String QUERY_ALL_DISH_TYPE="select rtrim(ch_typeno) 'ch_typeno',rtrim(vch_typename) 'vch_typename',rtrim(ch_seriesno) 'ch_seriesno' from dbo.cybr_bt_dish_type";
 	/* 查询所有 菜品大类*/
 	public static final String QUERY_ALL_DISH_SERIES = "select rtrim(ch_seriesno) 'ch_seriesno', rtrim(vch_seriesname) 'vch_seriesname' from dbo.cybr_bt_dish_series";
+	/* 查询所有 菜品大类*/
+	public static final String QUERY_DISH_SERIES_By_NO = "select rtrim(ch_seriesno) 'ch_seriesno', rtrim(vch_seriesname) 'vch_seriesname' from dbo.cybr_bt_dish_series where ch_seriesno=?";
+	
 	public static final String QUERY_DISH_SERIES_BY_NO="select rtrim(ch_seriesno) 'ch_seriesno', rtrim(vch_seriesname) 'vch_seriesname' from dbo.cybr_bt_dish_series where rtrim(ch_seriesno)=?";
 	/* 查询order detail 信息*/
 	public static final String QUERY_ORDERITEM="select rtrim(ord.ch_billno) 'billno',rtrim(ord.ch_payno) 'payno',rtrim(ord.ch_dishno) 'dishno',ord.ch_suitflag 'suitflag',rtrim(ord.ch_suitno) 'suitno',ord.num_num count,\n"

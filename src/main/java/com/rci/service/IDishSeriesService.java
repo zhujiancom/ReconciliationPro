@@ -5,4 +5,6 @@ import com.rci.service.base.IBaseService;
 
 public interface IDishSeriesService extends IBaseService<DishSeries, Long> {
 	public void deleteAll();
+	
+	public DishSeries querySeriesByNo(String sno);
 }

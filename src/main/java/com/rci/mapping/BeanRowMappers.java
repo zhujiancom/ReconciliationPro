@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -32,6 +34,7 @@ import com.rci.annotation.ColumnName;
  *
  */
 public class BeanRowMappers<T> implements RowMapper<T> {
+	private static final Log logger = LogFactory.getLog(BeanRowMappers.class);
 
 	private Class<T> clazz;
 
@@ -53,29 +56,35 @@ public class BeanRowMappers<T> implements RowMapper<T> {
 				Method wMethod = pdr.getWriteMethod();
 				ColumnName columnName = rMethod.getAnnotation(ColumnName.class);
 				Class<?> ptype = rMethod.getReturnType();
-				if (columnName != null) {
-					if (ptype == String.class) {
-						wMethod.invoke(obj, rs.getString(columnName.value()));
+				try{
+					if (columnName != null) {
+						if (ptype == String.class) {
+							wMethod.invoke(obj, rs.getString(columnName.value()));
+						}
+						if(ptype == Long.class){
+							wMethod.invoke(obj, rs.getLong(columnName.value()));
+						}
+						if(ptype == BigDecimal.class){
+							wMethod.invoke(obj, rs.getBigDecimal(columnName.value()));
+						}
+						if(ptype == Timestamp.class){
+							wMethod.invoke(obj, rs.getTimestamp(columnName.value()));
+						}
+						if(ptype == Integer.class){
+							wMethod.invoke(obj, rs.getInt(columnName.value()));
+						}
+						if(Enum.class.isAssignableFrom(ptype)){
+							wMethod.invoke(obj, enumValue(ptype,rs.getString(columnName.value())));
+						}
 					}
-					if(ptype == Long.class){
-						wMethod.invoke(obj, rs.getLong(columnName.value()));
-					}
-					if(ptype == BigDecimal.class){
-						wMethod.invoke(obj, rs.getBigDecimal(columnName.value()));
-					}
-					if(ptype == Timestamp.class){
-						wMethod.invoke(obj, rs.getTimestamp(columnName.value()));
-					}
-					if(ptype == Integer.class){
-						wMethod.invoke(obj, rs.getInt(columnName.value()));
-					}
-					if(Enum.class.isAssignableFrom(ptype)){
-						wMethod.invoke(obj, enumValue(ptype,rs.getString(columnName.value())));
-					}
+				}catch(Exception ex){
+					logger.warn("method invoke error!", ex);
+					continue;
 				}
 			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception ex) {
+			logger.warn("BeanRowMappers convert error!", ex);
+			ex.printStackTrace();
 		} 
 		return obj;
 	}
