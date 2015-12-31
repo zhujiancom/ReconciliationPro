@@ -96,7 +96,7 @@ public class DishType extends BaseEntity {
 		this.dishes = dishes;
 	}
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.ALL) //使用ALL,表示DishType不能够单独更新，必须绑定DishSeries一起更新
 	@JoinColumn(name="dish_series_id")
 	public DishSeries getDishSeries() {
 		return dishSeries;

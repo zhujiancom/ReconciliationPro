@@ -119,7 +119,7 @@ public class Dish extends BaseEntity{
 		this.dishPrice = dishPrice;
 	}
 
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(cascade=CascadeType.MERGE) // 使用MERGE,表示Dish可以独立于DishType和DishSeries之外单独更新
 	@JoinColumn(name="dish_type_id")
 	public DishType getDishType() {
 		return dishType;
