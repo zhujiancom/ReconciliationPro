@@ -5,7 +5,7 @@
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<param name="ImmediateFlush" value="true" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d [%p] - [%t] %c %x - %m%n" />
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] - [%t] (%F:%L) %m%n" />
 		</layout>
 	</appender>
 
