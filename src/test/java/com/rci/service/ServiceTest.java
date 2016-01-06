@@ -286,4 +286,8 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 		List<InventoryDishRef> result =idrservice.queryByDishNo("544");
 	}
 	
+	@Test
+	public void testOthers(){
+		System.out.println(Integer.MAX_VALUE);
+	}
 }

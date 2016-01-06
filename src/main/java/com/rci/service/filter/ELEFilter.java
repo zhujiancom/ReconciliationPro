@@ -37,8 +37,6 @@ public class ELEFilter extends AbstractFilter {
 		order.setFramework(OrderFramework.ELE);
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ELE);
 		BigDecimal freeAmount = order.getPaymodeMapping().get(PaymodeCode.FREE);
-//			BigDecimal originAmount = order.getOriginPrice();
-		
 		String schemeName = order.getSchemeName();
 		if(StringUtils.hasText(schemeName)){
 			schemeName = schemeName+","+"饿了么在线支付"+onlineAmount+"元";
@@ -46,13 +44,11 @@ public class ELEFilter extends AbstractFilter {
 			schemeName = "饿了么在线支付"+onlineAmount+"元";
 		}
 		if(freeAmount != null){
-//				originAmount = originAmount.subtract(freeAmount);
 			String day = order.getDay();
 			try{
 				Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
 				Scheme scheme = schemeService.getScheme(Vendor.ELE, freeAmount, orderDate);
 				if(scheme != null){
-//						freeAmount = freeAmount.subtract(scheme.getSpread());
 					schemeName = schemeName+","+scheme.getName();
 					Map<String,BigDecimal> freeMap = chain.getFreeOnlineMap();
 					if(freeMap.get(order.getPayNo()) == null){
