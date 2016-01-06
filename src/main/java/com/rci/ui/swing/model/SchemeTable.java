@@ -6,6 +6,8 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.enums.BusinessEnums.ActivityStatus;
@@ -67,6 +69,8 @@ public class SchemeTable extends BaseTable<SchemeVO> {
 		SchemeTabelModel dm = new SchemeTabelModel(columnNum);
 		dm.setItems(schemes);
 		super.setModel(dm);
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dm);
+		this.setRowSorter(sorter);
 	}
 	
 	
@@ -154,5 +158,15 @@ public class SchemeTable extends BaseTable<SchemeVO> {
 			return items.get(rowIndex);
 		}
 		
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			if(columnIndex >= 0 && columnIndex < getColumnCount()){
+				if(getValueAt(0, columnIndex) == null){
+					return Object.class;
+				}
+				return getValueAt(0, columnIndex).getClass();
+			}
+			return super.getColumnClass(columnIndex);
+		}
 	}
 }

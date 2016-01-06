@@ -138,7 +138,7 @@ public class OrderVO {
 	 * @return the originAmount
 	 */
 	public BigDecimal getOriginAmount() {
-		return originAmount;
+		return originAmount == null ? BigDecimal.ZERO:originAmount;
 	}
 
 	/**

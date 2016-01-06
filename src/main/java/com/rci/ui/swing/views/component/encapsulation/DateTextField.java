@@ -43,11 +43,12 @@ public class DateTextField extends BaseTextField {
 	protected void doMouseExitedAction() {
 		super.doMouseExitedAction();
 		if(getPlaceholder().equals(getText())){
+			setDate(DateUtil.getCurrentDate());
 			return;
 		}else if(!DateUtil.isDateFormat(getText(),pattern)){
 			errorMsg = "日期格式不正确,日期格式应为："+pattern;
 			super.setToolTipText(errorMsg);
-			setDate(null);
+			setDate(DateUtil.getCurrentDate());
 		}else{
 			super.setToolTipText(null);
 			setErrorMsg(null);
@@ -65,6 +66,7 @@ public class DateTextField extends BaseTextField {
 			super.setToolTipText(null);
 		}
 	}
+
 
 	public Date getDate() {
 		return date;

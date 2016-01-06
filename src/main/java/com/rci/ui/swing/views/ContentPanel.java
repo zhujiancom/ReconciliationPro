@@ -40,6 +40,7 @@ public class ContentPanel extends JSplitPane {
 		this.setDividerSize(5);
 		this.setDividerLocation(0.6);
 		this.setResizeWeight(0.6);
+		this.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.LIGHT_GRAY));
 		JScrollPane mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -51,7 +52,7 @@ public class ContentPanel extends JSplitPane {
 		rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));
 		JScrollPane rTopScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		rTopScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		rTopScrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
+		rTopScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		itemTable = new OrderItemTable(7);
 		rTopScrollPane.setViewportView(itemTable);
 		rTopScrollPane.getViewport().setBackground(Color.WHITE);

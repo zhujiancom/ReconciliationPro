@@ -81,6 +81,7 @@ public class HangupOrderPanel extends JPanel{
 	private void initComponent(){
 		setLayout(new BorderLayout(0, 0));
 		setBackground(Color.WHITE);
+		setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
 		refreshBtn = ButtonFactory.createImageButton("skin/gray/images/64x64/refresh.png","skin/gray/images/64x64/refresh_pressed.png");
 		refreshBtn.setToolTipText("刷新");
 		JPanel upPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,20,0));

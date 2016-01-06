@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -138,7 +137,6 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		this.add(createCheckPane()); //添加复选框
 		this.setVisible(true);
 		this.setSize(500, 300);
-		this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 	}
 	
 	public JPanel createCheckPane(){

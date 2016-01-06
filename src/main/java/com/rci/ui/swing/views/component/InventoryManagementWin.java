@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -351,17 +350,10 @@ public class InventoryManagementWin extends PopWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent paramActionEvent) {
-			String keyword = keywordInput.getText();
-			String time = timeInput.getText();
+			String keyword = keywordInput.getItext();
+			Date queryDate = timeInput.getDate();
 			PurchaseRecordQueryDTO queryDTO = new PurchaseRecordQueryDTO();
-			if(StringUtils.hasText(time)){
-				try {
-					Date queryDate = DateUtil.parseDate(time, "yyyyMMdd");
-					queryDTO.setPurDate(queryDate);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
+			queryDTO.setPurDate(queryDate);
 			if(StringUtils.hasText(keyword)){
 				queryDTO.setKeyword(keyword);
 			}
@@ -396,7 +388,6 @@ public class InventoryManagementWin extends PopWindow {
 			actionBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 			actionBar.setBackground(Color.WHITE);
 			
-//			JLabel dateLabel = new JLabel("日期");
 			timeInput = new DateTextField("查询日期");
 			JLabel keywordLabel = new JLabel("关键字查询：");
 			keywordInput = new BaseTextField("品种名称");
@@ -406,7 +397,6 @@ public class InventoryManagementWin extends PopWindow {
 			searchBtn.registerKeyboardAction(this,
 					KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
 					JComponent.WHEN_IN_FOCUSED_WINDOW);
-//			actionBar.add(dateLabel);
 			actionBar.add(timeInput);
 			actionBar.add(keywordLabel);
 			actionBar.add(keywordInput);
@@ -484,17 +474,6 @@ public class InventoryManagementWin extends PopWindow {
 			}
 		}
 		
-		/**
-		 *
-		 * Describle(描述)：
-		 *
-		 * 方法名称：initComponent
-		 *
-		 * 所在类名：PurchasePanel
-		 *
-		 * Create Time:2015年11月22日 下午3:13:44
-		 *   
-		 */
 		private void initComponent() {
 			setLayout(new BorderLayout());
 			add(createActionBar(),BorderLayout.NORTH);
@@ -514,9 +493,8 @@ public class InventoryManagementWin extends PopWindow {
 		@Override
 		public void actionPerformed(ActionEvent paramActionEvent) {
 			SaleLogQueryDTO queryDTO = new SaleLogQueryDTO();
-			String keyword = keywordInput.getText();
-			String day = timeInput.getText();
-			queryDTO.setDay(day);
+			String keyword = keywordInput.getItext();
+			queryDTO.setDay(DateUtil.date2Str(timeInput.getDate(), "yyyyMMdd"));
 			queryDTO.setKeyword(keyword);
 			contentPane.getMainTable().reflushTableData(queryDTO);
 			List<SaleLogVO> dataList = contentPane.getMainTable().getDataList();

@@ -22,6 +22,8 @@ public class BaseTextField extends JTextField{
 	private int columns;
 	private int height;
 	
+	private String itext;
+	
 	public BaseTextField(){
 		this("");
 	}
@@ -65,13 +67,20 @@ public class BaseTextField extends JTextField{
 		setForeground(Color.BLACK);
 		if(placeholder.equals(getText())){
 			setText(null);
+			setItext(null);
 		}
 	}
 	
 	protected void doMouseExitedAction(){
-		if(!StringUtils.hasText(getText())){
+		String preText = getText();
+		if(!StringUtils.hasText(preText)){
 			setText(placeholder);
+			setItext(null);
 			setForeground(Color.LIGHT_GRAY);
+		}else if(placeholder.equals(preText)){
+			setItext(null);
+		}else{
+			setItext(preText);
 		}
 	}
 	
@@ -82,7 +91,7 @@ public class BaseTextField extends JTextField{
 		super.setText(paramString);
 		setForeground(Color.BLACK);
 	}
-
+	
 	public String getPlaceholder() {
 		return placeholder;
 	}
@@ -105,5 +114,13 @@ public class BaseTextField extends JTextField{
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public String getItext() {
+		return itext;
+	}
+
+	public void setItext(String itext) {
+		this.itext = itext;
 	}
 }

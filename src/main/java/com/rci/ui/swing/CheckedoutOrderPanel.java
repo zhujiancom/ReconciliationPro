@@ -1,13 +1,17 @@
 package com.rci.ui.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
+import com.rci.tools.DateUtil;
 import com.rci.ui.swing.handler.InventoryWarningHandler;
 import com.rci.ui.swing.listeners.CleanListener;
 import com.rci.ui.swing.listeners.QueryListener;
@@ -28,6 +32,7 @@ public class CheckedoutOrderPanel extends JPanel {
 	ContentPanel contentPane; // 订单数据内容展示面板
 	private int width;
 	private int height;
+	private QueryListener listener;
 	
 	public CheckedoutOrderPanel(int width,int height){
 		this.width = width;
@@ -38,8 +43,17 @@ public class CheckedoutOrderPanel extends JPanel {
 
 	private void initComponent() {
 		BorderLayout layout = new BorderLayout(0, 0);
+		setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
 		setLayout(layout);
 		/* 绑定查询form */
+		SwingUtilities.invokeLater(new Runnable(){
+
+			@Override
+			public void run() {
+				queryPanel.getTimeInput().setText(DateUtil.date2Str(DateUtil.getCurrentDate(), "yyyyMMdd"));
+			}
+			
+		});
 		add(queryPanel,BorderLayout.NORTH);
 		/* 绑定订单内容和警告日志展示列表 */
 		contentPane = new ContentPanel(JSplitPane.HORIZONTAL_SPLIT,width,height);
@@ -48,11 +62,12 @@ public class CheckedoutOrderPanel extends JPanel {
 		add(conclusionPane, BorderLayout.SOUTH);
 		/* 绑定事件 */
 		bindListeners();
+		
 	}
 
 	private void bindListeners() {
 		InventoryWarningHandler.getInstance().setDisplayPanel(queryPanel);
-		QueryListener listener = new QueryListener(queryPanel,contentPane);
+		listener = new QueryListener(queryPanel,contentPane);
 		listener.setConclusionPane(conclusionPane);
 		queryPanel.getQueryBtn().registerKeyboardAction(listener,
 				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),

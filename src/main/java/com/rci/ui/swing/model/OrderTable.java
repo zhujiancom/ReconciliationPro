@@ -10,6 +10,8 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.springframework.util.CollectionUtils;
 
@@ -220,7 +222,7 @@ public class OrderTable extends BaseTable<OrderVO> {
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			if(CollectionUtils.isEmpty(orders)){
-				return null;
+				return new Object();
 			}
 			OrderVO order = orders.get(rowIndex);
 			switch (columnIndex) {
@@ -296,10 +298,23 @@ public class OrderTable extends BaseTable<OrderVO> {
 			this.orders = orders;
 		}
 
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			if(columnIndex >= 0 && columnIndex < getColumnCount()){
+				if(getValueAt(0, columnIndex) == null){
+					return Object.class;
+				}
+				return getValueAt(0, columnIndex).getClass();
+			}
+			return super.getColumnClass(columnIndex);
+		}
 	}
 
 	@Override
 	protected void setModel() {
-		this.setModel(new OrderTableModel(columnNum));
+		OrderTableModel model = new OrderTableModel(columnNum);
+		this.setModel(model);
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(model);
+		this.setRowSorter(sorter);
 	}
 }
