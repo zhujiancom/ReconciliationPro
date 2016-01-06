@@ -3,14 +3,22 @@ package com.rci;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.net.URL;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.RootFrame;
 
 public class Entry {
@@ -18,6 +26,9 @@ public class Entry {
 	
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
+		if(isRunning()){
+			System.exit(0);
+		}
 		try{
 			new ClassPathXmlApplicationContext("spring/spring-common.xml","spring/spring-db.xml");
 			JFrame frame = new RootFrame();
@@ -33,19 +44,47 @@ public class Entry {
 			ex.printStackTrace();
 		}finally{
 		}
-		
-//		DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-//			   @Override
-//			   public boolean dispatchKeyEvent(KeyEvent e) {
-//			      // KeyEvent.KEY_TYPED、KEY_PRESSED、KEY_RELEASED
-//			      System.out.println("e.getID() = " + e.getID());
-//			      System.out.println("e.isControlDown() = " + e.isControlDown());
-//			      System.out.println("e.isShiftDown() = " + e.isShiftDown());
-//			      System.out.println(" e.getKeyCode() = " + e.getKeyCode());
-//			      // e.consume();// 是否已经消费了此事件
-//			      return e.isConsumed();
-//			   }
-//			});
+	}
+	
+	private static boolean isRunning()
+	{
+	    boolean rv=false;
+	    try {
+	        //
+	        String os_name=System.getProperty("os.name");
+	        //指定文件锁路径
+	        String path=null;
+	        if(os_name.indexOf("Windows")>-1)
+	        {
+	            //如果是Windows操作系统
+	            path=System.getProperty("user.dir")+System.getProperty("file.separator");
+	        }
+	        else
+	        {
+	            path="/usr/temp/";
+	        }
+	        File dir=new File(path);
+	        if(!dir.exists())
+	        {
+	            dir.mkdirs();
+	        }
+	        //程序名称
+	        String applicationName=PropertyUtils.getStringValue("application.name");
+	        @SuppressWarnings("resource")
+			RandomAccessFile fis = new RandomAccessFile(path+applicationName+".lock","rw");
+	        FileChannel lockfc = fis.getChannel();
+	        FileLock flock = lockfc.tryLock();
+	        if(flock == null) {
+	        	JOptionPane.showMessageDialog(null,"程序正在运行！");
+	            rv=true;
+	        }
+	    } catch (FileNotFoundException e1) {
+	        e1.printStackTrace();
+	    }
+	    catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    return rv;
 	}
 
 }
