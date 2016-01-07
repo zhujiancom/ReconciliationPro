@@ -94,8 +94,11 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 */
 	protected Boolean isNodiscount(String dishNo){
 		Dish dish = dishService.findDishByNo(dishNo);
-		if(dish ==null){
+		if(dish == null){
 			dish = transformService.transformDishInfo(dishNo);
+			if(dish == null){
+				return false;
+			}
 		}
 		if(!YOrN.isY(dish.getDiscountFlag())){
 			return true;

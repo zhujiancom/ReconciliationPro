@@ -137,25 +137,30 @@ public class DataTransformServiceImpl implements IDataTransformService {
 	}
 	
 	public Dish transformDishInfo(String dishno){
-		DishDTO dishDTO = fetchService.fetchDishByNo(dishno);
-		DishType dType= dishTypeService.queryDishTypeByNo(dishDTO.getDishType());
-		if(dType == null){
-			DishTypeDTO dTypeDTO = fetchService.fetchDishTypeByNo(dishDTO.getDishType());
-			dType = beanMapper.map(dTypeDTO, DishType.class);
-			DishSeries series = dishSeriesService.querySeriesByNo(dType.getSeriesno());
-			if(series == null){
-				DishSeriesDTO seriesDTO = fetchService.fetchDishSeriesByno(dType.getSeriesno());
-				series = beanMapper.map(seriesDTO, DishSeries.class);
+		try{
+			DishDTO dishDTO = fetchService.fetchDishByNo(dishno);
+			DishType dType= dishTypeService.queryDishTypeByNo(dishDTO.getDishType());
+			if(dType == null){
+				DishTypeDTO dTypeDTO = fetchService.fetchDishTypeByNo(dishDTO.getDishType());
+				dType = beanMapper.map(dTypeDTO, DishType.class);
+				DishSeries series = dishSeriesService.querySeriesByNo(dType.getSeriesno());
+				if(series == null){
+					DishSeriesDTO seriesDTO = fetchService.fetchDishSeriesByno(dType.getSeriesno());
+					series = beanMapper.map(seriesDTO, DishSeries.class);
+				}
+				dType.setDishSeries(series);
+				dishTypeService.rwCreate(dType);
 			}
-			dType.setDishSeries(series);
-			dishTypeService.rwCreate(dType);
+			Dish dish = beanMapper.map(dishDTO, Dish.class);
+			dish.setDishType(dType);
+			dish.setDishSeries(dType.getDishSeries());
+			dish.setStatisticFlag(YOrN.Y);
+			dishService.rwCreate(dish);
+			return dish;
+		}catch(Exception ex){
+			logger.error("not exist dish["+dishno+"] in SQLServer DB", ex);
+			return null;
 		}
-		Dish dish = beanMapper.map(dishDTO, Dish.class);
-		dish.setDishType(dType);
-		dish.setDishSeries(dType.getDishSeries());
-		dish.setStatisticFlag(YOrN.Y);
-		dishService.rwCreate(dish);
-		return dish;
 	}
 
 	@Override
@@ -264,6 +269,9 @@ public class DataTransformServiceImpl implements IDataTransformService {
 	}
 
 	private boolean isDishDiscountable(Dish dish){
+		if(dish == null){
+			return false;
+		}
 		if(!YOrN.isY(dish.getDiscountFlag())){
 			return true;
 		}

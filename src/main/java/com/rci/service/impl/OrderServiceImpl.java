@@ -125,7 +125,11 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 				if(dish == null){
 					dish = transformService.transformDishInfo(item.getDishNo());
 				}
-				vo.setDishName(dish.getDishName());
+				if(dish != null){
+					vo.setDishName(dish.getDishName());
+				}else{
+					vo.setDishName(item.getDishNo());
+				}
 				vos.add(vo);
 			}
 		}
