@@ -109,7 +109,7 @@ public final class BusinessEnums {
 	}
 	
 	public static enum Vendor{
-		ELE,DZDP,MTWM,MT,LS,TDD,WMCR,SH,MTSUPER,BDNM,PLQ;
+		ELE,DZDP,MTWM,MT,LS,TDD,WMCR,SH,MTSUPER,BDNM,PLQ,DDF;
 	}
 	
 	public static enum StockOpType{
@@ -145,7 +145,7 @@ public final class BusinessEnums {
 		CASH_MACHINE("00"),ELE("11"),MTWM("14"),WMCR("12"),
 		TDD("96"),DPTG("98"),DPSH("13"),
 		MT("99"),FREE("YY"),MTSUPER("87"),POS("03"),
-		UNKNOW(""),ZFB("86"),BDNM("04"),PLQ("08");
+		UNKNOW(""),ZFB("86"),BDNM("04"),PLQ("08"),DDF("05");
 		
 		private String paymodeno;
 		private PaymodeCode(String paymodeno){
