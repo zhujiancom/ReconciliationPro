@@ -44,7 +44,6 @@ import com.rci.ui.swing.handler.DataExport;
 import com.rci.ui.swing.handler.InventoryWarningHandler;
 import com.rci.ui.swing.model.OrderItemTable;
 import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
-import com.rci.ui.swing.model.OrderTable;
 import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
@@ -202,7 +201,7 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 										OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
 										OrderItemTableModel ottm = (OrderItemTableModel) contentPane.getItemTable().getModel();
 										if(!CollectionUtils.isEmpty(ordervos)){
-											((OrderTable)contentPane.getMainTable()).reflushTable(ordervos);
+											contentPane.getMainTable().reflushTable(ordervos);
 											OrderVO order = otm.getOrderAt(0); 
 											((OrderItemTable)contentPane.getItemTable()).reflushTable(order.getPayNo());
 											//2. 根据订单数据统计今日收入明细

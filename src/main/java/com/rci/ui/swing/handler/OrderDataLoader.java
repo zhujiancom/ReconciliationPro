@@ -6,23 +6,21 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
 import org.springframework.util.CollectionUtils;
 
 import com.rci.enums.BusinessEnums.AccountCode;
-import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.service.IDataLoaderService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
+import com.rci.tools.StringUtils;
 import com.rci.ui.swing.model.OrderItemTable;
 import com.rci.ui.swing.model.OrderItemTable.OrderItemTableModel;
-import com.rci.ui.swing.model.OrderTable;
 import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
@@ -33,7 +31,7 @@ import com.rci.ui.swing.vos.OrderVO;
 public class OrderDataLoader implements Runnable {
 	private Date queryDate;
 	
-	private Set<PaymodeCode> paymodes;
+//	private Set<PaymodeCode> paymodes;
 	
 	private ContentPanel contentPane;
 	
@@ -47,9 +45,8 @@ public class OrderDataLoader implements Runnable {
 	
 	private Map<AccountCode,BigDecimal> sumMap;
 	
-	public OrderDataLoader(Date queryDate,Set<PaymodeCode> paymodes){
+	public OrderDataLoader(Date queryDate){
 		this.queryDate = queryDate;
-		this.paymodes = paymodes;
 	}
 	
 	@Override
@@ -69,25 +66,27 @@ public class OrderDataLoader implements Runnable {
 		List<OrderVO> ordervos = orderService.accquireOrderVOsByDay(time);
 		
 		List<OrderVO> displayOrders = new ArrayList<OrderVO>();
+		final StringBuffer warningInfo = new StringBuffer();
+		int count = 0;
 		for(OrderVO ordervo:ordervos){
-			String[] paymodecodes = ordervo.getPaymodecodes();
-			if(CollectionUtils.isEmpty(paymodes)){
-				displayOrders.add(ordervo);
-			}else{
-				for(String paymodecode:paymodecodes){
-					if(paymodes.contains(PaymodeCode.paymodeCode(paymodecode))){
-						displayOrders.add(ordervo);
-						break;
-					}
-				}
+			if(StringUtils.hasText(ordervo.getWarningInfo())){
+				warningInfo.append(++count).append(". ")
+							.append("[")
+							.append(ordervo.getPayNo())
+							.append("]-")
+							.append(ordervo.getWarningInfo())
+							.append("\n");
 			}
+			displayOrders.add(ordervo);
 		}
 		
 		OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
+//		OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getFixedTable().getModel();
 		OrderItemTableModel ottm = (OrderItemTableModel) contentPane.getItemTable().getModel();
 		if(!CollectionUtils.isEmpty(displayOrders)){
-			((OrderTable)contentPane.getMainTable()).reflushTable(displayOrders);
-			OrderVO order = otm.getOrderAt(0); 
+			contentPane.getMainTable().reflushTable(displayOrders);
+//			((FixedOrderTable)contentPane.getMainTable()).reflushTable(displayOrders);
+			OrderVO order = otm.getOrderAt(0);
 			((OrderItemTable)contentPane.getItemTable()).reflushTable(order.getPayNo());
 			//2. 根据订单数据统计今日收入明细
 			loadSumData(queryDate);
@@ -97,6 +96,7 @@ public class OrderDataLoader implements Runnable {
 				@Override
 				public void run() {
 					queryPane.displayInfoDone("查询完毕");
+					contentPane.getTextArea().setText(warningInfo.toString());
 				}
 			});
 		}else{

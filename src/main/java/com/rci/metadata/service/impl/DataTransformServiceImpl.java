@@ -73,6 +73,9 @@ public class DataTransformServiceImpl implements IDataTransformService {
 		//1. 根据日期获取当前时间之前的符合日期订单
 		List<OrderDTO> orderDTOs = fetchService.fetchOrders(sdate, edate);
 		List<Order> orders = new ArrayList<Order>();
+		if(CollectionUtils.isEmpty(orderDTOs)){
+			return orders;
+		}
 		Map<String,Order> container = mergerOrder(orderDTOs);
 		//2. 迭代order,获取对应的item信息
 		for(Iterator<Entry<String,Order>> it = container.entrySet().iterator();it.hasNext();){

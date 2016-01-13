@@ -2,22 +2,30 @@ package com.rci.ui.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
+import javax.swing.table.TableRowSorter;
 
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.tools.DateUtil;
 import com.rci.ui.swing.handler.InventoryWarningHandler;
 import com.rci.ui.swing.listeners.CleanListener;
 import com.rci.ui.swing.listeners.QueryListener;
+import com.rci.ui.swing.model.OrderTable.OrderTableModel;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
 import com.rci.ui.swing.views.QueryFormPanel;
+import com.rci.ui.swing.vos.OrderVO;
 
 public class CheckedoutOrderPanel extends JPanel {
 	/**
@@ -73,6 +81,35 @@ public class CheckedoutOrderPanel extends JPanel {
 				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
 		queryPanel.getQueryBtn().addActionListener(listener);
+		queryPanel.getFilterBtn().addActionListener(new ActionListener() {
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				final Set<PaymodeCode> paymodes = queryPanel.getPaymodes();
+				((TableRowSorter<OrderTableModel>)contentPane.getMainTable().getRowSorter()).setRowFilter(new RowFilter<OrderTableModel, Integer>(){
+	
+					@Override
+					public boolean include(
+							javax.swing.RowFilter.Entry<? extends OrderTableModel, ? extends Integer> entry) {
+						OrderTableModel model = entry.getModel();
+						OrderVO ordervo = model.getOrderAt(entry.getIdentifier());
+						String[] paymodecodes = ordervo.getPaymodecodes();
+						if(paymodes.contains(PaymodeCode.UNKNOW)){
+							return true;
+						}else{
+							for(String paymodecode:paymodecodes){
+								if(paymodes.contains(PaymodeCode.paymodeCode(paymodecode))){
+									return true;
+								}
+							}
+						}
+						return false;
+					}
+					
+				});
+			}
+		});
 
 		CleanListener clistener = new CleanListener(contentPane);
 		clistener.setConclusionPane(conclusionPane);

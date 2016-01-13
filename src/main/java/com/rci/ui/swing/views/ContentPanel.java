@@ -26,7 +26,8 @@ public class ContentPanel extends JSplitPane {
 	 * 
 	 */
 	private static final long serialVersionUID = 6530007596448077812L;
-	private JTable mainTable; //展示order 列表
+//	private FixedOrderTable mainTable; //展示order 列表
+	private OrderTable mainTable;
 	private JTable itemTable; //展示 orderItem 列表
 	private JTextArea textArea; //警告日志展示面板
 	
@@ -47,6 +48,20 @@ public class ContentPanel extends JSplitPane {
 		mainTable = new OrderTable(24);
 		mainScrollPane.setViewportView(mainTable);
 		mainScrollPane.getViewport().setBackground(Color.WHITE);
+		
+		/**
+		 * 使用固定列表格，排序有问题
+		 */
+//		mainTable = new FixedOrderTable(2, 22);
+//		JTable fixedTable = mainTable.getFixedTable();
+//		JTable flexibleTable = mainTable.getFlexibleTable();
+//		JScrollPane mainScrollPane = new JScrollPane(flexibleTable);
+//		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//		mainScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+//		mainScrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable.getTableHeader());  
+//		mainScrollPane.setRowHeaderView(fixedTable);
+//		mainScrollPane.getViewport().setBackground(Color.WHITE);
+//		mainScrollPane.getRowHeader().setBackground(Color.WHITE);
 		
 		JPanel rightPane = new JPanel();
 		rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));
@@ -84,6 +99,10 @@ public class ContentPanel extends JSplitPane {
 		if(mainTable.getModel() instanceof OrderTableModel){
 			OrderTableModel orderModel = (OrderTableModel) mainTable.getModel();
 			orderModel.setRowCount(0);
+//			OrderTableModel fixedOrderModel = (OrderTableModel) mainTable.getFixedTable().getModel();
+//			fixedOrderModel.setRowCount(0);
+//			OrderTableModel flexibleOrderModel = (OrderTableModel) mainTable.getFlexibleTable().getModel();
+//			flexibleOrderModel.setRowCount(0);
 		}
 		if(itemTable.getModel() instanceof OrderItemTableModel){
 			OrderItemTableModel itemModel = (OrderItemTableModel) itemTable.getModel();
@@ -93,11 +112,20 @@ public class ContentPanel extends JSplitPane {
 		datacleaner.cleanAllOfOneDay(time);
 	}
 
-	public JTable getMainTable() {
+
+//	public FixedOrderTable getMainTable() {
+//		return mainTable;
+//	}
+//
+//	public void setMainTable(FixedOrderTable mainTable) {
+//		this.mainTable = mainTable;
+//	}
+
+	public OrderTable getMainTable() {
 		return mainTable;
 	}
 
-	public void setMainTable(JTable mainTable) {
+	public void setMainTable(OrderTable mainTable) {
 		this.mainTable = mainTable;
 	}
 

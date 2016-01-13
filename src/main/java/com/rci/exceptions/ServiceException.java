@@ -53,4 +53,12 @@ public class ServiceException extends NestedRuntimeException{
 		return super.getMessage();
 	}
 
+	public ExceptionConstant.SERVICE getService() {
+		return service;
+	}
+
+	public void setService(ExceptionConstant.SERVICE service) {
+		this.service = service;
+	}
+
 }

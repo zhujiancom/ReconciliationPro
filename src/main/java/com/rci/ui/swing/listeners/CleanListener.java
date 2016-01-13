@@ -37,6 +37,7 @@ public class CleanListener implements ActionListener {
 						}
 						
 					});
+					queryPanel.getPaymodes().clear();
 					conclusionPane.clearData();
 					contentPane.clearData(time);
 					SwingUtilities.invokeLater(new Runnable(){

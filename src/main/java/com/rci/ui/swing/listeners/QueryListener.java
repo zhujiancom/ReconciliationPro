@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,7 +16,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.rci.bean.entity.EleSDStatistic;
-import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
@@ -41,7 +39,6 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 	private ConculsionPanel conclusionPane;
 	private String time;
 	private QueryFormPanel queryPanel;
-	private Set<PaymodeCode> paymodes;
 	
 	public QueryListener(QueryFormPanel queryPanel,ContentPanel contentPane){
 		this.queryPanel =queryPanel;
@@ -52,12 +49,14 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		time = queryPanel.getTimeInput().getText();
-		paymodes = queryPanel.getPaymodes();
 		try{
-			loadOrderData(time);
-//			saveEleSDInfo();
-			contentPane.getMainTable().getSelectionModel().addListSelectionListener(this);
-			InventoryWarningHandler.getInstance().displayWarningInfo();
+				loadOrderData(time);
+	//				saveEleSDInfo();
+				contentPane.getMainTable().getSelectionModel().addListSelectionListener(this);
+	//				contentPane.getMainTable().getFixedTable().getSelectionModel().addListSelectionListener(this);
+	//				contentPane.getMainTable().getFlexibleTable().getSelectionModel().addListSelectionListener(this);
+				InventoryWarningHandler.getInstance().displayWarningInfo();
+//			}
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, new JLabel("<html><font color='red'>"+se.getMessage()+"</font></html>"));
 		}catch (ParseException pe) {
@@ -119,11 +118,22 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 				&& contentPane.getMainTable().getRowSelectionAllowed()){
 			int row = contentPane.getMainTable().getSelectedRow();
 			if(row != -1){
-				String payno = (String) contentPane.getMainTable().getValueAt(row, 2);
+				String payno = (String) contentPane.getMainTable().getValueAt(row, 1);
 //				loadItemData(payno);
 				((OrderItemTable)contentPane.getItemTable()).reflushTable(payno);
 			}
 		}
+		/**
+		 * 使用固定表列的代码
+		 */
+//		if(event.getSource() == contentPane.getMainTable().getFixedTable().getSelectionModel()
+//				&& contentPane.getMainTable().getFixedTable().getRowSelectionAllowed()){
+//			int row = contentPane.getMainTable().getFixedTable().getSelectedRow();
+//			if(row != -1){
+//				String payno = (String) contentPane.getMainTable().getFixedTable().getValueAt(row, 1);
+//				((OrderItemTable)contentPane.getItemTable()).reflushTable(payno);
+//			}
+//		}
 	}
 	
 	/**
@@ -154,7 +164,7 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 		if(queryDate.after(currentDate)){
 			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "查询时间不能晚于当前时间");
 		}
-		OrderDataLoader dataLoader = new OrderDataLoader(queryDate,paymodes);
+		OrderDataLoader dataLoader = new OrderDataLoader(queryDate);
 		dataLoader.setContentPane(contentPane);
 		dataLoader.setConclusionPane(conclusionPane);
 		dataLoader.setQueryPane(queryPanel);

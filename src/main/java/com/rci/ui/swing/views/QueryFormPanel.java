@@ -39,6 +39,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 
 	private JButton queryBtn;
 	private JButton cleanBtn;
+	private JButton filterBtn;
 	private DateTextField timeInput;
 	
 	private JLabel actionLabel;
@@ -100,6 +101,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		timeInput = new DateTextField("查询日期");
 		queryBtn = ButtonFactory.createImageButton("查询","skin/gray/images/24x24/search.png", null);
 		cleanBtn = ButtonFactory.createImageButton("清空","skin/gray/images/24x24/empty_trash.png", null);
+		filterBtn = ButtonFactory.createImageButton("过滤","skin/gray/images/24x24/filter.png", null);
 //		queryPane.add(eleOnlinePayLabel);
 //		queryPane.add(eleOnlinePayAmount);
 //		queryPane.add(eleOrderCountLabel);
@@ -130,6 +132,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		queryPane.add(timeInput);
 		queryPane.add(queryBtn);
 		queryPane.add(cleanBtn);
+		queryPane.add(filterBtn);
 		queryPane.add(actionPane);
 		queryPane.add(inventoryWarningPane);
 		
@@ -257,6 +260,9 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		Object source = e.getItemSelectable();
+		if(paymodes.contains(PaymodeCode.UNKNOW)){
+			paymodes.remove(PaymodeCode.UNKNOW);
+		}
 		if(source == allCheck && e.getStateChange() == ItemEvent.SELECTED){
 			allCheck.setSelected(true);
 			cashCheck.setSelected(false);
@@ -271,6 +277,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 			alipayCheck.setSelected(false);
 			bdnmCheck.setSelected(false);
 			paymodes.clear();
+			paymodes.add(PaymodeCode.UNKNOW);
 		}
 		if(source == cashCheck){
 			if(e.getStateChange() == ItemEvent.SELECTED){
@@ -406,5 +413,13 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 
 	public void setWarningShowing(boolean warningShowing) {
 		this.warningShowing = warningShowing;
+	}
+
+	public JButton getFilterBtn() {
+		return filterBtn;
+	}
+
+	public void setFilterBtn(JButton filterBtn) {
+		this.filterBtn = filterBtn;
 	}
 }

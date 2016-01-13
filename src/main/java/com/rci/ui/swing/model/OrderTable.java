@@ -7,10 +7,10 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.springframework.util.CollectionUtils;
@@ -31,6 +31,7 @@ public class OrderTable extends BaseTable<OrderVO> {
 		super(columnNum);
 		this.setRowHeight(25);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 	
 	@Override
@@ -41,11 +42,11 @@ public class OrderTable extends BaseTable<OrderVO> {
 		cm.getColumn(0).setHeaderValue("序号");
 		cm.getColumn(0).setPreferredWidth(40);
 		cm.getColumn(0).setCellRenderer(redmarkRenderer);
-		cm.getColumn(1).setHeaderValue("桌号");
-		cm.getColumn(1).setPreferredWidth(75);
+		cm.getColumn(1).setHeaderValue("付款编号");
+		cm.getColumn(1).setPreferredWidth(105);
 		cm.getColumn(1).setCellRenderer(redmarkRenderer);
-		cm.getColumn(2).setHeaderValue("付款编号");
-		cm.getColumn(2).setPreferredWidth(105);
+		cm.getColumn(2).setHeaderValue("桌号");
+		cm.getColumn(2).setPreferredWidth(75);
 		cm.getColumn(2).setCellRenderer(redmarkRenderer);
 		cm.getColumn(3).setHeaderValue("原价");
 		cm.getColumn(3).setPreferredWidth(75);
@@ -229,9 +230,9 @@ public class OrderTable extends BaseTable<OrderVO> {
 			case 0:
 				return ++rowIndex;
 			case 1:
-				return order.getTableName();
-			case 2:
 				return order.getPayNo();
+			case 2:
+				return order.getTableName();
 			case 3:
 				return order.getOriginAmount();
 			case 4:
@@ -314,7 +315,7 @@ public class OrderTable extends BaseTable<OrderVO> {
 	protected void setModel() {
 		OrderTableModel model = new OrderTableModel(columnNum);
 		this.setModel(model);
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(model);
+		TableRowSorter<OrderTableModel> sorter = new TableRowSorter<OrderTableModel>(model);
 		this.setRowSorter(sorter);
 	}
 }
