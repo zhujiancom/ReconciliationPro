@@ -57,6 +57,9 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 	@Resource(name="jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
 	
+//	@Resource(name="jdbcTemplateForDerby")
+//	private JdbcTemplate jdbcTemplate;
+	
 	@Override
 	public String getTicketStatistic(Date date, Vendor vendor) {
 //		List<TicketStatistic> ts = ticketService.queryTicketStatisticByDate(date, vendor);

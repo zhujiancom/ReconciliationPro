@@ -53,7 +53,7 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-
+	
 	@SuppressWarnings("unchecked")
 	private Class<T> entityClass = GenericsUtils.getSuperClassGenericType(getClass());
 
