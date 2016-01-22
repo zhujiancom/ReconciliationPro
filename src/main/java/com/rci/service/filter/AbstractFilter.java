@@ -87,6 +87,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 
 	protected abstract void generateScheme(Order order,FilterChain chain);
 
+//	protected abstract void parseOrder(Order order,FilterChain context);
 	/**
 	 * 菜品是否不可以打折
 	 * @param dishNo

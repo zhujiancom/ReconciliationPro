@@ -86,5 +86,4 @@ public class POSFilter extends AbstractFilter {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

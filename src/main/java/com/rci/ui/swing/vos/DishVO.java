@@ -26,6 +26,12 @@ public class DishVO {
 	
 	private YOrN statisticFlag;
 	
+	/* 是否是餐盒费 等 */
+	private YOrN boxFeeFlag;
+	
+	/* 是否是外送费 */
+	private YOrN takeoutFeeFlag;
+	
 	private BigDecimal cost;
 	
 	public DishVO(){}
@@ -120,6 +126,22 @@ public class DishVO {
 
 	public void setStatisticFlag(YOrN statisticFlag) {
 		this.statisticFlag = statisticFlag;
+	}
+
+	public YOrN getBoxFeeFlag() {
+		return boxFeeFlag;
+	}
+
+	public YOrN getTakeoutFeeFlag() {
+		return takeoutFeeFlag;
+	}
+
+	public void setBoxFeeFlag(YOrN boxFeeFlag) {
+		this.boxFeeFlag = boxFeeFlag;
+	}
+
+	public void setTakeoutFeeFlag(YOrN takeoutFeeFlag) {
+		this.takeoutFeeFlag = takeoutFeeFlag;
 	}
 
 	@Override

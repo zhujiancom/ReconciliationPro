@@ -548,6 +548,8 @@ public class MetadataServiceImpl implements IMetadataService {
 		dish.setStopFlag(dishvo.getStopFlag());
 		dish.setDishPrice(dishvo.getDishPrice());
 		dish.setStatisticFlag(dishvo.getStatisticFlag());
+		dish.setBoxFeeFlag(dishvo.getBoxFeeFlag());
+		dish.setTakeoutFeeFlag(dishvo.getTakeoutFeeFlag());
 		dishService.rwUpdate(dish);
 	}
 

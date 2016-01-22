@@ -133,6 +133,8 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			dish.setDishType(type);
 			dish.setDishSeries(series);
 			dish.setStatisticFlag(YOrN.Y);
+			dish.setBoxFeeFlag(YOrN.N);
+			dish.setTakeoutFeeFlag(YOrN.N);
 			dishes.add(dish);
 //			dishService.rwCreate(dish);
 		}
@@ -158,6 +160,8 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			dish.setDishType(dType);
 			dish.setDishSeries(dType.getDishSeries());
 			dish.setStatisticFlag(YOrN.Y);
+			dish.setBoxFeeFlag(YOrN.N);
+			dish.setTakeoutFeeFlag(YOrN.N);
 			dishService.rwCreate(dish);
 			return dish;
 		}catch(Exception ex){

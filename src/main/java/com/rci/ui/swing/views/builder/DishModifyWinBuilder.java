@@ -43,6 +43,8 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 	private JCheckBox discountFlag;
 	private JCheckBox suitFlag;
 	private JCheckBox statisticFlag;
+	private JCheckBox boxfeeFlag;
+	private JCheckBox takeoutfeeFlag;
 	private InputPanel costPane;
 	private InputPanel pricePane;
 	private Map<InventoryDishRefVO,InputPanel> standardMap;
@@ -107,10 +109,27 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 			statisticFlag.setSelected(true);
 		}
 		statisticFlag.setBounds(300, 0, 100, 20);
+		
+		boxfeeFlag= new JCheckBox("餐盒费");
+		boxfeeFlag.addItemListener(this);
+		if(YOrN.Y.equals(dish.getBoxFeeFlag())){
+			boxfeeFlag.setSelected(true);
+		}
+		boxfeeFlag.setBounds(400, 0, 100, 20);
+		
+		takeoutfeeFlag= new JCheckBox("配送费");
+		takeoutfeeFlag.addItemListener(this);
+		if(YOrN.Y.equals(dish.getTakeoutFeeFlag())){
+			takeoutfeeFlag.setSelected(true);
+		}
+		takeoutfeeFlag.setBounds(500, 0, 100, 20);
+		
 		secondPane.add(stopFlag);
 		secondPane.add(discountFlag);
 		secondPane.add(suitFlag);
 		secondPane.add(statisticFlag);
+		secondPane.add(boxfeeFlag);
+		secondPane.add(takeoutfeeFlag);
 		mainPane.add(secondPane);
 		
 		JPanel thirdPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -242,6 +261,20 @@ public class DishModifyWinBuilder implements PopWindowBuilder, ItemListener , Ac
 				dish.setStatisticFlag(YOrN.Y);
 			}else{
 				dish.setStatisticFlag(YOrN.N);
+			}
+		}
+		if(source == boxfeeFlag){
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				dish.setBoxFeeFlag(YOrN.Y);
+			}else{
+				dish.setBoxFeeFlag(YOrN.N);
+			}
+		}
+		if(source == takeoutfeeFlag){
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				dish.setTakeoutFeeFlag(YOrN.Y);
+			}else{
+				dish.setTakeoutFeeFlag(YOrN.N);
 			}
 		}
 	}

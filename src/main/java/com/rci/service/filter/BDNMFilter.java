@@ -163,5 +163,4 @@ public class BDNMFilter extends AbstractFilter {
 		// TODO Auto-generated method stub
 
 	}
-
 }

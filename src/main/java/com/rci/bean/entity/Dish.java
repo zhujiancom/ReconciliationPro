@@ -81,6 +81,12 @@ public class Dish extends BaseEntity{
 	/* 是否参与统计 */
 	private YOrN statisticFlag;
 	
+	/* 是否是餐盒费 等 */
+	private YOrN boxFeeFlag;
+	
+	/* 是否是外送费 */
+	private YOrN takeoutFeeFlag;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
 	@Column(name="did", nullable=false,updatable=false)
@@ -212,6 +218,26 @@ public class Dish extends BaseEntity{
 
 	public void setCost(BigDecimal cost) {
 		this.cost = cost;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="boxfee_flag")
+	public YOrN getBoxFeeFlag() {
+		return boxFeeFlag;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="takeoutfee_flag")
+	public YOrN getTakeoutFeeFlag() {
+		return takeoutFeeFlag;
+	}
+
+	public void setBoxFeeFlag(YOrN boxFeeFlag) {
+		this.boxFeeFlag = boxFeeFlag;
+	}
+
+	public void setTakeoutFeeFlag(YOrN takeoutFeeFlag) {
+		this.takeoutFeeFlag = takeoutFeeFlag;
 	}
 
 	@Override

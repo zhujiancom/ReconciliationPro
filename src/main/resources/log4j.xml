@@ -89,7 +89,7 @@
 	
 	<!-- reconciliation Log -->
 	<logger name="com.rci" additivity="false">
-		<level value="WARN"></level>
+		<level value="${project-priority}"></level>
 		<appender-ref ref="RECONCILIATIONLOG" />
 		<appender-ref ref="CONSOLE" />
 	</logger>

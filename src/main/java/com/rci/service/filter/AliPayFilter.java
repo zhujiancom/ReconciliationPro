@@ -74,18 +74,5 @@ public class AliPayFilter extends AbstractFilter{
 	 */
 	@Override
 	protected void validation(Order order) {
-//		BigDecimal aliPayAmount = BigDecimal.ZERO;
-//		BigDecimal otherAmount = BigDecimal.ZERO;
-//		BigDecimal originAmount = order.getOriginPrice();
-//		for(Iterator<Entry<PaymodeCode,BigDecimal>> it = order.getPaymodeMapping().entrySet().iterator();it.hasNext();){
-//			Entry<PaymodeCode,BigDecimal> entry = it.next();
-//			PaymodeCode paymode = entry.getKey();
-//			BigDecimal amount = entry.getValue();
-//			if(!PaymodeCode.TDD.equals(paymode)){
-//				otherAmount = otherAmount.add(amount);
-//			}
-//		}
-//		aliPayAmount = originAmount.subtract(otherAmount);
 	}
-
 }

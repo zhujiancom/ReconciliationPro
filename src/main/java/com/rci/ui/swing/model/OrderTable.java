@@ -117,9 +117,6 @@ public class OrderTable extends BaseTable<OrderVO> {
 		OrderTableModel otm = (OrderTableModel) this.getModel();
 		otm.setOrders(orders);
 		otm.fireTableDataChanged();
-//			//设置表格默认第一行选中
-		setRowSelectionAllowed(true);
-		setRowSelectionInterval(0, 0);
 	}
 	
 	/**

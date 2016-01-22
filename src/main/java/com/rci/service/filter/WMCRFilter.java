@@ -142,5 +142,4 @@ public class WMCRFilter extends AbstractFilter{
 	@Override
 	protected void validation(Order order) {
 	}
-
 }

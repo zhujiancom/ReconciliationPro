@@ -5,15 +5,12 @@ package com.rci.service.impl;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Dish;
@@ -37,9 +34,7 @@ import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IStatisticRecordService;
 import com.rci.service.ITableInfoService;
-import com.rci.service.filter.CalculateFilter;
 import com.rci.service.filter.FilterChain;
-import com.rci.service.filter.FreeFilter;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventorySellLogService;
@@ -62,8 +57,11 @@ import com.rci.tools.DateUtil;
  *
  */
 public abstract class BaseDataLoaderService implements IDataLoaderService {
-	@Autowired
-	private List<CalculateFilter> filters;
+//	@Autowired
+//	private List<CalculateFilter> filters;
+	
+	@Resource(name="filterChain")
+	private FilterChain filterChain;
 	
 	@Resource(name="OrderAccountRefService")
 	private IOrderAccountRefService oaService;
@@ -104,7 +102,8 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 		}
 		// 解析订单各种账户收入的金额，判断订单使用的方案
 		for (Order order : orders) {
-			parseOrder(order);
+//			parseOrder(order);
+			filterChain.doFilter(order, filterChain);
 			addInventoryConsumeLog(order);
 			updateCostConsumeLog(order);
 			updateExpressRecord(order);
@@ -188,19 +187,19 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 	 */
 	@Override
 	public void parseOrder(Order order) {
-		FilterChain chain = new FilterChain();
-		Collections.sort(filters, new Comparator<CalculateFilter>() {
-
-			@Override
-			public int compare(CalculateFilter f1, CalculateFilter f2) {
-				if(f1 instanceof FreeFilter || f2 instanceof FreeFilter){
-					return 0;
-				}
-				return -1;
-			}
-		});
-		chain.addFilters(filters);
-		chain.doFilter(order, chain);
+//		FilterChain chain = new FilterChain();
+//		Collections.sort(filters, new Comparator<CalculateFilter>() {
+//
+//			@Override
+//			public int compare(CalculateFilter f1, CalculateFilter f2) {
+//				if(f1 instanceof FreeFilter || f2 instanceof FreeFilter){
+//					return 0;
+//				}
+//				return -1;
+//			}
+//		});
+//		chain.addFilters(filters);
+//		chain.doFilter(order, chain);
 	}
 
 	/* 
