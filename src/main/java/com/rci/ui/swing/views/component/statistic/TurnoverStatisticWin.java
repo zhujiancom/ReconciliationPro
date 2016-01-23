@@ -122,10 +122,11 @@ public class TurnoverStatisticWin extends PopWindow implements ActionListener{
 							ExceptionManage.throwServiceException("开始时间必须填写");
 						}
 					}
-					if(edate == null && !StringUtils.hasText(endDate.getErrorMsg())){
-						edate = DateUtil.getStartTimeOfDay(DateUtil.getCurrentDate());
-					}else{
+					if(StringUtils.hasText(endDate.getErrorMsg())){
 						ExceptionManage.throwServiceException(endDate.getErrorMsg());
+					}
+					if(edate == null){
+						edate = DateUtil.getStartTimeOfDay(DateUtil.getCurrentDate());
 					}
 					if(sdate.after(edate)){
 						ExceptionManage.throwServiceException("开始时间不能晚于结束时间或今天");

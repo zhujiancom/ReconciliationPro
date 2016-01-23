@@ -3,6 +3,7 @@ package com.rci.ui.swing.views.component.encapsulation;
 import java.text.ParseException;
 import java.util.Date;
 
+import com.rci.exceptions.ExceptionManage;
 import com.rci.tools.DateUtil;
 
 public class DateTextField extends BaseTextField {
@@ -54,8 +55,8 @@ public class DateTextField extends BaseTextField {
 			setErrorMsg(null);
 			try {
 				setDate(DateUtil.parseDate(getText().trim(), pattern));
-			} catch (ParseException e) {
-				e.printStackTrace();
+			} catch (ParseException pe) {
+				ExceptionManage.throwServiceException("日期解析错误！", pe);
 			}
 		}
 	}
