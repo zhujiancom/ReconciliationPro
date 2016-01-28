@@ -23,6 +23,7 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.OrderItem;
 import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.metadata.NativeSQLBuilder;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
@@ -159,9 +160,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 
 	@Override
 	public BigDecimal getExpressOrderCountByDay(String day) {
-		String sql = "SELECT COUNT(1) as 'count' FROM bus_tb_order o LEFT JOIN bus_tb_table t ON o.table_no=t.table_no \n"
-				+ "WHERE o.day='"+day+"' \n"
-				+ "AND t.table_type='03'";
+		String sql = String.format(NativeSQLBuilder.EXPRESS_ORDERS,day);
 		List<Map<String,Object>> countMapList =  baseDAO.queryListBySQL(sql);
 		Long count = (Long) countMapList.get(0).get("count");
 		return new BigDecimal(count);

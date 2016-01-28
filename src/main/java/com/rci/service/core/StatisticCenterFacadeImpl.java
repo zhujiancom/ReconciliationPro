@@ -11,9 +11,7 @@ import javax.annotation.Resource;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -282,18 +280,6 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 				return vo;
 			}
 			
-		});
-	}
-
-	@Override
-	public BigDecimal getSaleroom(Date sdate, Date edate) {
-		return jdbcTemplate.query(NativeSQLBuilder.DISHSALE_STATISTIC_AMUONT, new Object[]{sdate,edate},new ResultSetExtractor<BigDecimal>() {
-
-			@Override
-			public BigDecimal extractData(ResultSet rs) throws SQLException,
-					DataAccessException {
-				return rs.getBigDecimal("amount");
-			}
 		});
 	}
 

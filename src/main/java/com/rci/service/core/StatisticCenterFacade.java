@@ -124,22 +124,6 @@ public interface StatisticCenterFacade {
 	
 	/**
 	 * 
-	 * Describle(描述)：获取菜品总销售量
-	 *
-	 * 方法名称：getSaleroom
-	 *
-	 * 所在类名：StatisticCenterFacade
-	 *
-	 * Create Time:2015年12月8日 下午4:57:49
-	 *  
-	 * @param sdate
-	 * @param edate
-	 * @return
-	 */
-	BigDecimal getSaleroom(Date sdate,Date edate);
-	
-	/**
-	 * 
 	 * Describle(描述)： 营业额统计
 	 *
 	 * 方法名称：getTurnoverStatisticInfo

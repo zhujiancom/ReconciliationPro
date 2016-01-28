@@ -13,6 +13,7 @@ import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.service.filter.FilterChain;
 import com.rci.service.filter.parser.AbstractPlatformParser;
 import com.rci.tools.DigitUtil;
+import com.rci.tools.StringUtils;
 
 /**
  * 
@@ -63,6 +64,14 @@ public class MTWMParser2Impl extends AbstractPlatformParser {
 			freeMap.put(order.getPayNo(), commission);
 		}
 		
+		String schemeName = order.getSchemeName();
+		if(StringUtils.hasText(schemeName)){
+			schemeName = schemeName+",美团外卖到账"+postAmount+"元";
+		}else{
+			schemeName = "美团外卖到账"+postAmount+"元";
+		}
+		
+		order.setSchemeName(schemeName);
 		preserveOAR(commission,AccountCode.FREE_ONLINE,order); //餐厅补贴的金额就是给美团外卖的佣金
 		preserveOAR(postAmount,AccountCode.MTWM,order);
 	}

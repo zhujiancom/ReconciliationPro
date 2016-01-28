@@ -60,24 +60,20 @@ public class NativeSQLBuilder {
 			+ "and oar.accno=? \n"
 			+ "and o.framework=?";
 	
-	public static final String DISHSALE_STATISTIC="select oi.dish_no 'dishno',d.dish_name 'dishname',d.dish_price 'dishprice',sum(oi.count)-sum(oi.count_back) 'amount' \n"
-			+ "from bus_tb_order_item oi,bus_tb_dish d \n"
-			+ "where oi.dish_no=d.dish_no \n"
-			+ "and d.statistic_flag='Y' \n"
-			+ "and oi.suit_flag in ('P','N') \n"
-			+ "and oi.consume_time >= ? and oi.consume_time <= ? \n"
-			+ "group by (oi.dish_no) order by amount desc";
+	public static final String DISHSALE_STATISTIC="select dishno,dishname,dishprice,sum(count)-sum(backcount) 'amount' \n"
+			+ "from v_dish_sale_statistic \n"
+			+ "where consumeTime >= ? and consumeTime <= ? \n"
+			+ "group by (dishno) order by amount desc";
 	
-	public static final String DISHSALE_STATISTIC_AMUONT="select sum(count)-sum(count_back) 'amount' \n"
-			+ "from bus_tb_order_item oi,,bus_tb_dish d \n"
-			+ "where oi.dish_no=d.dish_no \n"
-			+ "and d.statistic_flag='Y' \n"
-			+ "and oi.suit_flag in ('P','N') \n"
-			+ "and oi.consume_time >= ? and oi.consume_time <= ? \n"
-			+ "order by amount desc";
+//	public static final String TURNOVER_STATISTIC="select sum(oar.real_amount) 'amount',acc.name 'name',oar.framework 'framework',acc.symbol 'symbol' \n"
+//			+ "from bus_tb_order_account_ref oar,bus_tb_account acc \n"
+//			+ "where oar.accno=acc.acc_no and oar.post_time >= ? and oar.post_time <= ?\n"
+//			+ "group by oar.accno,oar.framework";
+	public static final String TURNOVER_STATISTIC="select sum(realamount) 'amount',name,framework,symbol \n"
+			+ "from v_trunover_statistic \n"
+			+ "where postTime >= ? and postTime <= ? \n"
+			+ "group by accno,framework";
 	
-	public static final String TURNOVER_STATISTIC="select sum(oar.real_amount) 'amount',acc.name 'name',oar.framework 'framework',acc.symbol 'symbol' \n"
-			+ "from bus_tb_order_account_ref oar,bus_tb_account acc \n"
-			+ "where oar.accno=acc.acc_no and oar.post_time >= ? and oar.post_time <= ?\n"
-			+ "group by oar.accno,oar.framework";
+	// 查询外送订单单量  占位符用String.format解析
+	public static final String EXPRESS_ORDERS="select count(1) 'count' from v_express_order eo where eo.day='%s'"; 
 }
