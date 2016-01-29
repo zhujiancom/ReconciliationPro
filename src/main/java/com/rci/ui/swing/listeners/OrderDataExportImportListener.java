@@ -334,7 +334,7 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 				&& contentPane.getMainTable().getRowSelectionAllowed()){
 			int row = contentPane.getMainTable().getSelectedRow();
 			if(row != -1){
-				String payno = (String) contentPane.getMainTable().getValueAt(row, 2);
+				String payno = (String) contentPane.getMainTable().getValueAt(row, 1);
 				((OrderItemTable)contentPane.getItemTable()).reflushTable(payno);
 			}
 		}
