@@ -35,22 +35,7 @@
 		</property>
 	</bean>
 	
-	<util:list id="filters" list-class="java.util.LinkedList" value-type="com.rci.service.filter.CalculateFilter">
-		<bean class="com.rci.service.filter.CashFilter"></bean>
-		<bean class="com.rci.service.filter.DPTGFilter"></bean>
-		<bean class="com.rci.service.filter.BDNMFilter"></bean>
-		<bean class="com.rci.service.filter.MTFilter"></bean>
-		<bean class="com.rci.service.filter.ELEFilter"></bean>
-		<bean class="com.rci.service.filter.TDDFilter"></bean>
-		<bean class="com.rci.service.filter.MTWMFilter"></bean>
-		<bean class="com.rci.service.filter.FreeFilter" ></bean>
-		<bean class="com.rci.service.filter.MTSuperFilter"></bean>
-		<bean class="com.rci.service.filter.DPSHFilter"></bean>
-		<bean class="com.rci.service.filter.AliPayFilter"></bean>
-		<bean class="com.rci.service.filter.WMCRFilter"></bean>
-		<bean class="com.rci.service.filter.PLQFilter"></bean>
-		<bean class="com.rci.service.filter.DDFFilter"></bean>
-	</util:list>
-	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>
+	
+	<bean id="algorithmCallbackFactory" class="com.rci.service.filter.algorithm.AlgorithmCallbackBeanFactory"/>
 </beans>

@@ -1,7 +1,6 @@
 package com.rci.ui.swing.views.component.tab;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;

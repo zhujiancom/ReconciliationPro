@@ -37,4 +37,5 @@ public interface IDishTypeService extends IBaseService<DishType, Long>{
 	void delete(DishType type);
 	
 	List<DishType> queryDishTypesBySeriesno(String seriesno);
+	
 }

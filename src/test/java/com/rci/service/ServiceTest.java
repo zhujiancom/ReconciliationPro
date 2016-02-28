@@ -1,7 +1,6 @@
 package com.rci.service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.rci.bean.entity.DishSeries;
+import com.rci.bean.entity.DishType;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.TableInfo;
 import com.rci.bean.entity.inventory.Inventory;
@@ -210,6 +211,27 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 //			System.out.println(type.getDtid());
 //			dishtypeService.delete(type);
 //		}
+	}
+	@Test
+	public void testDishTypeCreate(){
+		System.out.println("--------- coming");
+		DishType dbtype = dishtypeService.queryDishTypeByNo("80");
+		if(dbtype != null){
+			return;
+		}
+		DishType type = new DishType();
+		type.setDtName("利口酒");
+		type.setDtNo("80");
+		DishSeries series = dishseriesService.querySeriesByNo("09");
+		type.setDishSeries(series);
+		type.setSeriesno(series.getSeriesno());
+		dishtypeService.rwCreate(type);
+	}
+	
+	@Test
+	public void testDishTypeTransform(){
+		System.out.println("----comming ---- ");
+		transformSevice.transformDishInfo("826");
 	}
 	
 	@Test

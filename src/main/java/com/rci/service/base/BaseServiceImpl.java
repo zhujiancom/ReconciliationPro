@@ -25,7 +25,7 @@ public class BaseServiceImpl<T extends BaseEntity, PK extends Serializable> impl
 	protected transient Log logger = LogFactory.getLog(BaseServiceImpl.class);
 	@Autowired
 	protected DefaultHibernateDAOFacadeImpl<T, PK> baseDAO;
-
+	
 	protected Log logger(){
 		if(logger == null){
 			return LogFactory.getLog(BaseServiceImpl.class);

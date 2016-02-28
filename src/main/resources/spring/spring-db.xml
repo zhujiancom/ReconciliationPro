@@ -118,7 +118,7 @@
 	
 	<!-- XML 风格支持 -->
 	<aop:config proxy-target-class="true" expose-proxy="true">
-		<aop:advisor pointcut="execution(* com.rci.service..*ServiceImpl.*(..))"
+		<aop:advisor pointcut="execution(* com.rci.service..*ServiceImpl.*(..)) and !execution(* com.rci.service..core..*ServiceImpl.*(..))"
 			advice-ref="txAdvice" />
 	</aop:config>
 	

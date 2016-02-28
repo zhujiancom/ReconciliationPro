@@ -49,8 +49,8 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private JCheckBox allCheck;
 	private JCheckBox eleCheck;
 	private JCheckBox mtwmCheck;
-	private JCheckBox dptgCheck;
-	private JCheckBox dpshCheck;
+//	private JCheckBox dptgCheck;
+//	private JCheckBox dpshCheck;
 	private JCheckBox mttgCheck;
 	private JCheckBox mtsuperCheck;
 	private JCheckBox cashCheck;
@@ -58,6 +58,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private JCheckBox tddCheck;
 	private JCheckBox alipayCheck;
 	private JCheckBox bdnmCheck;
+	private JCheckBox bdwmCheck;
 	private Set<PaymodeCode> paymodes = new HashSet<PaymodeCode>();
 	private Icon loadingIcon;
 	private Icon doneIcon;
@@ -158,13 +159,13 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		eleCheck.addItemListener(this);
 		eleCheck.setBackground(Color.WHITE);
 		
-		dptgCheck = new JCheckBox("点评团购");
-		dptgCheck.addItemListener(this);
-		dptgCheck.setBackground(Color.WHITE);
-		
-		dpshCheck = new JCheckBox("点评闪惠");
-		dpshCheck.addItemListener(this);
-		dpshCheck.setBackground(Color.WHITE);
+//		dptgCheck = new JCheckBox("点评团购");
+//		dptgCheck.addItemListener(this);
+//		dptgCheck.setBackground(Color.WHITE);
+//		
+//		dpshCheck = new JCheckBox("点评闪惠");
+//		dpshCheck.addItemListener(this);
+//		dpshCheck.setBackground(Color.WHITE);
 		
 		mttgCheck = new JCheckBox("美团团购");
 		mttgCheck.addItemListener(this);
@@ -194,11 +195,15 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		bdnmCheck.addItemListener(this);
 		bdnmCheck.setBackground(Color.WHITE);
 		
+		bdwmCheck = new JCheckBox("百度外卖");
+		bdwmCheck.addItemListener(this);
+		bdwmCheck.setBackground(Color.WHITE);
+		
 		checkPane.add(allCheck);
 		checkPane.add(cashCheck);
 		checkPane.add(eleCheck);
-		checkPane.add(dptgCheck);
-		checkPane.add(dpshCheck);
+//		checkPane.add(dptgCheck);
+//		checkPane.add(dpshCheck);
 		checkPane.add(mttgCheck);
 		checkPane.add(mtsuperCheck);
 		checkPane.add(mtwmCheck);
@@ -206,6 +211,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		checkPane.add(alipayCheck);
 		checkPane.add(posCheck);
 		checkPane.add(bdnmCheck);
+		checkPane.add(bdwmCheck);
 		return checkPane;
 	}
 
@@ -267,8 +273,8 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 			allCheck.setSelected(true);
 			cashCheck.setSelected(false);
 			eleCheck.setSelected(false);
-			dpshCheck.setSelected(false);
-			dptgCheck.setSelected(false);
+//			dpshCheck.setSelected(false);
+//			dptgCheck.setSelected(false);
 			mttgCheck.setSelected(false);
 			mtsuperCheck.setSelected(false);
 			mtwmCheck.setSelected(false);
@@ -295,22 +301,22 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 				paymodes.remove(PaymodeCode.ELE);
 			}
 		}
-		if(source == dptgCheck){
-			if(e.getStateChange() == ItemEvent.SELECTED){
-				allCheck.setSelected(false);
-				paymodes.add(PaymodeCode.DPTG);	
-			}else{
-				paymodes.remove(PaymodeCode.DPTG);
-			}
-		}
-		if(source == dpshCheck){
-			if(e.getStateChange() == ItemEvent.SELECTED){
-				allCheck.setSelected(false);
-				paymodes.add(PaymodeCode.DPSH);	
-			}else{
-				paymodes.remove(PaymodeCode.DPSH);
-			}
-		}
+//		if(source == dptgCheck){
+//			if(e.getStateChange() == ItemEvent.SELECTED){
+//				allCheck.setSelected(false);
+//				paymodes.add(PaymodeCode.DPTG);	
+//			}else{
+//				paymodes.remove(PaymodeCode.DPTG);
+//			}
+//		}
+//		if(source == dpshCheck){
+//			if(e.getStateChange() == ItemEvent.SELECTED){
+//				allCheck.setSelected(false);
+//				paymodes.add(PaymodeCode.DPSH);	
+//			}else{
+//				paymodes.remove(PaymodeCode.DPSH);
+//			}
+//		}
 		if(source == mttgCheck){
 			if(e.getStateChange() == ItemEvent.SELECTED){
 				allCheck.setSelected(false);
@@ -365,6 +371,14 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 				paymodes.add(PaymodeCode.BDNM);	
 			}else{
 				paymodes.remove(PaymodeCode.BDNM);
+			}
+		}
+		if(source == bdwmCheck){
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				allCheck.setSelected(false);
+				paymodes.add(PaymodeCode.BDWM);	
+			}else{
+				paymodes.remove(PaymodeCode.BDWM);
 			}
 		}
 	}

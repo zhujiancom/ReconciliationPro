@@ -242,9 +242,12 @@ public class SchemeManagementWin extends PopWindow {
 		JCheckBox mtwmCheck = new VendorJCheckBox(2,Vendor.MTWM,EnumUtils.getEnumMessage(Vendor.MTWM));
 		mtwmCheck.addItemListener(checkListener);
 		mtwmCheck.setBounds(320, 4, 80, 24);
-		JCheckBox dptgCheck = new VendorJCheckBox(3,Vendor.DZDP,EnumUtils.getEnumMessage(Vendor.DZDP));
-		dptgCheck.addItemListener(checkListener);
-		dptgCheck.setBounds(400, 4, 80, 24);
+//		JCheckBox dptgCheck = new VendorJCheckBox(3,Vendor.DZDP,EnumUtils.getEnumMessage(Vendor.DZDP));
+//		dptgCheck.addItemListener(checkListener);
+//		dptgCheck.setBounds(400, 4, 80, 24);
+		JCheckBox alipayCheck = new VendorJCheckBox(3,Vendor.ALIPAY,EnumUtils.getEnumMessage(Vendor.ALIPAY));
+		alipayCheck.addItemListener(checkListener);
+		alipayCheck.setBounds(400, 4, 80, 24);
 		JCheckBox wmcrCheck = new VendorJCheckBox(4,Vendor.WMCR,EnumUtils.getEnumMessage(Vendor.WMCR));
 		wmcrCheck.addItemListener(checkListener);
 		wmcrCheck.setBounds(480, 4, 80, 24);
@@ -257,28 +260,31 @@ public class SchemeManagementWin extends PopWindow {
 //		JCheckBox shCheck = new VendorJCheckBox(4,Vendor.SH,"闪惠");
 //		shCheck.addItemListener(checkListener);
 //		shCheck.setBounds(640, 4, 80, 24);
-		JCheckBox plqCheck = new VendorJCheckBox(4,Vendor.PLQ,"派乐趣");
-		plqCheck.addItemListener(checkListener);
-		plqCheck.setBounds(720, 4, 80, 24);
+//		JCheckBox plqCheck = new VendorJCheckBox(4,Vendor.PLQ,"派乐趣");
+//		plqCheck.addItemListener(checkListener);
+//		plqCheck.setBounds(720, 4, 80, 24);
+		JCheckBox bdwmCheck = new VendorJCheckBox(4,Vendor.BDWM,EnumUtils.getEnumMessage(Vendor.BDWM));
+		bdwmCheck.addItemListener(checkListener);
+		bdwmCheck.setBounds(720, 4, 80, 24);
 		
 		ButtonGroup checkGroup = new ButtonGroup();
 		checkGroup.add(allCheck);
 		checkGroup.add(eleCheck);
 		checkGroup.add(mtwmCheck);
-		checkGroup.add(dptgCheck);
+		checkGroup.add(alipayCheck);
 		checkGroup.add(wmcrCheck);
 		checkGroup.add(mtCheck);
 		checkGroup.add(bdnmCheck);
-		checkGroup.add(plqCheck);
+		checkGroup.add(bdwmCheck);
 		
 		operaPane.add(allCheck);
 		operaPane.add(eleCheck);
 		operaPane.add(mtwmCheck);
-		operaPane.add(dptgCheck);
+		operaPane.add(alipayCheck);
 		operaPane.add(wmcrCheck);
 		operaPane.add(mtCheck);
 		operaPane.add(bdnmCheck);
-		operaPane.add(plqCheck);
+		operaPane.add(bdwmCheck);
 	}
 
 	/**
