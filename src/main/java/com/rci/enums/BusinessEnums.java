@@ -144,8 +144,9 @@ public final class BusinessEnums {
 	public static enum PaymodeCode{
 		CASH_MACHINE("00"),ELE("11"),MTWM("14"),WMCR("12"),
 		TDD("96"),DPTG("98"),DPSH("13"),
-		MT("99"),FREE("YY"),MTSUPER("87"),POS("03"),
-		UNKNOW(""),ZFB("86"),BDNM("04"),PLQ("08"),DDF("05"),BDWM("20");
+		MT("99"),FREE("YY"),OFFLINE_FREE("OFF"),//线下现金免单
+		MTSUPER("87"),POS("03"),ONLINE_FREE("ON"),//线上免单
+		UNKNOW(""),ALIPAY("86"),BDNM("04"),PLQ("08"),DDF("05"),BDWM("20");
 		
 		private String paymodeno;
 		private PaymodeCode(String paymodeno){

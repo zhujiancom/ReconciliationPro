@@ -76,7 +76,11 @@ public class Account extends BaseEntity {
 	/* 是否父账户 */
 	private CommonEnums.YOrN isParent;
 	
+	/* 正值或负值， 对于优惠或免单账户，为负值N,正值为P*/
 	private Symbol symbol;
+	
+	/* 账户对应的支付方式 */
+	private String paymodeNo;
 	
 	public Account(){}
 	
@@ -197,6 +201,15 @@ public class Account extends BaseEntity {
 
 	public void setSymbol(Symbol symbol) {
 		this.symbol = symbol;
+	}
+
+	@Column(name="paymode")
+	public String getPaymodeNo() {
+		return paymodeNo;
+	}
+
+	public void setPaymodeNo(String paymodeNo) {
+		this.paymodeNo = paymodeNo;
 	}
 
 	@Override

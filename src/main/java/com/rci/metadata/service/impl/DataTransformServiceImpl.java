@@ -15,7 +15,6 @@ import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dozer.Mapper;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -27,6 +26,7 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.Paymode;
 import com.rci.bean.entity.TableInfo;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.dto.DishDTO;
 import com.rci.metadata.dto.DishSeriesDTO;
@@ -184,6 +184,22 @@ public class DataTransformServiceImpl implements IDataTransformService {
 	
 	/**
 	 * 
+	 * Describle(描述)：同步支付方式
+	 *
+	 * 方法名称：transformPaymodeInfo
+	 *
+	 * 所在类名：DataTransformServiceImpl
+	 *
+	 * Create Time:2016年2月29日 下午5:45:30
+	 *  
+	 * @param paymode
+	 */
+	public void transformPaymodeInfo(String paymode){
+		
+	}
+	
+	/**
+	 * 
 	 *
 	 * Describle(描述)： 由于订单有多种支付方式，该方法主要是合并订单
 	 *
@@ -205,10 +221,14 @@ public class DataTransformServiceImpl implements IDataTransformService {
 				String paymode = orderDTO.getPaymode();
 				BigDecimal realAmount = orderDTO.getRealAmount();
 				logger.debug("orderno: "+ orderNo +" -> paymode "+paymode);
+				PaymodeCode paycode = PaymodeCode.paymodeCode(paymode);
+				if(PaymodeCode.UNKNOW.equals(paycode)){
+					transformPaymodeInfo(paymode);
+				}
 				//2.1 如果容器中存在订单号重复，记录当前订单的支付方式合并到第一条订单中
 				if(container.containsKey(orderNo)){
 					order = container.get(orderNo);
-					order.addPayMode(paymode,realAmount);
+					order.addPayMode(paycode,realAmount);
 					if(realAmount.compareTo(BigDecimal.ZERO) > 0){
 						order.setRealAmount(order.getRealAmount().add(realAmount));
 					}
@@ -217,7 +237,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 				//2.2 如果容器中不存在，则初始化设置订单信息，将其加入容器
 				order = beanMapper.map(orderDTO, Order.class);
 				order.setOriginPrice(orderDTO.getOriginAmount());
-				order.addPayMode(paymode,realAmount);
+				order.addPayMode(paycode,realAmount);
 				container.put(orderNo, order);
 			}
 		}

@@ -56,12 +56,14 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 	private JTextField endInput;
 	private JTextField floorInput;
 	private JTextField ceilInput;
+	private JTextField commissionInput;
 	private JLabel name = new JLabel("活动名称");
 	private JLabel vendor = new JLabel("活动平台");
 	private JLabel schemeType = new JLabel("活动类型");
 	private JLabel price = new JLabel("优惠金额");
 	private JLabel postPrice = new JLabel("平台补贴");
 	private JLabel spread = new JLabel("餐厅补贴");
+	private JLabel commission = new JLabel("佣金"); 
 	private JLabel start = new JLabel("开始时间");
 	private JLabel end = new JLabel("结束时间");
 	private JLabel floor = new JLabel("最低消费金额");
@@ -131,6 +133,11 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 		postPriceInput = new JTextField(StringUtils.trimToEmpty(scheme.getPostPrice()),30);
 		forthPane.add(postPriceInput);
 		mainPane.add(forthPane);
+		JPanel thirtheenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+		thirtheenPane.add(commission);
+		commissionInput = new JTextField(StringUtils.trimToEmpty(scheme.getCommission()),30);
+		thirtheenPane.add(commissionInput);
+		mainPane.add(thirtheenPane);
 		JPanel fifthPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
 		fifthPane.add(spread);
 		spreadInput = new JTextField(StringUtils.trimToEmpty(scheme.getSpread()),30);

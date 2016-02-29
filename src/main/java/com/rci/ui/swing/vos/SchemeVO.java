@@ -18,6 +18,9 @@ public class SchemeVO {
 	
 	private String dishplayVendor;
 	
+	/*佣金*/
+	private BigDecimal commission;
+	
 	/* 平台补贴 */
 	private BigDecimal postPrice;
 	
@@ -182,5 +185,13 @@ public class SchemeVO {
 
 	public void setTypeno(String typeno) {
 		this.typeno = typeno;
+	}
+
+	public BigDecimal getCommission() {
+		return commission;
+	}
+
+	public void setCommission(BigDecimal commission) {
+		this.commission = commission;
 	}
 }

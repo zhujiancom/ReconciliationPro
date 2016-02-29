@@ -1,6 +1,7 @@
 package com.rci.service.filter.algorithm;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import com.rci.bean.entity.Order;
@@ -13,6 +14,8 @@ public interface ParameterValue {
 	Order getOrder();
 	
 	FilterChain getFilterChain();
+	
+	Date getOrderDate();
 	
 	/**
 	 * 获取在线支付金额

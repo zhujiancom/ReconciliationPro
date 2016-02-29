@@ -216,6 +216,7 @@ public class Order extends BaseEntity {
 		this.paymodeMapping = paymodeMapping;
 	}
 
+	
 	/**
 	 * @return the schemeName
 	 */
@@ -368,17 +369,16 @@ public class Order extends BaseEntity {
 	 * @param paymodeNo
 	 * @param amount
 	 */
-	public void addPayMode(String paymodeNo,BigDecimal amount){
-		PaymodeCode paycode = PaymodeCode.paymodeCode(paymodeNo);
+	public void addPayMode(PaymodeCode paycode,BigDecimal amount){
 		if(paymodeMapping.get(paycode) != null){
 			BigDecimal preAmount = paymodeMapping.get(paycode);
 			amount = preAmount.add(amount);
 		}
-		paymodeMapping.put(PaymodeCode.paymodeCode(paymodeNo), amount);
+		paymodeMapping.put(paycode, amount);
 		if(!StringUtils.hasLength(paymodes)){
-			paymodes = paymodeNo;
+			paymodes = paycode.getPaymodeno();
 		}else{
-			paymodes = paymodes+","+paymodeNo;
+			paymodes = paymodes+","+paycode.getPaymodeno();
 		}
 	}
 

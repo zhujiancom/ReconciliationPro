@@ -47,6 +47,20 @@ public interface IDataTransformService {
 	 *
 	 */
 	void transformPaymodeInfo();
+	
+	/**
+	 * 
+	 * Describle(描述)： 同步收银机支付方式
+	 *
+	 * 方法名称：transformPaymodeInfo
+	 *
+	 * 所在类名：IDataTransformService
+	 *
+	 * Create Time:2016年2月29日 下午5:46:06
+	 *  
+	 * @param paymode
+	 */
+	void transformPaymodeInfo(String paymode);
 	/**
 	 * 
 	 * Describle(描述)：同步桌号信息

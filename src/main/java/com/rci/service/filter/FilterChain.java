@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import com.rci.bean.entity.Order;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 
-@Component("filterChain")
+//@Component("filterChain")
 public class FilterChain implements CalculateFilter,InitializingBean {
 //	LinkedList<CalculateFilter> filters = new LinkedList<CalculateFilter>();
 	private static final Log logger = LogFactory.getLog(FilterChain.class);
@@ -99,6 +99,4 @@ public class FilterChain implements CalculateFilter,InitializingBean {
 			logger.debug("初始化链条排列顺序-"+filter.getClass().getName());
 		}
 	}
-
-
 }

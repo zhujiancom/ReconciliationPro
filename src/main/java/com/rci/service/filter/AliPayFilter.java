@@ -40,14 +40,14 @@ public class AliPayFilter extends AbstractFilter{
 	 */
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(PaymodeCode.ZFB);
+		return paymodeMapping.containsKey(PaymodeCode.ALIPAY);
 	}
 
 	@Override
 	protected void generateScheme(Order order, FilterChain chain) {
 		/* 只有堂食或外带等到店消费的形式才能用支付宝  */
 		order.setFramework(OrderFramework.ALIPAY);
-		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ZFB);
+		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ALIPAY);
 		
 		String schemeName = order.getSchemeName();
 		if(StringUtils.hasText(schemeName)){

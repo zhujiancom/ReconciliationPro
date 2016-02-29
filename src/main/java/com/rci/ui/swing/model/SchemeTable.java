@@ -9,6 +9,8 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import org.springframework.util.CollectionUtils;
+
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.tools.DateUtil;
@@ -106,6 +108,9 @@ public class SchemeTable extends BaseTable<SchemeVO> {
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
+			if(CollectionUtils.isEmpty(items)){
+				return null;
+			}
 			SchemeVO scheme = items.get(rowIndex);
 			switch(columnIndex){
 			case 0:

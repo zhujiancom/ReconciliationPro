@@ -1,16 +1,23 @@
 package com.rci.service.filter.algorithm;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.filter.FilterChain;
+import com.rci.tools.DateUtil;
 
 public class DefaultParameterValue implements ParameterValue {
+	private static final Log logger = LogFactory.getLog(DefaultParameterValue.class);
 	private Order order;
 	
 	private FilterChain chain;
@@ -92,5 +99,16 @@ public class DefaultParameterValue implements ParameterValue {
 	@Override
 	public PaymodeCode getPaymode() {
 		return paymode;
+	}
+
+	@Override
+	public Date getOrderDate() {
+		String day = order.getDay();
+		try {
+			return DateUtil.parseDate(day,"yyyyMMdd");
+		} catch (ParseException pe) {
+			logger.error("订单日期["+day+"]格式转换错误", pe);
+		}
+		return null;
 	}
 }

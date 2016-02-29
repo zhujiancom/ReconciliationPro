@@ -46,7 +46,7 @@ public class MTWMParser1Impl extends AbstractPlatformParser {
 	
 	@Resource(name="SchemeService")
 	protected ISchemeService schemeService;
-	@Resource(name="filterChain")
+//	@Resource(name="filterChain")
 	private FilterChain filterChain;
 	
 	@Override

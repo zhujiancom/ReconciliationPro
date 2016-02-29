@@ -32,7 +32,7 @@ import com.rci.tools.StringUtils;
  */
 @Service("MtwmParser2")
 public class MTWMParser2Impl extends AbstractPlatformParser {
-	@Resource(name="filterChain")
+//	@Resource(name="filterChain")
 	private FilterChain filterChain;
 	
 	@Override

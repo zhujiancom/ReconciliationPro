@@ -360,9 +360,9 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		if(source == alipayCheck){
 			if(e.getStateChange() == ItemEvent.SELECTED){
 				allCheck.setSelected(false);
-				paymodes.add(PaymodeCode.ZFB);	
+				paymodes.add(PaymodeCode.ALIPAY);	
 			}else{
-				paymodes.remove(PaymodeCode.ZFB);
+				paymodes.remove(PaymodeCode.ALIPAY);
 			}
 		}
 		if(source == bdnmCheck){

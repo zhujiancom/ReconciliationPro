@@ -34,7 +34,8 @@ import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IStatisticRecordService;
 import com.rci.service.ITableInfoService;
-import com.rci.service.filter.FilterChain;
+import com.rci.service.calculatecenter.DefaultOrderParameterValue;
+import com.rci.service.calculatecenter.filter.PaymodeFilterChain;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventorySellLogService;
@@ -57,11 +58,11 @@ import com.rci.tools.DateUtil;
  *
  */
 public abstract class BaseDataLoaderService implements IDataLoaderService {
-//	@Autowired
-//	private List<CalculateFilter> filters;
+//	@Resource(name="filterChain")
+//	private FilterChain filterChain;
 	
-	@Resource(name="filterChain")
-	private FilterChain filterChain;
+	@Resource(name="defaultFilterChain")
+	private PaymodeFilterChain filterChain;
 	
 	@Resource(name="OrderAccountRefService")
 	private IOrderAccountRefService oaService;
@@ -102,8 +103,8 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 		}
 		// 解析订单各种账户收入的金额，判断订单使用的方案
 		for (Order order : orders) {
-//			parseOrder(order);
-			filterChain.doFilter(order, filterChain);
+//			filterChain.doFilter(order, filterChain);
+			filterChain.doFilter(new DefaultOrderParameterValue(order));
 			addInventoryConsumeLog(order);
 			updateCostConsumeLog(order);
 			updateExpressRecord(order);

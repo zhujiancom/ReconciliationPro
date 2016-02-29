@@ -32,11 +32,13 @@ import org.springframework.util.CollectionUtils;
 import com.rci.annotation.ExcelColumn;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
+import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.metadata.dto.OrderDTO;
 import com.rci.metadata.dto.OrderItemDTO;
+import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IOrderService;
 import com.rci.tools.DateUtil;
 
@@ -50,6 +52,9 @@ public class OrderExcelService extends AbstractExcelOperationService {
 	
 	@Resource(name="OrderService")
 	private IOrderService orderService;
+	
+	@Resource(name="DataTransformService")
+	private IDataTransformService transformService;
 	
 	@Override
 	public Collection<Order> getDataSet() throws ServiceException {
@@ -202,10 +207,14 @@ public class OrderExcelService extends AbstractExcelOperationService {
 				String orderNo = orderDTO.getOrderNo();
 				String paymode = orderDTO.getPaymode();
 				BigDecimal realAmount = orderDTO.getRealAmount();
+				PaymodeCode paycode = PaymodeCode.paymodeCode(paymode);
+				if(PaymodeCode.UNKNOW.equals(paycode)){
+					transformService.transformPaymodeInfo(paymode);
+				}
 				//2.1 如果容器中存在订单号重复，记录当前订单的支付方式合并到第一条订单中
 				if(container.containsKey(orderNo)){
 					order = container.get(orderNo);
-					order.addPayMode(paymode,realAmount);
+					order.addPayMode(paycode,realAmount);
 					if(realAmount.compareTo(BigDecimal.ZERO) > 0){
 						order.setRealAmount(order.getRealAmount().add(realAmount));
 					}
@@ -214,7 +223,7 @@ public class OrderExcelService extends AbstractExcelOperationService {
 				//2.2 如果容器中不存在，则初始化设置订单信息，将其加入容器
 				order = beanMapper.map(orderDTO, Order.class);
 				order.setOriginPrice(orderDTO.getOriginAmount());
-				order.addPayMode(paymode,realAmount);
+				order.addPayMode(paycode,realAmount);
 				container.put(orderNo, order);
 			}
 		}
