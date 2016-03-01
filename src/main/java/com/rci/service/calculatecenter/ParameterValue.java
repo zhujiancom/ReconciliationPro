@@ -70,4 +70,34 @@ public interface ParameterValue {
 	 * @return
 	 */
 	BigDecimal getAmount(PaymodeCode code);
+	
+	/**
+	 * 
+	 * Describle(描述)：添加order所关联的方案信息
+	 *
+	 * 方法名称：joinSchemeName
+	 *
+	 * 所在类名：ParameterValue
+	 *
+	 * Create Time:2016年3月1日 上午9:41:43
+	 *  
+	 * @param schemeName
+	 * @return
+	 */
+	String joinSchemeName(String... schemeName);
+	
+	/**
+	 * 
+	 * Describle(描述)： 添加order上产生的警告信息
+	 *
+	 * 方法名称：joinWarningInfo
+	 *
+	 * 所在类名：ParameterValue
+	 *
+	 * Create Time:2016年3月1日 上午10:12:47
+	 *  
+	 * @param warningInfo
+	 * @return
+	 */
+	String joinWarningInfo(String... warningInfos);
 }

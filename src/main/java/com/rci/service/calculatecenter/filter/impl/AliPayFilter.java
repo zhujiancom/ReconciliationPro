@@ -1,12 +1,19 @@
 package com.rci.service.calculatecenter.filter.impl;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Map;
 
+import com.rci.bean.entity.Order;
+import com.rci.bean.entity.Scheme;
+import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
+import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
-import com.rci.service.calculatecenter.filter.PaymodeFilterChain;
+import com.rci.tools.DateUtil;
+import com.rci.tools.DigitUtil;
 
 /**
  * 
@@ -31,7 +38,33 @@ public class AliPayFilter extends AbstractPaymodeFilter {
 
 	@Override
 	protected void doExtractOrderInfo(ParameterValue value) {
-		// TODO Auto-generated method stub
-		
+		Order order = (Order) value.getSourceData();
+		order.setFramework(OrderFramework.ALIPAY);
+		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ALIPAY);
+		BigDecimal postAmount = BigDecimal.ZERO;
+		BigDecimal freeAmount = BigDecimal.ZERO;
+		String day = order.getDay();
+		try {
+			Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
+			Scheme scheme = calculator.getAppropriteScheme(orderDate, BigDecimal.ZERO, Vendor.ALIPAY);
+			if(scheme != null){
+				BigDecimal commission = scheme.getCommission();
+				if(commission == null){
+					value.joinWarningInfo("["+value.getPayNo()+"]-支付宝活动方案缺少佣金值");
+					postAmount = onlineAmount;
+				}else{
+					postAmount = DigitUtil.mutiplyDown(onlineAmount, DigitUtil.precentDown(scheme.getCommission()));
+				}
+			}else{
+				postAmount = onlineAmount;
+			}
+			freeAmount = onlineAmount.subtract(postAmount);
+			if(freeAmount.compareTo(BigDecimal.ZERO) != 0){
+				value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+			}
+			value.addPayInfo(PaymodeCode.ALIPAY, postAmount);
+		} catch (ParseException pe) {
+			logger.warn("日期["+day+"]转换错误", pe);
+		}
 	}
 }

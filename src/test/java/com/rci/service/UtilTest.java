@@ -1,13 +1,14 @@
 package com.rci.service;
 
-import static org.junit.Assert.*;
-
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
+import com.rci.bean.entity.Order;
+import com.rci.contants.BusinessConstant;
+import com.rci.service.calculatecenter.DefaultOrderParameterValue;
 import com.rci.tools.DateUtil;
+import com.rci.tools.StringUtils;
 
 public class UtilTest {
 
@@ -32,6 +33,14 @@ public class UtilTest {
 		System.out.println(DateUtil.getFragmentInHours(DateUtil.getCurrentDate(),Calendar.DATE));
 		System.out.println(DateUtil.getFragmentInMinutes(DateUtil.getCurrentDate(),Calendar.HOUR_OF_DAY));
 		System.out.println(DateUtil.getFragmentInSeconds(DateUtil.getCurrentDate(),Calendar.MINUTE));
+	}
+	
+	@Test
+	public void testStringUtilsJoin(){
+		String[] name = new String[]{"a","b","c"};
+//		System.out.println(StringUtils.join(name, BusinessConstant.COMMA,"d"));
+		DefaultOrderParameterValue value = new DefaultOrderParameterValue(new Order());
+		System.out.println(value.joinSchemeName());
 	}
 
 }

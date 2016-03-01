@@ -6,7 +6,6 @@ import java.util.Map;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
-import com.rci.service.calculatecenter.filter.PaymodeFilterChain;
 /**
  * 
  * remark (备注): 现金支付节点
@@ -31,7 +30,8 @@ public class CashFilter extends AbstractPaymodeFilter {
 
 	@Override
 	protected void doExtractOrderInfo(ParameterValue value) {
-		// TODO Auto-generated method stub
-		
+		BigDecimal cashAmount = value.getAmount(PaymodeCode.CASH_MACHINE);
+		value.joinSchemeName("现金支付"+cashAmount);
+		value.addPayInfo(PaymodeCode.CASH_MACHINE, cashAmount);
 	}
 }

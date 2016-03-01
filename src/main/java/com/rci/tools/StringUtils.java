@@ -352,4 +352,17 @@ public class StringUtils {
 	 public static String leftPad(String str, int size, char padChar) {
 		 return org.apache.commons.lang.StringUtils.leftPad(str,size,padChar);
     }
+	 
+	 public static String join(String[] srcArray,final String separator,String... extraArray){
+		 int srclength = srcArray.length;
+		 int extralength = extraArray.length;
+		 String[] destArray = new String[srclength+extralength];
+		 System.arraycopy(srcArray, 0, destArray, 0, srclength);
+		 System.arraycopy(extraArray, 0, destArray, srclength, extralength);
+		 return org.apache.commons.lang3.StringUtils.join(destArray,separator);
+	 }
+	 
+	 public static String join(final String separator,String... elements){
+		 return org.apache.commons.lang3.StringUtils.join(elements,separator);
+	 }
 }

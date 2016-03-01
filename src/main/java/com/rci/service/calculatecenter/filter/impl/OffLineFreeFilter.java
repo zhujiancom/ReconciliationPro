@@ -6,7 +6,6 @@ import java.util.Map;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
-import com.rci.service.calculatecenter.filter.PaymodeFilterChain;
 
 /**
  * 
@@ -35,8 +34,11 @@ public class OffLineFreeFilter extends AbstractPaymodeFilter {
 
 	@Override
 	protected void doExtractOrderInfo(ParameterValue value) {
-		// TODO Auto-generated method stub
-		
+		BigDecimal freeAmount = value.getAmount(PaymodeCode.FREE);
+		if(freeAmount.compareTo(BigDecimal.ZERO) > 0){
+			value.joinSchemeName("堂食免单"+freeAmount+"元");
+		}
+		value.addPayInfo(PaymodeCode.OFFLINE_FREE, freeAmount);
 	}
 
 }

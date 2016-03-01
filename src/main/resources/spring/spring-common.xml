@@ -37,56 +37,59 @@
 	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>
 	
-	<bean id="AliPayFilter" class="com.rci.service.calculatecenter.filter.impl.AliPayFilter">
+	<bean id="AliPayFilter" class="com.rci.service.calculatecenter.filter.impl.AliPayFilter" scope="prototype">
 		<property name="index" value="1"/>
 	</bean>
-	<bean id="BDNMDDFFilter" class="com.rci.service.calculatecenter.filter.impl.BDNMDDFFilter">
+	<bean id="BDNMDDFFilter" class="com.rci.service.calculatecenter.filter.impl.BDNMDDFFilter" scope="prototype">
 		<property name="index" value="2"/>
 	</bean>
-	<bean id="BDNMFilter" class="com.rci.service.calculatecenter.filter.impl.BDNMFilter">
+	<bean id="BDNMFilter" class="com.rci.service.calculatecenter.filter.impl.BDNMFilter" scope="prototype">
 		<property name="index" value="3"/>
 	</bean>
-	<bean id="BDWMFilter" class="com.rci.service.calculatecenter.filter.impl.BDWMFilter">
+	<bean id="BDWMFilter" class="com.rci.service.calculatecenter.filter.impl.BDWMFilter" scope="prototype">
 		<property name="index" value="4"/>
 	</bean>
-	<bean id="CashFilter" class="com.rci.service.calculatecenter.filter.impl.CashFilter">
+	<bean id="CashFilter" class="com.rci.service.calculatecenter.filter.impl.CashFilter" scope="prototype">
 		<property name="index" value="5"/>
 	</bean>
-	<bean id="DZDPshFilter" class="com.rci.service.calculatecenter.filter.impl.DZDPshFilter">
+	<bean id="DZDPshFilter" class="com.rci.service.calculatecenter.filter.impl.DZDPshFilter" scope="prototype">
 		<property name="index" value="6"/>
 	</bean>
-	<bean id="DZDPtgFilter" class="com.rci.service.calculatecenter.filter.impl.DZDPtgFilter">
+	<bean id="DZDPtgFilter" class="com.rci.service.calculatecenter.filter.impl.DZDPtgFilter" scope="prototype">
 		<property name="index" value="7"/>
 	</bean>
-	<bean id="MTcqFilter" class="com.rci.service.calculatecenter.filter.impl.MTcqFilter">
+	<bean id="MTcqFilter" class="com.rci.service.calculatecenter.filter.impl.MTcqFilter" scope="prototype">
 		<property name="index" value="8"/>
 	</bean>
-	<bean id="MTtgFilter" class="com.rci.service.calculatecenter.filter.impl.MTtgFilter">
+	<bean id="MTtgFilter" class="com.rci.service.calculatecenter.filter.impl.MTtgFilter" scope="prototype">
 		<property name="index" value="9"/>
 	</bean>
-	<bean id="MTWMFilter" class="com.rci.service.calculatecenter.filter.impl.MTWMFilter">
+	<bean id="MTWMFilter" class="com.rci.service.calculatecenter.filter.impl.MTWMFilter" scope="prototype">
 		<property name="index" value="10"/>
 	</bean>
-	<bean id="PLQFilter" class="com.rci.service.calculatecenter.filter.impl.PLQFilter">
+	<bean id="PLQFilter" class="com.rci.service.calculatecenter.filter.impl.PLQFilter" scope="prototype">
 		<property name="index" value="11"/>
 	</bean>
-	<bean id="POSFilter" class="com.rci.service.calculatecenter.filter.impl.POSFilter">
+	<bean id="POSFilter" class="com.rci.service.calculatecenter.filter.impl.POSFilter" scope="prototype">
 		<property name="index" value="12"/>
 	</bean>
-	<bean id="TDDFilter" class="com.rci.service.calculatecenter.filter.impl.TDDFilter">
+	<bean id="TDDFilter" class="com.rci.service.calculatecenter.filter.impl.TDDFilter" scope="prototype">
 		<property name="index" value="13"/>
 	</bean>
-	<bean id="WMCRFilter" class="com.rci.service.calculatecenter.filter.impl.WMCRFilter">
+	<bean id="WMCRFilter" class="com.rci.service.calculatecenter.filter.impl.WMCRFilter" scope="prototype">
 		<property name="index" value="14"/>
 	</bean>
-	<bean id="OffLineFilter" class="com.rci.service.calculatecenter.filter.impl.OffLineFreeFilter">
+	<bean id="ELEFilter" class="com.rci.service.calculatecenter.filter.impl.ELEFilter" scope="prototype">
 		<property name="index" value="15"/>
 	</bean>
-	<bean id="UnknowFilter" class="com.rci.service.calculatecenter.filter.impl.UnknowFilter">
+	<bean id="OffLineFilter" class="com.rci.service.calculatecenter.filter.impl.OffLineFreeFilter" scope="prototype">
 		<property name="index" value="16"/>
 	</bean>
-	<bean id="PreserveFilter" class="com.rci.service.calculatecenter.filter.impl.PreserveFilter">
+	<bean id="UnknowFilter" class="com.rci.service.calculatecenter.filter.impl.UnknowFilter" scope="prototype">
 		<property name="index" value="17"/>
+	</bean>
+	<bean id="PreserveFilter" class="com.rci.service.calculatecenter.filter.impl.PreserveFilter" scope="prototype">
+		<property name="index" value="18"/>
 	</bean>
 	
 </beans>
