@@ -19,7 +19,7 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.entity.EleSDStatistic;
 import com.rci.bean.entity.StatisticRecord;
 import com.rci.bean.entity.TicketInfo;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.metadata.NativeSQLBuilder;
@@ -210,33 +210,67 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 			}
 			BigDecimal totalAmount = BigDecimal.ZERO;
 			for(AccountSumResult sumResult:results){
-				AccountCode accountNo = sumResult.getAccNo();
+				String accountNo = sumResult.getAccNo();
 				BigDecimal amount = sumResult.getSumAmount();
 				totalAmount = totalAmount.add(amount);
-				switch(accountNo){
-				case CASH_MACHINE:vo.setCashMachineAmount(amount);break;
-				case POS:vo.setPosAmount(amount);break;
-				case MT:vo.setMtAmount(amount);break;
-				case DPTG:vo.setDptgAmount(amount);break;
-				case DPSH:vo.setDpshAmount(amount);break;
-				case ELE:vo.setEleAmount(amount);break;
-				case FREE_ELE:vo.setElebtAmount(amount);break;
-				case MTWM:vo.setMtwmAmount(amount);break;
-				case FREE_MTWM:vo.setMtwmbtAmount(amount);break;
-				case ALIPAY:vo.setAliPayAmount(amount);break;
-				case MT_SUPER:vo.setMtSuperAmount(amount);break;
-				case WMCR:vo.setWmcrAmount(amount);break;
-				case FREE_WMCR:vo.setWmcrbtAmount(amount);break;
-				case FREE:
-					vo.setTsFreeAmount(amount);
-					totalAmount = totalAmount.subtract(amount);
-					break;
-				case FREE_ONLINE:
+				
+				//现金入账
+				if(BusinessConstant.AccountCode_CASH_MACHINE.equals(accountNo)){
+					vo.setCashMachineAmount(amount);
+				}
+				//POS机入账
+				if(BusinessConstant.AccountCode_POS.equals(accountNo)){
+					vo.setPosAmount(amount);
+				}
+				//大众点评团购券入账
+				if(BusinessConstant.AccountCode_DPTG.equals(accountNo)){
+					vo.setDptgAmount(amount);
+				}
+				//大众点评闪惠入账
+				if(BusinessConstant.AccountCode_DPSH.equals(accountNo)){
+					vo.setDpshAmount(amount);
+				}
+				//饿了么入账
+				if(BusinessConstant.AccountCode_ELE.equals(accountNo)){
+					vo.setEleAmount(amount);
+				}
+				//支付宝入账
+				if(BusinessConstant.AccountCode_ALIPAY.equals(accountNo)){
+					vo.setAliPayAmount(amount);
+				}
+				//美团团购券入账
+				if(BusinessConstant.AccountCode_MT.equals(accountNo)){
+					vo.setMtAmount(amount);
+				}
+				//美团超券券入账
+				if(BusinessConstant.AccountCode_MT_SUPER.equals(accountNo)){
+					vo.setMtSuperAmount(amount);
+				}
+				//美团外卖入账
+				if(BusinessConstant.AccountCode_MTWM.equals(accountNo)){
+					vo.setMtwmAmount(amount);
+				}
+				//百度外卖入账
+				if(BusinessConstant.AccountCode_BDWM.equals(accountNo)){
+					vo.setBdwmAmount(amount);
+				}
+				//百度糯米团购券入账
+				if(BusinessConstant.AccountCode_BDNM.equals(accountNo)){
+					vo.setBdnmAmount(amount);
+				}
+				//百度糯米到店付入账
+				if(BusinessConstant.AccountCode_BDNM_DDF.equals(accountNo)){
+					vo.setBdnmddfAmount(amount);
+				}
+				//在线优惠（免单）金额
+				if(BusinessConstant.AccountCode_FREE_ONLINE.equals(accountNo)){
 					vo.setOnlineFreeAmount(amount);
 					totalAmount = totalAmount.subtract(amount);
-					break;
-				default:
-						break;
+				}
+				//线下优惠金额
+				if(BusinessConstant.AccountCode_FREE_OFFLINE.equals(accountNo)){
+					vo.setTsFreeAmount(amount);
+					totalAmount = totalAmount.subtract(amount);
 				}
 			}
 			/**
@@ -250,13 +284,13 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 			/**
 			 * 获取饿了么餐厅补贴金额
 			 */
-			BigDecimal eleOnlineFreeAmount = oarService.querySumAmount(AccountCode.FREE_ONLINE, position, OrderFramework.ELE);
+			BigDecimal eleOnlineFreeAmount = oarService.querySumAmount(BusinessConstant.AccountCode_FREE_ONLINE, position, OrderFramework.ELE);
 			vo.setEleOnlineFreeAmount(eleOnlineFreeAmount);
 			
 			/**
 			 * 获取美团外卖补贴金额
 			 */
-			BigDecimal mtwmOnlineFreeAmount = oarService.querySumAmount(AccountCode.FREE_ONLINE, position, OrderFramework.MTWM);
+			BigDecimal mtwmOnlineFreeAmount = oarService.querySumAmount(BusinessConstant.AccountCode_FREE_ONLINE, position, OrderFramework.MTWM);
 			vo.setMtwmOnlineFreeAmount(mtwmOnlineFreeAmount);
 			
 			vo.setTotalAmount(totalAmount);

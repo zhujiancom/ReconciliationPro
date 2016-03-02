@@ -17,7 +17,7 @@ import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -145,8 +145,8 @@ public class MTFilter extends AbstractFilter {
 				}
 				order.setSchemeName(schemeName);
 				//保存账户关联信息
-				preserveOAR(postAmount,AccountCode.MT,order);
-				preserveOAR(onlineFreeAmount,AccountCode.FREE_ONLINE,order);
+				preserveOAR(postAmount,BusinessConstant.AccountCode_MT,order);
+				preserveOAR(onlineFreeAmount,BusinessConstant.AccountCode_FREE_ONLINE,order);
 			}
 		}catch(Exception e){
 			

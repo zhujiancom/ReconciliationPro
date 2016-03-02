@@ -23,7 +23,6 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.OrderItem;
 import com.rci.contants.BusinessConstant;
-import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.metadata.NativeSQLBuilder;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IDishService;
@@ -114,37 +113,27 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 					if(BusinessConstant.AccountCode_MTWM.equals(accountNo)){
 						vo.setMtwmAmount(amount);
 					}
-					
+					//百度外卖入账
+					if(BusinessConstant.AccountCode_BDWM.equals(accountNo)){
+						vo.setBdwmAmount(amount);
+					}
+					//百度糯米团购券入账
+					if(BusinessConstant.AccountCode_BDNM.equals(accountNo)){
+						vo.setBdnmAmount(amount);
+					}
+					//百度糯米到店付入账
+					if(BusinessConstant.AccountCode_BDNM_DDF.equals(accountNo)){
+						vo.setBdnmddfAmount(amount);
+					}
+					//在线优惠（免单）金额
 					if(BusinessConstant.AccountCode_FREE_ONLINE.equals(accountNo)){
 						vo.setOnlineFreeAmount(amount);
 						totalAmount = totalAmount.subtract(amount);
 					}
-					
-					switch(accountNo){
-					case CASH_MACHINE:vo.setCashmachineAmount(amount);break;
-					case POS:vo.setPosAmount(amount);break;
-					case MT:vo.setMtAmount(amount);break;
-					case DPTG:vo.setDptgAmount(amount);break;
-					case DPSH:vo.setDpshAmount(amount);break;
-					case ELE:vo.setEleAmount(amount);break;
-					case FREE_ELE:vo.setEleFreeAmount(amount);break;
-					case ALIPAY:vo.setAliPayAmount(amount);break;
-					case MTWM:vo.setMtwmAmount(amount);break;
-					case FREE_MTWM:vo.setMtwmFreeAmount(amount);break;
-					case MT_SUPER:vo.setMtSuperAmount(amount);break;
-					case WMCR:vo.setWmcrAmount(amount);break;
-					case FREE_WMCR:vo.setWmcrbtAmount(amount);break;
-					//PLQ,BDNM 用于表格列展示，未实现，不影响运行
-					case FREE:
+					//线下优惠金额
+					if(BusinessConstant.AccountCode_FREE_OFFLINE.equals(accountNo)){
 						vo.setFreeAmount(amount);
 						totalAmount = totalAmount.subtract(amount);
-						break;
-					case FREE_ONLINE:
-						vo.setOnlineFreeAmount(amount);
-						totalAmount = totalAmount.subtract(amount);
-						break;
-					default:
-							break;
 					}
 				}
 				vo.setSchemeName(order.getSchemeName());

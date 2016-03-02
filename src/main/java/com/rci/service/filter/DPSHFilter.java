@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -77,7 +77,7 @@ public class DPSHFilter extends AbstractFilter {
 		try {
 			Date date = DateUtil.parseDate(order.getDay(), "yyyyMMdd");
 			if(order.getCheckoutTime().after(DateUtil.getTimeOfDay(date, 22, 0, 0, 0))){  //过了22:00闪惠没有优惠
-				preserveOAR(onlineAmount,AccountCode.DPSH,order);
+				preserveOAR(onlineAmount,BusinessConstant.AccountCode_DPSH,order);
 				return;
 			}
 		} catch (ParseException e) {
@@ -87,12 +87,12 @@ public class DPSHFilter extends AbstractFilter {
 		
 		if(onlineAmount.compareTo(originAmount) == 0){
 			BigDecimal[] result = calculatePostAmount(originAmount.subtract(nodiscountAmount),order.getDay(),Vendor.SH);
-			preserveOAR(result[0].add(nodiscountAmount),AccountCode.DPSH,order);
-			preserveOAR(result[1],AccountCode.FREE_ONLINE,order);
+			preserveOAR(result[0].add(nodiscountAmount),BusinessConstant.AccountCode_DPSH,order);
+			preserveOAR(result[1],BusinessConstant.AccountCode_FREE_ONLINE,order);
 		}else{
 			BigDecimal[] result = calculatePostAmount(onlineAmount,order.getDay(),Vendor.SH);
-			preserveOAR(result[0],AccountCode.DPSH,order);
-			preserveOAR(result[1],AccountCode.FREE_ONLINE,order);
+			preserveOAR(result[0],BusinessConstant.AccountCode_DPSH,order);
+			preserveOAR(result[1],BusinessConstant.AccountCode_FREE_ONLINE,order);
 		}
 	}
 	

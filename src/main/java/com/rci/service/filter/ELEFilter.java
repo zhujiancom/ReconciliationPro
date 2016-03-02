@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -55,8 +55,8 @@ public class ELEFilter extends AbstractFilter {
 						freeMap.put(order.getPayNo(), freeAmount);
 					}
 					//保存饿了么补贴金额
-					preserveOAR(scheme.getPostPrice(),AccountCode.FREE_ELE,order);
-					preserveOAR(scheme.getSpread(),AccountCode.FREE_ONLINE,order);
+					preserveOAR(scheme.getPostPrice(),BusinessConstant.AccountCode_FREE_ELE,order);
+					preserveOAR(scheme.getSpread(),BusinessConstant.AccountCode_FREE_ONLINE,order);
 				}else{
 					logger.warn(order.getPayNo()+"---[饿了么 活动补贴] 没有找到匹配的Scheme -----");
 					String warningInfo = "[饿了么 活动补贴]--- 没有找到匹配的Scheme";
@@ -69,7 +69,7 @@ public class ELEFilter extends AbstractFilter {
 		
 		order.setSchemeName(schemeName);
 		//保存饿了么在线支付金额
-		preserveOAR(onlineAmount,AccountCode.ELE,order);
+		preserveOAR(onlineAmount,BusinessConstant.AccountCode_ELE,order);
 	}
 
 

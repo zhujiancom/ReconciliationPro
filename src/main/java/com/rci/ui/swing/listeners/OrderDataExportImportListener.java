@@ -24,7 +24,6 @@ import javax.swing.filechooser.FileFilter;
 
 import org.springframework.util.CollectionUtils;
 
-import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
@@ -57,7 +56,7 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 	private ConculsionPanel conclusionPane; // 统计信息面板
 	private QueryFormPanel queryPane; // 查询面板
 	ContentPanel contentPane;
-	private Map<AccountCode,BigDecimal> sumMap;
+	private Map<String,BigDecimal> sumMap;
 	
 	public OrderDataExportImportListener(JFrame frame){
 		this.frame = frame;
@@ -308,11 +307,11 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 	 * @param date
 	 */
 	private void loadSumData(Date date){
-		sumMap = new HashMap<AccountCode,BigDecimal>();
+		sumMap = new HashMap<String,BigDecimal>();
 		IOrderAccountRefService oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
 		List<AccountSumResult> sumRes = oaService.querySumAmount(date);
 		for(AccountSumResult res:sumRes){
-			AccountCode accNo = res.getAccNo();
+			String accNo = res.getAccNo();
 			BigDecimal amount = res.getSumAmount();
 			sumMap.put(accNo, amount);
 		}

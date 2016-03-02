@@ -18,7 +18,7 @@ import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
@@ -97,9 +97,9 @@ public class WMCRFilter extends AbstractFilter{
 							}
 							schemeName = schemeName+","+scheme.getName();
 							//保存美团外卖补贴金额
-							preserveOAR(allowanceAmount,AccountCode.FREE_WMCR,order);
+							preserveOAR(allowanceAmount,BusinessConstant.AccountCode_FREE_WMCR,order);
 							//在线优惠金额
-							preserveOAR(scheme.getSpread(),AccountCode.FREE_ONLINE,order);
+							preserveOAR(scheme.getSpread(),BusinessConstant.AccountCode_FREE_ONLINE,order);
 							break;
 						}else if(freeAmount.compareTo(scheme.getFloorAmount()) == 0 && freeAmount.compareTo(scheme.getCeilAmount()) == 0){
 							//新用户下单
@@ -109,8 +109,8 @@ public class WMCRFilter extends AbstractFilter{
 							}
 							schemeName = schemeName+","+scheme.getName();
 							//保存美团外卖补贴金额
-							preserveOAR(allowanceAmount,AccountCode.FREE_WMCR,order);
-							preserveOAR(scheme.getSpread(),AccountCode.FREE_ONLINE,order);
+							preserveOAR(allowanceAmount,BusinessConstant.AccountCode_FREE_WMCR,order);
+							preserveOAR(scheme.getSpread(),BusinessConstant.AccountCode_FREE_ONLINE,order);
 							break;
 						}else{
 							logger.info(order.getPayNo()+"--- 【外卖超人】："+scheme.getName()+" 不匹配！");
@@ -124,7 +124,7 @@ public class WMCRFilter extends AbstractFilter{
 		
 		order.setSchemeName(schemeName);
 		//保存外卖超人在线支付金额
-		preserveOAR(onlineAmount,AccountCode.WMCR,order);
+		preserveOAR(onlineAmount,BusinessConstant.AccountCode_WMCR,order);
 	}
 
 	/* 

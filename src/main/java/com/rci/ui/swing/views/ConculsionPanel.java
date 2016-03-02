@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 import org.springframework.util.CollectionUtils;
 
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
@@ -61,7 +61,7 @@ public class ConculsionPanel extends JPanel {
 	private JLabel bdnmRemark;
 	
 //	private JLabel expRateValue; //外送率
-	private Map<AccountCode,BigDecimal> sumMap;
+	private Map<String,BigDecimal> sumMap;
 	private Date queryDate;  //统计日期
 	private StatisticCenterFacade facade;
 	
@@ -353,31 +353,31 @@ public class ConculsionPanel extends JPanel {
 	}
 	
 	public void refreshUI() {
-		String cashmachine = getTotalAmount(AccountCode.CASH_MACHINE).toString();
-		String pos = getTotalAmount(AccountCode.POS).toString();
-		String mt = getTotalAmount(AccountCode.MT).toString();
-		String dptg = getTotalAmount(AccountCode.DPTG).toString();
-		String sh = getTotalAmount(AccountCode.DPSH).toString();
-		String ele = getTotalAmount(AccountCode.ELE).toString();
-		String elefree = getTotalAmount(AccountCode.FREE_ELE).toString();
+		String cashmachine = getTotalAmount(BusinessConstant.AccountCode_CASH_MACHINE).toString();
+		String pos = getTotalAmount(BusinessConstant.AccountCode_POS).toString();
+		String mt = getTotalAmount(BusinessConstant.AccountCode_MT).toString();
+		String dptg = getTotalAmount(BusinessConstant.AccountCode_DPTG).toString();
+		String sh = getTotalAmount(BusinessConstant.AccountCode_DPSH).toString();
+		String ele = getTotalAmount(BusinessConstant.AccountCode_ELE).toString();
+		String elefree = getTotalAmount(BusinessConstant.AccountCode_FREE_ELE).toString();
 		BigDecimal elesdremark = getELESDAllowanceAmount(queryDate);
-		String tdd = getTotalAmount(AccountCode.ALIPAY).toString();
-		String mtsuper = getTotalAmount(AccountCode.MT_SUPER).toString();
-		String mtwm = getTotalAmount(AccountCode.MTWM).toString();
-		String freemtwm = getTotalAmount(AccountCode.FREE_MTWM).toString();
-		String free = getTotalAmount(AccountCode.FREE).toString();
+		String tdd = getTotalAmount(BusinessConstant.AccountCode_ALIPAY).toString();
+		String mtsuper = getTotalAmount(BusinessConstant.AccountCode_MT_SUPER).toString();
+		String mtwm = getTotalAmount(BusinessConstant.AccountCode_MTWM).toString();
+		String freemtwm = getTotalAmount(BusinessConstant.AccountCode_FREE_MTWM).toString();
+		String free = getTotalAmount(BusinessConstant.AccountCode_FREE_OFFLINE).toString();
 		String total = getTotalDayAmount(queryDate).toString();
 		String tgremark = getTicketStatistic(queryDate,Vendor.DZDP);
 		String mtremark = getTicketStatistic(queryDate,Vendor.MT);
 		Long eleOrderNum = getValidCount(queryDate, Vendor.ELE);
 		Long mtwmOrderNum = getValidCount(queryDate,Vendor.MTWM);
-		String wmcr = getTotalAmount(AccountCode.WMCR).toString();
-		String freewmcr = getTotalAmount(AccountCode.FREE_WMCR).toString();
-		Long wmcrOrderNum = getValidCount(queryDate,Vendor.WMCR);
-		String plq = getTotalAmount(AccountCode.PLQ).toString();
-		String plqbt = getTotalAmount(AccountCode.FREE_PLQ).toString();
+//		String wmcr = getTotalAmount(AccountCode.WMCR).toString();
+//		String freewmcr = getTotalAmount(AccountCode.FREE_WMCR).toString();
+//		Long wmcrOrderNum = getValidCount(queryDate,Vendor.WMCR);
+		String plq = getTotalAmount(BusinessConstant.AccountCode_PLQ).toString();
+		String plqbt = getTotalAmount(BusinessConstant.AccountCode_FREE_PLQ).toString();
 		Long plqOrderNum = getValidCount(queryDate,Vendor.PLQ);
-		String bdnm = getTotalAmount(AccountCode.BDNM).toString();
+		String bdnm = getTotalAmount(BusinessConstant.AccountCode_BDNM).toString();
 		String bdnmRemark = getTicketStatistic(queryDate,Vendor.BDNM);
 		getCashValue().setText(cashmachine);
 		getPosValue().setText(pos);
@@ -401,10 +401,10 @@ public class ConculsionPanel extends JPanel {
 		getTgRemark().setToolTipText(tgremark);
 		getMtRemark().setText(mtremark);
 		getMtRemark().setToolTipText(mtremark);
-		getWmcrValue().setText(wmcr);
-		getWmcrbtValue().setText(freewmcr);
-		getWmcrRemark().setText(wmcrOrderNum);
-		getWmcrRemark().displayToolTips(true);
+//		getWmcrValue().setText(wmcr);
+//		getWmcrbtValue().setText(freewmcr);
+//		getWmcrRemark().setText(wmcrOrderNum);
+//		getWmcrRemark().displayToolTips(true);
 		getPlqValue().setText(plq);
 		getPlqbtValue().setText(plqbt);
 		getPlqRemark().setText(plqOrderNum);
@@ -427,7 +427,7 @@ public class ConculsionPanel extends JPanel {
 	 * @param accountNo
 	 * @return
 	 */
-	public BigDecimal getTotalAmount(AccountCode accountNo){
+	public BigDecimal getTotalAmount(String accountNo){
 		return sumMap.get(accountNo) == null? BigDecimal.ZERO:sumMap.get(accountNo);
 	}
 	
@@ -447,7 +447,20 @@ public class ConculsionPanel extends JPanel {
 	 */
 	public Long getValidCount(Date postTime,Vendor vendor){
 		IOrderAccountRefService oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
-		return oaService.getValidOrderCount(postTime, AccountCode.valueOf(vendor.name()));
+		String accoutNo = "";
+		if(Vendor.MTWM.equals(vendor)){
+			accoutNo = BusinessConstant.AccountCode_MTWM;
+		}
+		if(Vendor.ELE.equals(vendor)){
+			accoutNo = BusinessConstant.AccountCode_ELE;
+		}
+		if(Vendor.BDWM.equals(vendor)){
+			accoutNo = BusinessConstant.AccountCode_BDWM;
+		}
+		if(Vendor.PLQ.equals(vendor)){
+			accoutNo = BusinessConstant.AccountCode_PLQ;
+		}
+		return oaService.getValidOrderCount(postTime, accoutNo);
 	}
 	
 	/**
@@ -634,11 +647,11 @@ public class ConculsionPanel extends JPanel {
 		this.eleSdRemark = eleSdRemark;
 	}
 
-	public Map<AccountCode, BigDecimal> getSumMap() {
+	public Map<String, BigDecimal> getSumMap() {
 		return sumMap;
 	}
 
-	public void setSumMap(Map<AccountCode, BigDecimal> sumMap) {
+	public void setSumMap(Map<String, BigDecimal> sumMap) {
 		this.sumMap = sumMap;
 	}
 

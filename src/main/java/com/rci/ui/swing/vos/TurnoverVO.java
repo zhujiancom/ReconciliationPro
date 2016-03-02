@@ -52,6 +52,12 @@ public class TurnoverVO {
 	
 	private BigDecimal totalAmount;
 	
+	private BigDecimal bdwmAmount;
+	
+	private BigDecimal bdnmAmount;
+	
+	private BigDecimal bdnmddfAmount;
+	
 	public TurnoverVO(){}
 	
 	public TurnoverVO(String displayTitle){
@@ -229,6 +235,30 @@ public class TurnoverVO {
 
 	public void setWmcrbtAmount(BigDecimal wmcrbtAmount) {
 		this.wmcrbtAmount = wmcrbtAmount;
+	}
+
+	public BigDecimal getBdwmAmount() {
+		return bdwmAmount == null ? BigDecimal.ZERO:bdwmAmount;
+	}
+
+	public void setBdwmAmount(BigDecimal bdwmAmount) {
+		this.bdwmAmount = bdwmAmount;
+	}
+
+	public BigDecimal getBdnmAmount() {
+		return bdnmAmount == null ? BigDecimal.ZERO:bdnmAmount;
+	}
+
+	public void setBdnmAmount(BigDecimal bdnmAmount) {
+		this.bdnmAmount = bdnmAmount;
+	}
+
+	public BigDecimal getBdnmddfAmount() {
+		return bdnmddfAmount == null ? BigDecimal.ZERO:bdnmddfAmount;
+	}
+
+	public void setBdnmddfAmount(BigDecimal bdnmddfAmount) {
+		this.bdnmddfAmount = bdnmddfAmount;
 	}
 
 }

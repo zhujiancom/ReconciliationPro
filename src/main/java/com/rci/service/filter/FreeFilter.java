@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.tools.StringUtils;
@@ -64,7 +64,7 @@ public class FreeFilter extends AbstractFilter {
 			order.setWarningInfo(warningInfo);
 		}
 		order.setSchemeName(schemeName);
-		preserveOAR(normalAmount, AccountCode.FREE, order);
+		preserveOAR(normalAmount, BusinessConstant.AccountCode_FREE_OFFLINE, order);
 	}
 
 	@Override

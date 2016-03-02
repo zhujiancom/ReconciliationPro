@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.CommonEnums.YOrN;
@@ -71,7 +71,7 @@ public class CashFilter extends AbstractFilter {
 				schemeName = "店内现金优惠-"+actualAmount;
 			}
 			order.setSchemeName(schemeName);
-			preserveOAR(actualAmount, AccountCode.CASH_MACHINE, order);
+			preserveOAR(actualAmount, BusinessConstant.AccountCode_CASH_MACHINE, order);
 		}
 		else if(actualAmount.compareTo(originAmount)==0){
 			//无折扣
@@ -81,13 +81,13 @@ public class CashFilter extends AbstractFilter {
 				schemeName = "现金支付-"+cashAmount;
 			}
 			order.setSchemeName(schemeName);
-			preserveOAR(cashAmount, AccountCode.CASH_MACHINE, order);
+			preserveOAR(cashAmount, BusinessConstant.AccountCode_CASH_MACHINE, order);
 		}
 		else{
 			logger.error("----【"+order.getPayNo()+"】[收银机支付异常] ---, 实际金额不应该大于原价");
 			String warningInfo = "[收银机支付异常]--- 收银机实际入账金额："+cashAmount+" 不应大于原价："+originAmount;
 			order.setWarningInfo(warningInfo);
-			preserveOAR(cashAmount, AccountCode.CASH_MACHINE, order);
+			preserveOAR(cashAmount, BusinessConstant.AccountCode_CASH_MACHINE, order);
 		}
 	}
 

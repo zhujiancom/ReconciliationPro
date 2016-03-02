@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.tools.StringUtils;
@@ -57,7 +57,7 @@ public class AliPayFilter extends AbstractFilter{
 		}
 		order.setSchemeName(schemeName);
 		//保存淘点点在线支付金额
-		preserveOAR(onlineAmount,AccountCode.ALIPAY,order);
+		preserveOAR(onlineAmount,BusinessConstant.AccountCode_ALIPAY,order);
 	}
 
 	/* 

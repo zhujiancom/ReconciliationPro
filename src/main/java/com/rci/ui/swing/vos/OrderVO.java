@@ -71,7 +71,7 @@ public class OrderVO {
 	/* 饿了么活动补贴免单金额  */
 	private BigDecimal eleFreeAmount;
 	
-	/* 堂食免单金额 */
+	/* 线下(堂食)免单金额 */
 	private BigDecimal freeAmount;
 	
 	/* 在线免单金额  */
@@ -87,6 +87,12 @@ public class OrderVO {
 	private BigDecimal wmcrAmount;
 	
 	private BigDecimal wmcrbtAmount;
+	
+	private BigDecimal bdwmAmount;
+	
+	private BigDecimal bdnmAmount;
+	
+	private BigDecimal bdnmddfAmount;
 	
 	private YOrN unusual;
 
@@ -247,23 +253,6 @@ public class OrderVO {
 	public void setDptgAmount(BigDecimal dptgAmount) {
 		this.dptgAmount = dptgAmount;
 	}
-//
-//	/**
-//	 * @return the dpshAmount
-//	 */
-//	@Deprecated
-//	public BigDecimal getDpshAmount() {
-//		return dpshAmount;
-//	}
-//
-//	/**
-//	 * @param dpshAmount
-//	 *            the dpshAmount to set
-//	 */
-//	@Deprecated
-//	public void setDpshAmount(BigDecimal dpshAmount) {
-//		this.dpshAmount = dpshAmount;
-//	}
 
 	public BigDecimal getDpshAmount() {
 		return dpshAmount;
@@ -454,6 +443,30 @@ public class OrderVO {
 
 	public void setWmcrbtAmount(BigDecimal wmcrbtAmount) {
 		this.wmcrbtAmount = wmcrbtAmount;
+	}
+
+	public BigDecimal getBdwmAmount() {
+		return bdwmAmount;
+	}
+
+	public void setBdwmAmount(BigDecimal bdwmAmount) {
+		this.bdwmAmount = bdwmAmount;
+	}
+
+	public BigDecimal getBdnmAmount() {
+		return bdnmAmount;
+	}
+
+	public void setBdnmAmount(BigDecimal bdnmAmount) {
+		this.bdnmAmount = bdnmAmount;
+	}
+
+	public BigDecimal getBdnmddfAmount() {
+		return bdnmddfAmount;
+	}
+
+	public void setBdnmddfAmount(BigDecimal bdnmddfAmount) {
+		this.bdnmddfAmount = bdnmddfAmount;
 	}
 
 	public String[] getPaymodecodes() {

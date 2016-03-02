@@ -16,7 +16,7 @@ import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
@@ -88,9 +88,9 @@ public class PLQFilter extends AbstractFilter {
 							}
 							schemeName = schemeName+","+scheme.getName();
 							//派乐趣补贴金额
-							preserveOAR(allowanceAmount,AccountCode.FREE_PLQ,order);
+							preserveOAR(allowanceAmount,BusinessConstant.AccountCode_FREE_PLQ,order);
 							//在线优惠金额
-							preserveOAR(scheme.getSpread(),AccountCode.FREE_ONLINE,order);
+							preserveOAR(scheme.getSpread(),BusinessConstant.AccountCode_FREE_ONLINE,order);
 						}else{
 							logger.info(order.getPayNo()+"--- 【派乐趣活动】："+scheme.getName()+" 不匹配！");
 						}
@@ -102,7 +102,7 @@ public class PLQFilter extends AbstractFilter {
 		}
 		order.setSchemeName(schemeName);
 		//保存饿了么在线支付金额
-		preserveOAR(onlineAmount,AccountCode.PLQ,order);
+		preserveOAR(onlineAmount,BusinessConstant.AccountCode_PLQ,order);
 	}
 
 	@Override

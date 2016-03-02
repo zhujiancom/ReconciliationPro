@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.tools.DigitUtil;
@@ -66,8 +66,8 @@ public class POSFilter extends AbstractFilter {
 		BigDecimal postAmount = DigitUtil.mutiplyDown(onlineAmount, new BigDecimal("0.996"),3);
 		order.setSchemeName(schemeName);
 		//保存银联卡支付金额
-		preserveOAR(postAmount,AccountCode.POS,order);
-		preserveOAR(onlineAmount.subtract(postAmount),AccountCode.FREE_ONLINE,order);
+		preserveOAR(postAmount,BusinessConstant.AccountCode_POS,order);
+		preserveOAR(onlineAmount.subtract(postAmount),BusinessConstant.AccountCode_FREE_ONLINE,order);
 	}
 
 	/* 

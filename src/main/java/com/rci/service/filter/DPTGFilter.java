@@ -17,7 +17,7 @@ import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -153,8 +153,8 @@ public class DPTGFilter extends AbstractFilter {
 				}
 				order.setSchemeName(schemeName);
 				//保存账户关联信息
-				preserveOAR(postAmount,AccountCode.DPTG,order);
-				preserveOAR(onlineFreeAmount,AccountCode.FREE_ONLINE,order);
+				preserveOAR(postAmount,BusinessConstant.AccountCode_DPTG,order);
+				preserveOAR(onlineFreeAmount,BusinessConstant.AccountCode_FREE_ONLINE,order);
 			}
 		}catch(Exception e){
 			

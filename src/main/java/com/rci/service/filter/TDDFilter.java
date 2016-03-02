@@ -14,7 +14,7 @@ import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
@@ -63,10 +63,10 @@ public class TDDFilter extends AbstractFilter {
 					if(freeMap.get(order.getPayNo()) == null){
 						freeMap.put(order.getPayNo(), freeAmount);
 					}
-					preserveOAR(freeAmount,AccountCode.FREE_ONLINE,order);
+					preserveOAR(freeAmount,BusinessConstant.AccountCode_FREE_ONLINE,order);
 				}
 				//保存淘点点在线支付金额
-				preserveOAR(onlineAmount,AccountCode.ALIPAY,order);
+				preserveOAR(onlineAmount,BusinessConstant.AccountCode_ALIPAY,order);
 			}else{
 				for(Scheme scheme:schemes){
 					if(onlineAmount.compareTo(scheme.getFloorAmount())>=0 && onlineAmount.compareTo(scheme.getCeilAmount()) < 0 ){
@@ -88,9 +88,9 @@ public class TDDFilter extends AbstractFilter {
 						}
 						order.setSchemeName(schemeName);
 						//保存淘点点免单金额
-						preserveOAR(freeAmount,AccountCode.FREE_ONLINE,order);
+						preserveOAR(freeAmount,BusinessConstant.AccountCode_FREE_ONLINE,order);
 						//保存淘点点在线支付金额
-						preserveOAR(postTotalAmount,AccountCode.ALIPAY,order);
+						preserveOAR(postTotalAmount,BusinessConstant.AccountCode_ALIPAY,order);
 						break;
 					}else{
 						continue;
