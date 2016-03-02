@@ -76,9 +76,9 @@
 	<bean id="TDDFilter" class="com.rci.service.calculatecenter.filter.impl.TDDFilter" scope="prototype">
 		<property name="index" value="13"/>
 	</bean>
-	<bean id="WMCRFilter" class="com.rci.service.calculatecenter.filter.impl.WMCRFilter" scope="prototype">
-		<property name="index" value="14"/>
-	</bean>
+<!-- 	<bean id="WMCRFilter" class="com.rci.service.calculatecenter.filter.impl.WMCRFilter" scope="prototype"> -->
+<!-- 		<property name="index" value="14"/> -->
+<!-- 	</bean> -->
 	<bean id="ELEFilter" class="com.rci.service.calculatecenter.filter.impl.ELEFilter" scope="prototype">
 		<property name="index" value="15"/>
 	</bean>

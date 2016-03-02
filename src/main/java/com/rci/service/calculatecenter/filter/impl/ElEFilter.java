@@ -57,11 +57,10 @@ public class ElEFilter extends AbstractPaymodeFilter {
 						value.joinWarningInfo("["+value.getPayNo()+"],在线支付金额{"+onlineAmount+"}错误,应该是{"+postAmount+"}");
 					}
 					value.joinSchemeName(scheme.getName(),"饿了么在线支付到账-"+postAmount+"元");
-					value.addPayInfo(PaymodeCode.ELE, scheme.getPostPrice());
 					value.addPayInfo(PaymodeCode.ELE, postAmount);
 				}else{
-					logger.warn(order.getPayNo()+"---[饿了么 活动] 没有找到匹配的Scheme -----");
-					String warningInfo = "[饿了么 活动]--- 没有找到匹配的Scheme";
+					logger.warn(order.getPayNo()+"---[饿了么 ] 没有找到匹配的Scheme -----");
+					String warningInfo = "[饿了么动]--- 没有找到匹配的Scheme";
 					value.joinWarningInfo(warningInfo);
 					order.setUnusual(YOrN.Y);
 				}

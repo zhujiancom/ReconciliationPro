@@ -42,7 +42,6 @@ public class AliPayFilter extends AbstractPaymodeFilter {
 		order.setFramework(OrderFramework.ALIPAY);
 		BigDecimal onlineAmount = order.getPaymodeMapping().get(PaymodeCode.ALIPAY);
 		BigDecimal postAmount = BigDecimal.ZERO;
-		BigDecimal freeAmount = BigDecimal.ZERO;
 		String day = order.getDay();
 		try {
 			Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
@@ -50,7 +49,7 @@ public class AliPayFilter extends AbstractPaymodeFilter {
 			if(scheme != null){
 				BigDecimal commission = scheme.getCommission();
 				if(commission == null){
-					value.joinWarningInfo("["+value.getPayNo()+"]-支付宝活动方案缺少佣金值");
+					value.joinWarningInfo("["+value.getPayNo()+"]-请确认支付宝活动方案是否真不需要佣金");
 					postAmount = onlineAmount;
 				}else{
 					postAmount = DigitUtil.mutiplyDown(onlineAmount, DigitUtil.precentDown(scheme.getCommission()));
@@ -58,10 +57,8 @@ public class AliPayFilter extends AbstractPaymodeFilter {
 			}else{
 				postAmount = onlineAmount;
 			}
-			freeAmount = onlineAmount.subtract(postAmount);
-			if(freeAmount.compareTo(BigDecimal.ZERO) != 0){
-				value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
-			}
+			BigDecimal freeAmount = onlineAmount.subtract(postAmount);
+			value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 			value.addPayInfo(PaymodeCode.ALIPAY, postAmount);
 		} catch (ParseException pe) {
 			logger.warn("日期["+day+"]转换错误", pe);

@@ -16,7 +16,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.account.Account;
-import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.CommonEnums.Symbol;
 import com.rci.service.IAccountService;
@@ -41,7 +40,7 @@ public class OrderAccountRefServiceImpl extends
 		List<OrderAccountRef> oars = getOARef(billno);
 		if(!CollectionUtils.isEmpty(oars)){
 			for(OrderAccountRef oar:oars){
-				Account account = accountService.getAccByNo(oar.getAccNo());
+				Account account = accountService.getAccount(oar.getAccNo());
 				if(Symbol.P.equals(account.getSymbol())){
 					postAmount = postAmount.add(oar.getRealAmount());
 				}
@@ -78,8 +77,7 @@ public class OrderAccountRefServiceImpl extends
 			@Override
 			public Object transformTuple(Object[] tuple, String[] aliases) {
 				String accountNo = tuple[1].toString();
-				AccountCode accCode = AccountCode.valueOf(accountNo);
-				return new AccountSumResult((Long)tuple[2],accCode,(BigDecimal)tuple[0]);
+				return new AccountSumResult((Long)tuple[2],accountNo,(BigDecimal)tuple[0]);
 			}
 			
 			@SuppressWarnings("rawtypes")
@@ -106,8 +104,7 @@ public class OrderAccountRefServiceImpl extends
 			@Override
 			public Object transformTuple(Object[] tuple, String[] aliases) {
 				String accountNo = tuple[1].toString();
-				AccountCode accCode = AccountCode.valueOf(accountNo);
-				return new AccountSumResult((Long)tuple[2],accCode,(BigDecimal)tuple[0]);
+				return new AccountSumResult((Long)tuple[2],accountNo,(BigDecimal)tuple[0]);
 			}
 			
 			@SuppressWarnings("rawtypes")
@@ -120,7 +117,7 @@ public class OrderAccountRefServiceImpl extends
 	}
 	
 	@Override
-	public BigDecimal querySumAmount(AccountCode account,Date postTime,OrderFramework framework) {
+	public BigDecimal querySumAmount(String account,Date postTime,OrderFramework framework) {
 //		String queryDate = DateUtil.date2Str(postTime, "yyyyMMdd");
 //		String nativeSql = "select sum(oar.real_amount) 'amount' from bus_tb_order_account_ref oar \n"
 //				+ "where oar.order_no in ( \n"
@@ -138,11 +135,11 @@ public class OrderAccountRefServiceImpl extends
 	public static class AccountSumResult{
 		private Long accId;
 		
-		private AccountCode accNo;
+		private String accNo;
 		
 		private BigDecimal sumAmount;
 
-		public AccountSumResult(Long accId, AccountCode accNo, BigDecimal sumAmount) {
+		public AccountSumResult(Long accId, String accNo, BigDecimal sumAmount) {
 			super();
 			this.accId = accId;
 			this.accNo = accNo;
@@ -157,11 +154,11 @@ public class OrderAccountRefServiceImpl extends
 			this.accId = accId;
 		}
 
-		public AccountCode getAccNo() {
+		public String getAccNo() {
 			return accNo;
 		}
 
-		public void setAccNo(AccountCode accNo) {
+		public void setAccNo(String accNo) {
 			this.accNo = accNo;
 		}
 
@@ -175,7 +172,7 @@ public class OrderAccountRefServiceImpl extends
 	}
 
 	@Override
-	public Long getValidOrderCount(Date postTime, AccountCode account) {
+	public Long getValidOrderCount(Date postTime, String account) {
 		DetachedCriteria dc = DetachedCriteria.forClass(OrderAccountRef.class);
 		dc.setProjection(Projections.projectionList().add(Projections.rowCount())).add(Restrictions.eq("accNo", account)).add(Restrictions.eq("postTime", postTime));
 		Long count = baseDAO.getRowCount(dc);

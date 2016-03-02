@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.rci.bean.entity.Order;
 import com.rci.enums.BusinessEnums.PaymodeCode;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
 import com.rci.tools.StringUtils;
@@ -35,13 +36,12 @@ public class UnknowFilter extends AbstractPaymodeFilter {
 	protected void doExtractOrderInfo(ParameterValue value) {
 		Order order = (Order) value.getSourceData();
 		String[] paymodes = StringUtils.split(order.getPaymodes(),",");
-		String schemeName = order.getSchemeName();
 		for(String paymode:paymodes){
 			if(PaymodeCode.UNKNOW.equals(PaymodeCode.paymodeCode(paymode))){
-				schemeName = schemeName+",未知支付方式编码："+paymode;
+				value.joinSchemeName("未知支付方式编码："+paymode);
+				order.setUnusual(YOrN.Y);
 			}
 		}
-		order.setSchemeName(schemeName);
 	}
 
 }

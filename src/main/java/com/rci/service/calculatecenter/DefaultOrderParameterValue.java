@@ -42,7 +42,12 @@ public class DefaultOrderParameterValue implements ParameterValue {
 		if(paymodeMapping == null){
 			paymodeMapping = order.getPaymodeMapping();
 		}
-		paymodeMapping.put(code, amount);
+		if(paymodeMapping.get(code) != null){
+			BigDecimal totalAmount = paymodeMapping.get(code).add(amount);
+			paymodeMapping.put(code, totalAmount);
+		}else{
+			paymodeMapping.put(code, amount);
+		}
 	}
 
 	@Override

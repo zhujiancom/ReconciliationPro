@@ -2,6 +2,8 @@ package com.rci.ui.swing.views.component.encapsulation;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -10,7 +12,7 @@ import javax.swing.JTextField;
 
 import com.rci.tools.StringUtils;
 
-public class BaseTextField extends JTextField{
+public class BaseTextField extends JTextField implements FocusListener{
 	/**
 	 * 
 	 */
@@ -61,6 +63,7 @@ public class BaseTextField extends JTextField{
 			}
 			
 		});
+		this.addFocusListener(this);
 	}
 	
 	protected void doMousePressedAction(){
@@ -122,5 +125,29 @@ public class BaseTextField extends JTextField{
 
 	public void setItext(String itext) {
 		this.itext = itext;
+	}
+
+	@Override
+	public void focusGained(FocusEvent paramFocusEvent) {
+		if(!StringUtils.hasText(getItext())){
+			setText("");
+			setItext(null);
+			setForeground(Color.BLACK);
+		}
+	}
+
+	@Override
+	public void focusLost(FocusEvent paramFocusEvent) {
+		String preText = getText();
+		if(!StringUtils.hasText(preText)){
+			setText(placeholder);
+			setItext(null);
+			setForeground(Color.LIGHT_GRAY);
+		}else if(placeholder.equals(preText)){
+			setItext(null);
+		}else{
+			setItext(preText);
+			setText(preText);
+		}
 	}
 }

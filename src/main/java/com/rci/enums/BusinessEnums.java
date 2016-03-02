@@ -109,7 +109,7 @@ public final class BusinessEnums {
 	}
 	
 	public static enum Vendor{
-		ELE,DZDP,MTWM,MT,LS,TDD,WMCR,SH,MTSUPER,BDNM,PLQ,DDF,ALIPAY,BDWM;
+		ELE,DZDP,MTWM,MT,LS,TDD,WMCR,SH,MTSUPER,BDNM,PLQ,DDF,ALIPAY,BDWM,UNIONPAY;
 	}
 	
 	public static enum StockOpType{
@@ -135,11 +135,11 @@ public final class BusinessEnums {
 		CONSUME
 	}
 	
-	public static enum AccountCode{
-		MT,MTWM,MT_SUPER,FREE_MT_SUPER,DPTG,DPSH,
-		ELE,ALIPAY,FREE,FREE_ONLINE,FREE_MTWM,FREE_ELE,
-		CASH_MACHINE,POS,WMCR,FREE_WMCR,BDNM,PLQ,FREE_PLQ,TDD;
-	}
+//	public static enum AccountCode{
+//		MT,MTWM,MT_SUPER,FREE_MT_SUPER,DPTG,DPSH,
+//		ELE,ALIPAY,FREE,FREE_ONLINE,FREE_MTWM,FREE_ELE,
+//		CASH_MACHINE,POS,WMCR,FREE_WMCR,BDNM,PLQ,FREE_PLQ,TDD;
+//	}
 	
 	public static enum PaymodeCode{
 		CASH_MACHINE("00"),ELE("11"),MTWM("14"),WMCR("12"),

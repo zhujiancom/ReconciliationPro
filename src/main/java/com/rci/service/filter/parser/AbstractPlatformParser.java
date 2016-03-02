@@ -8,7 +8,6 @@ import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.account.Account;
-import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IAccountService;
@@ -46,9 +45,9 @@ public abstract class AbstractPlatformParser implements IPlatformParser{
 	 * @param accNo
 	 * @param order
 	 */
-	protected void preserveOAR(BigDecimal postAmount,AccountCode accNo,Order order){
+	protected void preserveOAR(BigDecimal postAmount,String accNo,Order order){
 		OrderAccountRef oar = new OrderAccountRef();
-		Account account = accService.getAccByNo(accNo);
+		Account account = accService.getAccount(accNo);
 		oar.setAccId(account.getAccId());
 		oar.setAccNo(accNo);
 		oar.setOrderNo(order.getOrderNo());

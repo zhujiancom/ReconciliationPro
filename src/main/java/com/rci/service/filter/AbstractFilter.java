@@ -23,7 +23,6 @@ import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.TicketInfo;
 import com.rci.bean.entity.account.Account;
-import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.ActivityType;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -324,9 +323,9 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 * @param accNo
 	 * @param order
 	 */
-	protected void preserveOAR(BigDecimal postAmount,AccountCode accNo,Order order){
+	protected void preserveOAR(BigDecimal postAmount,String accNo,Order order){
 		OrderAccountRef oar = new OrderAccountRef();
-		Account account = accService.getAccByNo(accNo);
+		Account account = accService.getAccount(accNo);
 		oar.setAccId(account.getAccId());
 		oar.setAccNo(accNo);
 		oar.setOrderNo(order.getOrderNo());

@@ -90,7 +90,13 @@ public class DataTransformServiceImpl implements IDataTransformService {
 			for(OrderItemDTO itemDTO:itemDTOs){
 				OrderItem item = beanMapper.map(itemDTO, OrderItem.class);
 				item.setOrder(value);
+				String dishNo = itemDTO.getDishNo();
+				Dish dish = dishService.findDishByNo(dishNo);
+				if(dish ==null){
+					dish = transformDishInfo(dishNo);
+				}
 				items.add(item);
+				
 			}
 			value.setItems(items);
 			orders.add(value);

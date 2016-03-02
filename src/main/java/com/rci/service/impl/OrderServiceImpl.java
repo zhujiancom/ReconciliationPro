@@ -22,6 +22,7 @@ import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.OrderItem;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.metadata.NativeSQLBuilder;
 import com.rci.metadata.service.IDataTransformService;
@@ -75,7 +76,50 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 				for (OrderAccountRef accountRef : oaRefs) {
 					BigDecimal amount = accountRef.getRealAmount();
 					totalAmount = totalAmount.add(amount);
-					AccountCode accountNo = accountRef.getAccNo();
+					String accountNo = accountRef.getAccNo();
+					
+					//现金入账
+					if(BusinessConstant.AccountCode_CASH_MACHINE.equals(accountNo)){
+						vo.setCashmachineAmount(amount);
+					}
+					//POS机入账
+					if(BusinessConstant.AccountCode_POS.equals(accountNo)){
+						vo.setPosAmount(amount);
+					}
+					//大众点评团购券入账
+					if(BusinessConstant.AccountCode_DPTG.equals(accountNo)){
+						vo.setDptgAmount(amount);
+					}
+					//大众点评闪惠入账
+					if(BusinessConstant.AccountCode_DPSH.equals(accountNo)){
+						vo.setDpshAmount(amount);
+					}
+					//饿了么入账
+					if(BusinessConstant.AccountCode_ELE.equals(accountNo)){
+						vo.setEleAmount(amount);
+					}
+					//支付宝入账
+					if(BusinessConstant.AccountCode_ALIPAY.equals(accountNo)){
+						vo.setAliPayAmount(amount);
+					}
+					//美团团购券入账
+					if(BusinessConstant.AccountCode_MT.equals(accountNo)){
+						vo.setMtAmount(amount);
+					}
+					//美团超券券入账
+					if(BusinessConstant.AccountCode_MT_SUPER.equals(accountNo)){
+						vo.setMtSuperAmount(amount);
+					}
+					//美团外卖入账
+					if(BusinessConstant.AccountCode_MTWM.equals(accountNo)){
+						vo.setMtwmAmount(amount);
+					}
+					
+					if(BusinessConstant.AccountCode_FREE_ONLINE.equals(accountNo)){
+						vo.setOnlineFreeAmount(amount);
+						totalAmount = totalAmount.subtract(amount);
+					}
+					
 					switch(accountNo){
 					case CASH_MACHINE:vo.setCashmachineAmount(amount);break;
 					case POS:vo.setPosAmount(amount);break;

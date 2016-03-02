@@ -55,7 +55,7 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 				List<Scheme> schemes = calculator.getAppropriteSchemes(orderDate, Vendor.MTWM);
 				if(CollectionUtils.isEmpty(schemes)){
 					logger.warn(order.getPayNo()+"---[美团外卖] 没有找到匹配的Scheme -----");
-					value.joinWarningInfo("[美团外卖活动]-没有找到匹配的Scheme");
+					value.joinWarningInfo("[美团外卖]-没有找到匹配的Scheme");
 					order.setUnusual(YOrN.Y);
 				}else{
 					Scheme s = calculator.getSchemeForNewCustomer(freeAmount,schemes);
@@ -89,11 +89,11 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 							onlineFreeAmount = onlineFreeAmount.add(commissionAmount);
 						}
 					}
-					/* 记录百度外卖在线支付免单金额 */
+					/* 记录美团外卖在线支付免单金额 */
 					if(value.getAmount(PaymodeCode.ONLINE_FREE) == null){
 						value.addPayInfo(PaymodeCode.ONLINE_FREE, onlineFreeAmount);
 					}
-					/* 记录百度外卖商家到账金额 */
+					/* 记录美团外卖商家到账金额 */
 					value.addPayInfo(PaymodeCode.MTWM, postAmount);
 					value.joinSchemeName("美团外卖在线支付到账-"+postAmount+"元");
 				}

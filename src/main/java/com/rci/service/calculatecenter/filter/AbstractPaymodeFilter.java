@@ -12,7 +12,10 @@ import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.OrderItem;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.metadata.service.IDataTransformService;
+import com.rci.service.IAccountService;
 import com.rci.service.IDishService;
+import com.rci.service.IOrderAccountRefService;
+import com.rci.service.IOrderService;
 import com.rci.service.ISchemeTypeDishRefService;
 import com.rci.service.calculatecenter.Calculator;
 import com.rci.service.calculatecenter.ParameterValue;
@@ -42,6 +45,15 @@ public abstract class AbstractPaymodeFilter implements PaymodeFilter {
 //	
 //	@Resource(name="TicketInfoService")
 //	private ITicketInfoService ticketService;
+	
+	@Resource(name="AccountService")
+	protected IAccountService accService;
+	
+	@Resource(name="OrderAccountRefService")
+	protected IOrderAccountRefService oarService;
+	
+	@Resource(name="OrderService")
+	protected IOrderService orderService;
 	
 	@Override
 	public void doFilter(ParameterValue value, PaymodeFilterChain chain) {

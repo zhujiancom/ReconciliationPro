@@ -15,7 +15,7 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -91,9 +91,9 @@ public class MTWMParser1Impl extends AbstractPlatformParser {
 								}
 								schemeName = schemeName+","+scheme.getName();
 								//保存美团外卖补贴金额
-								preserveOAR(allowanceAmount,AccountCode.FREE_MTWM,order);
+								preserveOAR(allowanceAmount,BusinessConstant.AccountCode_FREE_MTWM,order);
 								//在线优惠金额
-								preserveOAR(scheme.getSpread(),AccountCode.FREE_ONLINE,order);
+								preserveOAR(scheme.getSpread(),BusinessConstant.AccountCode_FREE_ONLINE,order);
 								break;
 							}else{
 								logger.info(order.getPayNo()+"--- 【美团外卖活动】："+scheme.getName()+" 不匹配！");
@@ -106,8 +106,8 @@ public class MTWMParser1Impl extends AbstractPlatformParser {
 						}
 						schemeName = schemeName+","+s.getName();
 						//保存美团外卖补贴金额
-						preserveOAR(allowanceAmount,AccountCode.FREE_MTWM,order);
-						preserveOAR(s.getSpread(),AccountCode.FREE_ONLINE,order);
+						preserveOAR(allowanceAmount,BusinessConstant.AccountCode_FREE_MTWM,order);
+						preserveOAR(s.getSpread(),BusinessConstant.AccountCode_FREE_ONLINE,order);
 					}
 				}
 			}catch(Exception e){
@@ -116,7 +116,7 @@ public class MTWMParser1Impl extends AbstractPlatformParser {
 		}
 		order.setSchemeName(schemeName);
 		//保存美团外卖在线支付金额
-		preserveOAR(onlineAmount,AccountCode.MTWM,order);
+		preserveOAR(onlineAmount,BusinessConstant.AccountCode_FREE_MTWM,order);
 	}
 	
 	/**

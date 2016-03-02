@@ -3,13 +3,11 @@ package com.rci.service.filter.parser.mtwm;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
-import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.contants.BusinessConstant;
 import com.rci.service.filter.FilterChain;
 import com.rci.service.filter.parser.AbstractPlatformParser;
 import com.rci.tools.DigitUtil;
@@ -72,8 +70,8 @@ public class MTWMParser2Impl extends AbstractPlatformParser {
 		}
 		
 		order.setSchemeName(schemeName);
-		preserveOAR(commission,AccountCode.FREE_ONLINE,order); //餐厅补贴的金额就是给美团外卖的佣金
-		preserveOAR(postAmount,AccountCode.MTWM,order);
+		preserveOAR(commission,BusinessConstant.AccountCode_FREE_ONLINE,order); //餐厅补贴的金额就是给美团外卖的佣金
+		preserveOAR(postAmount,BusinessConstant.AccountCode_FREE_MTWM,order);
 	}
 
 }

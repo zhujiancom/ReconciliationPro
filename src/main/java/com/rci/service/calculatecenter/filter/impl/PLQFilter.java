@@ -1,12 +1,22 @@
 package com.rci.service.calculatecenter.filter.impl;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.util.CollectionUtils;
+
+import com.rci.bean.entity.Order;
+import com.rci.bean.entity.Scheme;
 import com.rci.enums.BusinessEnums.PaymodeCode;
+import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
-import com.rci.service.calculatecenter.filter.PaymodeFilterChain;
+import com.rci.tools.DateUtil;
+import com.rci.tools.DigitUtil;
 
 /**
  * 
@@ -32,7 +42,50 @@ public class PLQFilter extends AbstractPaymodeFilter {
 
 	@Override
 	protected void doExtractOrderInfo(ParameterValue value) {
-		// TODO Auto-generated method stub
-		
+		Order order = (Order) value.getSourceData();
+		BigDecimal onlineAmount = value.getAmount(PaymodeCode.PLQ);
+		BigDecimal freeAmount = value.getAmount(PaymodeCode.FREE);
+		BigDecimal originalAmount = order.getOriginPrice();
+		if(freeAmount != null){
+			String day = order.getDay();
+			try {
+				Date orderDate = DateUtil.parseDate(day, "yyyyMMdd");
+				List<Scheme> schemes = calculator.getAppropriteSchemes(orderDate, Vendor.PLQ);
+				if(CollectionUtils.isEmpty(schemes)){
+					logger.warn(order.getPayNo()+"---[派乐趣 ] 没有找到匹配的Scheme -----");
+					value.joinWarningInfo("[派乐趣 ]-没有找到匹配的Scheme");
+					order.setUnusual(YOrN.Y);
+				}else{
+					BigDecimal postAmount = BigDecimal.ZERO;//商家到账金额
+					BigDecimal onlineFreeAmount = BigDecimal.ZERO; //在线优惠金额，商家补贴金额
+						for(Scheme scheme:schemes){
+							if(originalAmount.compareTo(scheme.getFloorAmount()) >= 0 && originalAmount.compareTo(scheme.getCeilAmount()) < 0){
+								//享受满减活动
+								BigDecimal voucherAmount = scheme.getPrice();//方案优惠金额
+								BigDecimal redpacketAmount = freeAmount.subtract(voucherAmount); //使用红包金额
+								postAmount = onlineAmount.add(redpacketAmount).add(scheme.getPostPrice());//商家到账金额{在线支付+红包+平台补贴}
+								onlineFreeAmount = scheme.getSpread(); //在线优惠金额，商家补贴金额
+								if(scheme.getCommission() != null){
+									BigDecimal unAccessoryAmount = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
+									BigDecimal commissionAmount = DigitUtil.mutiplyDown(unAccessoryAmount, DigitUtil.precentDown(scheme.getCommission()));
+									postAmount = postAmount.subtract(commissionAmount);
+									onlineFreeAmount = onlineFreeAmount.add(commissionAmount);
+								}
+								value.joinSchemeName(scheme.getName());
+								break;
+							}
+						}
+					/* 记录派乐趣在线支付免单金额 */
+					if(value.getAmount(PaymodeCode.ONLINE_FREE) == null){
+						value.addPayInfo(PaymodeCode.ONLINE_FREE, onlineFreeAmount);
+					}
+					/* 记录派乐趣商家到账金额 */
+					value.addPayInfo(PaymodeCode.PLQ, postAmount);
+					value.joinSchemeName("派乐趣在线支付到账-"+postAmount+"元");
+				}
+			} catch (ParseException pe) {
+				logger.warn("日期["+day+"]转换错误", pe);
+			}
+		}
 	}
 }

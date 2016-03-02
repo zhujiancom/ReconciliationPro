@@ -20,7 +20,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.rci.bean.entity.base.BaseEntity;
-import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 
 /**
@@ -51,7 +50,9 @@ public class OrderAccountRef extends BaseEntity {
 	
 	private Long accId;
 	
-	private AccountCode accNo;
+//	private AccountCode accNo;
+	
+	private String accNo;
 	
 	private BigDecimal realAmount;
 	
@@ -81,15 +82,26 @@ public class OrderAccountRef extends BaseEntity {
 		this.accId = accId;
 	}
 
-	@Enumerated(EnumType.STRING)
+//	@Enumerated(EnumType.STRING)
+//	@Column(name="accno")
+//	public AccountCode getAccNo() {
+//		return accNo;
+//	}
+//
+//	public void setAccNo(AccountCode accNo) {
+//		this.accNo = accNo;
+//	}
+	
 	@Column(name="accno")
-	public AccountCode getAccNo() {
+	public String getAccNo() {
 		return accNo;
 	}
 
-	public void setAccNo(AccountCode accNo) {
+	public void setAccNo(String accNo) {
 		this.accNo = accNo;
 	}
+	
+	
 
 	@Column(name="real_amount")
 	public BigDecimal getRealAmount() {

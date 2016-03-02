@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 
 import com.sun.awt.AWTUtilities;
 
+@SuppressWarnings("restriction")
 public class MaskDialog extends JDialog {
 	/**
 	 * 
