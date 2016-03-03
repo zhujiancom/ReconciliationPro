@@ -20,6 +20,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.rci.bean.entity.base.BaseEntity;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 
 /**
@@ -61,6 +62,9 @@ public class OrderAccountRef extends BaseEntity {
 	private Date postTime;
 	
 	private OrderFramework framework;
+	
+	//主账户
+	private AccountCode mainAccount;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -139,6 +143,16 @@ public class OrderAccountRef extends BaseEntity {
 
 	public void setFramework(OrderFramework framework) {
 		this.framework = framework;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="main_account")
+	public AccountCode getMainAccount() {
+		return mainAccount;
+	}
+
+	public void setMainAccount(AccountCode mainAccount) {
+		this.mainAccount = mainAccount;
 	}
 
 	/* 

@@ -1,10 +1,12 @@
 package com.rci.service.calculatecenter;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.rci.bean.entity.Order;
 import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.tools.StringUtils;
 
@@ -12,6 +14,8 @@ public class DefaultOrderParameterValue implements ParameterValue {
 	private Order order;
 	
 	private Map<PaymodeCode,BigDecimal> paymodeMapping;
+	
+	private Map<AccountCode,BigDecimal> accountMapping;
 	
 	private String schemeName;
 	
@@ -33,7 +37,6 @@ public class DefaultOrderParameterValue implements ParameterValue {
 
 	@Override
 	public Map<PaymodeCode, BigDecimal> getPayInfo() {
-		paymodeMapping = order.getPaymodeMapping();
 		return paymodeMapping;
 	}
 
@@ -81,5 +84,23 @@ public class DefaultOrderParameterValue implements ParameterValue {
 			this.warningInfo = StringUtils.join(schemeArray, BusinessConstant.COMMA,warningInfos);
 		}
 		return this.warningInfo;
+	}
+
+	@Override
+	public Map<AccountCode, BigDecimal> getAccountInfo() {
+		return accountMapping;
+	}
+
+	@Override
+	public void addPostAccountAmount(AccountCode code, BigDecimal amount) {
+		if(accountMapping == null){
+			accountMapping = new HashMap<AccountCode,BigDecimal>();
+		}
+		if(accountMapping.get(code) != null){
+			BigDecimal totalAmount = accountMapping.get(code).add(amount);
+			accountMapping.put(code, totalAmount);
+		}else{
+			accountMapping.put(code, amount);
+		}
 	}
 }

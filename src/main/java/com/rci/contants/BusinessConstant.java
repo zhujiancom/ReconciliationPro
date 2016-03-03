@@ -9,8 +9,9 @@ public class BusinessConstant {
 	public static final String COMMA=",";
 	
 	//Account code
+	public static final String AccountCode_FREE="FREE";				//商家总免单账户
 	public static final String AccountCode_FREE_ONLINE="FREE_ONLINE";		//在线免单账户
-	public static final String AccountCode_FREE_OFFLINE="FREE";				//线下免单账户
+	public static final String AccountCode_FREE_OFFLINE="FREE_OFFLINE";		//线下免单账户
 	public static final String AccountCode_CASH_MACHINE="CASH_MACHINE";		//现金账户
 	public static final String AccountCode_POS="POS";						//pos账户
 	public static final String AccountCode_MT="MT";							//美团团购券账户
@@ -26,7 +27,7 @@ public class BusinessConstant {
 	public static final String AccountCode_FREE_WMCR="FREE_WMCR";			//外卖超人平台给商家的补贴账户（商家收入） 2016年该平台已倒闭
 	public static final String AccountCode_BDWM="BDWM";						//百度外卖账户
 	public static final String AccountCode_BDNM="BDNM";						//百度糯米代金券账户
-	public static final String AccountCode_BDNM_DDF="BDNM_DDF";				//百度糯米到店付账户
+	public static final String AccountCode_BDNM_DDF="DDF_BDNM";				//百度糯米到店付账户
 	public static final String AccountCode_PLQ="PLQ";						//派乐趣账户
 	public static final String AccountCode_FREE_PLQ="FREE_PLQ";				//派乐趣补贴账户
 	

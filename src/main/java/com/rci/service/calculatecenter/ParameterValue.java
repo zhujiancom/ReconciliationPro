@@ -3,6 +3,7 @@ package com.rci.service.calculatecenter;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 
 
@@ -43,6 +44,20 @@ public interface ParameterValue {
 	
 	/**
 	 * 
+	 * Describle(描述)：获取订单的入账信息
+	 *
+	 * 方法名称：getAccountInfo
+	 *
+	 * 所在类名：ParameterValue
+	 *
+	 * Create Time:2016年3月3日 上午10:49:34
+	 *  
+	 * @return
+	 */
+	Map<AccountCode,BigDecimal> getAccountInfo();
+	
+	/**
+	 * 
 	 * Describle(描述)：主要新增线下，线上免单金额
 	 *
 	 * 方法名称：addPayInfo
@@ -55,6 +70,21 @@ public interface ParameterValue {
 	 * @param amount
 	 */
 	void addPayInfo(PaymodeCode code,BigDecimal amount);
+	
+	/**
+	 * 
+	 * Describle(描述)：添加订单入账金额
+	 *
+	 * 方法名称：addPostAccountAmount
+	 *
+	 * 所在类名：ParameterValue
+	 *
+	 * Create Time:2016年3月3日 上午10:50:45
+	 *  
+	 * @param code
+	 * @param amount
+	 */
+	void addPostAccountAmount(AccountCode code,BigDecimal amount);
 	
 	/**
 	 * 

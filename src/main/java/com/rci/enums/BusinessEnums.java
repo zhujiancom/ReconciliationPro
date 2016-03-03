@@ -141,12 +141,71 @@ public final class BusinessEnums {
 //		CASH_MACHINE,POS,WMCR,FREE_WMCR,BDNM,PLQ,FREE_PLQ,TDD;
 //	}
 	
+	public static enum AccountCode{
+		CASH_MACHINE,						//收银机账户
+		ELE,								//饿了么主账户
+		ONLINE_ELE,
+		ALLOWANCE_ELE,
+		FREE_ELE,
+		MT,
+		ONLINE_MT,
+		FREE_MT,
+		MT_SUPER,
+		FREE_MT_SUPER,
+		DZDP,
+		ONLINE_DPTG,
+		FREE_DPTG,
+		DPSH,
+		FREE_DPSH,
+		MTWM,
+		ONLINE_MTWM,
+		ALLOWANCE_MTWM,
+		FREE_MTWM,
+		ALIPAY,
+		ONLINE_ALIPAY,
+		FREE_ALIPAY,
+		FREE,
+		FREE_ONLINE,
+		FREE_OFFLINE,
+		POS,
+		ONLINE_POS,
+		FREE_POS,
+		WMCR,
+		FREE_WMCR,
+		BDNM,
+		ONLINE_BDNM,
+		FREE_BDNM,
+		DDF_BDNM,
+		FREE_DDF_BDNM,
+		PLQ,
+		ONLINE_PLQ,
+		ALLOWANCE_PLQ,
+		FREE_PLQ,
+		TDD,
+		ONLINE_TDD,
+		FREE_TDD,
+		WALLET,
+	}
+	
 	public static enum PaymodeCode{
-		CASH_MACHINE("00"),ELE("11"),MTWM("14"),WMCR("12"),
-		TDD("96"),DPTG("98"),DPSH("13"),
-		MT("99"),FREE("YY"),OFFLINE_FREE("OFF"),//线下现金免单
-		MTSUPER("87"),POS("03"),ONLINE_FREE("ON"),//线上免单
-		UNKNOW(""),ALIPAY("86"),BDNM("04"),PLQ("08"),DDF("05"),BDWM("20"),VOUCHER("88");
+		CASH_MACHINE("00"),					//收银机现金支付
+		ELE("11"),							//饿了么在线支付
+		MTWM("14"),							//美团外卖在线支付
+		WMCR("12"),	
+		TDD("96"),							//淘点点支付
+		DPTG("98"),							//大众点评团购券支付
+		DPSH("13"),							//大众点评闪惠支付
+		MT("99"),							//美团团购支付
+		FREE("YY"),OFFLINE_FREE("OFFLINE_FREE"),ONLINE_FREE("ONLINE_FREE"),	//线下现金免单,线上免单
+		MTSUPER("87"),						//美团超券支付
+		POS("03"),							//pos机刷卡支付
+		ALIPAY("86"),						//支付宝支付
+		BDNM("04"),							//百度糯米团购支付
+		DDF("05"),							//百度糯米到店付支付
+		PLQ("08"),							//派乐趣支付
+		BDWM("20"),							//百度外卖支付
+		VOUCHER("88"),						//商家发放的代金券
+		UNKNOW("");							//未知支付方式
 		
 		private String paymodeno;
 		private PaymodeCode(String paymodeno){

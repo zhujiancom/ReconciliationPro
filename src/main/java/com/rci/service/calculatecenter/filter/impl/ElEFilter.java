@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -45,19 +46,23 @@ public class ElEFilter extends AbstractPaymodeFilter {
 		BigDecimal freeAmount = value.getAmount(PaymodeCode.FREE);
 		BigDecimal originalAmount = order.getOriginPrice();
 		if(freeAmount != null){
+			value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 			String day = order.getDay();
 			try {
 				Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
 				Scheme scheme = calculator.getAppropriteScheme(orderDate, freeAmount, Vendor.ELE);
 				if(scheme != null){
-					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
-					BigDecimal postAmount = originalAmount.subtract(scheme.getSpread());
-					if(onlineAmount.compareTo(postAmount) != 0){
+					BigDecimal postAmount = originalAmount.subtract(scheme.getSpread());		//商家到账金额
+					BigDecimal allowanceAmount = scheme.getPostPrice();							//平台给商家的补贴金额
+					BigDecimal predictOnlineAmount = originalAmount.subtract(scheme.getPrice());  //预期收银机应显示的金额{菜品总价-商家补贴-平台补贴} 
+					if(predictOnlineAmount.compareTo(onlineAmount) != 0){
 						order.setUnusual(YOrN.Y);
-						value.joinWarningInfo("["+value.getPayNo()+"],在线支付金额{"+onlineAmount+"}错误,应该是{"+postAmount+"}");
+						value.joinWarningInfo("["+value.getPayNo()+"],在线支付金额{"+onlineAmount+"}错误,应该是{"+predictOnlineAmount+"}");
 					}
 					value.joinSchemeName(scheme.getName(),"饿了么在线支付到账-"+postAmount+"元");
-					value.addPayInfo(PaymodeCode.ELE, postAmount);
+					value.addPostAccountAmount(AccountCode.ONLINE_ELE, predictOnlineAmount);
+					value.addPostAccountAmount(AccountCode.ALLOWANCE_ELE, allowanceAmount);
+					value.addPostAccountAmount(AccountCode.FREE_ELE, scheme.getSpread());
 				}else{
 					logger.warn(order.getPayNo()+"---[饿了么 ] 没有找到匹配的Scheme -----");
 					String warningInfo = "[饿了么动]--- 没有找到匹配的Scheme";

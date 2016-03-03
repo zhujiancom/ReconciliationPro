@@ -26,19 +26,23 @@ public class OffLineFreeFilter extends AbstractPaymodeFilter {
 
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
-		if(paymodeMapping.containsKey(PaymodeCode.ONLINE_FREE)){//已经经过线上优惠处理
-			return false;
-		}
 		return paymodeMapping.containsKey(PaymodeCode.FREE);
 	}
 
 	@Override
 	protected void doExtractOrderInfo(ParameterValue value) {
-		BigDecimal freeAmount = value.getAmount(PaymodeCode.FREE);
-		if(freeAmount.compareTo(BigDecimal.ZERO) > 0){
+		BigDecimal freeAmount = value.getAmount(PaymodeCode.FREE);		//收银机的免单金额
+		BigDecimal onlineFreeAmount = value.getAmount(PaymodeCode.ONLINE_FREE);  //经过前面处理器处理后查看有没有在线免单的金额
+		if(onlineFreeAmount == null){ // 没有在线免单
+			value.addPayInfo(PaymodeCode.OFFLINE_FREE, freeAmount);
 			value.joinSchemeName("堂食免单"+freeAmount+"元");
+		}else{
+			BigDecimal offlineFreeAmount = freeAmount.subtract(onlineFreeAmount);
+			if(offlineFreeAmount.compareTo(BigDecimal.ZERO) > 0){
+				value.addPayInfo(PaymodeCode.OFFLINE_FREE, offlineFreeAmount);
+				value.joinSchemeName("堂食免单"+offlineFreeAmount+"元");
+			}
 		}
-		value.addPayInfo(PaymodeCode.OFFLINE_FREE, freeAmount);
 	}
 
 }
