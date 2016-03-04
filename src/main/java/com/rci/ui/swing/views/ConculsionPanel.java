@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
@@ -44,6 +45,7 @@ public class ConculsionPanel extends JPanel {
 	private JLabel eleFreeValue;
 	private JLabel eleValue;
 	private JLabel tddValue;
+	private JLabel alipayValue;
 	private JLabel mtwmValue;
 	private JLabel mtwmFreeValue;
 	private DisplayLabel<String,Long> mtwmRemark;
@@ -54,14 +56,18 @@ public class ConculsionPanel extends JPanel {
 	private JLabel wmcrValue;
 	private JLabel wmcrbtValue;
 	private DisplayLabel<String,Long> wmcrRemark;
+	private JLabel bdwmValue;
+	private JLabel bdwmbtValue;
+	private DisplayLabel<String,Long> bdwmRemark;
 	private JLabel plqValue;
 	private JLabel plqbtValue;
 	private DisplayLabel<String,Long> plqRemark;
 	private JLabel bdnmValue;
 	private JLabel bdnmRemark;
+	private JLabel bdnmddfValue;
 	
 //	private JLabel expRateValue; //外送率
-	private Map<String,BigDecimal> sumMap;
+	private Map<AccountCode,BigDecimal> dailyPostAccountMap;  //每日账户入账金额
 	private Date queryDate;  //统计日期
 	private StatisticCenterFacade facade;
 	
@@ -170,12 +176,20 @@ public class ConculsionPanel extends JPanel {
 		elePanel.add(eleRemark);
 		
 		/* 淘点点&支付宝统计  */
-		JLabel tdd = new JLabel("支付宝入账总额：");
+		JLabel tdd = new JLabel("淘点点入账总额：");
 		tddValue = new JLabel();
 		tddValue.setForeground(Color.RED);
 		JPanel tddPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		tddPanel.add(tdd);
 		tddPanel.add(tddValue);
+		
+		/* 支付宝统计  */
+		JLabel alipay = new JLabel("支付宝入账总额：");
+		alipayValue = new JLabel();
+		alipayValue.setForeground(Color.RED);
+		JPanel alipayPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		alipayPanel.add(alipay);
+		alipayPanel.add(tddValue);
 		
 		JLabel mtwm = new JLabel("美团外卖入账总额：");
 		mtwmValue = new JLabel();
@@ -216,26 +230,45 @@ public class ConculsionPanel extends JPanel {
 		lsPanel.add(lsValue);
 		
 		/* 外卖超人 */
-		JLabel wmcrLabel = new JLabel("外卖超人入账总额：");
-		wmcrValue = new JLabel();
-		wmcrValue.setForeground(Color.RED);
-		wmcrRemark = new DisplayLabel<String,Long>("有效订单","单");
-		wmcrRemark.setForeground(Color.BLUE);
-		JPanel wmcrPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		wmcrPanel.add(wmcrLabel);
-		wmcrPanel.add(wmcrValue);
-		wmcrPanel.add(wmcrRemark);
+//		JLabel wmcrLabel = new JLabel("外卖超人入账总额：");
+//		wmcrValue = new JLabel();
+//		wmcrValue.setForeground(Color.RED);
+//		wmcrRemark = new DisplayLabel<String,Long>("有效订单","单");
+//		wmcrRemark.setForeground(Color.BLUE);
+//		JPanel wmcrPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+//		wmcrPanel.add(wmcrLabel);
+//		wmcrPanel.add(wmcrValue);
+//		wmcrPanel.add(wmcrRemark);
 		
 		/* 外卖超人补贴 */
-		JLabel wmcrbtLabel = new JLabel("外卖超人补贴总额：");
-		wmcrbtValue = new JLabel();
-		wmcrbtValue.setForeground(Color.RED);
-		JPanel wmcrbtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		wmcrbtPanel.add(wmcrbtLabel);
-		wmcrbtPanel.add(wmcrbtValue);
+//		JLabel wmcrbtLabel = new JLabel("外卖超人补贴总额：");
+//		wmcrbtValue = new JLabel();
+//		wmcrbtValue.setForeground(Color.RED);
+//		JPanel wmcrbtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+//		wmcrbtPanel.add(wmcrbtLabel);
+//		wmcrbtPanel.add(wmcrbtValue);
+		
+		/* 百度外卖 */
+		JLabel bdwmLabel = new JLabel("百度外卖入账总额：");
+		bdwmValue = new JLabel();
+		bdwmValue.setForeground(Color.RED);
+		bdwmRemark = new DisplayLabel<String,Long>("有效订单","单");
+		bdwmRemark.setForeground(Color.BLUE);
+		JPanel bdwmPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		bdwmPanel.add(bdwmLabel);
+		bdwmPanel.add(bdwmValue);
+		bdwmPanel.add(bdwmRemark);
+		
+		/* 百度外卖补贴 */
+		JLabel bdwmbtLabel = new JLabel("百度外卖补贴总额：");
+		bdwmbtValue = new JLabel();
+		bdwmbtValue.setForeground(Color.RED);
+		JPanel bdwmbtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		bdwmbtPanel.add(bdwmbtLabel);
+		bdwmbtPanel.add(bdwmbtValue);
 		
 		/* 总免单金额统计  */
-		JLabel freeLabel = new JLabel("总免单金额：");
+		JLabel freeLabel = new JLabel("线下免单金额：");
 		freeValue = new JLabel();
 		freeValue.setForeground(Color.GREEN);
 		JPanel freePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -271,6 +304,12 @@ public class ConculsionPanel extends JPanel {
 		bdnmPanel.add(bdnmValue);
 		bdnmPanel.add(bdnmRemark);
 		
+		JLabel bdnmddfLabel = new JLabel("百度糯米到店付总额：");
+		bdnmddfValue = new JLabel();
+		bdnmddfValue.setForeground(Color.RED);
+		JPanel bdnmddfPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		bdnmddfPanel.add(bdnmddfLabel);
+		bdnmddfPanel.add(bdnmddfValue);
 		/* 外送率统计  */
 //		JLabel expRateLabel = new JLabel("外送率：");
 //		expRateValue = new JLabel();
@@ -297,14 +336,18 @@ public class ConculsionPanel extends JPanel {
 		fifthGroup.add(mtSuperPanel);
 		sixthGroup.add(mtwmPanel);
 		sixthGroup.add(mtwmFreePanel);
-		sevenGroup.add(wmcrPanel);
+		sevenGroup.add(bdwmPanel);
 		sevenGroup.add(Box.createHorizontalStrut(10));
-		sevenGroup.add(wmcrbtPanel);
+//		sevenGroup.add(bdwmbtPanel);
+		sevenGroup.add(alipayPanel);
 		eightGroup.add(tddPanel);
 		eightGroup.add(freePanel);
 		tenGroup.add(plqPanel);
+		tenGroup.add(Box.createHorizontalStrut(10));
 		tenGroup.add(plqbtPanel);
 		elevenGroup.add(bdnmPanel);
+		nineGroup.add(bdnmddfPanel);
+		nineGroup.add(Box.createHorizontalStrut(10));
 		nineGroup.add(totalPanel);
 		
 		this.add(firstGroup);
@@ -342,9 +385,12 @@ public class ConculsionPanel extends JPanel {
 		eleSdRemark.setText("");
 		mtwmRemark.setText("");
 //		expRateValue.setText("");
-		wmcrValue.setText("");
-		wmcrbtValue.setText("");
-		wmcrRemark.setText("");
+//		wmcrValue.setText("");
+//		wmcrbtValue.setText("");
+//		wmcrRemark.setText("");
+		bdwmValue.setText("");
+		bdwmbtValue.setText("");
+		bdwmRemark.setText("");
 		plqValue.setText("");
 		plqbtValue.setText("");
 		plqRemark.setText("");
@@ -353,32 +399,65 @@ public class ConculsionPanel extends JPanel {
 	}
 	
 	public void refreshUI() {
-		String cashmachine = getTotalAmount(BusinessConstant.AccountCode_CASH_MACHINE).toString();
-		String pos = getTotalAmount(BusinessConstant.AccountCode_POS).toString();
-		String mt = getTotalAmount(BusinessConstant.AccountCode_MT).toString();
-		String dptg = getTotalAmount(BusinessConstant.AccountCode_DPTG).toString();
-		String sh = getTotalAmount(BusinessConstant.AccountCode_DPSH).toString();
-		String ele = getTotalAmount(BusinessConstant.AccountCode_ELE).toString();
-		String elefree = getTotalAmount(BusinessConstant.AccountCode_FREE_ELE).toString();
-		BigDecimal elesdremark = getELESDAllowanceAmount(queryDate);
-		String tdd = getTotalAmount(BusinessConstant.AccountCode_ALIPAY).toString();
-		String mtsuper = getTotalAmount(BusinessConstant.AccountCode_MT_SUPER).toString();
-		String mtwm = getTotalAmount(BusinessConstant.AccountCode_MTWM).toString();
-		String freemtwm = getTotalAmount(BusinessConstant.AccountCode_FREE_MTWM).toString();
-		String free = getTotalAmount(BusinessConstant.AccountCode_FREE_OFFLINE).toString();
-		String total = getTotalDayAmount(queryDate).toString();
-		String tgremark = getTicketStatistic(queryDate,Vendor.DZDP);
-		String mtremark = getTicketStatistic(queryDate,Vendor.MT);
-		Long eleOrderNum = getValidCount(queryDate, Vendor.ELE);
-		Long mtwmOrderNum = getValidCount(queryDate,Vendor.MTWM);
+//		String cashmachine = getTotalAmount(BusinessConstant.AccountCode_CASH_MACHINE).toString();
+//		String pos = getTotalAmount(BusinessConstant.AccountCode_POS).toString();
+//		String mt = getTotalAmount(BusinessConstant.AccountCode_MT).toString();
+//		String dptg = getTotalAmount(BusinessConstant.AccountCode_DPTG).toString();
+//		String sh = getTotalAmount(BusinessConstant.AccountCode_DPSH).toString();
+//		String ele = getTotalAmount(BusinessConstant.AccountCode_ELE).toString();
+//		String ele_allowance = getTotalAmount(BusinessConstant.AccountCode_FREE_ELE).toString();
+		BigDecimal elesdremark = getELESDAllowanceAmount(queryDate);								//饿了么刷单金额
+//		String tdd = getTotalAmount(BusinessConstant.AccountCode_ALIPAY).toString();
+//		String mtsuper = getTotalAmount(BusinessConstant.AccountCode_MT_SUPER).toString();
+//		String mtwm = getTotalAmount(BusinessConstant.AccountCode_MTWM).toString();
+//		String mtwm_allowance = getTotalAmount(BusinessConstant.AccountCode_FREE_MTWM).toString();
+//		String offlineFree = getTotalAmount(BusinessConstant.AccountCode_FREE_OFFLINE).toString();
+//		String totalAmount = getTotalDayAmount(queryDate).toString();
+//		String dptgRemark = getTicketStatistic(queryDate,Vendor.DZDP);
+//		String mttgRemark = getTicketStatistic(queryDate,Vendor.MT);
+//		Long eleOrderNum = getValidCount(queryDate, Vendor.ELE);
+//		Long mtwmOrderNum = getValidCount(queryDate,Vendor.MTWM);
 //		String wmcr = getTotalAmount(AccountCode.WMCR).toString();
 //		String freewmcr = getTotalAmount(AccountCode.FREE_WMCR).toString();
 //		Long wmcrOrderNum = getValidCount(queryDate,Vendor.WMCR);
-		String plq = getTotalAmount(BusinessConstant.AccountCode_PLQ).toString();
-		String plqbt = getTotalAmount(BusinessConstant.AccountCode_FREE_PLQ).toString();
-		Long plqOrderNum = getValidCount(queryDate,Vendor.PLQ);
-		String bdnm = getTotalAmount(BusinessConstant.AccountCode_BDNM).toString();
-		String bdnmRemark = getTicketStatistic(queryDate,Vendor.BDNM);
+//		String plq = getTotalAmount(BusinessConstant.AccountCode_PLQ).toString();
+//		String plqbt = getTotalAmount(BusinessConstant.AccountCode_FREE_PLQ).toString();
+//		Long plqOrderNum = getValidCount(queryDate,Vendor.PLQ);
+//		String bdnm = getTotalAmount(BusinessConstant.AccountCode_BDNM).toString();
+//		String bdnmRemark = getTicketStatistic(queryDate,Vendor.BDNM);
+		
+		String cashmachine = getDailyPostAccountAmount(AccountCode.CASH_MACHINE).toString(); 		//收银机每日入账金额
+		String pos = getDailyPostAccountAmount(AccountCode.ONLINE_POS).toString();					//pos机每日入账金额
+		String ele = getDailyPostAccountAmount(AccountCode.ONLINE_ELE).toString();					//饿了么
+		String ele_allowance = getDailyPostAccountAmount(AccountCode.ALLOWANCE_ELE).toString();		//饿了么补贴
+		String dptg = getDailyPostAccountAmount(AccountCode.ONLINE_DPTG).toString();				//点评团购
+		String dptgRemark = getTicketStatistic(queryDate,Vendor.DZDP);								//点评团购券使用信息
+		String mt = getDailyPostAccountAmount(AccountCode.ONLINE_MT).toString();					//美团团购
+		String mttgRemark = getTicketStatistic(queryDate,Vendor.MT);								//美团团购券使用信息
+		String sh = getDailyPostAccountAmount(AccountCode.DPSH).toString();							//大众点评闪惠
+		String mtsuper = getDailyPostAccountAmount(AccountCode.MT_SUPER).toString();				//美团超券
+		String mtwm = getDailyPostAccountAmount(AccountCode.ONLINE_MTWM).toString();				//美团外卖
+		String mtwm_allowance = getDailyPostAccountAmount(AccountCode.ALLOWANCE_MTWM).toString();	//美团外卖补贴
+		String bdwm = getDailyPostAccountAmount(AccountCode.ONLINE_BDWM).toString();				//百度外卖
+		String bdwm_allowance = "";																	//百度外卖补贴
+		String tdd = getDailyPostAccountAmount(AccountCode.ONLINE_TDD).toString();					//淘点点
+		String alipay = getDailyPostAccountAmount(AccountCode.ONLINE_ALIPAY).toString();			//支付宝
+		String offlineFree = getDailyPostAccountAmount(AccountCode.FREE_OFFLINE).toString();		//线下免单金额
+		String plq = getDailyPostAccountAmount(AccountCode.ONLINE_PLQ).toString();					//派乐趣
+		String plqbt = getDailyPostAccountAmount(AccountCode.ALLOWANCE_PLQ).toString();				//派乐趣补贴
+		String bdnm = getDailyPostAccountAmount(AccountCode.ONLINE_BDNM).toString();				//百度糯米团购
+		String bdnmRemark = getTicketStatistic(queryDate,Vendor.BDNM);								//百度糯米代金券使用信息
+		String bdnmddf = getDailyPostAccountAmount(AccountCode.DDF_BDNM).toString();				//百度糯米到店付
+		
+		String totalAmount = getTotalDayAmount(queryDate).toString();								//当日营业额总收入
+		
+		
+		
+		Long eleOrderNum = getValidCount(queryDate, Vendor.ELE);									//饿了么有效订单数量
+		Long mtwmOrderNum = getValidCount(queryDate,Vendor.MTWM);									//美团外卖有效订单数量
+		Long bdwmOrderNum = getValidCount(queryDate,Vendor.BDWM);									//百度外卖有效订单数量
+		Long plqOrderNum = getValidCount(queryDate,Vendor.PLQ);										//派乐趣有效订单数量
+		
 		getCashValue().setText(cashmachine);
 		getPosValue().setText(pos);
 		getMtValue().setText(mt);
@@ -387,24 +466,29 @@ public class ConculsionPanel extends JPanel {
 		getEleValue().setText(ele);
 		getEleRemark().setText(eleOrderNum);
 		getEleRemark().displayToolTips(true);
-		getEleFreeValue().setText(elefree);
+		getEleFreeValue().setText(ele_allowance);
 		getEleSdRemark().setText(elesdremark);
 		getTddValue().setText(tdd);
+		getAlipayValue().setText(alipay);
 		getMtSuperValue().setText(mtsuper);
 		getMtwmValue().setText(mtwm);
-		getMtwmFreeValue().setText(freemtwm);
+		getMtwmFreeValue().setText(mtwm_allowance);
 		getMtwmRemark().setText(mtwmOrderNum);
 		getMtwmRemark().displayToolTips(true);
-		getFreeValue().setText(free);
-		getTotalValue().setText(total);
-		getTgRemark().setText(tgremark);
-		getTgRemark().setToolTipText(tgremark);
-		getMtRemark().setText(mtremark);
-		getMtRemark().setToolTipText(mtremark);
+		getFreeValue().setText(offlineFree);
+		getTotalValue().setText(totalAmount);
+		getTgRemark().setText(dptgRemark);
+		getTgRemark().setToolTipText(dptgRemark);
+		getMtRemark().setText(mttgRemark);
+		getMtRemark().setToolTipText(mttgRemark);
 //		getWmcrValue().setText(wmcr);
 //		getWmcrbtValue().setText(freewmcr);
 //		getWmcrRemark().setText(wmcrOrderNum);
 //		getWmcrRemark().displayToolTips(true);
+		getBdwmValue().setText(bdwm);
+		getBdwmbtValue().setText(bdwm_allowance);
+		getBdwmRemark().setText(bdwmOrderNum);
+		getBdwmRemark().displayToolTips(true);
 		getPlqValue().setText(plq);
 		getPlqbtValue().setText(plqbt);
 		getPlqRemark().setText(plqOrderNum);
@@ -412,6 +496,7 @@ public class ConculsionPanel extends JPanel {
 		getBdnmValue().setText(bdnm);
 		getBdnmRemark().setText(bdnmRemark);
 		getBdnmRemark().setToolTipText(bdnmRemark);
+		getBdnmddfValue().setText(bdnmddf);
 	}
 	
 	/**
@@ -428,8 +513,14 @@ public class ConculsionPanel extends JPanel {
 	 * @return
 	 */
 	public BigDecimal getTotalAmount(String accountNo){
-		return sumMap.get(accountNo) == null? BigDecimal.ZERO:sumMap.get(accountNo);
+//		return sumMap.get(accountNo) == null? BigDecimal.ZERO:sumMap.get(accountNo);
+		return null;
 	}
+	
+	public BigDecimal getDailyPostAccountAmount(AccountCode code){
+		return dailyPostAccountMap.get(code) == null?BigDecimal.ZERO:dailyPostAccountMap.get(code);
+	}
+	
 	
 	/**
 	 * 
@@ -647,12 +738,14 @@ public class ConculsionPanel extends JPanel {
 		this.eleSdRemark = eleSdRemark;
 	}
 
-	public Map<String, BigDecimal> getSumMap() {
-		return sumMap;
+
+	public Map<AccountCode, BigDecimal> getDailyPostAccountMap() {
+		return dailyPostAccountMap;
 	}
 
-	public void setSumMap(Map<String, BigDecimal> sumMap) {
-		this.sumMap = sumMap;
+	public void setDailyPostAccountMap(
+			Map<AccountCode, BigDecimal> dailyPostAccountMap) {
+		this.dailyPostAccountMap = dailyPostAccountMap;
 	}
 
 	public Date getQueryDate() {
@@ -733,6 +826,46 @@ public class ConculsionPanel extends JPanel {
 
 	public void setBdnmRemark(JLabel bdnmRemark) {
 		this.bdnmRemark = bdnmRemark;
+	}
+
+	public JLabel getBdwmValue() {
+		return bdwmValue;
+	}
+
+	public JLabel getBdwmbtValue() {
+		return bdwmbtValue;
+	}
+
+	public DisplayLabel<String, Long> getBdwmRemark() {
+		return bdwmRemark;
+	}
+
+	public void setBdwmValue(JLabel bdwmValue) {
+		this.bdwmValue = bdwmValue;
+	}
+
+	public void setBdwmbtValue(JLabel bdwmbtValue) {
+		this.bdwmbtValue = bdwmbtValue;
+	}
+
+	public void setBdwmRemark(DisplayLabel<String, Long> bdwmRemark) {
+		this.bdwmRemark = bdwmRemark;
+	}
+
+	public JLabel getAlipayValue() {
+		return alipayValue;
+	}
+
+	public void setAlipayValue(JLabel alipayValue) {
+		this.alipayValue = alipayValue;
+	}
+
+	public JLabel getBdnmddfValue() {
+		return bdnmddfValue;
+	}
+
+	public void setBdnmddfValue(JLabel bdnmddfValue) {
+		this.bdnmddfValue = bdnmddfValue;
 	}
 
 }

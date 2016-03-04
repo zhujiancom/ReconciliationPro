@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
@@ -48,39 +49,54 @@ public class PLQFilter extends AbstractPaymodeFilter {
 		BigDecimal originalAmount = order.getOriginPrice();
 		if(freeAmount != null){
 			String day = order.getDay();
+			boolean matchScheme = false;
 			try {
 				Date orderDate = DateUtil.parseDate(day, "yyyyMMdd");
 				List<Scheme> schemes = calculator.getAppropriteSchemes(orderDate, Vendor.PLQ);
 				if(CollectionUtils.isEmpty(schemes)){
 					logger.warn(order.getPayNo()+"---[派乐趣 ] 没有找到匹配的Scheme -----");
 					value.joinWarningInfo("[派乐趣 ]-没有找到匹配的Scheme");
+					value.joinSchemeName("派乐趣无法解析活动方案");
 					order.setUnusual(YOrN.Y);
 				}else{
 					BigDecimal postAmount = BigDecimal.ZERO;//商家到账金额
 					BigDecimal onlineFreeAmount = BigDecimal.ZERO; //在线优惠金额，商家补贴金额
-						for(Scheme scheme:schemes){
-							if(originalAmount.compareTo(scheme.getFloorAmount()) >= 0 && originalAmount.compareTo(scheme.getCeilAmount()) < 0){
-								//享受满减活动
-								BigDecimal voucherAmount = scheme.getPrice();//方案优惠金额
-								BigDecimal redpacketAmount = freeAmount.subtract(voucherAmount); //使用红包金额
-								postAmount = onlineAmount.add(redpacketAmount).add(scheme.getPostPrice());//商家到账金额{在线支付+红包+平台补贴}
-								onlineFreeAmount = scheme.getSpread(); //在线优惠金额，商家补贴金额
-								if(scheme.getCommission() != null){
-									BigDecimal unAccessoryAmount = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
-									BigDecimal commissionAmount = DigitUtil.mutiplyDown(unAccessoryAmount, DigitUtil.precentDown(scheme.getCommission()));
-									postAmount = postAmount.subtract(commissionAmount);
-									onlineFreeAmount = onlineFreeAmount.add(commissionAmount);
-								}
-								value.joinSchemeName(scheme.getName());
-								break;
+					BigDecimal allowanceAmount = BigDecimal.ZERO;
+					for(Scheme scheme:schemes){
+						if(originalAmount.compareTo(scheme.getFloorAmount()) >= 0 && originalAmount.compareTo(scheme.getCeilAmount()) < 0){
+							//享受满减活动
+							BigDecimal voucherAmount = scheme.getPrice();//方案优惠金额
+							BigDecimal redpacketAmount = freeAmount.subtract(voucherAmount); //使用红包金额
+							allowanceAmount = redpacketAmount.add(scheme.getPostPrice()); //平台返回给商家的补贴金额
+							postAmount = onlineAmount;
+							onlineFreeAmount = scheme.getSpread(); //在线优惠金额，商家补贴金额
+							if(scheme.getCommission() != null){
+								BigDecimal unAccessoryAmount = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
+								BigDecimal commissionAmount = DigitUtil.mutiplyDown(unAccessoryAmount, DigitUtil.precentDown(scheme.getCommission()));
+								postAmount = postAmount.subtract(commissionAmount);
+								onlineFreeAmount = onlineFreeAmount.add(commissionAmount);
 							}
+							matchScheme = true;
+							value.joinSchemeName(scheme.getName());
+							break;
 						}
-					/* 记录派乐趣在线支付免单金额 */
-					if(value.getAmount(PaymodeCode.ONLINE_FREE) == null){
-						value.addPayInfo(PaymodeCode.ONLINE_FREE, onlineFreeAmount);
 					}
+					if(!matchScheme){
+						/* 记录美团外卖在线支付免单金额 */
+						value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+						value.joinWarningInfo("[派乐趣]--- 没有找到匹配的Scheme");
+						value.joinSchemeName("派乐趣无法解析活动方案");
+						order.setUnusual(YOrN.Y);
+						return;
+					}
+					/* 记录派乐趣在线支付免单金额 */
+					value.addPayInfo(PaymodeCode.ONLINE_FREE, onlineFreeAmount);
 					/* 记录派乐趣商家到账金额 */
-					value.addPayInfo(PaymodeCode.PLQ, postAmount);
+					value.addPostAccountAmount(AccountCode.ONLINE_PLQ, postAmount);
+					value.addPostAccountAmount(AccountCode.ALLOWANCE_PLQ, allowanceAmount);
+					value.addPostAccountAmount(AccountCode.FREE_PLQ, onlineFreeAmount);
+					value.addPostAccountAmount(AccountCode.FREE_ONLINE, onlineFreeAmount);
+					
 					value.joinSchemeName("派乐趣在线支付到账-"+postAmount+"元");
 				}
 			} catch (ParseException pe) {

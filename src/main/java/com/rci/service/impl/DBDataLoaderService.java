@@ -64,7 +64,7 @@ public class DBDataLoaderService extends BaseDataLoaderService {
 		// 更新账单使用方案和库存数据
 		updateRelativeInfo(orders);
 		// 生成账单流水
-		generateAccountFlow(date);
+//		generateAccountFlow(date);
 	}
 
 	/* 

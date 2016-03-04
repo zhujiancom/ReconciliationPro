@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Map;
 
 import com.rci.bean.entity.Order;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
@@ -43,14 +44,6 @@ public class MTcqFilter extends AbstractPaymodeFilter {
 		BigDecimal originAmount = order.getOriginPrice();
 		/* 不参与打折的菜品  */
 		BigDecimal nodiscountAmount = getUndiscountAmount(order.getItems());
-		/* 最大可在线支付金额 */
-		BigDecimal payAmount = originAmount.subtract(nodiscountAmount);
-		if(onlineAmount.compareTo(payAmount) > 0){
-			//实际在线支付金额大于理论上最大的在线支付金额
-			order.setUnusual(YOrN.Y);
-			logger.warn("---["+value.getPayNo()+"-美团超券支付异常]-最大可在线支付金额是"+payAmount+",实际在线支付金额是"+onlineAmount);
-			value.joinWarningInfo("["+value.getPayNo()+"-美团超券支付异常]-最大可在线支付金额是"+payAmount+",实际在线支付金额是"+onlineAmount);
-		}
 		
 		/* 设置订单中不可打折金额 */
 		if(!nodiscountAmount.equals(BigDecimal.ZERO) && order.getNodiscountAmount() == null){
@@ -59,24 +52,36 @@ public class MTcqFilter extends AbstractPaymodeFilter {
 		String day = order.getDay();
 		try {
 			Date orderDate = DateUtil.parseDate(order.getDay(), "yyyyMMdd");
-			if(order.getCheckoutTime().after(DateUtil.getTimeOfDay(orderDate, 22, 0, 0, 0))){  
+			if(order.getCheckoutTime().after(DateUtil.getTimeOfDay(orderDate, 23, 0, 0, 0))){  
 				//过了22:00到店付没有优惠
-				value.addPayInfo(PaymodeCode.MTSUPER, onlineAmount);
+				value.addPostAccountAmount(AccountCode.MT_SUPER, onlineAmount);
+				value.joinSchemeName("美团超券在线支付"+onlineAmount+"元");
 				return;
 			}
-			
-			if(onlineAmount.compareTo(originAmount) == 0){//全部在美团超券平台支付
-				payAmount = originAmount.subtract(nodiscountAmount);
-			}else{ //不可打折金额使用另外支付方式（如现金）等支付
-				payAmount = onlineAmount;
+			BigDecimal[] actualResult = calculator.doCalculateAmountForOnlinePay(onlineAmount,orderDate,Vendor.MTSUPER);
+			/* 最大可在线支付金额 */
+			BigDecimal payAmount = originAmount.subtract(nodiscountAmount);
+			BigDecimal[] predictResult = calculator.doCalculateAmountForOnlinePay(payAmount,orderDate,Vendor.MTSUPER);
+			if(actualResult[1].compareTo(predictResult[1]) != 0){
+				//实际在线支付金额大于理论上最大的在线支付金额
+				order.setUnusual(YOrN.Y);
+				logger.warn("美团超券支付异常-最大可在线支付金额是"+payAmount+",实际在线支付金额是"+onlineAmount);
+				value.joinWarningInfo("美团超券支付异常-最大可在线支付金额是"+payAmount+",实际在线支付金额是"+onlineAmount);
 			}
-			BigDecimal[] result = calculator.doCalculateAmountForOnlinePay(payAmount,orderDate,Vendor.MTSUPER);
-			value.addPayInfo(PaymodeCode.MTSUPER, result[0]);
-			value.addPayInfo(PaymodeCode.ONLINE_FREE, result[1]);
+			
+			value.addPayInfo(PaymodeCode.ONLINE_FREE, actualResult[1]);
+			
+			value.addPostAccountAmount(AccountCode.MT_SUPER, actualResult[0]);
+			value.addPostAccountAmount(AccountCode.FREE_MT_SUPER, actualResult[1]);
+			value.addPostAccountAmount(AccountCode.FREE_ONLINE, actualResult[1]);
+			
+			value.joinSchemeName("美团超券在线支付"+actualResult[0]+"元");
 		} catch (ParseException pe) {
 			logger.warn("日期["+day+"]转换错误", pe);
 		} catch (ServiceException se){
-			value.addPayInfo(PaymodeCode.MTSUPER, onlineAmount);
+			value.addPostAccountAmount(AccountCode.MT_SUPER, onlineAmount);
+			value.joinSchemeName("美团超券在线支付"+onlineAmount+"元");
+			value.joinWarningInfo(se.getMessage());
 		}
 	}
 }

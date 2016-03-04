@@ -66,7 +66,7 @@ public class OrderExcelDataLoaderService extends BaseDataLoaderService {
 			// 更新账单使用方案和库存数据
 			updateRelativeInfo(orders);
 			// 生成账单流水
-			generateAccountFlow(date);
+//			generateAccountFlow(date);
 		}else{
 			ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "数据已被导入，不可重复导入");
 		}

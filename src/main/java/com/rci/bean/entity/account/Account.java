@@ -137,7 +137,7 @@ public class Account extends BaseEntity {
 
 	@Column(name="earning_amount")
 	public BigDecimal getEarningAmount() {
-		return earningAmount;
+		return earningAmount == null ? BigDecimal.ZERO:earningAmount;
 	}
 
 	public void setEarningAmount(BigDecimal earningAmount) {
@@ -146,7 +146,7 @@ public class Account extends BaseEntity {
 
 	@Column(name="expense_amount")
 	public BigDecimal getExpenseAmount() {
-		return expenseAmount;
+		return expenseAmount == null ? BigDecimal.ZERO:expenseAmount;
 	}
 
 	public void setExpenseAmount(BigDecimal expenseAmount) {
@@ -155,7 +155,7 @@ public class Account extends BaseEntity {
 
 	@Column(name="balance")
 	public BigDecimal getBalance() {
-		return balance;
+		return balance == null ? BigDecimal.ZERO:balance;
 	}
 
 	public void setBalance(BigDecimal balance) {

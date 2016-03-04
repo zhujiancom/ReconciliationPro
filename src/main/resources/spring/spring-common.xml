@@ -91,5 +91,8 @@
 	<bean id="PreserveFilter" class="com.rci.service.calculatecenter.filter.impl.PreserveFilter" scope="prototype">
 		<property name="index" value="18"/>
 	</bean>
+	<bean id="VoucherFilter" class="com.rci.service.calculatecenter.filter.impl.VoucherFilter" scope="prototype">
+		<property name="index" value="14"/>
+	</bean>
 	
 </beans>

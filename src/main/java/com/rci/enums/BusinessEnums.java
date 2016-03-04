@@ -185,6 +185,11 @@ public final class BusinessEnums {
 		ONLINE_TDD,
 		FREE_TDD,
 		WALLET,
+		BDWM,
+		ONLINE_BDWM,
+		FREE_BDWM,
+		ALLOWANCE_BDWM,
+		ONLINE_VOUCHER
 	}
 	
 	public static enum PaymodeCode{

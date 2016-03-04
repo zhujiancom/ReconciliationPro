@@ -4,7 +4,6 @@
 package com.rci.service;
 
 import com.rci.bean.entity.account.Account;
-import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.service.base.IBaseService;
 
 /**
@@ -36,21 +35,6 @@ public interface IAccountService extends IBaseService<Account, Long>{
 	 * @return
 	 */
 	Account getAccount(Long id);
-	
-	/**
-	 * 
-	 * Describle(描述)：根据支付方式查找对应的账户
-	 *
-	 * 方法名称：getAccount
-	 *
-	 * 所在类名：IAccountService
-	 *
-	 * Create Time:2016年3月2日 上午11:31:35
-	 *  
-	 * @param paymode
-	 * @return
-	 */
-	Account getAccount(PaymodeCode paymode);
 	
 	/**
 	 * 

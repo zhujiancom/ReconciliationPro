@@ -3,6 +3,7 @@ package com.rci.service.calculatecenter.filter.impl;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
@@ -32,6 +33,6 @@ public class CashFilter extends AbstractPaymodeFilter {
 	protected void doExtractOrderInfo(ParameterValue value) {
 		BigDecimal cashAmount = value.getAmount(PaymodeCode.CASH_MACHINE);
 		value.joinSchemeName("现金支付"+cashAmount);
-		value.addPayInfo(PaymodeCode.CASH_MACHINE, cashAmount);
+		value.addPostAccountAmount(AccountCode.CASH_MACHINE, cashAmount);
 	}
 }

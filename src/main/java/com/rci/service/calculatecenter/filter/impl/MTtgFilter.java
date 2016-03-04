@@ -14,6 +14,7 @@ import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.SchemeType;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.enums.CommonEnums.YOrN;
@@ -119,8 +120,11 @@ public class MTtgFilter extends AbstractPaymodeFilter {
 					postAmount = postAmount.add(amount[0]);
 					freeAmount = freeAmount.add(amount[1]);
 				}
-				value.addPayInfo(PaymodeCode.MT, postAmount);
 				value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+				
+				value.addPostAccountAmount(AccountCode.ONLINE_MT, postAmount);
+				value.addPostAccountAmount(AccountCode.FREE_MT, freeAmount);
+				value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
 			}else{		//不存在直接返回
 				return;
 			}

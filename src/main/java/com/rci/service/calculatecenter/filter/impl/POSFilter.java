@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.service.calculatecenter.ParameterValue;
@@ -44,7 +45,7 @@ public class POSFilter extends AbstractPaymodeFilter {
 		String day = order.getDay();
 		try {
 			Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
-			Scheme scheme = calculator.getAppropriteScheme(orderDate, BigDecimal.ZERO, Vendor.ALIPAY);
+			Scheme scheme = calculator.getAppropriteScheme(orderDate, BigDecimal.ZERO, Vendor.UNIONPAY);
 			if(scheme != null){
 				BigDecimal commission = scheme.getCommission();
 				if(commission == null){
@@ -58,7 +59,12 @@ public class POSFilter extends AbstractPaymodeFilter {
 			}
 			BigDecimal freeAmount = onlineAmount.subtract(postAmount);
 			value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
-			value.addPayInfo(PaymodeCode.ALIPAY, postAmount);
+			
+			value.addPostAccountAmount(AccountCode.ONLINE_POS, postAmount);
+			value.addPostAccountAmount(AccountCode.FREE_POS, freeAmount);
+			value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
+			
+			value.joinSchemeName("POS机刷卡支付"+postAmount+"元");
 		} catch (ParseException pe) {
 			logger.warn("日期["+day+"]转换错误", pe);
 		}

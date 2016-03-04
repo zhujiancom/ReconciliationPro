@@ -3,7 +3,7 @@ package com.rci.service.calculatecenter.filter.impl;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import com.rci.bean.entity.Order;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
@@ -33,9 +33,11 @@ public class VoucherFilter extends AbstractPaymodeFilter {
 	@Override
 	protected void doExtractOrderInfo(ParameterValue value) {
 		BigDecimal voucherAmount = value.getAmount(PaymodeCode.VOUCHER);
-		value.joinSchemeName("使用代金券"+voucherAmount+"元");
+		value.joinSchemeName("使用"+voucherAmount+"元代金券");
 		value.addPayInfo(PaymodeCode.ONLINE_FREE, voucherAmount);
 		
+		value.addPostAccountAmount(AccountCode.ONLINE_VOUCHER, voucherAmount);
+		value.addPostAccountAmount(AccountCode.FREE_ONLINE, voucherAmount);
 	}
 
 }

@@ -103,7 +103,6 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 		}
 		// 解析订单各种账户收入的金额，判断订单使用的方案
 		for (Order order : orders) {
-//			filterChain.doFilter(order, filterChain);
 			filterChain.doFilter(new DefaultOrderParameterValue(order));
 			addInventoryConsumeLog(order);
 			updateCostConsumeLog(order);

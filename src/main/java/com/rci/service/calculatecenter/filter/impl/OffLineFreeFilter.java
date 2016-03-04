@@ -3,6 +3,7 @@ package com.rci.service.calculatecenter.filter.impl;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
@@ -33,13 +34,15 @@ public class OffLineFreeFilter extends AbstractPaymodeFilter {
 	protected void doExtractOrderInfo(ParameterValue value) {
 		BigDecimal freeAmount = value.getAmount(PaymodeCode.FREE);		//收银机的免单金额
 		BigDecimal onlineFreeAmount = value.getAmount(PaymodeCode.ONLINE_FREE);  //经过前面处理器处理后查看有没有在线免单的金额
-		if(onlineFreeAmount == null){ // 没有在线免单
+		if(onlineFreeAmount == null || onlineFreeAmount.compareTo(BigDecimal.ZERO) == 0){ // 没有在线免单
 			value.addPayInfo(PaymodeCode.OFFLINE_FREE, freeAmount);
+			value.addPostAccountAmount(AccountCode.FREE_OFFLINE, freeAmount);
 			value.joinSchemeName("堂食免单"+freeAmount+"元");
 		}else{
 			BigDecimal offlineFreeAmount = freeAmount.subtract(onlineFreeAmount);
 			if(offlineFreeAmount.compareTo(BigDecimal.ZERO) > 0){
 				value.addPayInfo(PaymodeCode.OFFLINE_FREE, offlineFreeAmount);
+				value.addPostAccountAmount(AccountCode.FREE_OFFLINE, offlineFreeAmount);
 				value.joinSchemeName("堂食免单"+offlineFreeAmount+"元");
 			}
 		}

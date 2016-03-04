@@ -37,6 +37,9 @@ public class DefaultOrderParameterValue implements ParameterValue {
 
 	@Override
 	public Map<PaymodeCode, BigDecimal> getPayInfo() {
+		if(paymodeMapping == null){
+			paymodeMapping = order.getPaymodeMapping();
+		}
 		return paymodeMapping;
 	}
 
@@ -44,6 +47,9 @@ public class DefaultOrderParameterValue implements ParameterValue {
 	public void addPayInfo(PaymodeCode code, BigDecimal amount) {
 		if(paymodeMapping == null){
 			paymodeMapping = order.getPaymodeMapping();
+		}
+		if(amount == null || amount.compareTo(BigDecimal.ZERO) == 0){
+			return;
 		}
 		if(paymodeMapping.get(code) != null){
 			BigDecimal totalAmount = paymodeMapping.get(code).add(amount);
@@ -74,7 +80,7 @@ public class DefaultOrderParameterValue implements ParameterValue {
 
 	@Override
 	public String joinWarningInfo(String... warningInfos) {
-		if(warningInfo == null){
+		if(warningInfos == null){
 			return StringUtils.trimToEmpty(this.warningInfo);
 		}
 		if(!StringUtils.hasText(this.warningInfo)){
@@ -95,6 +101,9 @@ public class DefaultOrderParameterValue implements ParameterValue {
 	public void addPostAccountAmount(AccountCode code, BigDecimal amount) {
 		if(accountMapping == null){
 			accountMapping = new HashMap<AccountCode,BigDecimal>();
+		}
+		if(amount == null || amount.compareTo(BigDecimal.ZERO) == 0){
+			return;
 		}
 		if(accountMapping.get(code) != null){
 			BigDecimal totalAmount = accountMapping.get(code).add(amount);

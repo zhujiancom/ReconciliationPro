@@ -22,9 +22,13 @@ import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.OrderItem;
+import com.rci.bean.entity.account.Account;
 import com.rci.contants.BusinessConstant;
+import com.rci.enums.BusinessEnums.AccountCode;
+import com.rci.enums.CommonEnums.Symbol;
 import com.rci.metadata.NativeSQLBuilder;
 import com.rci.metadata.service.IDataTransformService;
+import com.rci.service.IAccountService;
 import com.rci.service.IDishService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
@@ -39,6 +43,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 		IOrderService {
 	@Autowired
 	private Mapper beanMapper;
+	
+	@Resource(name="AccountService")
+	private IAccountService accountService;
 	@Resource(name="OrderAccountRefService")
 	private IOrderAccountRefService oaService;
 	@Resource(name="DishService")
@@ -74,65 +81,19 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 				BigDecimal totalAmount = BigDecimal.ZERO;
 				for (OrderAccountRef accountRef : oaRefs) {
 					BigDecimal amount = accountRef.getRealAmount();
-					totalAmount = totalAmount.add(amount);
 					String accountNo = accountRef.getAccNo();
-					
-					//现金入账
-					if(BusinessConstant.AccountCode_CASH_MACHINE.equals(accountNo)){
-						vo.setCashmachineAmount(amount);
-					}
-					//POS机入账
-					if(BusinessConstant.AccountCode_POS.equals(accountNo)){
-						vo.setPosAmount(amount);
-					}
-					//大众点评团购券入账
-					if(BusinessConstant.AccountCode_DPTG.equals(accountNo)){
-						vo.setDptgAmount(amount);
-					}
-					//大众点评闪惠入账
-					if(BusinessConstant.AccountCode_DPSH.equals(accountNo)){
-						vo.setDpshAmount(amount);
-					}
-					//饿了么入账
-					if(BusinessConstant.AccountCode_ELE.equals(accountNo)){
-						vo.setEleAmount(amount);
-					}
-					//支付宝入账
-					if(BusinessConstant.AccountCode_ALIPAY.equals(accountNo)){
-						vo.setAliPayAmount(amount);
-					}
-					//美团团购券入账
-					if(BusinessConstant.AccountCode_MT.equals(accountNo)){
-						vo.setMtAmount(amount);
-					}
-					//美团超券券入账
-					if(BusinessConstant.AccountCode_MT_SUPER.equals(accountNo)){
-						vo.setMtSuperAmount(amount);
-					}
-					//美团外卖入账
-					if(BusinessConstant.AccountCode_MTWM.equals(accountNo)){
-						vo.setMtwmAmount(amount);
-					}
-					//百度外卖入账
-					if(BusinessConstant.AccountCode_BDWM.equals(accountNo)){
-						vo.setBdwmAmount(amount);
-					}
-					//百度糯米团购券入账
-					if(BusinessConstant.AccountCode_BDNM.equals(accountNo)){
-						vo.setBdnmAmount(amount);
-					}
-					//百度糯米到店付入账
-					if(BusinessConstant.AccountCode_BDNM_DDF.equals(accountNo)){
-						vo.setBdnmddfAmount(amount);
-					}
-					//在线优惠（免单）金额
-					if(BusinessConstant.AccountCode_FREE_ONLINE.equals(accountNo)){
+					AccountCode code = AccountCode.valueOf(accountNo);
+					Account account = accountService.getAccount(accountNo);
+					if(AccountCode.FREE_ONLINE.equals(code)){
 						vo.setOnlineFreeAmount(amount);
-						totalAmount = totalAmount.subtract(amount);
+						continue;
 					}
-					//线下优惠金额
-					if(BusinessConstant.AccountCode_FREE_OFFLINE.equals(accountNo)){
+					if(AccountCode.FREE_OFFLINE.equals(code)){
 						vo.setFreeAmount(amount);
+					}
+					if(Symbol.P.equals(account.getSymbol())){  //是正数账户
+						totalAmount = totalAmount.add(amount);
+					}else if(Symbol.N.equals(account.getSymbol())){ //是负数账户
 						totalAmount = totalAmount.subtract(amount);
 					}
 				}

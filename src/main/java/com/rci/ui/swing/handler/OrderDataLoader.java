@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 
 import org.springframework.util.CollectionUtils;
 
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.service.IDataLoaderService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
@@ -42,7 +43,9 @@ public class OrderDataLoader implements Runnable {
 	
 	private IOrderService orderService;
 	
-	private Map<String,BigDecimal> sumMap;
+//	private Map<String,BigDecimal> sumMap;
+	
+	private Map<AccountCode,BigDecimal> dailyPostAccountMap;
 	
 	public OrderDataLoader(Date queryDate){
 		this.queryDate = queryDate;
@@ -70,9 +73,7 @@ public class OrderDataLoader implements Runnable {
 		for(OrderVO ordervo:ordervos){
 			if(StringUtils.hasText(ordervo.getWarningInfo())){
 				warningInfo.append(++count).append(". ")
-							.append("[")
-							.append(ordervo.getPayNo())
-							.append("]-")
+							.append("[").append(ordervo.getPayNo()).append("]-")
 							.append(ordervo.getWarningInfo())
 							.append("\n");
 			}
@@ -145,16 +146,17 @@ public class OrderDataLoader implements Runnable {
 	 * @param time
 	 */
 	private void loadSumData(Date date){
-		sumMap = new HashMap<String,BigDecimal>();
+		dailyPostAccountMap = new HashMap<AccountCode,BigDecimal>();
 		IOrderAccountRefService oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
 		List<AccountSumResult> sumRes = oaService.querySumAmount(date);
 		for(AccountSumResult res:sumRes){
 			String accNo = res.getAccNo();
 			BigDecimal amount = res.getSumAmount();
-			sumMap.put(accNo, amount);
+			dailyPostAccountMap.put(AccountCode.valueOf(accNo), amount);
 		}
 		conclusionPane.setQueryDate(date);
-		conclusionPane.setSumMap(sumMap);
+//		conclusionPane.setSumMap(sumMap);
+		conclusionPane.setDailyPostAccountMap(dailyPostAccountMap);
 	}
 	
 	public Date getQueryDate() {

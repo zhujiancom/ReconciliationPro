@@ -24,6 +24,7 @@ public class DefaultPaymodeFilterChain implements PaymodeFilterChain,Initializin
 	public void doFilter(ParameterValue value) {
 		if(pos == filters.size()){//执行到链条末尾
 			logger.debug("order["+value.getPayNo()+"] -  链条执行完成！");
+			pos = 0;
 			return;
 		}
 		PaymodeFilter filter = filters.get(pos);
@@ -37,7 +38,6 @@ public class DefaultPaymodeFilterChain implements PaymodeFilterChain,Initializin
 
 			@Override
 			public int compare(Indexable f1, Indexable f2) {
-				System.out.println("f1.index = "+f1.index()+"- f2.index = "+f2.index());
 				if(f1.index() - f2.index() > 0){
 					return 1;
 				}

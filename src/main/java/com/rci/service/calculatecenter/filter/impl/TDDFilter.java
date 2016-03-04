@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
@@ -69,8 +70,10 @@ public class TDDFilter extends AbstractPaymodeFilter {
 			if(CollectionUtils.isEmpty(schemes)){
 				if(freeAmount != null){
 					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+					value.addPostAccountAmount(AccountCode.FREE_TDD, freeAmount);
+					value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
 				}
-				value.addPayInfo(PaymodeCode.TDD, onlineAmount);
+				value.addPostAccountAmount(AccountCode.TDD, onlineAmount);
 				value.joinSchemeName("淘点点在线支付"+onlineAmount+"元");
 			}else{
 				for(Scheme scheme:schemes){
@@ -83,8 +86,12 @@ public class TDDFilter extends AbstractPaymodeFilter {
 							freeAmount = scheme.getSpread();
 						}
 						BigDecimal postAmount = onlineAmount.subtract(scheme.getSpread());
-						value.addPayInfo(PaymodeCode.TDD, postAmount);
 						value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+						
+						value.addPostAccountAmount(AccountCode.TDD, postAmount);
+						value.addPostAccountAmount(AccountCode.FREE_TDD, freeAmount);
+						value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
+						
 						value.joinSchemeName(scheme.getName(),"淘点点在线支付"+postAmount+"元 ");
 					}else{
 						continue;

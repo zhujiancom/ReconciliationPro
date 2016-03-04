@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import com.rci.bean.entity.Order;
+import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.service.calculatecenter.ParameterValue;
@@ -37,7 +38,7 @@ public class BDWMFilter extends AbstractPaymodeFilter{
 		order.setFramework(OrderFramework.BDWM);
 		BigDecimal onlineAmount = value.getAmount(PaymodeCode.BDWM);
 		/* 记录百度外卖商家到账金额 */
-		value.addPayInfo(PaymodeCode.BDWM, onlineAmount);
+		value.addPostAccountAmount(AccountCode.ONLINE_BDWM, onlineAmount);
 		
 		/* 暂时不开放，因为百度外卖是全部算好商家到账金额的*/
 //		BigDecimal originalAmount = order.getOriginPrice();

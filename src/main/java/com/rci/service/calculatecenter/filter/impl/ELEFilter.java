@@ -31,7 +31,7 @@ import com.rci.tools.DateUtil;
  * Create Time: 2016年3月1日 上午11:17:13
  *
  */
-public class ElEFilter extends AbstractPaymodeFilter {
+public class ELEFilter extends AbstractPaymodeFilter {
 
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
@@ -46,7 +46,6 @@ public class ElEFilter extends AbstractPaymodeFilter {
 		BigDecimal freeAmount = value.getAmount(PaymodeCode.FREE);
 		BigDecimal originalAmount = order.getOriginPrice();
 		if(freeAmount != null){
-			value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 			String day = order.getDay();
 			try {
 				Date orderDate = DateUtil.parseDate(day,"yyyyMMdd");
@@ -59,19 +58,35 @@ public class ElEFilter extends AbstractPaymodeFilter {
 						order.setUnusual(YOrN.Y);
 						value.joinWarningInfo("["+value.getPayNo()+"],在线支付金额{"+onlineAmount+"}错误,应该是{"+predictOnlineAmount+"}");
 					}
-					value.joinSchemeName(scheme.getName(),"饿了么在线支付到账-"+postAmount+"元");
+					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+					
 					value.addPostAccountAmount(AccountCode.ONLINE_ELE, predictOnlineAmount);
 					value.addPostAccountAmount(AccountCode.ALLOWANCE_ELE, allowanceAmount);
 					value.addPostAccountAmount(AccountCode.FREE_ELE, scheme.getSpread());
+					value.addPostAccountAmount(AccountCode.FREE_ONLINE, scheme.getSpread());
+					value.joinSchemeName(scheme.getName(),"饿了么在线支付到账-"+postAmount+"元","平台补贴"+allowanceAmount+"元");
 				}else{
 					logger.warn(order.getPayNo()+"---[饿了么 ] 没有找到匹配的Scheme -----");
-					String warningInfo = "[饿了么动]--- 没有找到匹配的Scheme";
+					String warningInfo = "[饿了么]--- 没有找到匹配的Scheme";
 					value.joinWarningInfo(warningInfo);
+					value.joinSchemeName("饿了么无法解析活动方案");
 					order.setUnusual(YOrN.Y);
+					
+					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+					value.addPostAccountAmount(AccountCode.ONLINE_ELE, onlineAmount);
+					value.addPostAccountAmount(AccountCode.FREE_ELE, freeAmount);
+					value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
 				}
 			} catch (ParseException pe) {
 				logger.warn("日期["+day+"]转换错误", pe);
 			}
+		}else{
+			if(onlineAmount.compareTo(originalAmount) != 0){
+				value.joinWarningInfo("饿了么在线支付金额不正确！");
+				order.setUnusual(YOrN.Y);
+			}
+			value.joinSchemeName("饿了么在线支付到账-"+onlineAmount+"元");
+			value.addPostAccountAmount(AccountCode.ONLINE_ELE, originalAmount);
 		}
 	}
 

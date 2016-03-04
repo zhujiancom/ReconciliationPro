@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.rci.bean.entity.account.Account;
 import com.rci.dao.impl.SafeDetachedCriteria;
 import com.rci.dao.impl.SafeRestrictions;
-import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.service.IAccountService;
 import com.rci.service.base.BaseServiceImpl;
 
@@ -32,13 +31,6 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implement
 	@Override
 	public Account getAccount(Long id) {
 		return baseDAO.get(id);
-	}
-
-	@Override
-	public Account getAccount(PaymodeCode paymode) {
-		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(Account.class);
-		sdc.add(SafeRestrictions.eq("paymodeNo", paymode.getPaymodeno()));
-		return baseDAO.queryUniqueByCriteria(sdc);
 	}
 
 	@Override
