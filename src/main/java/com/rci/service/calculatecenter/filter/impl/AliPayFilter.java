@@ -52,15 +52,15 @@ public class AliPayFilter extends AbstractPaymodeFilter {
 				postAmount = onlineAmount.add(scheme.getPostPrice());
 				BigDecimal commission = scheme.getCommission();
 				if(commission == null){
-					value.joinWarningInfo("["+value.getPayNo()+"]-请确认支付宝活动方案是否真不需要佣金");
+					value.joinWarningInfo("请确认支付宝活动方案是否真不需要佣金");
 				}else{
 					postAmount = DigitUtil.mutiplyDown(originalAmount, DigitUtil.precentDown(scheme.getCommission()));
 				}
 			}else{
 				if(onlineAmount.compareTo(originalAmount) != 0){
-					value.joinWarningInfo("["+value.getPayNo()+"]- 支付宝支付金额应该与订单原价相同！");
+					value.joinWarningInfo("支付宝支付金额应该与订单原价相同！");
 				}
-				postAmount = originalAmount;
+				postAmount = onlineAmount;
 			}
 			value.joinSchemeName("支付宝在线支付"+postAmount+"元");
 			BigDecimal freeAmount = originalAmount.subtract(postAmount);

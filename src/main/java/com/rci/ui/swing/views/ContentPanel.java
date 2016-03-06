@@ -45,7 +45,7 @@ public class ContentPanel extends JSplitPane {
 		JScrollPane mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 		mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		mainTable = new OrderTable(24);
+		mainTable = new OrderTable(11);
 		mainScrollPane.setViewportView(mainTable);
 		mainScrollPane.getViewport().setBackground(Color.WHITE);
 		

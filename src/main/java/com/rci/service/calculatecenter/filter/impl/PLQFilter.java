@@ -71,7 +71,8 @@ public class PLQFilter extends AbstractPaymodeFilter {
 							postAmount = onlineAmount;
 							onlineFreeAmount = scheme.getSpread(); //在线优惠金额，商家补贴金额
 							if(scheme.getCommission() != null){
-								BigDecimal unAccessoryAmount = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
+								BigDecimal[] amountExtract = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
+								BigDecimal unAccessoryAmount = amountExtract[0];
 								BigDecimal commissionAmount = DigitUtil.mutiplyDown(unAccessoryAmount, DigitUtil.precentDown(scheme.getCommission()));
 								postAmount = postAmount.subtract(commissionAmount);
 								onlineFreeAmount = onlineFreeAmount.add(commissionAmount);
@@ -90,7 +91,7 @@ public class PLQFilter extends AbstractPaymodeFilter {
 						return;
 					}
 					/* 记录派乐趣在线支付免单金额 */
-					value.addPayInfo(PaymodeCode.ONLINE_FREE, onlineFreeAmount);
+					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 					/* 记录派乐趣商家到账金额 */
 					value.addPostAccountAmount(AccountCode.ONLINE_PLQ, postAmount);
 					value.addPostAccountAmount(AccountCode.ALLOWANCE_PLQ, allowanceAmount);

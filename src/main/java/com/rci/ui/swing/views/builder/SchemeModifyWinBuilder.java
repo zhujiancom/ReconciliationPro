@@ -133,7 +133,7 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 		postPriceInput = new JTextField(StringUtils.trimToEmpty(scheme.getPostPrice()),30);
 		forthPane.add(postPriceInput);
 		mainPane.add(forthPane);
-		JPanel thirtheenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+		JPanel thirtheenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,2));
 		thirtheenPane.add(commission);
 		commissionInput = new JTextField(StringUtils.trimToEmpty(scheme.getCommission()),30);
 		thirtheenPane.add(commissionInput);
@@ -228,6 +228,9 @@ public class SchemeModifyWinBuilder implements PopWindowBuilder,ActionListener {
 			scheme.setPrice(new BigDecimal(priceInput.getText().trim()));
 			scheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
 			scheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
+			if(StringUtils.hasText(commissionInput.getText())){
+				scheme.setCommission(new BigDecimal(commissionInput.getText().trim()));
+			}
 			scheme.setStartDate(DateUtil.parseDate(startInput.getText().trim(),"yyyyMMdd"));
 			scheme.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
 			if(StringUtils.hasText(floorInput.getText())){

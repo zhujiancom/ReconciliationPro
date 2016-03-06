@@ -93,8 +93,10 @@ public abstract class AbstractPaymodeFilter implements PaymodeFilter {
 	 * @param order
 	 * @return
 	 */
-	protected BigDecimal wipeoutAccessoryAmount(List<OrderItem> items){
+	protected BigDecimal[] wipeoutAccessoryAmount(List<OrderItem> items){
 		BigDecimal unAccessoryAmount = BigDecimal.ZERO;
+		BigDecimal boxfeeAmount = BigDecimal.ZERO;
+		BigDecimal takeoutfeeAmount = BigDecimal.ZERO;
 		for(OrderItem item:items){
 			String dishno = item.getDishNo();
 			BigDecimal singlePrice = item.getPrice();
@@ -103,11 +105,17 @@ public abstract class AbstractPaymodeFilter implements PaymodeFilter {
 			BigDecimal ratepercent = item.getDiscountRate();
 			BigDecimal rate = DigitUtil.precentDown(ratepercent);
 			BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate);
+			if(isBoxfeeDish(dishno)){
+				boxfeeAmount = boxfeeAmount.add(price);
+			}
+			if(isTakeoutfeeDish(dishno)){
+				takeoutfeeAmount = takeoutfeeAmount.add(price);
+			}
 			if(!isBoxfeeDish(dishno) && !isTakeoutfeeDish(dishno)){
 				unAccessoryAmount = unAccessoryAmount.add(price);
 			}
 		}
-		return unAccessoryAmount;
+		return new BigDecimal[]{unAccessoryAmount,takeoutfeeAmount,boxfeeAmount};
 	}
 	
 	/**

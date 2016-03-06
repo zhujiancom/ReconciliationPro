@@ -23,7 +23,6 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.account.Account;
-import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.CommonEnums.Symbol;
 import com.rci.metadata.NativeSQLBuilder;
@@ -93,8 +92,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 					}
 					if(Symbol.P.equals(account.getSymbol())){  //是正数账户
 						totalAmount = totalAmount.add(amount);
-					}else if(Symbol.N.equals(account.getSymbol())){ //是负数账户
-						totalAmount = totalAmount.subtract(amount);
 					}
 				}
 				vo.setSchemeName(order.getSchemeName());

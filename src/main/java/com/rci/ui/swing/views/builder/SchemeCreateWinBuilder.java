@@ -52,7 +52,7 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 	private JTextField endInput = new JTextField(30);
 	private JTextField floorInput = new JTextField(30);
 	private JTextField ceilInput = new JTextField(30);
-	private JTextField commissionInput;
+	private JTextField commissionInput = new JTextField(30);;
 	private JLabel name = new JLabel("活动名称");
 	private JLabel vendor = new JLabel("活动平台");
 	private JLabel schemeType = new JLabel("活动类型");
@@ -91,6 +91,9 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 			}
 			newScheme.setPostPrice(new BigDecimal(postPriceInput.getText().trim()));
 			newScheme.setSpread(new BigDecimal(spreadInput.getText().trim()));
+			if(StringUtils.hasText(commissionInput.getText())){
+				newScheme.setCommission(new BigDecimal(commissionInput.getText().trim()));
+			}
 			newScheme.setStartDate(DateUtil.parseDate(startInput.getText().trim(), "yyyyMMdd"));
 			newScheme.setEndDate(DateUtil.parseDate(endInput.getText().trim(),"yyyyMMdd"));
 			if(StringUtils.hasText(floorInput.getText())){
@@ -154,7 +157,7 @@ public class SchemeCreateWinBuilder implements PopWindowBuilder,ActionListener{
 		forthPane.add(postPrice);
 		forthPane.add(postPriceInput);
 		mainPane.add(forthPane);
-		JPanel thirtheenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,20,2));
+		JPanel thirtheenPane = new JPanel(new FlowLayout(FlowLayout.LEFT,30,2));
 		thirtheenPane.add(commission);
 		thirtheenPane.add(commissionInput);
 		mainPane.add(thirtheenPane);

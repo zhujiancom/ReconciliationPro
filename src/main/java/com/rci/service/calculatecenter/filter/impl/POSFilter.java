@@ -52,7 +52,7 @@ public class POSFilter extends AbstractPaymodeFilter {
 					value.joinWarningInfo("["+value.getPayNo()+"]-请确认POS机刷卡活动方案是否真不需要佣金");
 					postAmount = onlineAmount;
 				}else{
-					postAmount = DigitUtil.mutiplyDown(onlineAmount, DigitUtil.precentDown(scheme.getCommission(),3));
+					postAmount = onlineAmount.subtract(DigitUtil.mutiplyDown(onlineAmount, DigitUtil.precentDown(scheme.getCommission(),3)));
 				}
 			}else{
 				postAmount = onlineAmount;

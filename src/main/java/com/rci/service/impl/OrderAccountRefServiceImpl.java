@@ -21,6 +21,7 @@ import com.rci.enums.CommonEnums.Symbol;
 import com.rci.service.IAccountService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.base.BaseServiceImpl;
+import com.rci.tools.StringUtils;
 
 @Service("OrderAccountRefService")
 public class OrderAccountRefServiceImpl extends
@@ -173,6 +174,9 @@ public class OrderAccountRefServiceImpl extends
 
 	@Override
 	public Long getValidOrderCount(Date postTime, String account) {
+		if(!StringUtils.hasText(account)){
+			return 0L;
+		}
 		DetachedCriteria dc = DetachedCriteria.forClass(OrderAccountRef.class);
 		dc.setProjection(Projections.projectionList().add(Projections.rowCount())).add(Restrictions.eq("accNo", account)).add(Restrictions.eq("postTime", postTime));
 		Long count = baseDAO.getRowCount(dc);

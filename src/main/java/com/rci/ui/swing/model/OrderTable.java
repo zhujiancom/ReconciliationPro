@@ -63,54 +63,54 @@ public class OrderTable extends BaseTable<OrderVO> {
 		cm.getColumn(7).setHeaderValue("结账时间");
 		cm.getColumn(7).setPreferredWidth(100);
 		cm.getColumn(7).setCellRenderer(redmarkRenderer);
-		cm.getColumn(8).setHeaderValue("收银机现金");
-		cm.getColumn(8).setPreferredWidth(70);
+//		cm.getColumn(8).setHeaderValue("收银机现金");
+//		cm.getColumn(8).setPreferredWidth(70);
+//		cm.getColumn(8).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(9).setHeaderValue("美团入账");
+//		cm.getColumn(9).setPreferredWidth(70);
+//		cm.getColumn(9).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(10).setHeaderValue("大众点评团购");
+//		cm.getColumn(10).setPreferredWidth(105);
+//		cm.getColumn(10).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(11).setHeaderValue("大众点评闪惠");
+//		cm.getColumn(11).setPreferredWidth(105);
+//		cm.getColumn(11).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(12).setHeaderValue("饿了么");
+//		cm.getColumn(12).setPreferredWidth(75);
+//		cm.getColumn(12).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(13).setHeaderValue("饿了么补贴");
+//		cm.getColumn(13).setPreferredWidth(105);
+//		cm.getColumn(13).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(14).setHeaderValue("支付宝");
+//		cm.getColumn(14).setPreferredWidth(75);
+//		cm.getColumn(14).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(15).setHeaderValue("美团超级代金券");
+//		cm.getColumn(15).setPreferredWidth(105);
+//		cm.getColumn(15).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(16).setHeaderValue("美团外卖");
+//		cm.getColumn(16).setPreferredWidth(75);
+//		cm.getColumn(16).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(17).setHeaderValue("美团外卖补贴");
+//		cm.getColumn(17).setPreferredWidth(105);
+//		cm.getColumn(17).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(18).setHeaderValue("POS机");
+//		cm.getColumn(18).setPreferredWidth(75);
+//		cm.getColumn(18).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(19).setHeaderValue("外卖超人");
+//		cm.getColumn(19).setPreferredWidth(75);
+//		cm.getColumn(19).setCellRenderer(redmarkRenderer);
+//		cm.getColumn(20).setHeaderValue("外卖超人补贴");
+//		cm.getColumn(20).setPreferredWidth(115);
+//		cm.getColumn(20).setCellRenderer(redmarkRenderer);
+		cm.getColumn(8).setHeaderValue("堂食免单");
+		cm.getColumn(8).setPreferredWidth(75);
 		cm.getColumn(8).setCellRenderer(redmarkRenderer);
-		cm.getColumn(9).setHeaderValue("美团入账");
-		cm.getColumn(9).setPreferredWidth(70);
+		cm.getColumn(9).setHeaderValue("在线免单");
+		cm.getColumn(9).setPreferredWidth(75);
 		cm.getColumn(9).setCellRenderer(redmarkRenderer);
-		cm.getColumn(10).setHeaderValue("大众点评团购");
-		cm.getColumn(10).setPreferredWidth(105);
-		cm.getColumn(10).setCellRenderer(redmarkRenderer);
-		cm.getColumn(11).setHeaderValue("大众点评闪惠");
-		cm.getColumn(11).setPreferredWidth(105);
-		cm.getColumn(11).setCellRenderer(redmarkRenderer);
-		cm.getColumn(12).setHeaderValue("饿了么");
-		cm.getColumn(12).setPreferredWidth(75);
-		cm.getColumn(12).setCellRenderer(redmarkRenderer);
-		cm.getColumn(13).setHeaderValue("饿了么补贴");
-		cm.getColumn(13).setPreferredWidth(105);
-		cm.getColumn(13).setCellRenderer(redmarkRenderer);
-		cm.getColumn(14).setHeaderValue("支付宝");
-		cm.getColumn(14).setPreferredWidth(75);
-		cm.getColumn(14).setCellRenderer(redmarkRenderer);
-		cm.getColumn(15).setHeaderValue("美团超级代金券");
-		cm.getColumn(15).setPreferredWidth(105);
-		cm.getColumn(15).setCellRenderer(redmarkRenderer);
-		cm.getColumn(16).setHeaderValue("美团外卖");
-		cm.getColumn(16).setPreferredWidth(75);
-		cm.getColumn(16).setCellRenderer(redmarkRenderer);
-		cm.getColumn(17).setHeaderValue("美团外卖补贴");
-		cm.getColumn(17).setPreferredWidth(105);
-		cm.getColumn(17).setCellRenderer(redmarkRenderer);
-		cm.getColumn(18).setHeaderValue("POS机");
-		cm.getColumn(18).setPreferredWidth(75);
-		cm.getColumn(18).setCellRenderer(redmarkRenderer);
-		cm.getColumn(19).setHeaderValue("外卖超人");
-		cm.getColumn(19).setPreferredWidth(75);
-		cm.getColumn(19).setCellRenderer(redmarkRenderer);
-		cm.getColumn(20).setHeaderValue("外卖超人补贴");
-		cm.getColumn(20).setPreferredWidth(115);
-		cm.getColumn(20).setCellRenderer(redmarkRenderer);
-		cm.getColumn(21).setHeaderValue("堂食免单");
-		cm.getColumn(21).setPreferredWidth(75);
-		cm.getColumn(21).setCellRenderer(redmarkRenderer);
-		cm.getColumn(22).setHeaderValue("在线免单");
-		cm.getColumn(22).setPreferredWidth(75);
-		cm.getColumn(22).setCellRenderer(redmarkRenderer);
-		cm.getColumn(23).setHeaderValue("入账总金额");
-		cm.getColumn(23).setPreferredWidth(115);
-		cm.getColumn(23).setCellRenderer(zeromarkRenderer);
+		cm.getColumn(10).setHeaderValue("入账总金额");
+		cm.getColumn(10).setPreferredWidth(115);
+		cm.getColumn(10).setCellRenderer(zeromarkRenderer);
 	}
 	
 	public void reflushTable(List<OrderVO> orders){
@@ -242,37 +242,37 @@ public class OrderTable extends BaseTable<OrderVO> {
 //				return order.getSingleDiscount();
 			case 7:
 				return DateUtil.getTimeStampOfDate(order.getCheckoutTime());
+//			case 8:
+//				return order.getCashmachineAmount();
+//			case 9:
+//				return order.getMtAmount();
+//			case 10:
+//				return order.getDptgAmount();
+//			case 11:
+//				return order.getDpshAmount();
+//			case 12:
+//				return order.getEleAmount();
+//			case 13:
+//				return order.getEleFreeAmount();
+//			case 14:
+//				return order.getAliPayAmount();
+//			case 15:
+//				return order.getMtSuperAmount();
+//			case 16:
+//				return order.getMtwmAmount();
+//			case 17:
+//				return order.getMtwmFreeAmount();
+//			case 18:
+//				return order.getPosAmount();
+//			case 19: 
+//				return order.getWmcrAmount();
+//			case 20:
+//				return order.getWmcrbtAmount();
 			case 8:
-				return order.getCashmachineAmount();
-			case 9:
-				return order.getMtAmount();
-			case 10:
-				return order.getDptgAmount();
-			case 11:
-				return order.getDpshAmount();
-			case 12:
-				return order.getEleAmount();
-			case 13:
-				return order.getEleFreeAmount();
-			case 14:
-				return order.getAliPayAmount();
-			case 15:
-				return order.getMtSuperAmount();
-			case 16:
-				return order.getMtwmAmount();
-			case 17:
-				return order.getMtwmFreeAmount();
-			case 18:
-				return order.getPosAmount();
-			case 19: 
-				return order.getWmcrAmount();
-			case 20:
-				return order.getWmcrbtAmount();
-			case 21:
 				return order.getFreeAmount();
-			case 22:
+			case 9:
 				return order.getOnlineFreeAmount();
-			case 23:
+			case 10:
 				return order.getTotalAmount();
 			default:
 				break;

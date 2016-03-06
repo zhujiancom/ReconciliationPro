@@ -9,7 +9,6 @@ import com.rci.bean.entity.Order;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
-import com.rci.enums.CommonEnums.YOrN;
 import com.rci.exceptions.ServiceException;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
@@ -57,25 +56,18 @@ public class DZDPshFilter extends AbstractPaymodeFilter {
 				value.joinSchemeName("闪惠在线支付"+onlineAmount+"元");
 				return;
 			}
-			
-			BigDecimal[] actualResult = calculator.doCalculateAmountForOnlinePay(onlineAmount,orderDate,Vendor.SH);
 			/* 最大可在线支付金额 */
-			BigDecimal payAmount = originAmount.subtract(nodiscountAmount);
-			BigDecimal[] predictResult = calculator.doCalculateAmountForOnlinePay(payAmount,orderDate,Vendor.SH);
-			if(actualResult[1].compareTo(predictResult[1]) != 0){
-				//实际在线支付金额大于理论上最大的在线支付金额
-				order.setUnusual(YOrN.Y);
-				logger.warn("---["+value.getPayNo()+"-闪惠支付异常]-最大可在线支付金额是"+payAmount+",实际在线支付金额是"+onlineAmount);
-				value.joinWarningInfo("["+value.getPayNo()+"-闪惠支付异常]-最大可在线支付金额是"+payAmount+",实际在线支付金额是"+onlineAmount);
-			}
+			BigDecimal payAmount = onlineAmount.subtract(nodiscountAmount);
+			BigDecimal[] actualResult = calculator.doCalculateAmountForOnlinePay(payAmount,orderDate,Vendor.SH);
 			
 			value.addPayInfo(PaymodeCode.ONLINE_FREE, actualResult[1]);
 			
-			value.addPostAccountAmount(AccountCode.DPSH, actualResult[0]);
+			BigDecimal postAmount = actualResult[0].add(nodiscountAmount);
+			value.addPostAccountAmount(AccountCode.DPSH, postAmount);
 			value.addPostAccountAmount(AccountCode.FREE_DPSH, actualResult[1]);
 			value.addPostAccountAmount(AccountCode.FREE_ONLINE, actualResult[1]);
 			
-			value.joinSchemeName("闪惠在线支付"+actualResult[0]+"元");
+			value.joinSchemeName("闪惠在线支付"+postAmount+"元");
 		} catch (ParseException pe) {
 			logger.warn("日期["+day+"]转换错误", pe);
 		} catch (ServiceException se){

@@ -39,6 +39,7 @@ public class BDWMFilter extends AbstractPaymodeFilter{
 		BigDecimal onlineAmount = value.getAmount(PaymodeCode.BDWM);
 		/* 记录百度外卖商家到账金额 */
 		value.addPostAccountAmount(AccountCode.ONLINE_BDWM, onlineAmount);
+		value.joinSchemeName("百度外卖在线支付"+onlineAmount+"元");
 		
 		/* 暂时不开放，因为百度外卖是全部算好商家到账金额的*/
 //		BigDecimal originalAmount = order.getOriginPrice();

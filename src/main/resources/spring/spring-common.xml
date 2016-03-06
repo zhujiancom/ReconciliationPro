@@ -66,6 +66,7 @@
 	</bean>
 	<bean id="MTWMFilter" class="com.rci.service.calculatecenter.filter.impl.MTWMFilter" scope="prototype">
 		<property name="index" value="10"/>
+		<property name="commission" value="15"/>
 	</bean>
 	<bean id="PLQFilter" class="com.rci.service.calculatecenter.filter.impl.PLQFilter" scope="prototype">
 		<property name="index" value="11"/>
@@ -94,5 +95,4 @@
 	<bean id="VoucherFilter" class="com.rci.service.calculatecenter.filter.impl.VoucherFilter" scope="prototype">
 		<property name="index" value="14"/>
 	</bean>
-	
 </beans>

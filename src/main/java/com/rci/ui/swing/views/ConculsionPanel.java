@@ -189,7 +189,7 @@ public class ConculsionPanel extends JPanel {
 		alipayValue.setForeground(Color.RED);
 		JPanel alipayPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		alipayPanel.add(alipay);
-		alipayPanel.add(tddValue);
+		alipayPanel.add(alipayValue);
 		
 		JLabel mtwm = new JLabel("美团外卖入账总额：");
 		mtwmValue = new JLabel();
@@ -372,6 +372,7 @@ public class ConculsionPanel extends JPanel {
 		eleFreeValue.setText("");
 		eleValue.setText("");
 		tddValue.setText("");
+		alipayValue.setText("");
 		mtwmValue.setText("");
 		mtwmFreeValue.setText("");
 		mtSuperValue.setText("");
@@ -396,6 +397,7 @@ public class ConculsionPanel extends JPanel {
 		plqRemark.setText("");
 		bdnmValue.setText("");
 		bdnmRemark.setText("");
+		bdnmddfValue.setText("");
 	}
 	
 	public void refreshUI() {
@@ -540,16 +542,16 @@ public class ConculsionPanel extends JPanel {
 		IOrderAccountRefService oaService = (IOrderAccountRefService) SpringUtils.getBean("OrderAccountRefService");
 		String accoutNo = "";
 		if(Vendor.MTWM.equals(vendor)){
-			accoutNo = BusinessConstant.AccountCode_MTWM;
+			accoutNo = AccountCode.ONLINE_MTWM.name();
 		}
 		if(Vendor.ELE.equals(vendor)){
-			accoutNo = BusinessConstant.AccountCode_ELE;
+			accoutNo = AccountCode.ONLINE_ELE.name();
 		}
 		if(Vendor.BDWM.equals(vendor)){
-			accoutNo = BusinessConstant.AccountCode_BDWM;
+			accoutNo = AccountCode.ONLINE_BDWM.name();
 		}
 		if(Vendor.PLQ.equals(vendor)){
-			accoutNo = BusinessConstant.AccountCode_PLQ;
+			accoutNo = AccountCode.ONLINE_PLQ.name();
 		}
 		return oaService.getValidOrderCount(postTime, accoutNo);
 	}

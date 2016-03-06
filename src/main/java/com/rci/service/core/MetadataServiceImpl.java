@@ -154,6 +154,7 @@ public class MetadataServiceImpl implements IMetadataService {
 		scheme.setPrice(schemevo.getPrice());
 		scheme.setPostPrice(schemevo.getPostPrice());
 		scheme.setSpread(schemevo.getSpread());
+		scheme.setCommission(schemevo.getCommission());
 		scheme.setFloorAmount(schemevo.getFloorAmount());
 		scheme.setCeilAmount(schemevo.getCeilAmount());
 		scheme.setVendor(schemevo.getVendor());

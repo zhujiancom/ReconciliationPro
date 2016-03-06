@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Order;
@@ -36,6 +38,7 @@ import com.rci.tools.DigitUtil;
  *
  */
 public class MTWMFilter extends AbstractPaymodeFilter {
+	private BigDecimal commission;
 
 	@Override
 	public boolean support(Map<PaymodeCode, BigDecimal> paymodeMapping) {
@@ -80,10 +83,15 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 								postAmount = onlineAmount;//商家到账金额{在线支付+红包+平台补贴}
 								onlineFreeAmount = scheme.getSpread(); //在线优惠金额，商家补贴金额
 								if(scheme.getCommission() != null){
-									BigDecimal unAccessoryAmount = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
+									BigDecimal[] amountExtract = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
+									BigDecimal unAccessoryAmount = amountExtract[0];
 									BigDecimal commissionAmount = DigitUtil.mutiplyDown(unAccessoryAmount, DigitUtil.precentDown(scheme.getCommission()));
 									postAmount = postAmount.subtract(commissionAmount);
 									onlineFreeAmount = onlineFreeAmount.add(commissionAmount);
+									if(amountExtract[1].compareTo(BigDecimal.ZERO) != 0){
+										postAmount = postAmount.subtract(amountExtract[1]);
+										value.joinSchemeName("去除美团外卖配送费");
+									}
 								}
 								value.joinSchemeName(scheme.getName());
 								matchScheme = true;
@@ -95,10 +103,15 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 						allowanceAmount = s.getPostPrice();
 						onlineFreeAmount = s.getSpread(); //商家补贴金额
 						if(s.getCommission() != null){
-							BigDecimal unAccessoryAmount = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
+							BigDecimal[] amountExtract = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
+							BigDecimal unAccessoryAmount = amountExtract[0];
 							BigDecimal commissionAmount = DigitUtil.mutiplyDown(unAccessoryAmount, DigitUtil.precentDown(s.getCommission()));
 							postAmount = postAmount.subtract(commissionAmount);
 							onlineFreeAmount = onlineFreeAmount.add(commissionAmount);
+							if(amountExtract[1].compareTo(BigDecimal.ZERO) != 0){
+								postAmount = postAmount.subtract(amountExtract[1]);
+								value.joinSchemeName("去除美团外卖配送费");
+							}
 						}
 						matchScheme = true;
 						value.joinSchemeName(s.getName());
@@ -112,7 +125,7 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 						return;
 					}
 					/* 记录美团外卖在线支付免单金额 */
-					value.addPayInfo(PaymodeCode.ONLINE_FREE, onlineFreeAmount);
+					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 					
 					/* 记录美团外卖商家到账金额 */
 					value.addPostAccountAmount(AccountCode.ONLINE_MTWM, postAmount);
@@ -130,8 +143,27 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 				value.joinWarningInfo("美团外卖在线支付金额不正确！");
 				order.setUnusual(YOrN.Y);
 			}
-			value.joinSchemeName("美团外卖在线支付到账-"+onlineAmount+"元");
-			value.addPostAccountAmount(AccountCode.ONLINE_MTWM, originalAmount);
+			BigDecimal postAmount = onlineAmount;
+			if(commission != null){
+				BigDecimal[] amountExtract = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
+				BigDecimal unAccessoryAmount = amountExtract[0];
+				BigDecimal commissionAmount = DigitUtil.mutiplyDown(unAccessoryAmount, DigitUtil.precentDown(commission));
+				postAmount = onlineAmount.subtract(commissionAmount);
+				if(amountExtract[1].compareTo(BigDecimal.ZERO) != 0){
+					postAmount = postAmount.subtract(amountExtract[1]);
+					value.joinSchemeName("去除美团外卖配送费");
+				}
+			}
+			value.joinSchemeName("美团外卖在线支付到账-"+postAmount+"元");
+			value.addPostAccountAmount(AccountCode.ONLINE_MTWM, postAmount);
 		}
+	}
+
+	public BigDecimal getCommission() {
+		return commission;
+	}
+
+	public void setCommission(BigDecimal commission) {
+		this.commission = commission;
 	}
 }
