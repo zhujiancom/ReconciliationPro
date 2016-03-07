@@ -50,13 +50,13 @@ public class ExceptionManage{
 	 * @author zj
 	 * @Date 2014年8月4日
 	 */
-	public static void throwDAOException(DAO action,String msg) throws ServiceException{
+	public static void throwDAOException(DAO action,String msg){
 		throw new DAOException(action,msg);
 	}
-	public static void throwDAOException(DAO action,Throwable cause) throws ServiceException{
+	public static void throwDAOException(DAO action,Throwable cause){
 		throw new DAOException(action,cause);
 	}
-	public static void throwDAOException(DAO action,String msg, Throwable cause) throws ServiceException{
+	public static void throwDAOException(DAO action,String msg, Throwable cause){
 		throw new DAOException(action,msg,cause);
 	}
 
@@ -69,15 +69,15 @@ public class ExceptionManage{
 	 * @author zj
 	 * @Date 2014年10月20日
 	 */
-	public static void throwToolsException(Tools action,String msg) throws ServiceException{
+	public static void throwToolsException(Tools action,String msg){
 		throw new ToolsException(action,msg);
 	}
 
-	public static void throwToolsException(Tools action,Throwable cause) throws ServiceException{
+	public static void throwToolsException(Tools action,Throwable cause){
 		throw new ToolsException(action,cause);
 	}
 
-	public static void throwToolsException(Tools action,String msg, Throwable cause) throws ServiceException{
+	public static void throwToolsException(Tools action,String msg, Throwable cause){
 		throw new ToolsException(action,msg,cause);
 	}
 
@@ -90,15 +90,15 @@ public class ExceptionManage{
 	 * @author zj
 	 * @Date 2014年10月20日
 	 */
-	public static void throwSqlException(SQL action,String msg) throws ServiceException{
+	public static void throwSqlException(SQL action,String msg){
 		throw new SqlException(action,msg);
 	}
 
-	public static void throwSqlException(SQL action,Throwable cause) throws ServiceException{
+	public static void throwSqlException(SQL action,Throwable cause){
 		throw new SqlException(action,cause);
 	}
 
-	public static void throwSqlException(SQL action,String msg, Throwable cause) throws ServiceException{
+	public static void throwSqlException(SQL action,String msg, Throwable cause){
 		throw new SqlException(action,msg,cause);
 	}
 

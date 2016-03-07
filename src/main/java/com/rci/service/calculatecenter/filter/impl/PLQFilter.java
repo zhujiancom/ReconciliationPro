@@ -84,9 +84,9 @@ public class PLQFilter extends AbstractPaymodeFilter {
 					}
 					if(!matchScheme){
 						/* 记录美团外卖在线支付免单金额 */
-						value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+//						value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 						value.joinWarningInfo("[派乐趣]--- 没有找到匹配的Scheme");
-						value.joinSchemeName("派乐趣无法解析活动方案");
+						value.joinSchemeName("派乐趣无法解析活动方案","在线支付"+onlineAmount);
 						order.setUnusual(YOrN.Y);
 						return;
 					}

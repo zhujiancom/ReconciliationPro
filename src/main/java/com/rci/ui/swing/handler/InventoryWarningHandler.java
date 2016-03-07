@@ -34,17 +34,17 @@ public class InventoryWarningHandler {
 			return;
 		}
 		if(metaService.hasSellOffWarningInfo()){
-			InventoryWarningHandler.getInstance().showWarningInfo();
+			InventoryWarningHandler.getInstance().showWarningInfo("有库存将被沽清，请尽快进货！");
 		}else{
 			InventoryWarningHandler.getInstance().hideWarningInfo();
 		}
 	}
 	
-	public void showWarningInfo(){
+	public void showWarningInfo(String warningInfo){
 		if(displayPanel.isWarningShowing()){
 			return;
 		}
-		displayPanel.displayWarningInfo();
+		displayPanel.displayWarningInfo(warningInfo);
 	}
 	
 	public void hideWarningInfo(){

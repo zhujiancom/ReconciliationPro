@@ -48,6 +48,7 @@
 	</bean>
 	<bean id="BDWMFilter" class="com.rci.service.calculatecenter.filter.impl.BDWMFilter" scope="prototype">
 		<property name="index" value="4"/>
+		<property name="commission" value="15"/>
 	</bean>
 	<bean id="CashFilter" class="com.rci.service.calculatecenter.filter.impl.CashFilter" scope="prototype">
 		<property name="index" value="5"/>

@@ -63,6 +63,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private Icon loadingIcon;
 	private Icon doneIcon;
 	private Icon warningIcon;
+	private Icon errorIcon;
 	
 	public QueryFormPanel() {
 		buildPane();
@@ -70,6 +71,8 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		loadingIcon = new ImageIcon(loadingIconUrl);
 		URL doneIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/done.png");
 		doneIcon = new ImageIcon(doneIconUrl);
+		URL errorIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/24x24/warning.png");
+		errorIcon = new ImageIcon(errorIconUrl);
 		URL warningIconUrl = this.getClass().getClassLoader().getResource("skin/gray/images/16x16/warning.png");
 		warningIcon = new ImageIcon(warningIconUrl);
 	}
@@ -409,10 +412,20 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		actionLabel.setIcon(doneIcon);
 	}
 	
-	public void displayWarningInfo(){
-		warningLabel.setText("有库存将被沽清，请尽快进货！");
+	public void displayErrorInfo(String errorInfo){
+		actionLabel.setText(errorInfo);
+		actionLabel.setIcon(errorIcon);
+	}
+	
+	public void displayWarningInfo(String warningInfo){
+		warningLabel.setText(warningInfo);
 		warningLabel.setIcon(warningIcon);
 		warningShowing = true;
+	}
+	
+	public void hideInfo(){
+		actionLabel.setText(null);
+		actionLabel.setIcon(null);
 	}
 	
 	public void removeWarningInfo(){

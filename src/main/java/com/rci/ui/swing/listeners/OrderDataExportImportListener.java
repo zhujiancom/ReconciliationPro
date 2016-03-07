@@ -245,9 +245,23 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 										e.printStackTrace();
 									} catch(ServiceException se){
 										JOptionPane.showMessageDialog(null, se.getMessage());
+										SwingUtilities.invokeLater(new Runnable() {
+											
+											@Override
+											public void run() {
+												queryPane.displayErrorInfo("订单加载失败");
+											}
+										});
 									} catch(Exception e){
 										e.printStackTrace();
 										JOptionPane.showMessageDialog(null, e.getMessage());
+										SwingUtilities.invokeLater(new Runnable() {
+											
+											@Override
+											public void run() {
+												queryPane.displayErrorInfo("订单加载失败");
+											}
+										});
 									}
 								}
 							}).start();

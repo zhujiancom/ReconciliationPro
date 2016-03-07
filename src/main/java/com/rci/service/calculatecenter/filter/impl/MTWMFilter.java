@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.entity.Order;
@@ -52,6 +50,8 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 		BigDecimal onlineAmount = value.getAmount(PaymodeCode.MTWM);
 		BigDecimal freeAmount = value.getAmount(PaymodeCode.FREE);
 		BigDecimal originalAmount = order.getOriginPrice();
+		BigDecimal[] amountExtract = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
+		originalAmount = originalAmount.subtract(amountExtract[1]);
 		if(freeAmount != null){
 			boolean matchScheme = false;
 			String day = order.getDay();
@@ -61,13 +61,11 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 				if(CollectionUtils.isEmpty(schemes)){
 					logger.warn(order.getPayNo()+"---[美团外卖] 没有找到匹配的Scheme -----");
 					value.joinWarningInfo("[美团外卖]-没有找到匹配的Scheme");
-					value.joinSchemeName("美团外卖无法解析活动方案");
+					value.joinSchemeName("美团外卖无法解析活动方案","在线支付"+onlineAmount);
 					order.setUnusual(YOrN.Y);
 					
-					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+//					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 					value.addPostAccountAmount(AccountCode.ONLINE_MTWM, onlineAmount);
-					value.addPostAccountAmount(AccountCode.FREE_MTWM, freeAmount);
-					value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
 				}else{
 					Scheme s = calculator.getSchemeForNewCustomer(freeAmount,schemes);
 					BigDecimal postAmount = BigDecimal.ZERO;//商家到账金额
@@ -80,10 +78,9 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 								BigDecimal voucherAmount = scheme.getPrice();//方案优惠金额
 								BigDecimal redpacketAmount = freeAmount.subtract(voucherAmount); //使用红包金额
 								allowanceAmount = redpacketAmount.add(scheme.getPostPrice()); //平台返回给商家的金额
-								postAmount = onlineAmount;//商家到账金额{在线支付+红包+平台补贴}
+								postAmount = onlineAmount;//商家到账金额
 								onlineFreeAmount = scheme.getSpread(); //在线优惠金额，商家补贴金额
 								if(scheme.getCommission() != null){
-									BigDecimal[] amountExtract = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
 									BigDecimal unAccessoryAmount = amountExtract[0];
 									BigDecimal commissionAmount = DigitUtil.mutiplyDown(unAccessoryAmount, DigitUtil.precentDown(scheme.getCommission()));
 									postAmount = postAmount.subtract(commissionAmount);
@@ -103,7 +100,6 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 						allowanceAmount = s.getPostPrice();
 						onlineFreeAmount = s.getSpread(); //商家补贴金额
 						if(s.getCommission() != null){
-							BigDecimal[] amountExtract = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
 							BigDecimal unAccessoryAmount = amountExtract[0];
 							BigDecimal commissionAmount = DigitUtil.mutiplyDown(unAccessoryAmount, DigitUtil.precentDown(s.getCommission()));
 							postAmount = postAmount.subtract(commissionAmount);
@@ -118,9 +114,9 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 					}
 					if(!matchScheme){
 						/* 记录美团外卖在线支付免单金额 */
-						value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+//						value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 						value.joinWarningInfo("[美团外卖]--- 没有找到匹配的Scheme");
-						value.joinSchemeName("美团外卖无法解析活动方案");
+						value.joinSchemeName("美团外卖无法解析活动方案","在线支付"+onlineAmount);
 						order.setUnusual(YOrN.Y);
 						return;
 					}
@@ -145,7 +141,6 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 			}
 			BigDecimal postAmount = onlineAmount;
 			if(commission != null){
-				BigDecimal[] amountExtract = wipeoutAccessoryAmount(order.getItems()); //所有真正的菜品金额，去除了餐盒费，外送费等附加菜品的金额
 				BigDecimal unAccessoryAmount = amountExtract[0];
 				BigDecimal commissionAmount = DigitUtil.mutiplyDown(unAccessoryAmount, DigitUtil.precentDown(commission));
 				postAmount = onlineAmount.subtract(commissionAmount);

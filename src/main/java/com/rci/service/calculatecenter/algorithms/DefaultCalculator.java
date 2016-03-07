@@ -70,6 +70,9 @@ public class DefaultCalculator implements Calculator {
 				SchemeType type = entry.getKey();
 				Integer count = entry.getValue();
 				Scheme scheme = schemeService.getScheme(type.getTypeNo(),vendor,queryDate);
+				if(scheme == null){
+					ExceptionManage.throwServiceException("不存在套餐活动！平台["+vendor+"],套餐类型["+type+"]");
+				}
 				BigDecimal suitPrice = scheme.getPrice();
 				suitAmount = suitAmount.add(suitPrice.multiply(new BigDecimal(count)));
 				SchemeWrapper schemewrapper = new SchemeWrapper(scheme,count);

@@ -130,6 +130,6 @@ public class MTtgFilter extends AbstractPaymodeFilter {
 			}
 		} catch (ParseException pe) {
 			logger.warn("日期["+day+"]转换错误", pe);
-		} 
+		}
 	}
 }

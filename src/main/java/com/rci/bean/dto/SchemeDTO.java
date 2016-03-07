@@ -24,6 +24,9 @@ public class SchemeDTO {
 	/* 餐厅补贴 */
 	private BigDecimal spread;
 	
+	/* 佣金 */
+	private BigDecimal commission;
+	
 //	private SchemeType type;
 	private String typeno;
 	
@@ -105,6 +108,15 @@ public class SchemeDTO {
 //		this.type = type;
 //	}
 	
+	@ExcelColumn(value="佣金",index=13)
+	public BigDecimal getCommission() {
+		return commission;
+	}
+
+	public void setCommission(BigDecimal commission) {
+		this.commission = commission;
+	}
+
 	@ExcelColumn(value="代金券类型",index=6)
 	public String getTypeno() {
 		return typeno;

@@ -69,10 +69,10 @@ public class ELEFilter extends AbstractPaymodeFilter {
 					logger.warn(order.getPayNo()+"---[饿了么 ] 没有找到匹配的Scheme -----");
 					String warningInfo = "[饿了么]--- 没有找到匹配的Scheme";
 					value.joinWarningInfo(warningInfo);
-					value.joinSchemeName("饿了么无法解析活动方案");
+					value.joinSchemeName("饿了么无法解析活动方案","在线支付"+onlineAmount);
 					order.setUnusual(YOrN.Y);
 					
-					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
+//					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 					value.addPostAccountAmount(AccountCode.ONLINE_ELE, onlineAmount);
 					value.addPostAccountAmount(AccountCode.FREE_ELE, freeAmount);
 					value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);

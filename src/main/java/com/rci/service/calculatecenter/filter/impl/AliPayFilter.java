@@ -11,6 +11,7 @@ import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
 import com.rci.tools.DateUtil;
@@ -59,6 +60,7 @@ public class AliPayFilter extends AbstractPaymodeFilter {
 			}else{
 				if(onlineAmount.compareTo(originalAmount) != 0){
 					value.joinWarningInfo("支付宝支付金额应该与订单原价相同！");
+					order.setUnusual(YOrN.Y);
 				}
 				postAmount = onlineAmount;
 			}
