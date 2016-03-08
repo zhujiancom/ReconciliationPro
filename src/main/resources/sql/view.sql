@@ -8,3 +8,5 @@ WHERE oar.accno=acc.acc_no;
 
 CREATE VIEW v_express_order AS SELECT o.* FROM bus_tb_order o LEFT JOIN bus_tb_table t ON o.table_no=t.table_no
 WHERE o.real_amount > 0 AND t.table_type='03';
+
+CREATE VIEW v_daily_post_account AS SELECT ref.accno,sum(ref.real_amount),ref.post_time from bus_tb_order_account_ref ref GROUP BY ref.post_time,ref.accno
