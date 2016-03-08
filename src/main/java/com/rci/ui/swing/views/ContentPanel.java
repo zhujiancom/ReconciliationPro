@@ -12,7 +12,7 @@ import javax.swing.JTextArea;
 
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
-import com.rci.service.core.DataCleanFacade;
+import com.rci.service.facade.DataCleanFacade;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtils;
@@ -109,7 +109,7 @@ public class ContentPanel extends JSplitPane {
 			itemModel.setRowCount(0);
 		}
 		DataCleanFacade datacleaner = (DataCleanFacade) SpringUtils.getBean("DataCleanFacade");
-		datacleaner.cleanAllOfOneDay(time);
+		datacleaner.doCleanAllOfOneDay(time);
 	}
 
 

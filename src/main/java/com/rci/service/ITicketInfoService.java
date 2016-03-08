@@ -55,4 +55,6 @@ public interface ITicketInfoService extends IBaseService<TicketInfo, Long> {
 	 * @param time
 	 */
 	void deleteTicketStatistic(String time);
+	
+	void doDeleteTicketStatistic(String time);
 }

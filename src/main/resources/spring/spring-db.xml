@@ -138,6 +138,7 @@
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="rw*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
+			<tx:method name="do*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
 			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="*" propagation="REQUIRED" read-only="true" />

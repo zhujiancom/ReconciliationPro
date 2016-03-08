@@ -50,4 +50,18 @@ public interface IAccountService extends IBaseService<Account, Long>{
 	 * @return
 	 */
 	Account getAccount(String accNo);
+	
+	/**
+	 * 
+	 * Describle(描述)：更新账户信息  包含在事务中
+	 *
+	 * 方法名称：doUpdateAccount
+	 *
+	 * 所在类名：IAccountService
+	 *
+	 * Create Time:2016年3月8日 下午8:39:22
+	 *  
+	 * @param account
+	 */
+	void doUpdateAccount(Account account);
 }

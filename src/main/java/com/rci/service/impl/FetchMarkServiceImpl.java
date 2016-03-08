@@ -81,4 +81,12 @@ public class FetchMarkServiceImpl extends BaseServiceImpl<DataFetchMark, Long>
 		baseDAO.save(mark);
 	}
 
+	@Override
+	public void doDeleteMark(String day) {
+		DataFetchMark mark = getMarkRecordByDay(day);
+		if(mark != null){
+			baseDAO.delete(mark.getMarkId());
+		}
+	}
+
 }

@@ -47,7 +47,7 @@ public class BaseServiceImpl<T extends BaseEntity, PK extends Serializable> impl
 
 	/**
 	 * 
-	 * Describle(描述)： 更新
+	 * Describle(描述)： 更新， 新开启一个事务进行数据更改
 	 *
 	 * 方法名称：rwUpdate
 	 *

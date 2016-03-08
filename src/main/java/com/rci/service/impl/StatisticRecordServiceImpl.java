@@ -45,4 +45,12 @@ public class StatisticRecordServiceImpl extends
 		}
 	}
 
+	@Override
+	public void doDeleteByDate(Date date) {
+		StatisticRecord record = queryRecordByDate(date);
+		if(record != null){
+			baseDAO.delete(record.getSrid());
+		}
+	}
+
 }

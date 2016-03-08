@@ -1,6 +1,8 @@
 package com.rci.service.impl;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -18,9 +21,11 @@ import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.CommonEnums.Symbol;
+import com.rci.metadata.NativeSQLBuilder;
 import com.rci.service.IAccountService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.base.BaseServiceImpl;
+import com.rci.service.calculatecenter.Calculator;
 import com.rci.tools.StringUtils;
 
 @Service("OrderAccountRefService")
@@ -28,6 +33,9 @@ public class OrderAccountRefServiceImpl extends
 		BaseServiceImpl<OrderAccountRef, Long> implements IOrderAccountRefService{
 	@Resource(name="AccountService")
 	private IAccountService accountService;
+	
+	@Resource(name="calculator")
+	protected Calculator calculator;
 
 	@Override
 	public List<OrderAccountRef> getOARef(String billno) {
@@ -61,6 +69,14 @@ public class OrderAccountRefServiceImpl extends
 		dc.add(Restrictions.eq("postTime", date));
 		List<OrderAccountRef> oars = baseDAO.queryListByCriteria(dc);
 		((IOrderAccountRefService)AopContext.currentProxy()).rwDelete(oars.toArray(new OrderAccountRef[0]));
+	}
+	
+	@Override
+	public void doDeleteOar(Date date) {
+		DetachedCriteria dc = DetachedCriteria.forClass(OrderAccountRef.class);
+		dc.add(Restrictions.eq("postTime", date));
+		List<OrderAccountRef> oars = baseDAO.queryListByCriteria(dc);
+		baseDAO.delete(oars.toArray(new OrderAccountRef[0]));
 	}
 
 	@Override
@@ -139,6 +155,15 @@ public class OrderAccountRefServiceImpl extends
 		private String accNo;
 		
 		private BigDecimal sumAmount;
+		
+		private Account account;
+		
+		public AccountSumResult(){}
+		
+		public AccountSumResult(Account account,BigDecimal sumAmount){
+			this.account = account;
+			this.sumAmount = sumAmount;
+		}
 
 		public AccountSumResult(Long accId, String accNo, BigDecimal sumAmount) {
 			super();
@@ -170,6 +195,14 @@ public class OrderAccountRefServiceImpl extends
 		public void setSumAmount(BigDecimal sumAmount) {
 			this.sumAmount = sumAmount;
 		}
+
+		public Account getAccount() {
+			return account;
+		}
+
+		public void setAccount(Account account) {
+			this.account = account;
+		}
 	}
 
 	@Override
@@ -181,5 +214,30 @@ public class OrderAccountRefServiceImpl extends
 		dc.setProjection(Projections.projectionList().add(Projections.rowCount())).add(Restrictions.eq("accNo", account)).add(Restrictions.eq("postTime", postTime));
 		Long count = baseDAO.getRowCount(dc);
 		return count;
+	}
+
+	@Override
+	public List<AccountSumResult> querySumAmountfromView(Date postTime) {
+		List<AccountSumResult> accounts = baseDAO.queryListBySQL(NativeSQLBuilder.DAILY_POSTACCOUNT_SUMMARY, new Object[]{postTime}, new RowMapper<AccountSumResult>() {
+
+			@Override
+			public AccountSumResult mapRow(ResultSet rs, int rowNum) throws SQLException {
+				String accno = rs.getString(1);
+				Account account = accountService.getAccount(accno);
+				BigDecimal amount = rs.getBigDecimal(2);
+				return new AccountSumResult(account,amount);
+			}
+		});
+		return accounts;
+	}
+
+	@Override
+	public void doRollbackAccount(Date postTime) {
+		List<AccountSumResult> results = querySumAmountfromView(postTime);
+		for(AccountSumResult result:results){
+			Account account = result.getAccount();
+			BigDecimal amount = result.getSumAmount();
+			calculator.doExpensePostAmount(account, amount);
+		}
 	}
 }

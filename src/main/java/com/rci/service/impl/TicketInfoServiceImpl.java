@@ -44,7 +44,19 @@ public class TicketInfoServiceImpl extends BaseServiceImpl<TicketInfo, Long>
 			List<TicketInfo> tss = baseDAO.queryListByCriteria(dc);
 			((ITicketInfoService)AopContext.currentProxy()).rwDelete(tss.toArray(new TicketInfo[0]));
 		} catch (ParseException e) {
-			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void doDeleteTicketStatistic(String time) {
+		try {
+			Date date = DateUtil.parseDate(time,"yyyyMMdd");
+			DetachedCriteria dc = DetachedCriteria.forClass(TicketInfo.class);
+			dc.add(Restrictions.eq("date", date));
+			List<TicketInfo> tss = baseDAO.queryListByCriteria(dc);
+//			((ITicketInfoService)AopContext.currentProxy()).rwDelete(tss.toArray(new TicketInfo[0]));
+			baseDAO.delete(tss.toArray(new TicketInfo[0]));
+		} catch (ParseException e) {
 		}
 	}
 

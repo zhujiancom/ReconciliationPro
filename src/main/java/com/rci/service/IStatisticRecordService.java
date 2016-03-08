@@ -13,4 +13,6 @@ public interface IStatisticRecordService extends
 	List<StatisticRecord> queryRecords(Date sdate,Date edate);
 	
 	void deleteByDate(Date date);
+	
+	void doDeleteByDate(Date date);
 }

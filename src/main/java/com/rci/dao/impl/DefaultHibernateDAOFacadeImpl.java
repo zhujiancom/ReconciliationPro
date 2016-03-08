@@ -24,6 +24,7 @@ import org.hibernate.internal.CriteriaImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -250,14 +251,25 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 	 * @Date 2014年10月17日
 	 */
 	@Override
-	public List<Map<String, Object>> queryListBySQL(String sql){
+	public List<Map<String, Object>> queryListBySQL(String sql,Object... params){
 		try {
-			return jdbcTemplate.queryForList(sql);
+			return jdbcTemplate.queryForList(sql,params);
 		} catch (DataAccessException de) {
 			logger().error(DAO.QUERY+" >>>>>>>>> SQL:"+sql+"\n",de);
 			ExceptionManage.throwDAOException(DAO.QUERY,sql,de);
 		}
 		return Collections.emptyList();
+	}
+	
+	public <E> List<E> queryListBySQL(String sql,Object[] params,RowMapper<E> rowMapper){
+		try {
+			return jdbcTemplate.query(sql, params, rowMapper);
+		} catch (DataAccessException de) {
+			logger().error(DAO.QUERY+" >>>>>>>>> SQL:"+sql+"\n",de);
+			ExceptionManage.throwDAOException(DAO.QUERY,sql,de);
+		}
+		return Collections.emptyList();
+		
 	}
 	
 	/**

@@ -41,7 +41,6 @@ public class BDNMDDFFilter extends AbstractPaymodeFilter {
 		Order order = (Order) value.getSourceData();
 		order.setFramework(OrderFramework.BDNM);
 		BigDecimal onlineAmount = value.getAmount(PaymodeCode.DDF);
-		BigDecimal originAmount = order.getOriginPrice();
 		/* 不参与打折的菜品  */
 		BigDecimal nodiscountAmount = getUndiscountAmount(order.getItems());
 		

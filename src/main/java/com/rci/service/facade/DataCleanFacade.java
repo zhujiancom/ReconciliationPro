@@ -1,4 +1,4 @@
-package com.rci.service.core;
+package com.rci.service.facade;
 
 import com.rci.enums.BusinessEnums.DataGenerateType;
 
@@ -95,7 +95,7 @@ public interface DataCleanFacade {
 	 *  
 	 * @param time
 	 */
-	public void cleanAllOfOneDay(String time);
+	public void doCleanAllOfOneDay(String time);
 	
 	public void deleteInventoryInfo(String time);
 	

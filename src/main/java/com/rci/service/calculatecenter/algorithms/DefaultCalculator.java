@@ -20,11 +20,15 @@ import com.rci.bean.dto.SchemeQueryDTO;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
 import com.rci.bean.entity.TicketInfo;
+import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.ActivityType;
 import com.rci.enums.BusinessEnums.Vendor;
+import com.rci.enums.CommonEnums.Symbol;
+import com.rci.enums.CommonEnums.YOrN;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
+import com.rci.service.IAccountService;
 import com.rci.service.ISchemeService;
 import com.rci.service.ISchemeTypeService;
 import com.rci.service.ITicketInfoService;
@@ -42,6 +46,9 @@ public class DefaultCalculator implements Calculator {
 	
 	@Resource(name="TicketInfoService")
 	private ITicketInfoService ticketService;
+	
+	@Resource(name="AccountService")
+	protected IAccountService accService;
 
 	@Override
 	public BigDecimal[] doCalculateAmountForTG(Scheme scheme, Integer count) {
@@ -118,13 +125,22 @@ public class DefaultCalculator implements Calculator {
 		}
 		Scheme scheme = schemes.get(0);
 		BigDecimal chitAmount = scheme.getPrice();//需要消费满的金额
-		BigDecimal count = payAmount.divideToIntegralValue(chitAmount);//倍数
-		BigDecimal singleActualAmount = scheme.getPostPrice();
-		BigDecimal totalChitAmount = DigitUtil.mutiplyDown(singleActualAmount, count);
-		BigDecimal balance = payAmount.subtract(chitAmount.multiply(count));
+		BigDecimal count = payAmount.divideToIntegralValue(chitAmount);//算出倍数
+		BigDecimal singleActualAmount = scheme.getPostPrice();			//单份实际到账
+		BigDecimal totalChitAmount = DigitUtil.mutiplyDown(singleActualAmount, count); //一单总共到账金额
+		BigDecimal balance = payAmount.subtract(chitAmount.multiply(count));		//剩余不可优惠金额
 		BigDecimal onlineFreeAmount = DigitUtil.mutiplyDown(chitAmount.subtract(singleActualAmount),count);
 		/* 入账金额  */
 		BigDecimal postAmount =totalChitAmount.add(balance);
+		
+		BigDecimal singleCommissionAmount = scheme.getCommission();
+		if(singleCommissionAmount != null && !singleCommissionAmount.equals(BigDecimal.ZERO)){
+			//存在佣金，结算方式：优惠金额*佣金比率
+			BigDecimal commissionAmount = DigitUtil.mutiplyDown(chitAmount.multiply(count), DigitUtil.precentDown(singleCommissionAmount,4));
+			onlineFreeAmount = onlineFreeAmount.add(commissionAmount);
+			postAmount = postAmount.subtract(commissionAmount);
+		}
+		
 		return new BigDecimal[]{postAmount,onlineFreeAmount};
 	}
 
@@ -180,5 +196,74 @@ public class DefaultCalculator implements Calculator {
 		}
 	}
 
-	
+	@Override
+	public void doEarningPostAmount(Account account, BigDecimal amount) {
+		if(YOrN.isY(account.getIsParent())){ //是主账户
+			BigDecimal balanceAmount = account.getBalance();
+			BigDecimal earningAmount = account.getEarningAmount();
+			BigDecimal expenseAmount = account.getExpenseAmount();
+			if(Symbol.P.equals(account.getSymbol())){ //主账户是正值账户
+				balanceAmount = balanceAmount.add(amount);
+				earningAmount = earningAmount.add(amount);
+			}else{
+				balanceAmount = balanceAmount.subtract(amount);
+				expenseAmount = expenseAmount.subtract(amount);
+			}
+			account.setBalance(balanceAmount);
+			account.setEarningAmount(earningAmount);
+			account.setExpenseAmount(expenseAmount);
+		}else{
+			Account parentAccount = accService.getAccount(account.getParentId());
+			if(Symbol.P.equals(account.getSymbol())){
+				parentAccount.setEarningAmount(parentAccount.getEarningAmount().add(amount));
+				parentAccount.setBalance(parentAccount.getBalance().add(amount));
+				
+				account.setEarningAmount(account.getEarningAmount().add(amount));
+				account.setBalance(account.getBalance().add(amount));
+			}else if(Symbol.N.equals(account.getSymbol())){
+				if(Symbol.N.equals(parentAccount.getSymbol())){
+					parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().subtract(amount));
+					parentAccount.setBalance(parentAccount.getBalance().subtract(amount));
+				}else if(Symbol.P.equals(parentAccount.getSymbol())){ //主账户的余额与正值子账户的余额保持一致，收入和支出字段自作显示用。
+					parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().subtract(amount));
+				}
+				account.setExpenseAmount(account.getExpenseAmount().subtract(amount));
+				account.setBalance(account.getBalance().subtract(amount));
+			}
+			accService.rwUpdate(parentAccount);
+		}
+		accService.rwUpdate(account);
+	}
+
+	@Override
+	public void doExpensePostAmount(Account account, BigDecimal amount) {
+		if(YOrN.isY(account.getIsParent())){
+			if(Symbol.P.equals(account.getSymbol())){ //主账户是正值账户
+				account.setBalance(account.getBalance().subtract(amount));
+				account.setEarningAmount(account.getEarningAmount().subtract(amount));
+			}else{									 //主账户是负值账户
+				account.setBalance(account.getBalance().add(amount));
+				account.setExpenseAmount(account.getExpenseAmount().add(amount));
+			}
+		}else{
+			Account parentAccount = accService.getAccount(account.getParentId());
+			if(Symbol.P.equals(account.getSymbol())){
+				parentAccount.setEarningAmount(parentAccount.getEarningAmount().subtract(amount));
+				parentAccount.setBalance(parentAccount.getBalance().subtract(amount));
+				account.setEarningAmount(account.getEarningAmount().subtract(amount));
+				account.setBalance(account.getBalance().subtract(amount));
+			}else if(Symbol.N.equals(account.getSymbol())){
+				if(Symbol.N.equals(parentAccount.getSymbol())){
+					parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().add(amount));
+					parentAccount.setBalance(parentAccount.getBalance().add(amount));
+				}else if(Symbol.P.equals(parentAccount.getSymbol())){ //主账户的余额与正值子账户的余额保持一致，收入和支出字段自作显示用。
+					parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().add(amount));
+				}
+				account.setExpenseAmount(account.getExpenseAmount().add(amount));
+				account.setBalance(account.getBalance().add(amount));
+			}
+			accService.doUpdateAccount(parentAccount);
+		}
+		accService.doUpdateAccount(account);
+	}
 }

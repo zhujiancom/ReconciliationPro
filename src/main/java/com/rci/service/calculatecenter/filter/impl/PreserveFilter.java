@@ -82,26 +82,7 @@ public class PreserveFilter extends AbstractPaymodeFilter {
 			oarService.rwCreate(oar);
 			
 			//更新账户余额
-			doUpdateAccountAmount(account,postAmount);
+			calculator.doEarningPostAmount(account,postAmount);
 		}
 	}
-	
-	private void doUpdateAccountAmount(Account account,BigDecimal amount){
-		if(YOrN.isY(account.getIsParent())){ //是主账户
-			account.setEarningAmount(account.getEarningAmount().add(amount));
-			account.setBalance(account.getBalance().add(amount));
-			accService.rwUpdate(account);
-		}else{
-			Account parentAccount = accService.getAccount(account.getParentId());
-			if(Symbol.P.equals(account.getSymbol()) || (Symbol.N.equals(account.getSymbol()) && Symbol.N.equals(parentAccount.getSymbol()))){
-				parentAccount.setEarningAmount(parentAccount.getEarningAmount().add(amount));
-				parentAccount.setBalance(parentAccount.getBalance().add(amount));
-				accService.rwUpdate(parentAccount);
-			}
-			account.setEarningAmount(account.getEarningAmount().add(amount));
-			account.setBalance(account.getBalance().add(amount));
-			accService.rwUpdate(account);
-		}
-	}
-
 }

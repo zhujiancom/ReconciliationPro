@@ -39,7 +39,6 @@ public class DZDPshFilter extends AbstractPaymodeFilter {
 	protected void doExtractOrderInfo(ParameterValue value) {
 		Order order = (Order) value.getSourceData();
 		BigDecimal onlineAmount = value.getAmount(PaymodeCode.DPSH);
-		BigDecimal originAmount = order.getOriginPrice();
 		/* 不参与打折的菜品  */
 		BigDecimal nodiscountAmount = getUndiscountAmount(order.getItems());
 		

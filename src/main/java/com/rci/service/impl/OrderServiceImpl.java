@@ -140,6 +140,18 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void doDeleteOrders(String day) {
+		List<Order> orders = queryOrdersByDay(day);
+		for(Order order:orders){
+			baseDAO.delete(order.getOid());
+		}
+		try {
+			oaService.doDeleteOar(DateUtil.parseDate(day, "yyyyMMdd"));
+		} catch (ParseException e) {
+		}
+	}
 
 	@Override
 	public BigDecimal getOrderCountByDay(String day) {

@@ -30,7 +30,7 @@ public interface DAOFacade<T,PK extends Serializable>{
 	public T get(PK pk);
 	public List<T> getAll();
 
-	public List<Map<String,Object>> queryListBySQL(String sql);
+	public List<Map<String,Object>> queryListBySQL(String sql,Object... params);
 	
 	public <E> List<E> queryListByCriteria(DetachedCriteria dc);
 	

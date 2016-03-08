@@ -1,4 +1,4 @@
-package com.rci.service.core;
+package com.rci.service.facade;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -12,6 +12,7 @@ import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.service.IAccFlowService;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IFetchMarkService;
+import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
 import com.rci.service.IStatisticRecordService;
 import com.rci.service.ITicketInfoService;
@@ -43,15 +44,20 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 	@Resource(name="StatisticRecordService")
 	private IStatisticRecordService srService;
 	
+	@Resource(name="OrderAccountRefService")
+	private IOrderAccountRefService oarService;
+	
 
 	@Override
 	public void deleteOrders(String time) {
-		orderService.deleteOrders(time);
+//		orderService.deleteOrders(time);
+		orderService.doDeleteOrders(time);
 	}
 
 	@Override
 	public void deleteMark(String time) {
-		markService.deleteMark(time);
+//		markService.deleteMark(time);
+		markService.doDeleteMark(time);
 	}
 
 	@Override
@@ -62,34 +68,37 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 	@Deprecated
 	@Override
 	public void deleteTicketStatistic(String time) {
-		tsService.deleteTicketStatistic(time);
+//		tsService.deleteTicketStatistic(time);
 	}
 
+	@Deprecated
 	@Override
 	public void deleteELESDInfo(String time) {
-		try {
-			elesdService.clearDataByDate(DateUtil.parseDate(time, "yyyyMMdd"));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			elesdService.clearDataByDate(DateUtil.parseDate(time, "yyyyMMdd"));
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override
-	public void cleanAllOfOneDay(String time) {
+	public void doCleanAllOfOneDay(String time) {
+		deleteAccountAmount(time);
 		deleteOrders(time);
 		deleteMark(time);
-		deleteFlowInfo(time,DataGenerateType.AUTO);
-//		deleteTicketStatistic(time);
+		//		deleteFlowInfo(time,DataGenerateType.AUTO);
+		//		deleteTicketStatistic(time);
 		deleteTicketInfo(time);
-		deleteELESDInfo(time);
-//		deleteStockInfo(time);
+		//		deleteELESDInfo(time);
+		//		deleteStockInfo(time);
 		deleteInventoryInfo(time);
 		deleteStatisticRecord(time);
 	}
 
 	@Override
 	public void deleteTicketInfo(String time) {
-		ticketService.deleteTicketStatistic(time);
+//		ticketService.deleteTicketStatistic(time);
+		ticketService.doDeleteTicketStatistic(time);
 	}
 
 	@Override
@@ -103,10 +112,17 @@ public class DataCleanFacadeImpl implements DataCleanFacade {
 	public void deleteStatisticRecord(String time){
 		try {
 			Date date = DateUtil.parseDate(time, "yyyyMMdd");
-			srService.deleteByDate(date);
+			srService.doDeleteByDate(date);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
 
+	public void deleteAccountAmount(String time){
+		try {
+			Date date = DateUtil.parseDate(time, "yyyyMMdd");
+			oarService.doRollbackAccount(date);
+		} catch (ParseException e) {
+		}
+	}
 }

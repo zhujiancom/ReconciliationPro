@@ -8,6 +8,7 @@ import java.util.Map;
 import com.rci.bean.SchemeWrapper;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.entity.SchemeType;
+import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.exceptions.ServiceException;
 
@@ -128,4 +129,34 @@ public interface Calculator {
 	 * @param schemes
 	 */
 	public void createTicketRecord(Date queryDate,Vendor vendor,Map<SchemeType,SchemeWrapper> schemes);
+	
+	/**
+	 * 
+	 * Describle(描述)：账户入账
+	 *
+	 * 方法名称：doEarningPostAmount
+	 *
+	 * 所在类名：Calculator
+	 *
+	 * Create Time:2016年3月8日 下午5:38:54
+	 *  
+	 * @param account
+	 * @param amount
+	 */
+	public void doEarningPostAmount(Account account,BigDecimal amount);
+	
+	/**
+	 * 
+	 * Describle(描述)：账户出账，回滚
+	 *
+	 * 方法名称：doExpensePostAmount
+	 *
+	 * 所在类名：Calculator
+	 *
+	 * Create Time:2016年3月8日 下午5:39:52
+	 *  
+	 * @param account
+	 * @param amount
+	 */
+	public void doExpensePostAmount(Account account,BigDecimal amount);
 }

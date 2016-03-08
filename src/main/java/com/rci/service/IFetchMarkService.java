@@ -53,4 +53,6 @@ public interface IFetchMarkService extends IBaseService<DataFetchMark, Long>{
 	
 	public void deleteMark(String day);
 	
+	public void doDeleteMark(String day);
+	
 }

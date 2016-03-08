@@ -18,6 +18,8 @@ public interface IOrderService extends IBaseService<Order, Long>{
 //	void rwDeleteOrders(Order[] orders);
 //	
 	void deleteOrders(String day);
+	
+	void doDeleteOrders(String day);
 //	
 //	void rwUpdateOrder(Order order);
 	

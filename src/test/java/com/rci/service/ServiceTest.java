@@ -27,9 +27,9 @@ import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.metadata.dto.TableDTO;
 import com.rci.metadata.service.IDataFetchService;
 import com.rci.metadata.service.IDataTransformService;
-import com.rci.service.core.DataCleanFacade;
 import com.rci.service.core.IMetadataService;
 import com.rci.service.core.StatisticCenterFacade;
+import com.rci.service.facade.DataCleanFacade;
 import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventorySellLogService;
@@ -319,6 +319,6 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void testCleanAllOrders(){
-		dataFacade.cleanAllOfOneDay("20160220");
+		dataFacade.doCleanAllOfOneDay("20160301");
 	}
 }

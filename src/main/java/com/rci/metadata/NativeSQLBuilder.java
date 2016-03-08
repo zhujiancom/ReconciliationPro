@@ -75,5 +75,7 @@ public class NativeSQLBuilder {
 			+ "group by accno,framework";
 	
 	// 查询外送订单单量  占位符用String.format解析
-	public static final String EXPRESS_ORDERS="select count(1) 'count' from v_express_order eo where eo.day='%s'"; 
+	public static final String EXPRESS_ORDERS="select count(1) 'count' from v_express_order eo where eo.day='%s'";
+	
+	public static final String DAILY_POSTACCOUNT_SUMMARY="select accno,amount from v_daily_post_account where post_time=?";
 }

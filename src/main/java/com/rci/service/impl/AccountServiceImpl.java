@@ -3,7 +3,10 @@
  */
 package com.rci.service.impl;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 
 import com.rci.bean.entity.account.Account;
 import com.rci.dao.impl.SafeDetachedCriteria;
@@ -27,7 +30,9 @@ import com.rci.service.base.BaseServiceImpl;
  */
 @Service("AccountService")
 public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implements IAccountService{
-
+	@Resource(name="transactionManager")
+	private AbstractPlatformTransactionManager transactionManager;
+	
 	@Override
 	public Account getAccount(Long id) {
 		return baseDAO.get(id);
@@ -38,6 +43,10 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implement
 		SafeDetachedCriteria sdc = SafeDetachedCriteria.forClass(Account.class);
 		sdc.add(SafeRestrictions.eq("accNo", accNo));
 		return baseDAO.queryUniqueByCriteria(sdc);
+	}
+	
+	public void doUpdateAccount(Account account){
+		baseDAO.update(account);
 	}
 
 }
