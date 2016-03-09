@@ -65,8 +65,8 @@ public class BDNMDDFFilter extends AbstractPaymodeFilter {
 			
 			BigDecimal postAmount = actualResult[0].add(nodiscountAmount);
 			value.addPostAccountAmount(AccountCode.DDF_BDNM, postAmount);
-			value.addPostAccountAmount(AccountCode.FREE_DDF_BDNM, actualResult[1]);
-			value.addPostAccountAmount(AccountCode.FREE_ONLINE, actualResult[1]);
+			value.addPostAccountAmount(AccountCode.FREE_DDF_BDNM, actualResult[1].negate());
+			value.addPostAccountAmount(AccountCode.FREE_ONLINE, actualResult[1].negate());
 			
 			value.joinSchemeName("百度糯米到店付在线支付"+postAmount+"元");
 		} catch (ParseException pe) {

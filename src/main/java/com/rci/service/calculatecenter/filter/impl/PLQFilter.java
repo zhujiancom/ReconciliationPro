@@ -95,8 +95,8 @@ public class PLQFilter extends AbstractPaymodeFilter {
 					/* 记录派乐趣商家到账金额 */
 					value.addPostAccountAmount(AccountCode.ONLINE_PLQ, postAmount);
 					value.addPostAccountAmount(AccountCode.ALLOWANCE_PLQ, allowanceAmount);
-					value.addPostAccountAmount(AccountCode.FREE_PLQ, onlineFreeAmount);
-					value.addPostAccountAmount(AccountCode.FREE_ONLINE, onlineFreeAmount);
+					value.addPostAccountAmount(AccountCode.FREE_PLQ, onlineFreeAmount.negate());
+					value.addPostAccountAmount(AccountCode.FREE_ONLINE, onlineFreeAmount.negate());
 					
 					value.joinSchemeName("派乐趣在线支付到账-"+postAmount+"元");
 				}

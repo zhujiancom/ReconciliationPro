@@ -248,9 +248,12 @@ public class SchemeManagementWin extends PopWindow {
 		JCheckBox alipayCheck = new VendorJCheckBox(3,Vendor.ALIPAY,EnumUtils.getEnumMessage(Vendor.ALIPAY));
 		alipayCheck.addItemListener(checkListener);
 		alipayCheck.setBounds(400, 4, 80, 24);
-		JCheckBox wmcrCheck = new VendorJCheckBox(4,Vendor.WMCR,EnumUtils.getEnumMessage(Vendor.WMCR));
-		wmcrCheck.addItemListener(checkListener);
-		wmcrCheck.setBounds(480, 4, 80, 24);
+//		JCheckBox wmcrCheck = new VendorJCheckBox(4,Vendor.WMCR,EnumUtils.getEnumMessage(Vendor.WMCR));
+//		wmcrCheck.addItemListener(checkListener);
+//		wmcrCheck.setBounds(480, 4, 80, 24);
+		JCheckBox mtcqCheck = new VendorJCheckBox(4,Vendor.MTSUPER,EnumUtils.getEnumMessage(Vendor.MTSUPER));
+		mtcqCheck.addItemListener(checkListener);
+		mtcqCheck.setBounds(480, 4, 80, 24);
 		JCheckBox mtCheck = new VendorJCheckBox(4,Vendor.MT,EnumUtils.getEnumMessage(Vendor.MT));
 		mtCheck.addItemListener(checkListener);
 		mtCheck.setBounds(560, 4, 80, 24);
@@ -272,7 +275,7 @@ public class SchemeManagementWin extends PopWindow {
 		checkGroup.add(eleCheck);
 		checkGroup.add(mtwmCheck);
 		checkGroup.add(alipayCheck);
-		checkGroup.add(wmcrCheck);
+		checkGroup.add(mtcqCheck);
 		checkGroup.add(mtCheck);
 		checkGroup.add(bdnmCheck);
 		checkGroup.add(bdwmCheck);
@@ -281,7 +284,7 @@ public class SchemeManagementWin extends PopWindow {
 		operaPane.add(eleCheck);
 		operaPane.add(mtwmCheck);
 		operaPane.add(alipayCheck);
-		operaPane.add(wmcrCheck);
+		operaPane.add(mtcqCheck);
 		operaPane.add(mtCheck);
 		operaPane.add(bdnmCheck);
 		operaPane.add(bdwmCheck);

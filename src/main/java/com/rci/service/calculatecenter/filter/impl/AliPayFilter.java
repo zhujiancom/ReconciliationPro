@@ -69,8 +69,8 @@ public class AliPayFilter extends AbstractPaymodeFilter {
 			value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);				//标记是线上免单优惠
 			
 			value.addPostAccountAmount(AccountCode.ONLINE_ALIPAY, postAmount);	//支付宝商家入账金额
-			value.addPostAccountAmount(AccountCode.FREE_ALIPAY, freeAmount);  //支付宝商家免单金额
-			value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
+			value.addPostAccountAmount(AccountCode.FREE_ALIPAY, freeAmount.negate());  //支付宝商家免单金额
+			value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount.negate());
 		} catch (ParseException pe) {
 			logger.warn("日期["+day+"]转换错误", pe);
 		}

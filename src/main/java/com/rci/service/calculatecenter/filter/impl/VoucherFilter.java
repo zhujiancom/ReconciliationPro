@@ -36,8 +36,8 @@ public class VoucherFilter extends AbstractPaymodeFilter {
 		value.joinSchemeName("使用"+voucherAmount+"元代金券");
 		value.addPayInfo(PaymodeCode.ONLINE_FREE, voucherAmount);
 		
-		value.addPostAccountAmount(AccountCode.ONLINE_VOUCHER, voucherAmount);
-		value.addPostAccountAmount(AccountCode.FREE_ONLINE, voucherAmount);
+		value.addPostAccountAmount(AccountCode.ONLINE_VOUCHER, voucherAmount.negate());
+		value.addPostAccountAmount(AccountCode.FREE_ONLINE, voucherAmount.negate());
 	}
 
 }

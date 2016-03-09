@@ -61,8 +61,8 @@ public class POSFilter extends AbstractPaymodeFilter {
 			value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 			
 			value.addPostAccountAmount(AccountCode.ONLINE_POS, postAmount);
-			value.addPostAccountAmount(AccountCode.FREE_POS, freeAmount);
-			value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
+			value.addPostAccountAmount(AccountCode.FREE_POS, freeAmount.negate());
+			value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount.negate());
 			
 			value.joinSchemeName("POS机刷卡支付"+postAmount+"元");
 		} catch (ParseException pe) {

@@ -143,7 +143,22 @@ public interface Calculator {
 	 * @param account
 	 * @param amount
 	 */
-	public void doEarningPostAmount(Account account,BigDecimal amount);
+	public void doEarningAccountAmount(Account account,BigDecimal amount);
+	
+	/**
+	 * 
+	 * Describle(描述)： 账户出账
+	 *
+	 * 方法名称：doExpenseAccountAmount
+	 *
+	 * 所在类名：Calculator
+	 *
+	 * Create Time:2016年3月9日 上午9:21:29
+	 *  
+	 * @param account
+	 * @param amount
+	 */
+	public void doExpenseAccountAmount(Account account,BigDecimal amount);
 	
 	/**
 	 * 
@@ -158,5 +173,5 @@ public interface Calculator {
 	 * @param account
 	 * @param amount
 	 */
-	public void doExpensePostAmount(Account account,BigDecimal amount);
+	public void doRollbackAccountAmount(Account account,BigDecimal amount);
 }

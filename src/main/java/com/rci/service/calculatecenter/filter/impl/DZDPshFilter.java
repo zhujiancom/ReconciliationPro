@@ -63,8 +63,8 @@ public class DZDPshFilter extends AbstractPaymodeFilter {
 			
 			BigDecimal postAmount = actualResult[0].add(nodiscountAmount);
 			value.addPostAccountAmount(AccountCode.DPSH, postAmount);
-			value.addPostAccountAmount(AccountCode.FREE_DPSH, actualResult[1]);
-			value.addPostAccountAmount(AccountCode.FREE_ONLINE, actualResult[1]);
+			value.addPostAccountAmount(AccountCode.FREE_DPSH, actualResult[1].negate());
+			value.addPostAccountAmount(AccountCode.FREE_ONLINE, actualResult[1].negate());
 			
 			value.joinSchemeName("闪惠在线支付"+postAmount+"元");
 		} catch (ParseException pe) {

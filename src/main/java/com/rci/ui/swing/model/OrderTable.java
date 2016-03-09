@@ -117,6 +117,7 @@ public class OrderTable extends BaseTable<OrderVO> {
 		OrderTableModel otm = (OrderTableModel) this.getModel();
 		otm.setOrders(orders);
 		otm.fireTableDataChanged();
+		this.repaint();
 	}
 	
 	/**

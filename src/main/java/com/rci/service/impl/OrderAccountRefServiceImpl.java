@@ -20,7 +20,6 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.OrderFramework;
-import com.rci.enums.CommonEnums.Symbol;
 import com.rci.metadata.NativeSQLBuilder;
 import com.rci.service.IAccountService;
 import com.rci.service.IOrderAccountRefService;
@@ -49,9 +48,13 @@ public class OrderAccountRefServiceImpl extends
 		List<OrderAccountRef> oars = getOARef(billno);
 		if(!CollectionUtils.isEmpty(oars)){
 			for(OrderAccountRef oar:oars){
-				Account account = accountService.getAccount(oar.getAccNo());
-				if(Symbol.P.equals(account.getSymbol())){
-					postAmount = postAmount.add(oar.getRealAmount());
+//				Account account = accountService.getAccount(oar.getAccNo());
+//				if(Symbol.P.equals(account.getSymbol())){
+//					postAmount = postAmount.add(oar.getRealAmount());
+//				}
+				BigDecimal realAmount = oar.getRealAmount();
+				if(realAmount.compareTo(BigDecimal.ZERO) > 0){
+					postAmount = postAmount.add(realAmount);
 				}
 			}
 		}
@@ -237,7 +240,7 @@ public class OrderAccountRefServiceImpl extends
 		for(AccountSumResult result:results){
 			Account account = result.getAccount();
 			BigDecimal amount = result.getSumAmount();
-			calculator.doExpensePostAmount(account, amount);
+			calculator.doRollbackAccountAmount(account, amount);
 		}
 	}
 }

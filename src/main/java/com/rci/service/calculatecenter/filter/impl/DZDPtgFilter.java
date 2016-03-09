@@ -123,8 +123,8 @@ public class DZDPtgFilter extends AbstractPaymodeFilter {
 				value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 				
 				value.addPostAccountAmount(AccountCode.ONLINE_DPTG, postAmount);
-				value.addPostAccountAmount(AccountCode.FREE_DPTG, freeAmount);
-				value.addPostAccountAmount(AccountCode.FREE_ONLINE,freeAmount);
+				value.addPostAccountAmount(AccountCode.FREE_DPTG, freeAmount.negate());
+				value.addPostAccountAmount(AccountCode.FREE_ONLINE,freeAmount.negate());
 			}else{		//不存在直接返回
 				return;
 			}

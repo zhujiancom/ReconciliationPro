@@ -127,8 +127,8 @@ public class BDWMFilter extends AbstractPaymodeFilter{
 					/* 记录百度外卖商家到账金额 */
 					value.addPostAccountAmount(AccountCode.ONLINE_BDWM, postAmount);
 					value.addPostAccountAmount(AccountCode.ALLOWANCE_BDWM, allowanceAmount);
-					value.addPostAccountAmount(AccountCode.FREE_BDWM, onlineFreeAmount);
-					value.addPostAccountAmount(AccountCode.FREE_ONLINE, onlineFreeAmount);
+					value.addPostAccountAmount(AccountCode.FREE_BDWM, onlineFreeAmount.negate());
+					value.addPostAccountAmount(AccountCode.FREE_ONLINE, onlineFreeAmount.negate());
 					
 					value.joinSchemeName("百度外卖在线支付到账-"+postAmount+"元","平台补贴"+allowanceAmount+"元");
 				}

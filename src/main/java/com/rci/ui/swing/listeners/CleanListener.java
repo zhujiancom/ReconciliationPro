@@ -2,12 +2,14 @@ package com.rci.ui.swing.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import com.rci.exceptions.ServiceException;
+import com.rci.tools.DateUtil;
 import com.rci.ui.swing.views.ConculsionPanel;
 import com.rci.ui.swing.views.ContentPanel;
 import com.rci.ui.swing.views.QueryFormPanel;
@@ -23,7 +25,9 @@ public class CleanListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final String time = queryPanel.getTimeInput().getText();
+//		final String time = queryPanel.getTimeInput().getText();
+		Date queryDate = queryPanel.getDatepicker().getDate();
+		final String time = DateUtil.date2Str(queryDate, "yyyyMMdd");
 		new Thread(new Runnable(){
 
 			@Override

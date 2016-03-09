@@ -36,13 +36,13 @@ public class OffLineFreeFilter extends AbstractPaymodeFilter {
 		BigDecimal onlineFreeAmount = value.getAmount(PaymodeCode.ONLINE_FREE);  //经过前面处理器处理后查看有没有在线免单的金额
 		if(onlineFreeAmount == null || onlineFreeAmount.compareTo(BigDecimal.ZERO) == 0){ // 没有在线免单
 			value.addPayInfo(PaymodeCode.OFFLINE_FREE, freeAmount);
-			value.addPostAccountAmount(AccountCode.FREE_OFFLINE, freeAmount);
+			value.addPostAccountAmount(AccountCode.FREE_OFFLINE, freeAmount.negate());
 			value.joinSchemeName("堂食免单"+freeAmount+"元");
 		}else{
 			BigDecimal offlineFreeAmount = freeAmount.subtract(onlineFreeAmount);
 			if(offlineFreeAmount.compareTo(BigDecimal.ZERO) > 0){
 				value.addPayInfo(PaymodeCode.OFFLINE_FREE, offlineFreeAmount);
-				value.addPostAccountAmount(AccountCode.FREE_OFFLINE, offlineFreeAmount);
+				value.addPostAccountAmount(AccountCode.FREE_OFFLINE, offlineFreeAmount.negate());
 				value.joinSchemeName("堂食免单"+offlineFreeAmount+"元");
 			}
 		}

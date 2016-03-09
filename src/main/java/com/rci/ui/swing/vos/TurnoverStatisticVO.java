@@ -2,25 +2,24 @@ package com.rci.ui.swing.vos;
 
 import java.math.BigDecimal;
 
-import com.rci.enums.BusinessEnums.OrderFramework;
-import com.rci.tools.EnumUtils;
-
 public class TurnoverStatisticVO {
 	private String accountName;
 	
 	private BigDecimal amount;
 	
-	private OrderFramework framework;
+	private String accno;
+	
+	private String parentAccountno;
 	
 	public String getAccountName() {
-		if(framework != null){
-			accountName += "-"+EnumUtils.getEnumMessage(framework);
-		}
+//		if(framework != null){
+//			accountName += "-"+EnumUtils.getEnumMessage(framework);
+//		}
 		return accountName;
 	}
 
 	public BigDecimal getAmount() {
-		return amount;
+		return amount == null ? BigDecimal.ZERO:amount;
 	}
 
 	public void setAccountName(String accountName) {
@@ -31,13 +30,23 @@ public class TurnoverStatisticVO {
 		this.amount = amount;
 	}
 
-	public OrderFramework getFramework() {
-		return framework;
+	public String getAccno() {
+		return accno;
 	}
 
-	public void setFramework(OrderFramework framework) {
-		this.framework = framework;
+	public void setAccno(String accno) {
+		this.accno = accno;
+	}
+
+	public String getParentAccountno() {
+		return parentAccountno;
+	}
+
+	public void setParentAccountno(String parentAccountno) {
+		this.parentAccountno = parentAccountno;
 	}
 	
-	
+	public void addAmount(BigDecimal amt){
+		setAmount(getAmount().add(amt));
+	}
 }

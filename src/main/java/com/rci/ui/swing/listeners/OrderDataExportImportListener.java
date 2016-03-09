@@ -39,6 +39,7 @@ import com.rci.service.utils.IExImportService;
 import com.rci.service.utils.excel.ExcelSheet;
 import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
+import com.rci.tools.StringUtils;
 import com.rci.ui.swing.CheckedoutOrderPanel;
 import com.rci.ui.swing.handler.DataExport;
 import com.rci.ui.swing.handler.InventoryWarningHandler;
@@ -186,7 +187,7 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 												dialog.loading("数据正在导入，请稍后...");
 											}
 										});
-										Date date = DateUtil.parseDate(day, "yyyyMMdd");
+										final Date date = DateUtil.parseDate(day, "yyyyMMdd");
 										BufferedInputStream bin = new BufferedInputStream(new FileInputStream(new File(chooser.getSelectedFile().getAbsolutePath())));
 										IDataLoaderService loaderService = (IDataLoaderService) SpringUtils.getBean("OrderExcelDataLoaderService");
 										loaderService.load(bin, date);
@@ -199,6 +200,16 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 										
 										IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
 										List<OrderVO> ordervos = orderService.accquireOrderVOsByDay(day);
+										final StringBuffer warningInfo = new StringBuffer();
+										int count = 0;
+										for(OrderVO ordervo:ordervos){
+											if(StringUtils.hasText(ordervo.getWarningInfo())){
+												warningInfo.append(++count).append(". ")
+															.append("[").append(ordervo.getPayNo()).append("]-")
+															.append(ordervo.getWarningInfo())
+															.append("\n");
+											}
+										}
 										
 										OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
 										OrderItemTableModel ottm = (OrderItemTableModel) contentPane.getItemTable().getModel();
@@ -214,8 +225,10 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 												
 												@Override
 												public void run() {
-													queryPane.getTimeInput().setText(day);
-													queryPane.displayInfoDone("查询完毕");
+//													queryPane.getTimeInput().setText(day);
+													queryPane.getDatepicker().setDate(date);
+													contentPane.getTextArea().setText(warningInfo.toString());
+													queryPane.displayInfoDone("导入完毕");
 //													InventoryWarningHandler.getInstance().displayWarningInfo();
 												}
 											});
@@ -245,23 +258,10 @@ public class OrderDataExportImportListener extends DataExportImportListener impl
 										e.printStackTrace();
 									} catch(ServiceException se){
 										JOptionPane.showMessageDialog(null, se.getMessage());
-										SwingUtilities.invokeLater(new Runnable() {
-											
-											@Override
-											public void run() {
-												queryPane.displayErrorInfo("订单加载失败");
-											}
-										});
+										dialog.error("订单加载失败");
 									} catch(Exception e){
-										e.printStackTrace();
 										JOptionPane.showMessageDialog(null, e.getMessage());
-										SwingUtilities.invokeLater(new Runnable() {
-											
-											@Override
-											public void run() {
-												queryPane.displayErrorInfo("订单加载失败");
-											}
-										});
+										dialog.error("订单加载失败");
 									}
 								}
 							}).start();

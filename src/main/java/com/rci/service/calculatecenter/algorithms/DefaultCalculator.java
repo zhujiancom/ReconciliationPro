@@ -24,7 +24,6 @@ import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.ActivityStatus;
 import com.rci.enums.BusinessEnums.ActivityType;
 import com.rci.enums.BusinessEnums.Vendor;
-import com.rci.enums.CommonEnums.Symbol;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
@@ -197,72 +196,61 @@ public class DefaultCalculator implements Calculator {
 	}
 
 	@Override
-	public void doEarningPostAmount(Account account, BigDecimal amount) {
-		if(YOrN.isY(account.getIsParent())){ //是主账户
-			BigDecimal balanceAmount = account.getBalance();
-			BigDecimal earningAmount = account.getEarningAmount();
-			BigDecimal expenseAmount = account.getExpenseAmount();
-			if(Symbol.P.equals(account.getSymbol())){ //主账户是正值账户
-				balanceAmount = balanceAmount.add(amount);
-				earningAmount = earningAmount.add(amount);
-			}else{
-				balanceAmount = balanceAmount.subtract(amount);
-				expenseAmount = expenseAmount.subtract(amount);
-			}
-			account.setBalance(balanceAmount);
-			account.setEarningAmount(earningAmount);
-			account.setExpenseAmount(expenseAmount);
-		}else{
+	public void doEarningAccountAmount(Account account, BigDecimal amount) {
+		if(!YOrN.isY(account.getIsParent())){
 			Account parentAccount = accService.getAccount(account.getParentId());
-			if(Symbol.P.equals(account.getSymbol())){
-				parentAccount.setEarningAmount(parentAccount.getEarningAmount().add(amount));
+			if(amount.compareTo(BigDecimal.ZERO) < 0){
+				parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().add(amount));
+			}else{
 				parentAccount.setBalance(parentAccount.getBalance().add(amount));
-				
-				account.setEarningAmount(account.getEarningAmount().add(amount));
-				account.setBalance(account.getBalance().add(amount));
-			}else if(Symbol.N.equals(account.getSymbol())){
-				if(Symbol.N.equals(parentAccount.getSymbol())){
-					parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().subtract(amount));
-					parentAccount.setBalance(parentAccount.getBalance().subtract(amount));
-				}else if(Symbol.P.equals(parentAccount.getSymbol())){ //主账户的余额与正值子账户的余额保持一致，收入和支出字段自作显示用。
-					parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().subtract(amount));
-				}
-				account.setExpenseAmount(account.getExpenseAmount().subtract(amount));
-				account.setBalance(account.getBalance().subtract(amount));
+				parentAccount.setEarningAmount(parentAccount.getEarningAmount().add(amount));
 			}
-			accService.rwUpdate(parentAccount);
+			accService.doUpdateAccount(parentAccount);
 		}
-		accService.rwUpdate(account);
+		if(amount.compareTo(BigDecimal.ZERO) < 0){
+			account.setExpenseAmount(account.getExpenseAmount().add(amount));
+			account.setBalance(account.getBalance().add(amount));
+		}else{
+			account.setBalance(account.getBalance().add(amount));
+			account.setEarningAmount(account.getEarningAmount().add(amount));
+		}
+		accService.doUpdateAccount(account);
+	}
+	
+	@Override
+	public void doExpenseAccountAmount(Account account, BigDecimal amount) {
+		if(amount.compareTo(BigDecimal.ZERO) < 0){
+			ExceptionManage.throwServiceException("账户出账金额不能小于0");
+		}
+		if(!YOrN.isY(account.getIsParent())){
+			Account parentAccount = accService.getAccount(account.getParentId());
+			parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().subtract(amount));
+			parentAccount.setBalance(parentAccount.getBalance().subtract(amount));
+			accService.doUpdateAccount(parentAccount);
+		}
+		account.setExpenseAmount(account.getExpenseAmount().subtract(amount));
+		account.setBalance(account.getBalance().subtract(amount));
+		accService.doUpdateAccount(account);
 	}
 
 	@Override
-	public void doExpensePostAmount(Account account, BigDecimal amount) {
-		if(YOrN.isY(account.getIsParent())){
-			if(Symbol.P.equals(account.getSymbol())){ //主账户是正值账户
-				account.setBalance(account.getBalance().subtract(amount));
-				account.setEarningAmount(account.getEarningAmount().subtract(amount));
-			}else{									 //主账户是负值账户
-				account.setBalance(account.getBalance().add(amount));
-				account.setExpenseAmount(account.getExpenseAmount().add(amount));
-			}
-		}else{
+	public void doRollbackAccountAmount(Account account, BigDecimal amount) {
+		if(!YOrN.isY(account.getIsParent())){
 			Account parentAccount = accService.getAccount(account.getParentId());
-			if(Symbol.P.equals(account.getSymbol())){
-				parentAccount.setEarningAmount(parentAccount.getEarningAmount().subtract(amount));
+			if(amount.compareTo(BigDecimal.ZERO) < 0){
+				parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().subtract(amount));
+			}else{
 				parentAccount.setBalance(parentAccount.getBalance().subtract(amount));
-				account.setEarningAmount(account.getEarningAmount().subtract(amount));
-				account.setBalance(account.getBalance().subtract(amount));
-			}else if(Symbol.N.equals(account.getSymbol())){
-				if(Symbol.N.equals(parentAccount.getSymbol())){
-					parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().add(amount));
-					parentAccount.setBalance(parentAccount.getBalance().add(amount));
-				}else if(Symbol.P.equals(parentAccount.getSymbol())){ //主账户的余额与正值子账户的余额保持一致，收入和支出字段自作显示用。
-					parentAccount.setExpenseAmount(parentAccount.getExpenseAmount().add(amount));
-				}
-				account.setExpenseAmount(account.getExpenseAmount().add(amount));
-				account.setBalance(account.getBalance().add(amount));
+				parentAccount.setEarningAmount(parentAccount.getEarningAmount().subtract(amount));
 			}
 			accService.doUpdateAccount(parentAccount);
+		}
+		if(amount.compareTo(BigDecimal.ZERO) < 0){
+			account.setExpenseAmount(account.getExpenseAmount().subtract(amount));
+			account.setBalance(account.getBalance().subtract(amount));
+		}else{
+			account.setBalance(account.getBalance().subtract(amount));
+			account.setEarningAmount(account.getEarningAmount().subtract(amount));
 		}
 		accService.doUpdateAccount(account);
 	}

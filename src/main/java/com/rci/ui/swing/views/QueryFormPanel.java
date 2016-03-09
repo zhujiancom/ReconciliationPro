@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,9 +21,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.jdesktop.swingx.JXDatePicker;
+
 import com.rci.enums.BusinessEnums.PaymodeCode;
 import com.rci.ui.swing.model.ButtonFactory;
-import com.rci.ui.swing.views.component.encapsulation.DateTextField;
 
 public class QueryFormPanel extends JPanel implements ItemListener{
 
@@ -40,7 +43,8 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private JButton queryBtn;
 	private JButton cleanBtn;
 	private JButton filterBtn;
-	private DateTextField timeInput;
+//	private DateTextField timeInput;
+	private JXDatePicker datepicker;
 	
 	private JLabel actionLabel;
 	private JLabel warningLabel;
@@ -102,7 +106,14 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 //		elePerAllowanceAmount = new JTextField(5);
 		
 		
-		timeInput = new DateTextField("查询日期");
+//		timeInput = new DateTextField("查询日期");
+		datepicker = new JXDatePicker(new Date());
+		Calendar calendar = datepicker.getMonthView().getCalendar();
+		calendar.add(Calendar.YEAR,1);
+		datepicker.getMonthView().setUpperBound(calendar.getTime());
+		datepicker.setPreferredSize(new Dimension(150,25));
+		datepicker.setFormats("yyyyMMdd");
+		
 		queryBtn = ButtonFactory.createImageButton("查询","skin/gray/images/24x24/search.png", null);
 		cleanBtn = ButtonFactory.createImageButton("清空","skin/gray/images/24x24/empty_trash.png", null);
 		filterBtn = ButtonFactory.createImageButton("过滤","skin/gray/images/24x24/filter.png", null);
@@ -133,7 +144,8 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		warningLabel.setForeground(Color.RED);
 		inventoryWarningPane.add(warningLabel);
 		
-		queryPane.add(timeInput);
+//		queryPane.add(timeInput);
+		queryPane.add(datepicker);
 		queryPane.add(queryBtn);
 		queryPane.add(cleanBtn);
 		queryPane.add(filterBtn);
@@ -250,13 +262,13 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		this.cleanBtn = cleanBtn;
 	}
 
-	public DateTextField getTimeInput() {
-		return timeInput;
-	}
-
-	public void setTimeInput(DateTextField timeInput) {
-		this.timeInput = timeInput;
-	}
+//	public DateTextField getTimeInput() {
+//		return timeInput;
+//	}
+//
+//	public void setTimeInput(DateTextField timeInput) {
+//		this.timeInput = timeInput;
+//	}
 
 	public JTextField getElePerAllowanceAmount() {
 		return elePerAllowanceAmount;
@@ -448,5 +460,13 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 
 	public void setFilterBtn(JButton filterBtn) {
 		this.filterBtn = filterBtn;
+	}
+
+	public JXDatePicker getDatepicker() {
+		return datepicker;
+	}
+
+	public void setDatepicker(JXDatePicker datepicker) {
+		this.datepicker = datepicker;
 	}
 }

@@ -22,9 +22,7 @@ import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.OrderItem;
-import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.AccountCode;
-import com.rci.enums.CommonEnums.Symbol;
 import com.rci.metadata.NativeSQLBuilder;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IAccountService;
@@ -82,7 +80,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 					BigDecimal amount = accountRef.getRealAmount();
 					String accountNo = accountRef.getAccNo();
 					AccountCode code = AccountCode.valueOf(accountNo);
-					Account account = accountService.getAccount(accountNo);
+//					Account account = accountService.getAccount(accountNo);
 					if(AccountCode.FREE_ONLINE.equals(code)){
 						vo.setOnlineFreeAmount(amount);
 						continue;
@@ -90,7 +88,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements
 					if(AccountCode.FREE_OFFLINE.equals(code)){
 						vo.setFreeAmount(amount);
 					}
-					if(Symbol.P.equals(account.getSymbol())){  //是正数账户
+//					if(Symbol.P.equals(account.getSymbol())){  //是正数账户
+//						totalAmount = totalAmount.add(amount);
+//					}
+					if(amount.compareTo(BigDecimal.ZERO) >= 0){
 						totalAmount = totalAmount.add(amount);
 					}
 				}

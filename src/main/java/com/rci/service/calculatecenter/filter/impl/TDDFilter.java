@@ -71,7 +71,7 @@ public class TDDFilter extends AbstractPaymodeFilter {
 				if(freeAmount != null){
 					value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 					value.addPostAccountAmount(AccountCode.FREE_TDD, freeAmount);
-					value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
+					value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount.negate());
 				}
 				value.addPostAccountAmount(AccountCode.TDD, onlineAmount);
 				value.joinSchemeName("淘点点在线支付"+onlineAmount+"元");
@@ -89,8 +89,8 @@ public class TDDFilter extends AbstractPaymodeFilter {
 						value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 						
 						value.addPostAccountAmount(AccountCode.TDD, postAmount);
-						value.addPostAccountAmount(AccountCode.FREE_TDD, freeAmount);
-						value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
+						value.addPostAccountAmount(AccountCode.FREE_TDD, freeAmount.negate());
+						value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount.negate());
 						
 						value.joinSchemeName(scheme.getName(),"淘点点在线支付"+postAmount+"元 ");
 					}else{

@@ -126,8 +126,8 @@ public class MTWMFilter extends AbstractPaymodeFilter {
 					/* 记录美团外卖商家到账金额 */
 					value.addPostAccountAmount(AccountCode.ONLINE_MTWM, postAmount);
 					value.addPostAccountAmount(AccountCode.ALLOWANCE_MTWM, allowanceAmount);
-					value.addPostAccountAmount(AccountCode.FREE_MTWM, onlineFreeAmount);
-					value.addPostAccountAmount(AccountCode.FREE_ONLINE, onlineFreeAmount);
+					value.addPostAccountAmount(AccountCode.FREE_MTWM, onlineFreeAmount.negate());
+					value.addPostAccountAmount(AccountCode.FREE_ONLINE, onlineFreeAmount.negate());
 					
 					value.joinSchemeName("美团外卖在线支付到账-"+postAmount+"元","平台补贴"+allowanceAmount+"元");
 				}

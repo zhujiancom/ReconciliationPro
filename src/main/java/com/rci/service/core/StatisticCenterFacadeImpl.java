@@ -5,7 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
@@ -19,10 +23,12 @@ import org.springframework.util.CollectionUtils;
 import com.rci.bean.entity.EleSDStatistic;
 import com.rci.bean.entity.StatisticRecord;
 import com.rci.bean.entity.TicketInfo;
+import com.rci.bean.entity.account.Account;
 import com.rci.contants.BusinessConstant;
 import com.rci.enums.BusinessEnums.OrderFramework;
 import com.rci.enums.BusinessEnums.Vendor;
 import com.rci.metadata.NativeSQLBuilder;
+import com.rci.service.IAccountService;
 import com.rci.service.IELESDStatisticService;
 import com.rci.service.IOrderAccountRefService;
 import com.rci.service.IOrderService;
@@ -48,6 +54,8 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 	private IOrderAccountRefService oarService;
 	@Resource(name="StatisticRecordService")
 	private IStatisticRecordService srService;
+	@Resource(name="AccountService")
+	private IAccountService accService;
 	
 	@Autowired
 	private Mapper beanMapper;
@@ -181,25 +189,53 @@ public class StatisticCenterFacadeImpl implements StatisticCenterFacade {
 	
 	@Override
 	public List<TurnoverStatisticVO> getTurnoverStatisticInfo(Date sdate,Date edate){
-		return jdbcTemplate.query(NativeSQLBuilder.TURNOVER_STATISTIC,new Object[]{sdate,edate},new RowMapper<TurnoverStatisticVO>(){
+		List<TurnoverStatisticVO> results = jdbcTemplate.query(NativeSQLBuilder.TURNOVER_STATISTIC,new Object[]{sdate,edate},new RowMapper<TurnoverStatisticVO>(){
 
 			@Override
 			public TurnoverStatisticVO mapRow(ResultSet rs, int rowNum)
 					throws SQLException {
 				TurnoverStatisticVO result = new TurnoverStatisticVO();
-				result.setAccountName(rs.getString("name"));
-				String symbol = rs.getString("symbol");
+				result.setAccno(rs.getString("accno"));
+				result.setParentAccountno(rs.getString("main_account"));
+//				String symbol = rs.getString("symbol");
 				result.setAmount(rs.getBigDecimal("amount"));
-				if("N".equals(symbol)){
-					result.setAmount(rs.getBigDecimal("amount").negate());					
-				}
-				if(rs.getString("framework") != null){
-					result.setFramework(OrderFramework.valueOf(rs.getString("framework")));
-				}
+//				if("N".equals(symbol)){
+//					result.setAmount(rs.getBigDecimal("amount").negate());					
+//				}
+//				if(rs.getString("framework") != null){
+//					result.setFramework(OrderFramework.valueOf(rs.getString("framework")));
+//				}
 				return result;
 			}
 			
 		});
+		return mergeTurnoverStatisticList(results);
+	}
+	
+	private List<TurnoverStatisticVO> mergeTurnoverStatisticList(List<TurnoverStatisticVO> list){
+		Map<String,TurnoverStatisticVO> datastore = new HashMap<String,TurnoverStatisticVO>();
+		List<TurnoverStatisticVO> results = new ArrayList<TurnoverStatisticVO>();
+		for(TurnoverStatisticVO turnover:list){
+			String key = "";
+			if(turnover.getAmount().compareTo(BigDecimal.ZERO) < 0){
+				key = turnover.getAccno();
+			}else{
+				key = turnover.getParentAccountno();
+			}
+			if(datastore.containsKey(key)){
+				TurnoverStatisticVO oldObj = datastore.get(key);
+				oldObj.addAmount(turnover.getAmount());
+			}else{
+				Account account = accService.getAccount(key);
+				turnover.setAccountName(account.getAccName());
+				datastore.put(key, turnover);
+			}
+		}
+		for(Iterator<Entry<String,TurnoverStatisticVO>> it = datastore.entrySet().iterator();it.hasNext();){
+			Entry<String,TurnoverStatisticVO> entry = it.next();
+			results.add(entry.getValue());
+		}
+		return results;
 	}
 	
 	private TurnoverVO buildTurnoverVO(Date position,List<AccountSumResult> results){

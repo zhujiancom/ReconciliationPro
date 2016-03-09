@@ -69,10 +69,13 @@ public class NativeSQLBuilder {
 //			+ "from bus_tb_order_account_ref oar,bus_tb_account acc \n"
 //			+ "where oar.accno=acc.acc_no and oar.post_time >= ? and oar.post_time <= ?\n"
 //			+ "group by oar.accno,oar.framework";
-	public static final String TURNOVER_STATISTIC="select sum(realamount) 'amount',name,framework,symbol \n"
-			+ "from v_trunover_statistic \n"
-			+ "where postTime >= ? and postTime <= ? \n"
-			+ "group by accno,framework";
+//	public static final String TURNOVER_STATISTIC="select sum(realamount) 'amount',name,mainaccount \n"
+//			+ "from v_trunover_statistic \n"
+//			+ "where postTime >= ? and postTime <= ? \n"
+//			+ "group by accno,mainaccount";
+	public static final String TURNOVER_STATISTIC="select sum(amount) 'amount',accno,main_account from v_daily_post_account \n"
+			+ "where post_time >= ? and post_time <= ? \n"
+			+ "group by accno";
 	
 	// 查询外送订单单量  占位符用String.format解析
 	public static final String EXPRESS_ORDERS="select count(1) 'count' from v_express_order eo where eo.day='%s'";

@@ -13,11 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
-import javax.swing.SwingUtilities;
 import javax.swing.table.TableRowSorter;
 
 import com.rci.enums.BusinessEnums.PaymodeCode;
-import com.rci.tools.DateUtil;
 import com.rci.ui.swing.handler.InventoryWarningHandler;
 import com.rci.ui.swing.listeners.CleanListener;
 import com.rci.ui.swing.listeners.QueryListener;
@@ -54,14 +52,14 @@ public class CheckedoutOrderPanel extends JPanel {
 		setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
 		setLayout(layout);
 		/* 绑定查询form */
-		SwingUtilities.invokeLater(new Runnable(){
-
-			@Override
-			public void run() {
-				queryPanel.getTimeInput().setText(DateUtil.date2Str(DateUtil.getCurrentDate(), "yyyyMMdd"));
-			}
-			
-		});
+//		SwingUtilities.invokeLater(new Runnable(){
+//
+//			@Override
+//			public void run() {
+//				queryPanel.getTimeInput().setText(DateUtil.date2Str(DateUtil.getCurrentDate(), "yyyyMMdd"));
+//			}
+//			
+//		});
 		add(queryPanel,BorderLayout.NORTH);
 		/* 绑定订单内容和警告日志展示列表 */
 		contentPane = new ContentPanel(JSplitPane.HORIZONTAL_SPLIT,width,height);

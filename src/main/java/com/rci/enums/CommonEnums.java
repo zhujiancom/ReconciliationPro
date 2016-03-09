@@ -26,7 +26,7 @@ public final class CommonEnums {
 		CREATE,READ,UPDATE,DELTE
 	}
 	
-	public static enum Symbol{
-		N,P;
-	}
+//	public static enum Symbol{
+//		N,P;
+//	}
 }

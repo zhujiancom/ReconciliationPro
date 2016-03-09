@@ -123,8 +123,8 @@ public class MTtgFilter extends AbstractPaymodeFilter {
 				value.addPayInfo(PaymodeCode.ONLINE_FREE, freeAmount);
 				
 				value.addPostAccountAmount(AccountCode.ONLINE_MT, postAmount);
-				value.addPostAccountAmount(AccountCode.FREE_MT, freeAmount);
-				value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount);
+				value.addPostAccountAmount(AccountCode.FREE_MT, freeAmount.negate());
+				value.addPostAccountAmount(AccountCode.FREE_ONLINE, freeAmount.negate());
 			}else{		//不存在直接返回
 				return;
 			}

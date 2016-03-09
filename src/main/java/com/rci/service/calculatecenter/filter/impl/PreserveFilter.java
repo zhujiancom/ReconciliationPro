@@ -12,7 +12,6 @@ import com.rci.bean.entity.OrderAccountRef;
 import com.rci.bean.entity.account.Account;
 import com.rci.enums.BusinessEnums.AccountCode;
 import com.rci.enums.BusinessEnums.PaymodeCode;
-import com.rci.enums.CommonEnums.Symbol;
 import com.rci.enums.CommonEnums.YOrN;
 import com.rci.service.calculatecenter.ParameterValue;
 import com.rci.service.calculatecenter.filter.AbstractPaymodeFilter;
@@ -82,7 +81,7 @@ public class PreserveFilter extends AbstractPaymodeFilter {
 			oarService.rwCreate(oar);
 			
 			//更新账户余额
-			calculator.doEarningPostAmount(account,postAmount);
+			calculator.doEarningAccountAmount(account,postAmount);
 		}
 	}
 }

@@ -48,7 +48,8 @@ public class QueryListener implements ActionListener,ListSelectionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		time = queryPanel.getTimeInput().getText();
+//		time = queryPanel.getTimeInput().getText();
+		time = DateUtil.date2Str(queryPanel.getDatepicker().getDate(), "yyyyMMdd");
 		try{
 				loadOrderData(time);
 	//				saveEleSDInfo();

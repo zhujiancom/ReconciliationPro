@@ -1,7 +1,6 @@
 package com.rci.ui.swing.handler;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +69,7 @@ public class OrderDataLoader implements Runnable {
 			String time = DateUtil.date2Str(queryDate, "yyyyMMdd");
 			List<OrderVO> ordervos = orderService.accquireOrderVOsByDay(time);
 			
-			List<OrderVO> displayOrders = new ArrayList<OrderVO>();
+//			List<OrderVO> displayOrders = new ArrayList<OrderVO>();
 			final StringBuffer warningInfo = new StringBuffer();
 			int count = 0;
 			for(OrderVO ordervo:ordervos){
@@ -80,14 +79,14 @@ public class OrderDataLoader implements Runnable {
 								.append(ordervo.getWarningInfo())
 								.append("\n");
 				}
-				displayOrders.add(ordervo);
+//				displayOrders.add(ordervo);
 			}
 			
 			OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getModel();
 	//		OrderTableModel otm = (OrderTableModel) contentPane.getMainTable().getFixedTable().getModel();
 			OrderItemTableModel ottm = (OrderItemTableModel) contentPane.getItemTable().getModel();
-			if(!CollectionUtils.isEmpty(displayOrders)){
-				contentPane.getMainTable().reflushTable(displayOrders);
+			if(!CollectionUtils.isEmpty(ordervos)){
+				contentPane.getMainTable().reflushTable(ordervos);
 	//			((FixedOrderTable)contentPane.getMainTable()).reflushTable(displayOrders);
 				OrderVO order = otm.getOrderAt(0);
 				((OrderItemTable)contentPane.getItemTable()).reflushTable(order.getPayNo());
