@@ -5,20 +5,6 @@ MySQL - 5.6.17
 */
 /*!40101 SET NAMES utf8 */;
 
-create table `bus_tb_account` (
-	`h�i` bigint (20),
-	`��i` varchar (765),
-	`��i` varchar (765),
-	`@�i` varchar (765),
-	`��i` Decimal (21),
-	`Хi` varchar (765),
-	`(�i` varchar (765),
-	`��i` Decimal (21),
-	`ئi` Decimal (21),
-	`0�i` varchar (765),
-	`��i` bigint (20),
-	`Чi` int (11)
-); 
 insert into `bus_tb_account` (`accId`, `name`, `acc_no`, `type`, `balance`, `currency`, `description`, `earning_amount`, `expense_amount`, `is_parent`, `pid`, `version`) values('1','收银机账户','CASH_MACHINE','CASH','11105.00','RMB','收银机现金入账部分','11105.00','0.00','Y',NULL,'3088');
 insert into `bus_tb_account` (`accId`, `name`, `acc_no`, `type`, `balance`, `currency`, `description`, `earning_amount`, `expense_amount`, `is_parent`, `pid`, `version`) values('4','饿了么总账户','ELE','VIRTUAL','8909.00','RMB','饿了么总账户金额','8909.00','-1191.00','Y',NULL,'5161');
 insert into `bus_tb_account` (`accId`, `name`, `acc_no`, `type`, `balance`, `currency`, `description`, `earning_amount`, `expense_amount`, `is_parent`, `pid`, `version`) values('5','饿了么活动补贴账户','ALLOWANCE_ELE','VIRTUAL','0.00','RMB','饿了么平台返还给商家的补贴部分','0.00','0.00',NULL,'4','1705');
