@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -17,14 +16,10 @@ import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.StatisticRecord;
-import com.rci.bean.entity.account.AccFlow;
-import com.rci.bean.entity.account.Account;
 import com.rci.bean.entity.inventory.Inventory;
 import com.rci.bean.entity.inventory.InventoryDishRef;
 import com.rci.bean.entity.inventory.InventorySellLog;
 import com.rci.bean.entity.inventory.SellOffWarning;
-import com.rci.enums.BusinessEnums.DataGenerateType;
-import com.rci.enums.BusinessEnums.FlowType;
 import com.rci.enums.BusinessEnums.State;
 import com.rci.metadata.service.IDataTransformService;
 import com.rci.service.IAccFlowService;
@@ -36,7 +31,6 @@ import com.rci.service.IStatisticRecordService;
 import com.rci.service.ITableInfoService;
 import com.rci.service.calculatecenter.DefaultOrderParameterValue;
 import com.rci.service.calculatecenter.filter.PaymodeFilterChain;
-import com.rci.service.impl.OrderAccountRefServiceImpl.AccountSumResult;
 import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventorySellLogService;
 import com.rci.service.inventory.IInventoryService;
@@ -58,9 +52,6 @@ import com.rci.tools.DateUtil;
  *
  */
 public abstract class BaseDataLoaderService implements IDataLoaderService {
-//	@Resource(name="filterChain")
-//	private FilterChain filterChain;
-	
 	@Resource(name="defaultFilterChain")
 	private PaymodeFilterChain filterChain;
 	
@@ -104,9 +95,9 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 		// 解析订单各种账户收入的金额，判断订单使用的方案
 		for (Order order : orders) {
 			filterChain.doFilter(new DefaultOrderParameterValue(order));
-			addInventoryConsumeLog(order);
-			updateCostConsumeLog(order);
-			updateExpressRecord(order);
+			addInventoryConsumeLog(order);	//更新库存消耗
+			updateCostConsumeLog(order);	//更新今日成本
+			updateExpressRecord(order);    //更新外送率
 		}
 	}
 
@@ -180,126 +171,6 @@ public abstract class BaseDataLoaderService implements IDataLoaderService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/* 
-	 * @see com.rci.service.IDataLoaderService#parseOrder(com.rci.bean.entity.Order)
-	 */
-	@Override
-	public void parseOrder(Order order) {
-//		FilterChain chain = new FilterChain();
-//		Collections.sort(filters, new Comparator<CalculateFilter>() {
-//
-//			@Override
-//			public int compare(CalculateFilter f1, CalculateFilter f2) {
-//				if(f1 instanceof FreeFilter || f2 instanceof FreeFilter){
-//					return 0;
-//				}
-//				return -1;
-//			}
-//		});
-//		chain.addFilters(filters);
-//		chain.doFilter(order, chain);
-	}
-
-	/* 
-	 * @see com.rci.service.IDataLoaderService#generateAccountFlow(java.util.Date)
-	 */
-	@Override
-	public void generateAccountFlow(Date date){
-		List<AccountSumResult> sumRes = oaService.querySumAmount(date);
-		for(AccountSumResult res:sumRes){
-			Long accId = res.getAccId();
-			BigDecimal amount = res.getSumAmount();
-			//1. 根据时间和账户id，数据来源 查找流水
-			AccFlow flow = accFlowService.queryUniqueAccFlow(accId, DataGenerateType.AUTO, date);
-			if(flow == null){
-				//2. 创建流水信息
-				flow = new AccFlow(accId);
-				flow.setAmount(amount);
-				flow.setClassify("销售收入");
-				flow.setProject("营业收入");
-				flow.setTime(date);
-				flow.setFlowType(FlowType.IN);
-				flow.setGenerateType(DataGenerateType.AUTO);
-				accFlowService.rwCreate(flow);
-				//2. 更新账户信息
-				updateAccountInfo(accId, amount);
-			}else if(flow.getAmount().compareTo(amount) != 0){
-				flow.setAmount(amount);
-				accFlowService.rwUpdate(flow);
-				//2. 更新账户信息
-				BigDecimal difference = amount.subtract(flow.getAmount()); //差额
-				updateAccountInfo(accId, difference);
-			}
-		}
-	}
-
-	@Deprecated
-	@Override
-	public void addStockOpLog(Order order, Map<String, BigDecimal> stockMap) {
-		List<OrderItem> items = order.getItems();
-		for(OrderItem item:items){
-			String dishNo = item.getDishNo();
-			Dish dish = dishService.findDishByNo(dishNo);
-			if(dish != null){
-//				if(YOrN.isY(dish.getStockFlag())){
-//					BigDecimal count = item.getCount().subtract(item.getCountback());
-//					List<Stock> stocks = stockService.getStocksByDish(dishNo);
-//					for(Stock stock:stocks){
-//						BigDecimal totalAmount = stock.getAmount().multiply(count);
-//						StockOpLog sol = new StockOpLog(dishNo,totalAmount);
-//						sol.setConsumeTime(item.getConsumeTime());
-//						sol.setDay(order.getDay());
-//						sol.setType(StockOpType.CONSUME);
-//						sol.setDishName(stock.getDishName());
-//						sol.setSno(stock.getSno());
-//						BigDecimal storeAmount = stockMap.get(stock.getSno());
-//						if(storeAmount != null){
-//							storeAmount = storeAmount.add(totalAmount);
-//						}else{
-//							storeAmount = totalAmount;
-//						}
-//						stockMap.put(stock.getSno(), storeAmount);
-//						stockService.insertStockOpLog(sol);
-//					}
-//				}
-			}
-		}
-	}
-	
-	/**
-	 * 
-	 *
-	 * Describle(描述)：更新账户流入金额和余额
-	 *
-	 * 方法名称：updateAccountInfo
-	 *
-	 * 所在类名：BaseDataLoaderService
-	 *
-	 * Create Time:2015年8月26日 下午9:05:49
-	 *  
-	 * @param accId
-	 * @param amount
-	 */
-	private void updateAccountInfo(Long accId,BigDecimal amount){
-		Account account = accService.getAccount(accId);
-		BigDecimal earning = BigDecimal.ZERO;
-		if(account.getEarningAmount() == null){
-			earning = amount;
-		}else{
-			earning = account.getEarningAmount().add(amount);
-		}
-		BigDecimal balance = BigDecimal.ZERO;
-		if(account.getBalance() == null){
-			balance = amount;
-		}else{
-			balance = account.getBalance().add(amount);
-		}
-		
-		account.setEarningAmount(earning);
-		account.setBalance(balance);
-		accService.rwUpdate(account);
 	}
 
 	/**

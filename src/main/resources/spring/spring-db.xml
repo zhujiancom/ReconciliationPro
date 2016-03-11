@@ -112,7 +112,7 @@
 <!-- 	</bean> -->
 	
 	<!-- 配置事务管理器 -->
-	<tx:annotation-driven />
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 	<!-- 注解风格支持 - 开启暴露Aop代理到ThreadLocal支持-->
 	<aop:aspectj-autoproxy expose-proxy="true"/>
 	
