@@ -21,8 +21,8 @@ import com.rci.enums.BusinessEnums.DataGenerateType;
 import com.rci.enums.BusinessEnums.FlowType;
 import com.rci.enums.CommonEnums.YOrN;
 
-@Entity
-@Table(name="bus_tb_account_flow")
+//@Entity
+//@Table(name="bus_tb_account_flow")
 public class AccFlow extends BaseEntity {
 	/**
 	 * 

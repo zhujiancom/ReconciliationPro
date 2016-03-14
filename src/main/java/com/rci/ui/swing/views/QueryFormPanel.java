@@ -54,7 +54,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 	private JCheckBox eleCheck;
 	private JCheckBox mtwmCheck;
 //	private JCheckBox dptgCheck;
-//	private JCheckBox dpshCheck;
+	private JCheckBox dpshCheck;
 	private JCheckBox mttgCheck;
 	private JCheckBox mtsuperCheck;
 	private JCheckBox cashCheck;
@@ -178,9 +178,9 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 //		dptgCheck.addItemListener(this);
 //		dptgCheck.setBackground(Color.WHITE);
 //		
-//		dpshCheck = new JCheckBox("点评闪惠");
-//		dpshCheck.addItemListener(this);
-//		dpshCheck.setBackground(Color.WHITE);
+		dpshCheck = new JCheckBox("点评闪惠");
+		dpshCheck.addItemListener(this);
+		dpshCheck.setBackground(Color.WHITE);
 		
 		mttgCheck = new JCheckBox("美团团购");
 		mttgCheck.addItemListener(this);
@@ -218,7 +218,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 		checkPane.add(cashCheck);
 		checkPane.add(eleCheck);
 //		checkPane.add(dptgCheck);
-//		checkPane.add(dpshCheck);
+		checkPane.add(dpshCheck);
 		checkPane.add(mttgCheck);
 		checkPane.add(mtsuperCheck);
 		checkPane.add(mtwmCheck);
@@ -288,7 +288,7 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 			allCheck.setSelected(true);
 			cashCheck.setSelected(false);
 			eleCheck.setSelected(false);
-//			dpshCheck.setSelected(false);
+			dpshCheck.setSelected(false);
 //			dptgCheck.setSelected(false);
 			mttgCheck.setSelected(false);
 			mtsuperCheck.setSelected(false);
@@ -324,14 +324,14 @@ public class QueryFormPanel extends JPanel implements ItemListener{
 //				paymodes.remove(PaymodeCode.DPTG);
 //			}
 //		}
-//		if(source == dpshCheck){
-//			if(e.getStateChange() == ItemEvent.SELECTED){
-//				allCheck.setSelected(false);
-//				paymodes.add(PaymodeCode.DPSH);	
-//			}else{
-//				paymodes.remove(PaymodeCode.DPSH);
-//			}
-//		}
+		if(source == dpshCheck){
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				allCheck.setSelected(false);
+				paymodes.add(PaymodeCode.DPSH);	
+			}else{
+				paymodes.remove(PaymodeCode.DPSH);
+			}
+		}
 		if(source == mttgCheck){
 			if(e.getStateChange() == ItemEvent.SELECTED){
 				allCheck.setSelected(false);

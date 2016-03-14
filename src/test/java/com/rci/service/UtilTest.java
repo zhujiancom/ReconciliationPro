@@ -8,6 +8,7 @@ import com.rci.bean.entity.Order;
 import com.rci.contants.BusinessConstant;
 import com.rci.service.calculatecenter.DefaultOrderParameterValue;
 import com.rci.tools.DateUtil;
+import com.rci.tools.PropertyUtils;
 import com.rci.tools.StringUtils;
 
 public class UtilTest {
@@ -41,6 +42,14 @@ public class UtilTest {
 //		System.out.println(StringUtils.join(name, BusinessConstant.COMMA,"d"));
 		DefaultOrderParameterValue value = new DefaultOrderParameterValue(new Order());
 		System.out.println(value.joinSchemeName());
+	}
+	
+	@Test
+	public void testPropertiesUtils(){
+		System.out.println(PropertyUtils.getIntegerValue("notdiscount.dishno"));
+		System.out.println(PropertyUtils.getBigDecimalValue("notdiscount.dishno"));
+		System.out.println(PropertyUtils.getStringValue("application.name"));
+		System.out.println(PropertyUtils.getStringValue("test.message"));
 	}
 
 }

@@ -35,7 +35,7 @@ import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventorySellLogService;
 import com.rci.service.inventory.IInventoryService;
 import com.rci.tools.DateUtil;
-import com.rci.tools.properties.PropertyUtils;
+import com.rci.tools.PropertyUtils;
 import com.rci.ui.swing.vos.DishVO;
 
 @ContextConfiguration({"classpath:spring/spring-db.xml","classpath:spring/spring-common.xml"})
@@ -127,13 +127,6 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 //		BigDecimal d = a.divide(b).multiply(c);
 //		System.out.println(d.setScale(0, RoundingMode.HALF_EVEN));
 		System.out.println(a.negate());
-	}
-	
-	
-	@Test
-	public void testPropertiesUtils(){
-//		System.out.println(PropertyUtils.getIntegerValue("mtwm.base.free.amount"));
-		System.out.println(PropertyUtils.getBigDecimalValue("mtwm.base.free.amount"));
 	}
 	
 	@Test
@@ -321,4 +314,5 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	public void testCleanAllOrders(){
 		dataFacade.doCleanAllOfOneDay("20160301");
 	}
+	
 }

@@ -10,7 +10,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.LabelValueBean;
 import com.rci.contants.BusinessConstant;
-import com.rci.tools.properties.PropertyUtils;
 
 public class EnumUtils {
 	public static String getEnumMessage(Enum<?> e) {

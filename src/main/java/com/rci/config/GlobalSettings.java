@@ -109,7 +109,7 @@ public class GlobalSettings{
 				configuration.setReloadingStrategy(strategy);
 			}
 			if(logger.isInfoEnabled()){
-				logger.info("Load " + propFileName + "from " + res.getURL());
+				logger.info("Load " + propFileName + " from " + res.getURL());
 			}
 		}
 		catch(IOException ioe){

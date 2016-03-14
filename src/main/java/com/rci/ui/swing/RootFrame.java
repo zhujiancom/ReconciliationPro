@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import com.rci.config.PropertyConstants;
-import com.rci.tools.properties.PropertyUtils;
+import com.rci.tools.PropertyUtils;
 import com.rci.ui.swing.handler.MenuItemActionHandler;
 import com.rci.ui.swing.handler.switcher.MainPaneSwitcherHandler;
 import com.rci.ui.swing.listeners.FrameListener;
