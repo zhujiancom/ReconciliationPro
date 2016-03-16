@@ -35,8 +35,6 @@ import com.rci.service.inventory.IInventoryDishRefService;
 import com.rci.service.inventory.IInventorySellLogService;
 import com.rci.service.inventory.IInventoryService;
 import com.rci.tools.DateUtil;
-import com.rci.tools.PropertyUtils;
-import com.rci.ui.swing.vos.DishVO;
 
 @ContextConfiguration({"classpath:spring/spring-db.xml","classpath:spring/spring-common.xml"})
 public class ServiceTest extends AbstractJUnit4SpringContextTests{
@@ -278,13 +276,6 @@ public class ServiceTest extends AbstractJUnit4SpringContextTests{
 	public void testPaymodeCodeEnum(){
 		System.out.println(PaymodeCode.paymodeCode("18"));
 		System.out.println(PaymodeCode.ELE.getPaymodeno());
-	}
-	
-	@Test
-	public void testQueryDishes(){
-		List<DishVO> dishes = dishService.queryDishes(false);
-		System.out.println(dishes.size());
-		
 	}
 	
 	@Test

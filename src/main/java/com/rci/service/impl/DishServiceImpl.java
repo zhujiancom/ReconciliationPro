@@ -1,6 +1,5 @@
 package com.rci.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.dozer.Mapper;
@@ -14,8 +13,8 @@ import com.rci.bean.entity.Dish;
 import com.rci.dao.impl.SafeDetachedCriteria;
 import com.rci.dao.impl.SafeRestrictions;
 import com.rci.enums.CommonEnums.YOrN;
-import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
+import com.rci.exceptions.ExceptionManage;
 import com.rci.service.IDishService;
 import com.rci.service.base.BaseServiceImpl;
 import com.rci.ui.swing.vos.DishVO;
@@ -40,21 +39,6 @@ public class DishServiceImpl extends BaseServiceImpl<Dish, Long> implements
 		return dish;
 	}
 	
-	@Override
-	public List<DishVO> queryDishes(boolean isStocked) {
-		DetachedCriteria dc = DetachedCriteria.forClass(Dish.class);
-		dc.add(Restrictions.eq("stopFlag", YOrN.N)).add(Restrictions.eq("stockFlag", YOrN.getYN(isStocked)));
-		List<Dish> dishes = baseDAO.queryListByCriteria(dc);
-		List<DishVO> dishVos = new ArrayList<DishVO>();
-		for(Dish dish:dishes){
-			DishVO dishvo = beanMapper.map(dish, DishVO.class);
-			dishVos.add(dishvo);
-		}
-		return dishVos;
-	}
-
-
-
 	@Override
 	public DishVO queryDish(String no) {
 		Dish dish = findDishByNo(no);

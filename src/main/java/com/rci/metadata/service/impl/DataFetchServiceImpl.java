@@ -62,11 +62,11 @@ public class DataFetchServiceImpl implements IDataFetchService {
 		return series;
 	}
 	
-	@Override
-	public DishSeriesDTO fetchDishSeriesByno(String sno){
-		DishSeriesDTO series = sqlServerJdbcTemplate.queryForObject(NativeSQLBuilder.QUERY_DISH_BY_NO,new Object[]{sno},new BeanRowMappers<DishSeriesDTO>(DishSeriesDTO.class));
-		return series;
-	}
+//	@Override
+//	public DishSeriesDTO fetchDishSeriesByno(String sno){
+//		DishSeriesDTO series = sqlServerJdbcTemplate.queryForObject(NativeSQLBuilder.QUERY_DISH_BY_NO,new Object[]{sno},new BeanRowMappers<DishSeriesDTO>(DishSeriesDTO.class));
+//		return series;
+//	}
 
 	@Override
 	public List<PaymodeDTO> fetchPaymodes() {

@@ -157,7 +157,7 @@ public class DataTransformServiceImpl implements IDataTransformService {
 				dType = beanMapper.map(dTypeDTO, DishType.class);
 				DishSeries series = dishSeriesService.querySeriesByNo(dType.getSeriesno());
 				if(series == null){
-					DishSeriesDTO seriesDTO = fetchService.fetchDishSeriesByno(dType.getSeriesno());
+					DishSeriesDTO seriesDTO = fetchService.fetchDishSeriesByNo(dType.getSeriesno());
 					series = beanMapper.map(seriesDTO, DishSeries.class);
 				}
 				dType.setDishSeries(series);

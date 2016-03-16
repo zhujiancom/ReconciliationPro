@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.DataFetchMark;
 import com.rci.enums.BusinessEnums.MarkType;
-import com.rci.enums.CommonEnums;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.base.BaseServiceImpl;
 import com.rci.tools.DateUtil;
@@ -53,7 +52,6 @@ public class FetchMarkServiceImpl extends BaseServiceImpl<DataFetchMark, Long>
 	@Override
 	public void rwInitSystem() {
 		DataFetchMark mark = new DataFetchMark(MarkType.SYSTEM_INIT);
-		mark.setMarkFlag(CommonEnums.YOrN.Y);
 		baseDAO.save(mark);
 	}
 	
@@ -69,7 +67,6 @@ public class FetchMarkServiceImpl extends BaseServiceImpl<DataFetchMark, Long>
 	public void markOrder(String day) {
 		DataFetchMark mark = new DataFetchMark(MarkType.ORDER_FETCH);
 		mark.setRciDate(day);
-		mark.setMarkFlag(CommonEnums.YOrN.Y);
 		mark.setSavepoint(DateUtil.getCurrentDate());
 		((IFetchMarkService)AopContext.currentProxy()).rwCreate(mark);
 	}
@@ -77,7 +74,6 @@ public class FetchMarkServiceImpl extends BaseServiceImpl<DataFetchMark, Long>
 	@Override
 	public void rwInitStock() {
 		DataFetchMark mark = new DataFetchMark(MarkType.STOCK_INIT);
-		mark.setMarkFlag(CommonEnums.YOrN.Y);
 		baseDAO.save(mark);
 	}
 

@@ -17,7 +17,6 @@ import javax.persistence.Transient;
 
 import com.rci.bean.entity.base.BaseEntity;
 import com.rci.enums.BusinessEnums;
-import com.rci.enums.CommonEnums;
 
 @Entity
 @Table(name="bus_tb_datafetch_mark")
@@ -31,13 +30,13 @@ public class DataFetchMark extends BaseEntity {
 	
 	private BusinessEnums.MarkType type;
 	
-	/* ��������  */
+	/* 订单数据加载日期 */
 	private String rciDate;
 	
 	/* ��� */
-	private CommonEnums.YOrN markFlag;
+//	private CommonEnums.YOrN markFlag;
 	
-	/* �������ݵ� */
+	/* 记录每次查询的时间 */
 	private Date savepoint;
 	
 	public DataFetchMark(){}
@@ -76,15 +75,15 @@ public class DataFetchMark extends BaseEntity {
 		this.rciDate = rciDate;
 	}
 
-	@Enumerated(EnumType.STRING)
-	@Column(name="mark_flag")
-	public CommonEnums.YOrN getMarkFlag() {
-		return markFlag;
-	}
-
-	public void setMarkFlag(CommonEnums.YOrN markFlag) {
-		this.markFlag = markFlag;
-	}
+//	@Enumerated(EnumType.STRING)
+//	@Column(name="mark_flag")
+//	public CommonEnums.YOrN getMarkFlag() {
+//		return markFlag;
+//	}
+//
+//	public void setMarkFlag(CommonEnums.YOrN markFlag) {
+//		this.markFlag = markFlag;
+//	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="savepoint")

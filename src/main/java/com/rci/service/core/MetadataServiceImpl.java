@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +64,8 @@ import com.rci.ui.swing.vos.SellOffWarningVO;
 
 @Service("MetadataService")
 public class MetadataServiceImpl implements IMetadataService {
+	private static final Log logger = LogFactory.getLog(MetadataServiceImpl.class);
+	
 	@Resource(name="DishTypeService")
 	private IDishTypeService dishtypeService;
 	@Resource(name="DishSeriesService")
@@ -563,7 +567,12 @@ public class MetadataServiceImpl implements IMetadataService {
 
 	@Override
 	public List<OrderItemVO> queryOrderItemsByPayno(String payno) {
-		return orderService.queryOrderItemVOsByPayno(payno);
+		try{
+			return orderService.queryOrderItemVOsByPayno(payno);
+		}catch(Exception ex){
+			logger.debug("payno = "+payno,ex);
+			return null;
+		}
 	}
 
 	@Override

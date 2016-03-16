@@ -98,7 +98,7 @@ public interface IDataFetchService {
 	 * @param sno
 	 * @return
 	 */
-	DishSeriesDTO fetchDishSeriesByno(String sno);
+//	DishSeriesDTO fetchDishSeriesByno(String sno);
 	
 	DishSeriesDTO fetchDishSeriesByNo(String seriesno);
 	
