@@ -54,7 +54,6 @@ public class OrderDataLoader implements Runnable {
 	
 	@Override
 	public void run() {
-		long startTime = System.currentTimeMillis();
 		try{
 			SwingUtilities.invokeLater(new Runnable() {
 				
@@ -123,9 +122,6 @@ public class OrderDataLoader implements Runnable {
 					queryPane.displayErrorInfo("订单加载失败");
 				}
 			});
-		}finally{
-			long timeoffset = System.currentTimeMillis()-startTime;
-			System.out.println("--- 运行时间： "+timeoffset/1000);
 		}
 	}
 	
